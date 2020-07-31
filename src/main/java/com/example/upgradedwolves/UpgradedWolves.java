@@ -2,10 +2,7 @@ package com.example.upgradedwolves;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.WolfRenderer;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.WolfEntity;
+
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
@@ -13,7 +10,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -28,7 +24,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.example.upgradedwolves.client.ClientHandler;
-import com.example.upgradedwolves.entities.UpgradedWolfRenderer;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(UpgradedWolves.ModId)
