@@ -24,6 +24,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.example.upgradedwolves.client.ClientHandler;
+import com.example.upgradedwolves.common.DamageHandler;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(UpgradedWolves.ModId)
@@ -43,7 +44,8 @@ public class UpgradedWolves
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
         // Register the doClientStuff method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
-
+        // Setup Events from DamageHandler.java
+        MinecraftForge.EVENT_BUS.register(new DamageHandler());
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
     }
