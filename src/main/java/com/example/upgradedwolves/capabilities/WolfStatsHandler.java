@@ -10,6 +10,7 @@ import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -24,6 +25,7 @@ public class WolfStatsHandler {
 
     public static void register() {
         CapabilityManager.INSTANCE.register(IWolfStats.class, new Storage(), WolfStats::new);
+        MinecraftForge.EVENT_BUS.register(new WolfStatsHandler());
     }
 
     @Nullable
