@@ -1,6 +1,8 @@
 package com.example.upgradedwolves.entities;
 
 import com.example.upgradedwolves.UpgradedWolves;
+import com.example.upgradedwolves.capabilities.IWolfStats;
+import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.WolfRenderer;
@@ -16,8 +18,21 @@ public class UpgradedWolfRenderer extends WolfRenderer {
 
     @Override
     public ResourceLocation getEntityTexture(WolfEntity wolf){
+        if(!wolf.isTamed())
+            return super.getEntityTexture(wolf);
+        else{
+            IWolfStats handler = WolfStatsHandler.getHandler(wolf);
+            switch(handler.getWolfType()){
+                case 0:
+                    return super.getEntityTexture(wolf);
+                case 1:
+                    return UpgradedWolves.getId("textures/entity/fighterwolf.png");
+                case 2:
+                    return UpgradedWolves.getId("textures/entity/scavengerwolf.png");
+            }
+            return UpgradedWolves.getId("textures/entity/pet_dog.png");
+        }
         
-        return UpgradedWolves.getId("textures/entity/pet_dog.png");
     }
   
 }
