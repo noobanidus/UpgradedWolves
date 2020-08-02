@@ -51,7 +51,14 @@ public class WolfStatsHandler {
             }
             return xp;
         }
-
+        public void InitLove(){
+            if(loveLvl > 0)
+                return;
+            //Skewed Random function
+            loveLvl = (int)(Math.pow(Math.random() * 1000,2) / 10000);
+            if(loveLvl < 10)
+            loveLvl = 10;
+        }
         @Override
         public void addXp(WolfStatsEnum wolfStats, int amount) {
             int xp;
@@ -146,13 +153,14 @@ public class WolfStatsHandler {
         @Override
         public INBT writeNBT(Capability<IWolfStats> capability, IWolfStats instance, Direction side) {
             CompoundNBT nbt = new CompoundNBT();
+            instance.InitLove();          
             nbt.putInt("SpeedLevel", instance.getLevel(WolfStatsEnum.Speed));
             nbt.putInt("StrengthLevel", instance.getLevel(WolfStatsEnum.Strength));
             nbt.putInt("IntelligenceLevel", instance.getLevel(WolfStatsEnum.Intelligence));
             nbt.putInt("LoveLevel", instance.getLevel(WolfStatsEnum.Love));
             nbt.putInt("SpeedXp", instance.getXp(WolfStatsEnum.Speed));
-            nbt.putInt("StrengthXp", instance.getXp(WolfStatsEnum.Speed));
-            nbt.putInt("IntelligenceXp", instance.getXp(WolfStatsEnum.Speed));
+            nbt.putInt("StrengthXp", instance.getXp(WolfStatsEnum.Strength));
+            nbt.putInt("IntelligenceXp", instance.getXp(WolfStatsEnum.Intelligence));
             nbt.putInt("WolfType",instance.getWolfType());            
             return nbt;
         }
@@ -160,15 +168,16 @@ public class WolfStatsHandler {
         @Override
         public void readNBT(Capability<IWolfStats> capability, IWolfStats instance, Direction side, INBT nbt) {
             // TODO Auto-generated method stub
-            CompoundNBT next = (CompoundNBT)nbt;
+            CompoundNBT next = (CompoundNBT)nbt;            
             instance.setLevel(WolfStatsEnum.Speed, next.getInt("SpeedLevel"));
             instance.setLevel(WolfStatsEnum.Strength, next.getInt("StrengthLevel"));
             instance.setLevel(WolfStatsEnum.Intelligence, next.getInt("IntelligenceLevel"));
             instance.setLevel(WolfStatsEnum.Love, next.getInt("LoveLevel"));
             instance.addXp(WolfStatsEnum.Speed, next.getInt("SpeedXp"));
-            instance.addXp(WolfStatsEnum.Speed, next.getInt("StrengthXp"));
-            instance.addXp(WolfStatsEnum.Speed, next.getInt("IntelligenceXp"));
+            instance.addXp(WolfStatsEnum.Strength, next.getInt("StrengthXp"));
+            instance.addXp(WolfStatsEnum.Intelligence, next.getInt("IntelligenceXp"));
             instance.setWolfType(next.getInt("WolfType"));
+            instance.InitLove();
         }
 
     }

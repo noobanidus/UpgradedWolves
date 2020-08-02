@@ -1,6 +1,7 @@
 package com.example.upgradedwolves.common;
 
 import com.example.upgradedwolves.capabilities.IWolfStats;
+import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler.WolfStats;
 
@@ -16,10 +17,10 @@ public class WolfPlayerInteraction {
     public void entityInteract(EntityInteract event){
         //LogManager.getLogger().info(event.getEntity().toString());
         if(event.getTarget() instanceof WolfEntity){
-            WolfEntity wolf = (WolfEntity) event.getTarget();
-            LogManager.getLogger().info(wolf.getHeldItemMainhand());
-            IWolfStats handler = WolfStatsHandler.getHandler(wolf);
-            handler.setWolfType(1);
+            WolfEntity wolf = (WolfEntity) event.getTarget();            
+            IWolfStats handler = WolfStatsHandler.getHandler(wolf);            
+            LogManager.getLogger().info(handler.getLevel(WolfStatsEnum.Love));
+            handler.setWolfType(0);
         }
     }
 }

@@ -7,4 +7,5 @@ public interface IWolfStats {
     public void setLevel(WolfStatsEnum wolfStats,int amount);
     public int getWolfType();
     public void setWolfType(int type);
+    public void InitLove();
 }
