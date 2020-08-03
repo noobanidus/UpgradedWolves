@@ -23,6 +23,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.example.upgradedwolves.capabilities.TrainingHandler;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.client.ClientHandler;
 import com.example.upgradedwolves.common.DamageHandler;
@@ -59,6 +60,7 @@ public class UpgradedWolves
         LOGGER.info("HELLO FROM PREINIT");
         LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
         WolfStatsHandler.register();
+        TrainingHandler.register();
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
