@@ -1,7 +1,6 @@
 package com.example.upgradedwolves.common;
 
 import com.example.upgradedwolves.capabilities.TrainingHandler;
-import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.capabilities.TrainingHandler.ITraining;
 import com.example.upgradedwolves.network.PacketHandler;
 import com.example.upgradedwolves.network.message.MessageRender;
@@ -17,8 +16,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent.StartTracking;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.eventbus.api.EventPriority;

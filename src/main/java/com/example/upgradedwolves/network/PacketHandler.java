@@ -2,7 +2,6 @@ package com.example.upgradedwolves.network;
 
 import com.example.upgradedwolves.UpgradedWolves;
 import com.example.upgradedwolves.network.message.IMessage;
-import com.example.upgradedwolves.network.message.ItemPacket;
 import com.example.upgradedwolves.network.message.MessageRender;
 
 import net.minecraftforge.fml.network.NetworkRegistry;

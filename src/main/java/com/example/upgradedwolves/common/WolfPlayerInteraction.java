@@ -4,22 +4,14 @@ import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.TrainingHandler;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.capabilities.TrainingHandler.ITraining;
-import com.example.upgradedwolves.network.PacketHandler;
-import com.example.upgradedwolves.network.message.MessageRender;
 
 import org.apache.logging.log4j.LogManager;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.common.thread.SidedThreadGroup;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.PacketDistributor;
 
 public class WolfPlayerInteraction {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
