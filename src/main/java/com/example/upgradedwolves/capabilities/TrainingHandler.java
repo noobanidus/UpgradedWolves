@@ -90,7 +90,7 @@ public class TrainingHandler {
 
         @Override
         public void setAttribute(int value) {
-            currentAttribute = 0;
+            currentAttribute = value;
 
         }
 
