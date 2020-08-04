@@ -25,7 +25,8 @@ public class TrainingHandler {
 
     public interface ITraining{
         public void setAttribute(int value);        
-        public int getAndResetAttribute();
+        public void resetAttribute();
+        public int getAttribute();
     }
     public static void register() {
         CapabilityManager.INSTANCE.register(ITraining.class, new Storage(), Training::new);
@@ -52,7 +53,7 @@ public class TrainingHandler {
         @Nullable
         @Override
         public INBT writeNBT(Capability<ITraining> capability, ITraining instance, Direction side) {
-            return IntNBT.valueOf(instance.getAndResetAttribute());
+            return IntNBT.valueOf(instance.getAttribute());
         }
 
         @Override
@@ -95,10 +96,13 @@ public class TrainingHandler {
         }
 
         @Override
-        public int getAndResetAttribute() {
-            int retint = currentAttribute;
-            currentAttribute = 0;
-            return retint;
+        public void resetAttribute() {        
+            currentAttribute = 0;            
+        }
+
+        @Override
+        public int getAttribute() {            
+            return currentAttribute;
         }
 
     }
