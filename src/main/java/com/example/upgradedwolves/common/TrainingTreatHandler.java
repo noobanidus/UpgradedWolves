@@ -1,7 +1,10 @@
 package com.example.upgradedwolves.common;
 
 import com.example.upgradedwolves.capabilities.TrainingHandler;
+import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.capabilities.TrainingHandler.ITraining;
+import com.example.upgradedwolves.network.PacketHandler;
+import com.example.upgradedwolves.network.message.MessageRender;
 
 import org.apache.logging.log4j.LogManager;
 
@@ -11,16 +14,20 @@ import net.minecraft.block.OreBlock;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.StartTracking;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.network.PacketDistributor;
 
 public class TrainingTreatHandler {
     @SubscribeEvent
-    public void BlockBreak(BreakEvent event){
+    public void BlockBreak(BreakEvent event){        
         LogManager.getLogger().info("Block Broken" + event.getState().getBlock());
         ItemStack foodItem = getFoodStack(event.getPlayer());
         Block block = event.getState().getBlock();
@@ -30,13 +37,20 @@ public class TrainingTreatHandler {
         if(block instanceof CropsBlock){
             ITraining handler = TrainingHandler.getHandler(foodItem);
             handler.setAttribute(3);
+            if(Thread.currentThread().getName() == "Server thread"){                
+                PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)event.getPlayer()), new MessageRender(3, event.getPlayer().getEntityId()));
+            }
         }
         else if(block instanceof OreBlock){
             LogManager.getLogger().info("Deep Bug");
             ITraining handler = TrainingHandler.getHandler(foodItem);
             handler.setAttribute(2);
+            if(Thread.currentThread().getName() == "Server thread"){
+                PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)event.getPlayer()), new MessageRender(2, event.getPlayer().getEntityId()));
+            }
         }
     }
+
     @SubscribeEvent
     public void MobKill(LivingDeathEvent event){
         
@@ -48,7 +62,10 @@ public class TrainingTreatHandler {
             if(event.getEntity() instanceof MonsterEntity){
                 LogManager.getLogger().info("Killed");
                 ITraining handler = TrainingHandler.getHandler(foodItem);
-                handler.setAttribute(1);
+                handler.setAttribute(1);                
+                if(Thread.currentThread().getName() == "Server thread"){
+                    PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)player), new MessageRender(1, player.getEntityId()));
+                }
             }
         }
     }
@@ -64,7 +81,13 @@ public class TrainingTreatHandler {
             ITraining handler = TrainingHandler.getHandler(foodItem);
             handler.setAttribute(4);
         }
-    }    
+    }
+    /*@SubscribeEvent
+    public static void onStartTracking(StartTracking event) {
+        event.getTarget().getCapability(WolfStatsHandler.CAPABILITY_WOLF_STATS).ifPresent(capability -> {
+        PacketHandler.instance.send(PacketDistributor.PLAYER.with(event.getPlayer()), new MessageRender(capability., id));
+        })
+    }*/
     public static ItemStack getFoodStack(PlayerEntity player){
         //Checks if the player is holding food in either hand.
         if(player.getHeldItemMainhand().isFood() && player.getHeldItemMainhand().getItem().getFood().isMeat())

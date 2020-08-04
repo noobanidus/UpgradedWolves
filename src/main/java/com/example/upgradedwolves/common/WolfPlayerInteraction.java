@@ -11,11 +11,15 @@ import org.apache.logging.log4j.LogManager;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.common.thread.SidedThreadGroup;
 import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.PacketDistributor;
 
 public class WolfPlayerInteraction {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -32,13 +36,13 @@ public class WolfPlayerInteraction {
             if(foodItem != null){
                 ITraining tHandler = TrainingHandler.getHandler(foodItem);
                 int item = tHandler.getAttribute();
-                LogManager.getLogger().info(item);
+                LogManager.getLogger().info(item);                
                 if(item == 0)
                     return;
                 else /*if (handler.getWolfType() != 0)*/{                    
                     handler.setWolfType(item);
                     foodItem.shrink(1);
-                    tHandler.resetAttribute();
+                    tHandler.resetAttribute();                    
                     
                 }
             }
