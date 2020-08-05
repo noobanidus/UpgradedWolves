@@ -1,9 +1,11 @@
 package com.example.upgradedwolves.common;
 
 import com.example.upgradedwolves.capabilities.TrainingHandler;
+import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.capabilities.TrainingHandler.ITraining;
 import com.example.upgradedwolves.network.PacketHandler;
-import com.example.upgradedwolves.network.message.MessageRender;
+import com.example.upgradedwolves.network.message.RenderMessage;
+import com.example.upgradedwolves.network.message.TrainingItemMessage;
 
 import org.apache.logging.log4j.LogManager;
 
@@ -16,6 +18,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.StartTracking;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -35,7 +38,7 @@ public class TrainingTreatHandler {
             ITraining handler = TrainingHandler.getHandler(foodItem);
             handler.setAttribute(3);
             if(Thread.currentThread().getName() == "Server thread"){                
-                PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)event.getPlayer()), new MessageRender(3, event.getPlayer().getEntityId()));
+                PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)event.getPlayer()), new TrainingItemMessage(3, event.getPlayer().getEntityId()));
             }
         }
         else if(block instanceof OreBlock){
@@ -43,7 +46,7 @@ public class TrainingTreatHandler {
             ITraining handler = TrainingHandler.getHandler(foodItem);
             handler.setAttribute(2);
             if(Thread.currentThread().getName() == "Server thread"){
-                PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)event.getPlayer()), new MessageRender(2, event.getPlayer().getEntityId()));
+                PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)event.getPlayer()), new TrainingItemMessage(2, event.getPlayer().getEntityId()));
             }
         }
     }
@@ -61,7 +64,7 @@ public class TrainingTreatHandler {
                 ITraining handler = TrainingHandler.getHandler(foodItem);
                 handler.setAttribute(1);                
                 if(Thread.currentThread().getName() == "Server thread"){
-                    PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)player), new MessageRender(1, player.getEntityId()));
+                    PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)player), new TrainingItemMessage(1, player.getEntityId()));
                 }
             }
         }
@@ -79,12 +82,12 @@ public class TrainingTreatHandler {
             handler.setAttribute(4);
         }
     }
-    /*@SubscribeEvent
-    public static void onStartTracking(StartTracking event) {
+    @SubscribeEvent
+    public static void onStartTracking(StartTracking event) {        
         event.getTarget().getCapability(WolfStatsHandler.CAPABILITY_WOLF_STATS).ifPresent(capability -> {
-        PacketHandler.instance.send(PacketDistributor.PLAYER.with(event.getPlayer()), new MessageRender(capability., id));
-        })
-    }*/
+            PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)event.getPlayer()), new RenderMessage(event.getTarget().getEntityId(),capability.getWolfType()));
+        });
+    }
     public static ItemStack getFoodStack(PlayerEntity player){
         //Checks if the player is holding food in either hand.
         if(player.getHeldItemMainhand().isFood() && player.getHeldItemMainhand().getItem().getFood().isMeat())

@@ -2,6 +2,7 @@ package com.example.upgradedwolves.common;
 
 import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.TrainingHandler;
+import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.capabilities.TrainingHandler.ITraining;
 
@@ -20,18 +21,16 @@ public class WolfPlayerInteraction {
         if(event.getTarget() instanceof WolfEntity){
             WolfEntity wolf = (WolfEntity) event.getTarget();            
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);            
-            //LogManager.getLogger().info(handler.getLevel(WolfStatsEnum.Love));
+            LogManager.getLogger().info(handler.getLevel(WolfStatsEnum.Love));
+            LogManager.getLogger().info(handler.getWolfType());
             //handler.setWolfType(0);            
             ItemStack foodItem = TrainingTreatHandler.getFoodStack(event.getPlayer());
-            LogManager.getLogger().info(foodItem);
-            LogManager.getLogger().info(handler.getWolfType());
             if(foodItem != null){
                 ITraining tHandler = TrainingHandler.getHandler(foodItem);
-                int item = tHandler.getAttribute();
-                LogManager.getLogger().info(item);                
+                int item = tHandler.getAttribute();                
                 if(item == 0)
                     return;
-                else /*if (handler.getWolfType() != 0)*/{                    
+                else /*if (handler.getWolfType() != 0)*/{                
                     handler.setWolfType(item);
                     foodItem.shrink(1);
                     tHandler.resetAttribute();                    

@@ -166,8 +166,7 @@ public class WolfStatsHandler {
         }
 
         @Override
-        public void readNBT(Capability<IWolfStats> capability, IWolfStats instance, Direction side, INBT nbt) {
-            // TODO Auto-generated method stub
+        public void readNBT(Capability<IWolfStats> capability, IWolfStats instance, Direction side, INBT nbt) {            
             CompoundNBT next = (CompoundNBT)nbt;            
             instance.setLevel(WolfStatsEnum.Speed, next.getInt("SpeedLevel"));
             instance.setLevel(WolfStatsEnum.Strength, next.getInt("StrengthLevel"));

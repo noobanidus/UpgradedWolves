@@ -12,31 +12,31 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 
-public class MessageRender implements IMessage<MessageRender> {
+public class TrainingItemMessage implements IMessage<TrainingItemMessage> {
     int wolfValue;
     int playerId;
-    public MessageRender(){
+    public TrainingItemMessage(){
         wolfValue = 0;
         playerId = 0;
     }
-    public MessageRender(int val,int id){
+    public TrainingItemMessage(int val,int id){
         wolfValue = val;
         playerId = id;
     }
     @Override
-    public void encode(MessageRender message, PacketBuffer buffer) {                
+    public void encode(TrainingItemMessage message, PacketBuffer buffer) {                
         
         buffer.writeInt(message.wolfValue);        
         buffer.writeInt(message.playerId);
     }
 
     @Override
-    public MessageRender decode(PacketBuffer buffer) {    
-        return new MessageRender(buffer.readInt(),buffer.readInt());
+    public TrainingItemMessage decode(PacketBuffer buffer) {    
+        return new TrainingItemMessage(buffer.readInt(),buffer.readInt());
     }
 
     @Override
-    public void handle(MessageRender message, Supplier<Context> supplier) {
+    public void handle(TrainingItemMessage message, Supplier<Context> supplier) {
         supplier.get().enqueueWork(() -> {
             Minecraft mc = Minecraft.getInstance();
             ClientPlayerEntity player = (ClientPlayerEntity)mc.world.getEntityByID(message.playerId);

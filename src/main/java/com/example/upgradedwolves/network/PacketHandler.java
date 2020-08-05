@@ -2,7 +2,7 @@ package com.example.upgradedwolves.network;
 
 import com.example.upgradedwolves.UpgradedWolves;
 import com.example.upgradedwolves.network.message.IMessage;
-import com.example.upgradedwolves.network.message.MessageRender;
+import com.example.upgradedwolves.network.message.TrainingItemMessage;
 
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
@@ -23,7 +23,7 @@ public class PacketHandler
                 .serverAcceptedVersions(PROTOCOL_VERSION::equals)
                 .simpleChannel();
 
-        register(MessageRender.class,new MessageRender());
+        register(TrainingItemMessage.class,new TrainingItemMessage());
         //register(ItemPacket.class,new ItemPacket(0,0));
     }
 

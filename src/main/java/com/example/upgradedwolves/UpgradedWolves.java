@@ -62,9 +62,9 @@ public class UpgradedWolves
         // some preinit code
         LOGGER.info("HELLO FROM PREINIT");
         LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
-        WolfStatsHandler.register();
-        TrainingHandler.register();
         PacketHandler.register();
+        WolfStatsHandler.register();
+        TrainingHandler.register();        
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
