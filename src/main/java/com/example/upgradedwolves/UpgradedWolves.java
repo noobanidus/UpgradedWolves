@@ -62,7 +62,9 @@ public class UpgradedWolves
         // some preinit code
         LOGGER.info("HELLO FROM PREINIT");
         LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
+        
         PacketHandler.register();
+
         WolfStatsHandler.register();
         TrainingHandler.register();        
     }
