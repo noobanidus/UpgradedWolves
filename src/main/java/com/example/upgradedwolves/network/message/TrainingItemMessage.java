@@ -4,7 +4,7 @@ import java.util.function.Supplier;
 
 import com.example.upgradedwolves.capabilities.TrainingHandler;
 import com.example.upgradedwolves.capabilities.TrainingHandler.ITraining;
-import com.example.upgradedwolves.common.TrainingTreatHandler;
+import com.example.upgradedwolves.common.TrainingEventHandler;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
@@ -40,7 +40,7 @@ public class TrainingItemMessage implements IMessage<TrainingItemMessage> {
         supplier.get().enqueueWork(() -> {
             Minecraft mc = Minecraft.getInstance();
             ClientPlayerEntity player = (ClientPlayerEntity)mc.world.getEntityByID(message.playerId);
-            ItemStack foodItem = TrainingTreatHandler.getFoodStack(player);
+            ItemStack foodItem = TrainingEventHandler.getFoodStack(player);
             ITraining handler = TrainingHandler.getHandler(foodItem);
             handler.setAttribute(message.wolfValue);
         });

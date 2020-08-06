@@ -4,8 +4,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.example.upgradedwolves.UpgradedWolves;
-import com.example.upgradedwolves.network.PacketHandler;
-import com.example.upgradedwolves.network.message.RenderMessage;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.WolfEntity;
@@ -20,7 +18,6 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.network.PacketDistributor;
 
 public class WolfStatsHandler {
     @CapabilityInject(IWolfStats.class)
@@ -42,7 +39,7 @@ public class WolfStatsHandler {
             event.addCapability(UpgradedWolves.getId("wolf_stats"), new Provider());            
         }
     }
-
+    
     public static class WolfStats implements IWolfStats {
 
         int speedLvl, strengthLvl, intelligenceLvl, loveLvl, wolfType;

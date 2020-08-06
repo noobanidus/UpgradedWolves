@@ -13,12 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
-import net.minecraftforge.event.entity.item.ItemTossEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -35,7 +30,7 @@ public class WolfPlayerInteraction {
             LogManager.getLogger().info(handler.getLevel(WolfStatsEnum.Love));
             LogManager.getLogger().info(handler.getWolfType());
             handler.InitLove();       
-            final ItemStack foodItem = TrainingTreatHandler.getFoodStack(event.getPlayer());
+            final ItemStack foodItem = TrainingEventHandler.getFoodStack(event.getPlayer());
             if(Thread.currentThread().getName() == "Server thread")
                 PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getEntityId(),WolfStatsHandler.getHandler(wolf).getWolfType()) );
             if(foodItem != null){

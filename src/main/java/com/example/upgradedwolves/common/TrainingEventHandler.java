@@ -22,7 +22,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
 
-public class TrainingTreatHandler {
+public class TrainingEventHandler {
     @SubscribeEvent
     public void BlockBreak(BreakEvent event){        
         LogManager.getLogger().info("Block Broken" + event.getState().getBlock());

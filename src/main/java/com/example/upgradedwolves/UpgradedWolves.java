@@ -27,7 +27,7 @@ import com.example.upgradedwolves.capabilities.TrainingHandler;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.client.ClientHandler;
 import com.example.upgradedwolves.common.DamageHandler;
-import com.example.upgradedwolves.common.TrainingTreatHandler;
+import com.example.upgradedwolves.common.TrainingEventHandler;
 import com.example.upgradedwolves.common.WolfPlayerInteraction;
 import com.example.upgradedwolves.network.PacketHandler;
 
@@ -52,7 +52,7 @@ public class UpgradedWolves
         // Setup Events from DamageHandler.java
         MinecraftForge.EVENT_BUS.register(new DamageHandler());
         MinecraftForge.EVENT_BUS.register(new WolfPlayerInteraction());
-        MinecraftForge.EVENT_BUS.register(new TrainingTreatHandler());
+        MinecraftForge.EVENT_BUS.register(new TrainingEventHandler());
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -62,7 +62,7 @@ public class UpgradedWolves
         // some preinit code
         LOGGER.info("HELLO FROM PREINIT");
         LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
-        
+
         PacketHandler.register();
 
         WolfStatsHandler.register();
