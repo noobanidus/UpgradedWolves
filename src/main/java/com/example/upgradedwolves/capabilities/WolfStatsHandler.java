@@ -146,6 +146,18 @@ public class WolfStatsHandler {
             }            
         }
 
+        @Override
+        public double getWolfSpeed() {
+            //Wolf Generic Movement Speed is 0.3D
+            return 0.3D + (speedLvl * .01);
+        }
+
+        @Override
+        public int getWolfStrength() {
+            //Base wolf Damage is 4
+            return 4 + (strengthLvl / 2);
+        }
+
     }
 
     public static class Storage implements Capability.IStorage<IWolfStats> {

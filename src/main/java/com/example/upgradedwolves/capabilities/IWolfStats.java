@@ -8,4 +8,6 @@ public interface IWolfStats {
     public int getWolfType();
     public void setWolfType(int type);
     public void InitLove();
+    public double getWolfSpeed();
+    public int getWolfStrength();
 }

@@ -10,10 +10,14 @@ import com.example.upgradedwolves.network.message.RenderMessage;
 
 import org.apache.logging.log4j.LogManager;
 
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.event.entity.living.LivingDestroyBlockEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
+import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -38,7 +42,7 @@ public class WolfPlayerInteraction {
                 final int item = tHandler.getAttribute();                
                 if(item == 0)
                     return;
-                else /*if (handler.getWolfType() != 0)*/{                
+                else /*if (handler.getWolfType() != 0)*/{                                    
                     handler.setWolfType(item);
                     foodItem.shrink(1);
                     tHandler.resetAttribute();                                        
@@ -50,15 +54,49 @@ public class WolfPlayerInteraction {
     @SubscribeEvent(priority=EventPriority.HIGHEST)
     public void onEntitySpawn(LivingSpawnEvent event) {
         if(event.getEntity() instanceof WolfEntity){                
-            final WolfEntity wolf = (WolfEntity)event.getEntity();
-            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getEntityId(),WolfStatsHandler.getHandler(wolf).getWolfType()) );
+            WolfEntity wolf = (WolfEntity)event.getEntity();
+            IWolfStats handler = WolfStatsHandler.getHandler(wolf);
+            wolf.setCanPickUpLoot(true);
+            wolf.getAttribute(Attributes.field_233821_d_).setBaseValue(handler.getWolfSpeed());
+            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getEntityId(),handler.getWolfType()) );
         }        
     }
 
     @SubscribeEvent(priority=EventPriority.HIGHEST)
     public void onStartTracking(PlayerEvent.StartTracking event){        
         event.getTarget().getCapability(WolfStatsHandler.CAPABILITY_WOLF_STATS).ifPresent(capability -> {
-            PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)event.getPlayer()), new RenderMessage(event.getTarget().getEntityId(),capability.getWolfType()));
+            WolfEntity wolf = (WolfEntity)event.getTarget();
+            PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)event.getPlayer()), new RenderMessage(wolf.getEntityId(),capability.getWolfType()));
+            wolf.getAttribute(Attributes.field_233821_d_).setBaseValue(capability.getWolfSpeed());
         });
+    }
+
+    @SubscribeEvent
+    public void onWolfJump(LivingJumpEvent event){
+        if(event.getEntity() instanceof WolfEntity){
+            WolfEntity wolf = (WolfEntity)event.getEntity();
+            IWolfStats handler = WolfStatsHandler.getHandler(wolf);
+            //Scavenger Wolf Bonus
+            handler.addXp(WolfStatsEnum.Speed,(handler.getWolfType() == 2 ? 2 : 1));
+            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getEntityId(),handler.getWolfType()) );
+        }
+    }
+    @SubscribeEvent
+    public void onWolfDestroyBlock(LivingDestroyBlockEvent event){
+        if(event.getEntity() instanceof WolfEntity){
+            WolfEntity wolf = (WolfEntity)event.getEntity();
+            IWolfStats handler = WolfStatsHandler.getHandler(wolf);
+            handler.addXp(WolfStatsEnum.Strength,1);
+            handler.addXp(WolfStatsEnum.Intelligence,(handler.getWolfType() == 3 ? 2 : 1));
+            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getEntityId(),handler.getWolfType()) );
+        }
+    }
+    @SubscribeEvent
+    public void onWolfPickUp(EntityItemPickupEvent event){
+        if(event.getEntity() instanceof WolfEntity){
+            WolfEntity wolf = (WolfEntity)event.getEntity();
+            IWolfStats handler = WolfStatsHandler.getHandler(wolf);
+            ItemStack item = event.getItem().getItem();
+        }
     }
 }

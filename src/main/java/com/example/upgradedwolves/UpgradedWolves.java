@@ -72,7 +72,7 @@ public class UpgradedWolves
     private void doClientStuff(final FMLClientSetupEvent event) {
         // do something that can only be done on the client                    
         ClientHandler.setup();    
-        LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().gameSettings);
+        //LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().gameSettings);
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event)

@@ -12,8 +12,7 @@ import net.minecraft.util.ResourceLocation;
 public class UpgradedWolfRenderer extends WolfRenderer {
 
     public UpgradedWolfRenderer(EntityRendererManager p_i47187_1_) {
-        super(p_i47187_1_);
-        // TODO Auto-generated constructor stub
+        super(p_i47187_1_);        
     }
 
     @Override
