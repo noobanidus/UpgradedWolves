@@ -7,6 +7,7 @@ import com.example.upgradedwolves.UpgradedWolves;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
@@ -18,6 +19,7 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.items.ItemStackHandler;
 
 public class WolfStatsHandler {
     @CapabilityInject(IWolfStats.class)
@@ -44,6 +46,8 @@ public class WolfStatsHandler {
 
         int speedLvl, strengthLvl, intelligenceLvl, loveLvl, wolfType;
         int speedXp, strengthXp, intelligenceXp;
+        //The wolves will have a maximum of 27 slots. (3, +1 every 10 str)         
+        ItemStackHandler inventory;
         
         private int LevelUpFunction(int level, int xp) {
             if (xp >= Math.pow(level, 1.1) * 4) {
@@ -158,6 +162,22 @@ public class WolfStatsHandler {
             return 4 + (strengthLvl / 2);
         }
 
+        @Override
+        public ItemStackHandler getInventory() {            
+            return inventory;
+        }
+        @Override
+        public boolean addItemStack(ItemStack item){
+            int i = 0;
+            while(item.getCount() > 0){
+                item = inventory.insertItem(i, item, false);
+                if(i == 27)
+                    return false;
+                i++;
+            }
+            return true;
+        }
+
     }
 
     public static class Storage implements Capability.IStorage<IWolfStats> {
@@ -173,7 +193,8 @@ public class WolfStatsHandler {
             nbt.putInt("SpeedXp", instance.getXp(WolfStatsEnum.Speed));
             nbt.putInt("StrengthXp", instance.getXp(WolfStatsEnum.Strength));
             nbt.putInt("IntelligenceXp", instance.getXp(WolfStatsEnum.Intelligence));
-            nbt.putInt("WolfType",instance.getWolfType());            
+            nbt.putInt("WolfType",instance.getWolfType());
+            nbt.put("Inventory",instance.getInventory().serializeNBT());
             return nbt;
         }
 
@@ -188,6 +209,7 @@ public class WolfStatsHandler {
             instance.addXp(WolfStatsEnum.Strength, next.getInt("StrengthXp"));
             instance.addXp(WolfStatsEnum.Intelligence, next.getInt("IntelligenceXp"));
             instance.setWolfType(next.getInt("WolfType"));
+            instance.getInventory().deserializeNBT(next.getCompound("Inventory"));
             instance.InitLove();
         }
 
