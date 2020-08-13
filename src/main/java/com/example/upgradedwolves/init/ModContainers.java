@@ -10,9 +10,9 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class ModContainers {
-    public static final DeferredRegister<ContainerType<?>> CONTAINER_TYPES = new DeferredRegister<>(
+    public static final DeferredRegister<ContainerType<?>> CONTAINER_TYPES = DeferredRegister.create(
         ForgeRegistries.CONTAINERS, UpgradedWolves.ModId
     );
 
-    public static final RegistryObject<ContainerType<WolfContainer>> WOLF_CONTAINER = CONTAINER_TYPES.register("wolf_container", () -> IForgeContainerType.create(WolfContainer::new)));
+    public static final RegistryObject<ContainerType<WolfContainer>> WOLF_CONTAINER = CONTAINER_TYPES.register("wolf_container", () -> IForgeContainerType.create(WolfContainer::new));
 }
