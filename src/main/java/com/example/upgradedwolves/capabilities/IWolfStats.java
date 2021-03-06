@@ -13,6 +13,6 @@ public interface IWolfStats {
     public void InitLove();
     public double getWolfSpeed();
     public int getWolfStrength();
-    public ItemStackHandler getInventory();
+    //public ItemStackHandler getInventory();
     public boolean addItemStack(ItemStack item);
 }

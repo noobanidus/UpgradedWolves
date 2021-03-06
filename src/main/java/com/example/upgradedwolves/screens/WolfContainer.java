@@ -25,7 +25,7 @@ public class WolfContainer extends Container {
 
     public WolfContainer(int id, PlayerInventory playerInventory,WolfEntity wolfEntity) {
         super(ModContainers.WOLF_CONTAINER.get(),id);
-        wolf = wolfEntity;
+        /*wolf = wolfEntity;
         wolfItemHandler = wolf.getCapability(WolfStatsHandler.CAPABILITY_WOLF_STATS).orElse(null).getInventory();
         //canInteractWithCallable = IWorldPosCallable.of(wolf.getEntityWorld(),wolf.getPositionVec())
         int startX = 16;
@@ -45,7 +45,7 @@ public class WolfContainer extends Container {
         // Hot bar
         for(int i = 0; i < 9; i++){
             this.addSlot(new Slot(playerInventory,i,startX + delta * (i % 9),286));
-        }
+        }*/
     }
     public static WolfEntity getwolfEntity(PlayerInventory playerInventory, PacketBuffer data){
         Objects.requireNonNull(playerInventory,"playerInventory cannot be null");

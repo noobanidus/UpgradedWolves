@@ -57,7 +57,7 @@ public class WolfPlayerInteraction {
             WolfEntity wolf = (WolfEntity)event.getEntity();
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             wolf.setCanPickUpLoot(true);
-            wolf.getAttribute(Attributes.field_233821_d_).setBaseValue(handler.getWolfSpeed());
+            wolf.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(handler.getWolfSpeed());
             PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getEntityId(),handler.getWolfType()) );
         }        
     }
@@ -67,7 +67,7 @@ public class WolfPlayerInteraction {
         event.getTarget().getCapability(WolfStatsHandler.CAPABILITY_WOLF_STATS).ifPresent(capability -> {
             WolfEntity wolf = (WolfEntity)event.getTarget();
             PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)event.getPlayer()), new RenderMessage(wolf.getEntityId(),capability.getWolfType()));
-            wolf.getAttribute(Attributes.field_233821_d_).setBaseValue(capability.getWolfSpeed());
+            wolf.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(capability.getWolfSpeed());
         });
     }
 

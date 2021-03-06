@@ -59,7 +59,7 @@ public class TrainingEventHandler {
             if(event.getEntity() instanceof MonsterEntity){
                 LogManager.getLogger().info("Killed");
                 ITraining handler = TrainingHandler.getHandler(foodItem);
-                handler.setAttribute(1);                
+                handler.setAttribute(1);                         
                 if(Thread.currentThread().getName() == "Server thread"){
                     PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)player), new TrainingItemMessage(1, player.getEntityId()));
                 }

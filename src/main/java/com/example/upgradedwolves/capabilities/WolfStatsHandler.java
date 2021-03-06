@@ -162,10 +162,10 @@ public class WolfStatsHandler {
             return 4 + (strengthLvl / 2);
         }
 
-        @Override
+        /*@Override
         public ItemStackHandler getInventory() {            
             return inventory;
-        }
+        }*/
         @Override
         public boolean addItemStack(ItemStack item){
             int i = 0;
@@ -194,7 +194,7 @@ public class WolfStatsHandler {
             nbt.putInt("StrengthXp", instance.getXp(WolfStatsEnum.Strength));
             nbt.putInt("IntelligenceXp", instance.getXp(WolfStatsEnum.Intelligence));
             nbt.putInt("WolfType",instance.getWolfType());
-            nbt.put("Inventory",instance.getInventory().serializeNBT());
+            //nbt.put("Inventory",instance.getInventory().serializeNBT());
             return nbt;
         }
 
@@ -209,7 +209,7 @@ public class WolfStatsHandler {
             instance.addXp(WolfStatsEnum.Strength, next.getInt("StrengthXp"));
             instance.addXp(WolfStatsEnum.Intelligence, next.getInt("IntelligenceXp"));
             instance.setWolfType(next.getInt("WolfType"));
-            instance.getInventory().deserializeNBT(next.getCompound("Inventory"));
+            //instance.getInventory().deserializeNBT(next.getCompound("Inventory"));
             instance.InitLove();
         }
 
