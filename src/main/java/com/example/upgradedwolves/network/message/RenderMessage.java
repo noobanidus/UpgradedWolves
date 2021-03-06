@@ -44,6 +44,7 @@ public class RenderMessage implements IMessage<RenderMessage> {
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             handler.setWolfType(message.wolfValue);
         });
+        supplier.get().setPacketHandled(true);
 
     }
     

@@ -44,6 +44,7 @@ public class TrainingItemMessage implements IMessage<TrainingItemMessage> {
             ITraining handler = TrainingHandler.getHandler(foodItem);
             handler.setAttribute(message.wolfValue);
         });
+        supplier.get().setPacketHandled(true);
 
     }
 
