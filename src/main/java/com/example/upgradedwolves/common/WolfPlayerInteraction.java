@@ -21,6 +21,7 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDestroyBlockEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
@@ -96,13 +97,13 @@ public class WolfPlayerInteraction {
         }
     }
     @SubscribeEvent
-    public void onWolfPickUp(EntityItemPickupEvent event){
+    public void onWolfPickUp(LivingUpdateEvent event){        
         if(event.getEntity() instanceof WolfEntity){
             WolfEntity wolf = (WolfEntity)event.getEntity();
-            IWolfStats handler = WolfStatsHandler.getHandler(wolf);
-            ItemStack item = event.getItem().getItem();
+            IWolfStats handler = WolfStatsHandler.getHandler(wolf);            
             if(handler.getLevel(WolfStatsEnum.Intelligence) > 4){
-                if(wolf.getHeldItemMainhand() != null){
+                if(wolf.getHeldItemMainhand() != ItemStack.EMPTY && wolf.getOwner() != null){
+                    LogManager.getLogger().info(wolf.getHeldItemMainhand());
                     wolf.getOwner().entityDropItem(wolf.getHeldItemMainhand());
                     wolf.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);                
                 }
