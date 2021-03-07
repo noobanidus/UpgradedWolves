@@ -69,7 +69,6 @@ public class WolfStatsHandler {
                 case Strength:
                     if (LevelUpFunction(strengthLvl,strengthXp + amount)){                        
                         strengthXp -= Math.pow(strengthLvl++,1.1) * 4;
-                        LogManager.getLogger().info("Wolf Leveled up strength");
                     }
                     strengthXp += amount;
                     break;

@@ -26,8 +26,7 @@ public class DamageHandler {
             event.setAmount(handler.getWolfStrength());                                          
             handler.addXp(WolfStatsEnum.Strength, 2);
             if(event.getEntity() instanceof MonsterEntity)
-                handler.addXp(WolfStatsEnum.Strength, 2);
-            LogManager.getLogger().info("Wolf strength Increased:" + handler.getXp(WolfStatsEnum.Strength) + " xp, lvl: " + handler.getLevel(WolfStatsEnum.Strength));      
+                handler.addXp(WolfStatsEnum.Strength, 2);            
         }
     }
     @SubscribeEvent
@@ -38,7 +37,7 @@ public class DamageHandler {
             handler.addXp(WolfStatsEnum.Intelligence, 1);
             handler.addXp(WolfStatsEnum.Speed,2);
             wolf.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(handler.getWolfSpeed());
-            LogManager.getLogger().info("Wolf speed Increased:" + handler.getXp(WolfStatsEnum.Speed) + " xp, lvl: " + handler.getLevel(WolfStatsEnum.Speed));
+            LogManager.getLogger().info("Wolf intelligence Increased:" + handler.getXp(WolfStatsEnum.Intelligence) + " xp, lvl: " + handler.getLevel(WolfStatsEnum.Intelligence));
             if(wolf.getHeldItemMainhand() != null){
                 wolf.getOwner().entityDropItem(wolf.getHeldItemMainhand());
                 wolf.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);                

@@ -5,15 +5,19 @@ import com.example.upgradedwolves.capabilities.TrainingHandler;
 import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.capabilities.TrainingHandler.ITraining;
+import com.example.upgradedwolves.entities.goals.WolfAutoAttackTargetGoal;
 import com.example.upgradedwolves.network.PacketHandler;
 import com.example.upgradedwolves.network.message.RenderMessage;
 
 import org.apache.logging.log4j.LogManager;
 
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Hand;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDestroyBlockEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
@@ -97,6 +101,19 @@ public class WolfPlayerInteraction {
             WolfEntity wolf = (WolfEntity)event.getEntity();
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             ItemStack item = event.getItem().getItem();
+            if(handler.getLevel(WolfStatsEnum.Intelligence) > 4){
+                if(wolf.getHeldItemMainhand() != null){
+                    wolf.getOwner().entityDropItem(wolf.getHeldItemMainhand());
+                    wolf.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);                
+                }
+            }
+        }
+    }
+    @SubscribeEvent
+    public void AddWolfGoals(EntityJoinWorldEvent event){
+        if(event.getEntity() instanceof WolfEntity){
+            WolfEntity wolf = (WolfEntity)event.getEntity();
+            wolf.targetSelector.addGoal(4, new WolfAutoAttackTargetGoal(wolf,MonsterEntity.class,false));
         }
     }
 }
