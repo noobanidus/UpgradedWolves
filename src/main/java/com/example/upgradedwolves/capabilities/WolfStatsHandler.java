@@ -21,6 +21,8 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.items.ItemStackHandler;
 
+import org.apache.logging.log4j.LogManager;
+
 public class WolfStatsHandler {
     @CapabilityInject(IWolfStats.class)
     public static final Capability<IWolfStats> CAPABILITY_WOLF_STATS = null;
@@ -49,11 +51,8 @@ public class WolfStatsHandler {
         //The wolves will have a maximum of 27 slots. (3, +1 every 10 str)         
         ItemStackHandler inventory;
         
-        private int LevelUpFunction(int level, int xp) {
-            if (xp >= Math.pow(level, 1.1) * 4) {
-                xp -= Math.pow(level, 1.1) * 4;
-            }
-            return xp;
+        private boolean LevelUpFunction(int level, int xp) {
+            return xp > Math.pow(level,1.1) * 4;
         }
         public void InitLove(){
             if(loveLvl > 0)
@@ -65,22 +64,26 @@ public class WolfStatsHandler {
         }
         @Override
         public void addXp(WolfStatsEnum wolfStats, int amount) {
-            int xp;
+
             switch (wolfStats) {
                 case Strength:
-                    if (strengthXp > (xp = LevelUpFunction(strengthLvl, strengthXp + amount)))
-                        strengthLvl++;
-                    strengthXp = xp;
+                    if (LevelUpFunction(strengthLvl,strengthXp + amount)){                        
+                        strengthXp -= Math.pow(strengthLvl++,1.1) * 4;
+                        LogManager.getLogger().info("Wolf Leveled up strength");
+                    }
+                    strengthXp += amount;
                     break;
                 case Speed:
-                    if (speedXp > (xp = LevelUpFunction(speedLvl, speedXp + amount)))
-                        speedLvl++;
-                    speedXp = xp;
+                if (LevelUpFunction(speedLvl,speedXp + amount)){                        
+                    speedXp -= Math.pow(speedLvl++,1.1) * 4;
+                }
+                strengthXp += amount;
                     break;
                 case Intelligence:
-                    if (intelligenceXp > (xp = LevelUpFunction(intelligenceLvl, intelligenceXp + amount)))
-                        intelligenceLvl++;
-                    intelligenceXp = xp;
+                if (LevelUpFunction(intelligenceLvl,intelligenceXp + amount)){                        
+                    intelligenceXp -= Math.pow(intelligenceLvl++,1.1) * 4;
+                }
+                strengthXp += amount;
                     break;
                 case Love:
                     break;
