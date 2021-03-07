@@ -6,6 +6,7 @@ import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 
 import org.apache.logging.log4j.LogManager;
 
+import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
@@ -22,7 +23,10 @@ public class DamageHandler {
             WolfEntity wolf = (WolfEntity)event.getSource().getTrueSource();
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             event.setAmount(handler.getWolfStrength());                                          
-            handler.addXp(WolfStatsEnum.Strength, 2);            
+            handler.addXp(WolfStatsEnum.Strength, 2);
+            if(event.getEntity() instanceof MonsterEntity)
+                handler.addXp(WolfStatsEnum.Strength, 2);
+            LogManager.getLogger().info("Wolf strength Increased:" + handler.getXp(WolfStatsEnum.Strength) + " xp, lvl: " + handler.getLevel(WolfStatsEnum.Strength));      
         }
     }
     @SubscribeEvent
