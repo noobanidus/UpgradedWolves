@@ -77,13 +77,13 @@ public class WolfStatsHandler {
                 if (LevelUpFunction(speedLvl,speedXp + amount)){                        
                     speedXp -= Math.pow(speedLvl++,1.1) * 4;
                 }
-                strengthXp += amount;
+                speedXp += amount;
                     break;
                 case Intelligence:
                 if (LevelUpFunction(intelligenceLvl,intelligenceXp + amount)){                        
                     intelligenceXp -= Math.pow(intelligenceLvl++,1.1) * 4;
                 }
-                strengthXp += amount;
+                intelligenceXp += amount;
                     break;
                 case Love:
                     break;
