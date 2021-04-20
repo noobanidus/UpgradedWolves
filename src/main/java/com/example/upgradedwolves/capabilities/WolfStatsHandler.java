@@ -4,6 +4,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.example.upgradedwolves.UpgradedWolves;
+import com.example.upgradedwolves.network.PacketHandler;
+import com.example.upgradedwolves.network.message.SpawnLevelUpParticle;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.WolfEntity;
@@ -19,6 +21,7 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class WolfStatsHandler {
@@ -32,7 +35,9 @@ public class WolfStatsHandler {
 
     @Nullable
     public static IWolfStats getHandler(WolfEntity entity) {
-        return entity.getCapability(CAPABILITY_WOLF_STATS, Direction.DOWN).orElse(null);
+        IWolfStats stats = entity.getCapability(CAPABILITY_WOLF_STATS, Direction.DOWN).orElse(null);
+        stats.setActiveWolf(entity);
+        return stats;
     }
 
     @SubscribeEvent
@@ -48,6 +53,7 @@ public class WolfStatsHandler {
         int speedXp, strengthXp, intelligenceXp;
         //The wolves will have a maximum of 27 slots. (3, +1 every 10 str)         
         ItemStackHandler inventory;
+        WolfEntity currentWolf;
         
         private boolean LevelUpFunction(int level, int xp) {
             return xp > Math.pow(level,1.1) * 4;
@@ -67,20 +73,23 @@ public class WolfStatsHandler {
                 case Strength:
                     if (LevelUpFunction(strengthLvl,strengthXp + amount)){                        
                         strengthXp -= Math.pow(strengthLvl++,1.1) * 4;
+                        PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> currentWolf), new SpawnLevelUpParticle( currentWolf.getEntityId(),wolfStats.ordinal()));
                     }
                     strengthXp += amount;
                     break;
                 case Speed:
-                if (LevelUpFunction(speedLvl,speedXp + amount)){                        
-                    speedXp -= Math.pow(speedLvl++,1.1) * 4;
-                }
-                speedXp += amount;
+                    if (LevelUpFunction(speedLvl,speedXp + amount)){                        
+                        speedXp -= Math.pow(speedLvl++,1.1) * 4;
+                        PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> currentWolf), new SpawnLevelUpParticle( currentWolf.getEntityId(),wolfStats.ordinal()));
+                    }
+                    speedXp += amount;
                     break;
                 case Intelligence:
-                if (LevelUpFunction(intelligenceLvl,intelligenceXp + amount)){                        
-                    intelligenceXp -= Math.pow(intelligenceLvl++,1.1) * 4;
-                }
-                intelligenceXp += amount;
+                    if (LevelUpFunction(intelligenceLvl,intelligenceXp + amount)){                        
+                        intelligenceXp -= Math.pow(intelligenceLvl++,1.1) * 4;
+                        PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> currentWolf), new SpawnLevelUpParticle( currentWolf.getEntityId(),wolfStats.ordinal()));
+                    }
+                    intelligenceXp += amount;
                     break;
                 case Love:
                     break;
@@ -177,6 +186,16 @@ public class WolfStatsHandler {
             }
             return true;
         }
+        @Override
+        public WolfEntity getActiveWolf() {
+            return currentWolf;
+        }
+        @Override
+        public void setActiveWolf(WolfEntity entity) {
+            if(currentWolf == null)
+                currentWolf = entity;
+        }
+        
 
     }
 
