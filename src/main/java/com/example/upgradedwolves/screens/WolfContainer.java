@@ -2,7 +2,6 @@ package com.example.upgradedwolves.screens;
 
 import java.util.Objects;
 
-import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.init.ModContainers;
 
 import net.minecraft.entity.Entity;
@@ -10,12 +9,9 @@ import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IWorldPosCallable;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
 
 public class WolfContainer extends Container {
 

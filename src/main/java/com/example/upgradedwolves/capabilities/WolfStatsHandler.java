@@ -21,8 +21,6 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.items.ItemStackHandler;
 
-import org.apache.logging.log4j.LogManager;
-
 public class WolfStatsHandler {
     @CapabilityInject(IWolfStats.class)
     public static final Capability<IWolfStats> CAPABILITY_WOLF_STATS = null;

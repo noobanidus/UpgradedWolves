@@ -1,7 +1,6 @@
 package com.example.upgradedwolves.capabilities;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.ItemStackHandler;
 
 public interface IWolfStats {
     public void addXp(WolfStatsEnum wolfStats,int amount);
