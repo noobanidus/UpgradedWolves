@@ -16,6 +16,8 @@ public class ModContainers {
 
     @SubscribeEvent
     public static void registerContainers(final RegistryEvent.Register<ContainerType<?>> event){
-        
+        WOLF_CONTAINER = IForgeContainerType.create(WolfContainer::createContainerClientSide);
+        WOLF_CONTAINER.setRegistryName("wolf_container");
+        event.getRegistry().register(WOLF_CONTAINER);
     }
 }

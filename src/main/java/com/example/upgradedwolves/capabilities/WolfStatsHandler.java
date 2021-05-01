@@ -4,6 +4,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.example.upgradedwolves.UpgradedWolves;
+import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
 import com.example.upgradedwolves.network.PacketHandler;
 import com.example.upgradedwolves.network.message.SpawnLevelUpParticle;
 
@@ -52,7 +53,7 @@ public class WolfStatsHandler {
         int speedLvl, strengthLvl, intelligenceLvl, loveLvl, wolfType;
         int speedXp, strengthXp, intelligenceXp;
         //The wolves will have a maximum of 27 slots. (3, +1 every 10 str)         
-        ItemStackHandler inventory;
+        ItemStackHandlerWolf inventory;
         WolfEntity currentWolf;
         
         private boolean LevelUpFunction(int level, int xp) {
@@ -171,10 +172,10 @@ public class WolfStatsHandler {
             return 4 + (strengthLvl / 2);
         }
 
-        /*@Override
-        public ItemStackHandler getInventory() {            
+        @Override
+        public ItemStackHandlerWolf getInventory() {            
             return inventory;
-        }*/
+        }
         @Override
         public boolean addItemStack(ItemStack item){
             int i = 0;
