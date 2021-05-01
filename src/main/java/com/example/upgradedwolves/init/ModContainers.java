@@ -5,14 +5,17 @@ import com.example.upgradedwolves.screens.WolfContainer;
 
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraftforge.common.extensions.IForgeContainerType;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class ModContainers {
-    public static final DeferredRegister<ContainerType<?>> CONTAINER_TYPES = DeferredRegister.create(
-        ForgeRegistries.CONTAINERS, UpgradedWolves.ModId
-    );
+    public static ContainerType<WolfContainer> WOLF_CONTAINER;
 
-    public static final RegistryObject<ContainerType<WolfContainer>> WOLF_CONTAINER = CONTAINER_TYPES.register("wolf_container", () -> IForgeContainerType.create(WolfContainer::new));
+    @SubscribeEvent
+    public static void registerContainers(final RegistryEvent.Register<ContainerType<?>> event){
+        
+    }
 }

@@ -20,7 +20,7 @@ public class WolfContainer extends Container {
     private IWorldPosCallable canInteractWithCallable;    
 
     public WolfContainer(int id, PlayerInventory playerInventory,WolfEntity wolfEntity) {
-        super(ModContainers.WOLF_CONTAINER.get(),id);
+        super(ModContainers.WOLF_CONTAINER,id);
         /*wolf = wolfEntity;
         wolfItemHandler = wolf.getCapability(WolfStatsHandler.CAPABILITY_WOLF_STATS).orElse(null).getInventory();
         //canInteractWithCallable = IWorldPosCallable.of(wolf.getEntityWorld(),wolf.getPositionVec())
@@ -42,17 +42,6 @@ public class WolfContainer extends Container {
         for(int i = 0; i < 9; i++){
             this.addSlot(new Slot(playerInventory,i,startX + delta * (i % 9),286));
         }*/
-    }
-    public static WolfEntity getwolfEntity(PlayerInventory playerInventory, PacketBuffer data){
-        Objects.requireNonNull(playerInventory,"playerInventory cannot be null");
-        Objects.requireNonNull(data,"data cannot be null");
-        Entity entity = playerInventory.player.world.getEntityByID(data.readInt());
-        if(entity instanceof WolfEntity)
-            return (WolfEntity)entity;
-        throw new IllegalStateException("Wolf Entity is not correct" + entity);
-    }
-    public WolfContainer(int windowId,PlayerInventory playerInventory, PacketBuffer data){
-        this(windowId,playerInventory, getwolfEntity(playerInventory, data));
     }
     @Override
     public boolean canInteractWith(PlayerEntity playerIn) {
