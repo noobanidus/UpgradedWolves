@@ -5,6 +5,7 @@ import com.example.upgradedwolves.capabilities.TrainingHandler;
 import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.capabilities.TrainingHandler.ITraining;
+import com.example.upgradedwolves.containers.ContainerProviderWolfInventory;
 import com.example.upgradedwolves.entities.goals.WolfAutoAttackTargetGoal;
 import com.example.upgradedwolves.network.PacketHandler;
 import com.example.upgradedwolves.network.message.RenderMessage;
@@ -15,7 +16,9 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Hand;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDestroyBlockEvent;
@@ -26,6 +29,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.fml.network.PacketDistributor;
 
 public class WolfPlayerInteraction {
@@ -34,22 +38,33 @@ public class WolfPlayerInteraction {
         //LogManager.getLogger().info(event.getEntity().toString());
         if(event.getTarget() instanceof WolfEntity){
             final WolfEntity wolf = (WolfEntity) event.getTarget();            
-            final IWolfStats handler = WolfStatsHandler.getHandler(wolf);            
-            LogManager.getLogger().info(handler.getLevel(WolfStatsEnum.Love));
-            LogManager.getLogger().info(handler.getWolfType());
-            handler.InitLove();       
-            final ItemStack foodItem = TrainingEventHandler.getFoodStack(event.getPlayer());
-            if(Thread.currentThread().getName() == "Server thread")
-                PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getEntityId(),WolfStatsHandler.getHandler(wolf).getWolfType()) );
-            if(foodItem != null){
-                final ITraining tHandler = TrainingHandler.getHandler(foodItem);
-                final int item = tHandler.getAttribute();                
-                if(item == 0)
-                    return;
-                else /*if (handler.getWolfType() != 0)*/{                                  
-                    handler.setWolfType(item);
-                    foodItem.shrink(1);
-                    tHandler.resetAttribute();                                        
+            final IWolfStats handler = WolfStatsHandler.getHandler(wolf);
+            if(wolf.getOwner() == event.getPlayer() && event.getPlayer().isCrouching()){
+                if(Thread.currentThread().getName() == "Server thread"){
+                    INamedContainerProvider wolfInventory = new ContainerProviderWolfInventory(wolf,handler.getInventory());
+                    NetworkHooks.openGui((ServerPlayerEntity)event.getPlayer(),
+                        wolfInventory,
+                        (packetBuffer) ->{packetBuffer.writeInt(1);}
+                    );
+                }
+            }
+            else{
+                LogManager.getLogger().info(handler.getLevel(WolfStatsEnum.Love));
+                LogManager.getLogger().info(handler.getWolfType());
+                handler.InitLove();       
+                final ItemStack foodItem = TrainingEventHandler.getFoodStack(event.getPlayer());
+                if(Thread.currentThread().getName() == "Server thread")
+                    PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getEntityId(),WolfStatsHandler.getHandler(wolf).getWolfType()) );
+                if(foodItem != null){
+                    final ITraining tHandler = TrainingHandler.getHandler(foodItem);
+                    final int item = tHandler.getAttribute();                
+                    if(item == 0)
+                        return;
+                    else /*if (handler.getWolfType() != 0)*/{                                  
+                        handler.setWolfType(item);
+                        foodItem.shrink(1);
+                        tHandler.resetAttribute();                                        
+                    }
                 }
             }
         }

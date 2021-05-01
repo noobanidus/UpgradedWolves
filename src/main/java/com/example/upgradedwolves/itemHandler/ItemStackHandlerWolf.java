@@ -9,7 +9,7 @@ import net.minecraftforge.items.ItemStackHandler;
 public class ItemStackHandlerWolf extends ItemStackHandler {
     
     public static final int MIN_WOLF_SLOT = 1;
-    public static final int MAX_WOLF_SLOT = 7;
+    public static final int MAX_WOLF_SLOT = 9;
 
     boolean isDirty = true;
 

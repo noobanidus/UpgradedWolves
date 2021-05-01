@@ -1,4 +1,4 @@
-package com.example.upgradedwolves.screens;
+package com.example.upgradedwolves.containers;
 
 import com.example.upgradedwolves.UpgradedWolves;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -18,10 +18,10 @@ public class WolfScreen extends ContainerScreen<WolfContainer> {
 
     public WolfScreen(WolfContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
-        this.guiLeft = 0;
-        this.guiTop = 0;
-        this.xSize = 352;
-        this.ySize = 334;
+        // this.guiLeft = 0;
+        // this.guiTop = 0;
+        // this.xSize = 256;
+        // this.ySize = 256;
     }    
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {

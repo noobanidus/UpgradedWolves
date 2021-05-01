@@ -1,7 +1,7 @@
 package com.example.upgradedwolves.init;
 
 import com.example.upgradedwolves.UpgradedWolves;
-import com.example.upgradedwolves.screens.WolfContainer;
+import com.example.upgradedwolves.containers.WolfContainer;
 
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraftforge.common.extensions.IForgeContainerType;

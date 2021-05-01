@@ -1,4 +1,4 @@
-package com.example.upgradedwolves.screens;
+package com.example.upgradedwolves.containers;
 
 import java.util.Objects;
 
@@ -26,19 +26,16 @@ public class WolfContainer extends Container {
 
     public WolfEntity wolf;
     public ItemStackHandlerWolf wolfItemHandler;
-    private ItemStack itemStackBeingHeld;
     private IWorldPosCallable canInteractWithCallable;    
 
-    private WolfContainer(int id, PlayerInventory playerInventory,ItemStackHandlerWolf wolfStackHandler,ItemStack itemStackHeld,WolfEntity wolf) {
+    private WolfContainer(int id, PlayerInventory playerInventory,ItemStackHandlerWolf wolfStackHandler,WolfEntity wolf) {
         super(ModContainers.WOLF_CONTAINER,id);
         this.wolf = wolf;
         this.wolfItemHandler = wolfStackHandler;
-        this.itemStackBeingHeld = itemStackHeld;
-        int startX = 16;
-        int startY = 36;
+        int startX = 8;
+        int startY = 51;
         //The delta X and delta Y are the same
-        int delta = 36;
-        startY = 170;
+        int delta = 18;
         //Player Inventory
         for(int i = 0; i < 27; i++){
             this.addSlot(new Slot(playerInventory,9 + i,startX + delta * (i % 9),startY + delta * (i/9)));
@@ -46,10 +43,11 @@ public class WolfContainer extends Container {
         
         // Hot bar
         for(int i = 0; i < 9; i++){
-            this.addSlot(new Slot(playerInventory,i,startX + delta * (i % 9),286));
+            this.addSlot(new Slot(playerInventory,i,startX + delta * (i % 9),109));
         }
+        startY = 20;
         //Wolf Inventory
-        for(int i = 0; i < 27; i++){
+        for(int i = 0; i < wolfItemHandler.getSlots(); i++){
             this.addSlot(new SlotItemHandler(wolfStackHandler,i,startX + delta * (i % 9),startY + delta * (i/9)));
         }
     }
@@ -60,15 +58,15 @@ public class WolfContainer extends Container {
         try{
             ItemStackHandlerWolf wolfItemHandler = new ItemStackHandlerWolf(numberOfSlots);
 
-            return new WolfContainer(id,inventory,wolfItemHandler,ItemStack.EMPTY, null);
+            return new WolfContainer(id,inventory,wolfItemHandler, null);
         }catch(IllegalArgumentException iae){
             LogManager.getLogger().warn(iae);
         }
         return null;
     }
 
-    public static WolfContainer createContainerServerSide(int id, PlayerInventory inventory,ItemStackHandlerWolf wolfItemHandler,ItemStack item,WolfEntity wolf){
-        return new WolfContainer(id,inventory,wolfItemHandler,item,wolf);
+    public static WolfContainer createContainerServerSide(int id, PlayerInventory inventory,ItemStackHandlerWolf wolfItemHandler,WolfEntity wolf){
+        return new WolfContainer(id,inventory,wolfItemHandler,wolf);
     }
 
     @Nonnull
@@ -107,21 +105,10 @@ public class WolfContainer extends Container {
         return copyOfSourceStack;
 	}
 
-    @Override    
-    public void detectAndSendChanges() {
-        if(wolfItemHandler.isDirty()){
-            CompoundNBT nbt = itemStackBeingHeld.getOrCreateTag();
-            int dirtyCounter = nbt.getInt("dirtyCounter");
-            nbt.putInt("dirtyCounter",dirtyCounter + 1);
-            itemStackBeingHeld.setTag(nbt);
-        }
-        super.detectAndSendChanges();
-    }
-
     @Override
     public boolean canInteractWith(PlayerEntity playerIn) {
         
-        return false;
+        return true;
     }
 
     

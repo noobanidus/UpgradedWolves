@@ -29,6 +29,7 @@ import com.example.upgradedwolves.client.ClientHandler;
 import com.example.upgradedwolves.common.DamageHandler;
 import com.example.upgradedwolves.common.TrainingEventHandler;
 import com.example.upgradedwolves.common.WolfPlayerInteraction;
+import com.example.upgradedwolves.init.ModContainers;
 import com.example.upgradedwolves.network.PacketHandler;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -53,6 +54,8 @@ public class UpgradedWolves
         MinecraftForge.EVENT_BUS.register(new DamageHandler());
         MinecraftForge.EVENT_BUS.register(new WolfPlayerInteraction());
         MinecraftForge.EVENT_BUS.register(new TrainingEventHandler());
+        //Future reference for static registering...
+        FMLJavaModLoadingContext.get().getModEventBus().register(ModContainers.class);
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
     }
