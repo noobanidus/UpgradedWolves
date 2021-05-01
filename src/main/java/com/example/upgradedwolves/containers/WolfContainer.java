@@ -1,7 +1,5 @@
 package com.example.upgradedwolves.containers;
 
-import java.util.Objects;
-
 import javax.annotation.Nonnull;
 
 import com.example.upgradedwolves.init.ModContainers;
@@ -9,24 +7,19 @@ import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
 
 import org.apache.logging.log4j.LogManager;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IWorldPosCallable;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class WolfContainer extends Container {
 
     public WolfEntity wolf;
-    public ItemStackHandlerWolf wolfItemHandler;
-    private IWorldPosCallable canInteractWithCallable;    
+    public ItemStackHandlerWolf wolfItemHandler;   
 
     private WolfContainer(int id, PlayerInventory playerInventory,ItemStackHandlerWolf wolfStackHandler,WolfEntity wolf) {
         super(ModContainers.WOLF_CONTAINER,id);
