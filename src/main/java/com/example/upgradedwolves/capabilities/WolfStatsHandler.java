@@ -23,7 +23,6 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
-import net.minecraftforge.items.ItemStackHandler;
 
 public class WolfStatsHandler {
     @CapabilityInject(IWolfStats.class)
