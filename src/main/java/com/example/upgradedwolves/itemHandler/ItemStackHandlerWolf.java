@@ -4,6 +4,7 @@ import javax.annotation.Nonnull;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class ItemStackHandlerWolf extends ItemStackHandler {
@@ -50,5 +51,19 @@ public class ItemStackHandlerWolf extends ItemStackHandler {
 
     protected void onContentsChanged(int slot){
         isDirty = true;
+    }
+
+    public int getAvailableSlot(ItemStack item){
+        for(int i = 0; i < getSlots(); i++){
+            if(getStackInSlot(i) == ItemStack.EMPTY)
+                return i;
+            else if(ItemHandlerHelper.canItemStacksStack(getStackInSlot(i), item)){
+                ItemStack slotItem = getStackInSlot(i);
+                int max = slotItem.getMaxStackSize();
+                if(slotItem.getCount() != max)
+                    return i;
+            }
+        }
+        return -1;
     }
 }

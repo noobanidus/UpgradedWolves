@@ -7,12 +7,14 @@ import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.capabilities.TrainingHandler.ITraining;
 import com.example.upgradedwolves.containers.ContainerProviderWolfInventory;
 import com.example.upgradedwolves.entities.goals.WolfAutoAttackTargetGoal;
+import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
 import com.example.upgradedwolves.network.PacketHandler;
 import com.example.upgradedwolves.network.message.RenderMessage;
 
 import org.apache.logging.log4j.LogManager;
 
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -121,12 +123,32 @@ public class WolfPlayerInteraction {
     public void onWolfPickUp(LivingUpdateEvent event){        
         if(event.getEntity() instanceof WolfEntity){
             WolfEntity wolf = (WolfEntity)event.getEntity();
-            IWolfStats handler = WolfStatsHandler.getHandler(wolf);            
-            if(handler.getLevel(WolfStatsEnum.Intelligence) > 4){
-                if(wolf.getHeldItemMainhand() != ItemStack.EMPTY && wolf.getOwner() != null){
+            IWolfStats handler = WolfStatsHandler.getHandler(wolf);
+            ItemStackHandlerWolf wolfInventory = handler.getInventory();
+
+            wolf.setCanPickUpLoot(false);
+            for(ItemEntity itementity : wolf.world.getEntitiesWithinAABB(ItemEntity.class, wolf.getBoundingBox().grow(1.0D, 0.0D, 1.0D))) {
+                if (wolfInventory.getAvailableSlot(itementity.getItem()) >= 0) {
+                    wolf.setCanPickUpLoot(true);
+                }
+             }
+
+            if(wolf.getHeldItemMainhand() != ItemStack.EMPTY && wolf.getOwner() != null){
+                if(handler.getLevel(WolfStatsEnum.Intelligence) > 4){                
                     LogManager.getLogger().info(wolf.getHeldItemMainhand());
-                    wolf.getOwner().entityDropItem(wolf.getHeldItemMainhand());
-                    wolf.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);                
+                    wolf.getOwner().entityDropItem(wolf.getHeldItemMainhand());                    
+                    wolf.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
+                }
+                else{                                        
+                    int wolfSlot = wolfInventory.getAvailableSlot(wolf.getHeldItemMainhand());
+                    if(wolfSlot >= 0){
+                        ItemStack remaining = wolfInventory.insertItem(wolfSlot, wolf.getHeldItemMainhand(), false);
+                        wolf.setHeldItem(Hand.MAIN_HAND, remaining);
+                    }
+                    else{
+                        wolf.entityDropItem(wolf.getHeldItemMainhand());                    
+                        wolf.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
+                    }
                 }
             }
         }
