@@ -3,6 +3,7 @@ package com.example.upgradedwolves.common;
 import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
+import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
 
 import org.apache.logging.log4j.LogManager;
 
@@ -41,6 +42,15 @@ public class DamageHandler {
             if(wolf.getHeldItemMainhand() != null){
                 wolf.getOwner().entityDropItem(wolf.getHeldItemMainhand());
                 wolf.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);                
+            }
+        }
+        //If the wolf dies
+        else if(event.getEntity() instanceof WolfEntity){
+            WolfEntity wolf = (WolfEntity)event.getEntity();
+            IWolfStats handler = WolfStatsHandler.getHandler(wolf);
+            ItemStackHandlerWolf wolfInventory = handler.getInventory();
+            for(int i = 0; i < wolfInventory.getSlots(); i++){
+                wolf.entityDropItem(wolfInventory.getStackInSlot(i));
             }
         }
     }

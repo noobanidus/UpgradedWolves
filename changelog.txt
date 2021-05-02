@@ -3,11 +3,11 @@
 Added
 +Scavenger wolf
 
-
 +Added Inventory features
 	+Status bar
 	+health bar
 	+Inventory menu
++Wolf drops items on death
 
 Removed
 
