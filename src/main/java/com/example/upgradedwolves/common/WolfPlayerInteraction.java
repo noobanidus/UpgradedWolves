@@ -7,6 +7,7 @@ import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.capabilities.TrainingHandler.ITraining;
 import com.example.upgradedwolves.containers.ContainerProviderWolfInventory;
 import com.example.upgradedwolves.entities.goals.WolfAutoAttackTargetGoal;
+import com.example.upgradedwolves.entities.goals.WolfFindAndPickUpItemGoal;
 import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
 import com.example.upgradedwolves.network.PacketHandler;
 import com.example.upgradedwolves.network.message.RenderMessage;
@@ -131,7 +132,7 @@ public class WolfPlayerInteraction {
                 if (wolfInventory.getAvailableSlot(itementity.getItem()) >= 0) {
                     wolf.setCanPickUpLoot(true);
                 }
-             }
+            }
 
             if(wolf.getHeldItemMainhand() != ItemStack.EMPTY && wolf.getOwner() != null){
                 if(handler.getLevel(WolfStatsEnum.Intelligence) > 4){                
@@ -158,6 +159,7 @@ public class WolfPlayerInteraction {
         if(event.getEntity() instanceof WolfEntity){
             WolfEntity wolf = (WolfEntity)event.getEntity();
             wolf.targetSelector.addGoal(4, new WolfAutoAttackTargetGoal(wolf,MonsterEntity.class,false));
+            wolf.goalSelector.addGoal(3, new WolfFindAndPickUpItemGoal(wolf));
         }
     }
 }
