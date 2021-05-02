@@ -7,6 +7,8 @@ import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
 
 import org.apache.logging.log4j.LogManager;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -25,8 +27,8 @@ public class WolfContainer extends Container {
         super(ModContainers.WOLF_CONTAINER,id);
         this.wolf = wolf;
         this.wolfItemHandler = wolfStackHandler;
-        int startX = 8;
-        int startY = 51;
+        int startX = 7;
+        int startY = 94;
         //The delta X and delta Y are the same
         int delta = 18;
         //Player Inventory
@@ -36,9 +38,9 @@ public class WolfContainer extends Container {
         
         // Hot bar
         for(int i = 0; i < 9; i++){
-            this.addSlot(new Slot(playerInventory,i,startX + delta * (i % 9),109));
+            this.addSlot(new Slot(playerInventory,i,startX + delta * (i % 9),152));
         }
-        startY = 20;
+        startY = 68;
         //Wolf Inventory
         for(int i = 0; i < wolfItemHandler.getSlots(); i++){
             this.addSlot(new SlotItemHandler(wolfStackHandler,i,startX + delta * (i % 9),startY + delta * (i/9)));
@@ -47,11 +49,14 @@ public class WolfContainer extends Container {
 
     public static WolfContainer createContainerClientSide(int id, PlayerInventory inventory, PacketBuffer data){
         int numberOfSlots = data.readInt();
+        int wolfId = data.readInt();
 
         try{
             ItemStackHandlerWolf wolfItemHandler = new ItemStackHandlerWolf(numberOfSlots);
+            Minecraft mc = Minecraft.getInstance();
+            WolfEntity wolf = (WolfEntity)mc.world.getEntityByID(wolfId);
 
-            return new WolfContainer(id,inventory,wolfItemHandler, null);
+            return new WolfContainer(id,inventory,wolfItemHandler, wolf);
         }catch(IllegalArgumentException iae){
             LogManager.getLogger().warn(iae);
         }

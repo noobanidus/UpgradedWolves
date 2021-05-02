@@ -43,7 +43,7 @@ public class WolfPlayerInteraction {
                     INamedContainerProvider wolfInventory = new ContainerProviderWolfInventory(wolf,handler.getInventory());
                     NetworkHooks.openGui((ServerPlayerEntity)event.getPlayer(),
                         wolfInventory,
-                        (packetBuffer) ->{packetBuffer.writeInt(1);}
+                        (packetBuffer) ->{packetBuffer.writeInt(1);packetBuffer.writeInt(wolf.getEntityId());}
                     );
                 }
             }
