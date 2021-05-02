@@ -197,6 +197,21 @@ public class WolfStatsHandler {
             if(currentWolf == null)
                 currentWolf = entity;
         }
+        @Override
+        public float getStatRatio(WolfStatsEnum wolfStats) {
+            switch (wolfStats) {
+                case Speed:
+                    return speedXp / ((float)Math.pow(speedLvl,1.1) * 4);
+                case Strength:
+                    return strengthXp / ((float)Math.pow(strengthLvl,1.1) * 4);
+                case Intelligence:
+                    return intelligenceXp / ((float)Math.pow(intelligenceLvl,1.1) * 4);
+                case Love:
+                    return -4;
+                default:
+                    return 0;
+            }  
+        }
         
 
     }

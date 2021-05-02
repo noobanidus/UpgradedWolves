@@ -18,6 +18,7 @@ import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDestroyBlockEvent;
@@ -41,9 +42,16 @@ public class WolfPlayerInteraction {
             if(wolf.getOwner() == event.getPlayer() && event.getPlayer().isCrouching()){
                 if(Thread.currentThread().getName() == "Server thread"){
                     INamedContainerProvider wolfInventory = new ContainerProviderWolfInventory(wolf,handler.getInventory());
+                    CompoundNBT nbt = new CompoundNBT();
+                    nbt.putInt("strLevel", handler.getLevel(WolfStatsEnum.Strength));                    
+                    nbt.putInt("spdLevel", handler.getLevel(WolfStatsEnum.Speed));
+                    nbt.putInt("intLevel", handler.getLevel(WolfStatsEnum.Intelligence));
+                    nbt.putFloat("strNum", handler.getStatRatio(WolfStatsEnum.Strength));
+                    nbt.putFloat("spdNum", handler.getStatRatio(WolfStatsEnum.Speed));
+                    nbt.putFloat("intNum", handler.getStatRatio(WolfStatsEnum.Intelligence));
                     NetworkHooks.openGui((ServerPlayerEntity)event.getPlayer(),
                         wolfInventory,
-                        (packetBuffer) ->{packetBuffer.writeInt(1);packetBuffer.writeInt(wolf.getEntityId());}
+                        (packetBuffer) ->{packetBuffer.writeInt(1);packetBuffer.writeInt(wolf.getEntityId());packetBuffer.writeCompoundTag(nbt);}
                     );
                 }
             }

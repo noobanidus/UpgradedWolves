@@ -15,6 +15,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -22,11 +23,14 @@ public class WolfContainer extends Container {
 
     public WolfEntity wolf;
     public ItemStackHandlerWolf wolfItemHandler;   
+    public CompoundNBT nbt;
 
-    private WolfContainer(int id, PlayerInventory playerInventory,ItemStackHandlerWolf wolfStackHandler,WolfEntity wolf) {
+    private WolfContainer(int id, PlayerInventory playerInventory,ItemStackHandlerWolf wolfStackHandler,WolfEntity wolf,CompoundNBT nbt) {
         super(ModContainers.WOLF_CONTAINER,id);
         this.wolf = wolf;
         this.wolfItemHandler = wolfStackHandler;
+        this.nbt = nbt;
+
         int startX = 7;
         int startY = 94;
         //The delta X and delta Y are the same
@@ -40,7 +44,7 @@ public class WolfContainer extends Container {
         for(int i = 0; i < 9; i++){
             this.addSlot(new Slot(playerInventory,i,startX + delta * (i % 9),152));
         }
-        startY = 68;
+        startY = 63;
         //Wolf Inventory
         for(int i = 0; i < wolfItemHandler.getSlots(); i++){
             this.addSlot(new SlotItemHandler(wolfStackHandler,i,startX + delta * (i % 9),startY + delta * (i/9)));
@@ -50,13 +54,14 @@ public class WolfContainer extends Container {
     public static WolfContainer createContainerClientSide(int id, PlayerInventory inventory, PacketBuffer data){
         int numberOfSlots = data.readInt();
         int wolfId = data.readInt();
+        CompoundNBT nbt = data.readCompoundTag();
 
         try{
             ItemStackHandlerWolf wolfItemHandler = new ItemStackHandlerWolf(numberOfSlots);
             Minecraft mc = Minecraft.getInstance();
             WolfEntity wolf = (WolfEntity)mc.world.getEntityByID(wolfId);
 
-            return new WolfContainer(id,inventory,wolfItemHandler, wolf);
+            return new WolfContainer(id,inventory,wolfItemHandler, wolf,nbt);
         }catch(IllegalArgumentException iae){
             LogManager.getLogger().warn(iae);
         }
@@ -64,7 +69,7 @@ public class WolfContainer extends Container {
     }
 
     public static WolfContainer createContainerServerSide(int id, PlayerInventory inventory,ItemStackHandlerWolf wolfItemHandler,WolfEntity wolf){
-        return new WolfContainer(id,inventory,wolfItemHandler,wolf);
+        return new WolfContainer(id,inventory,wolfItemHandler,wolf,null);
     }
 
     @Nonnull
