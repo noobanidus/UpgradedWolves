@@ -6,6 +6,8 @@ import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.capabilities.TrainingHandler.ITraining;
 import com.example.upgradedwolves.containers.ContainerProviderWolfInventory;
+import com.example.upgradedwolves.entities.goals.FleeExplodingCreeper;
+import com.example.upgradedwolves.entities.goals.FleeOnLowHealthGoal;
 import com.example.upgradedwolves.entities.goals.WolfAutoAttackTargetGoal;
 import com.example.upgradedwolves.entities.goals.WolfFindAndPickUpItemGoal;
 import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
@@ -160,6 +162,8 @@ public class WolfPlayerInteraction {
             WolfEntity wolf = (WolfEntity)event.getEntity();
             wolf.targetSelector.addGoal(4, new WolfAutoAttackTargetGoal(wolf,MonsterEntity.class,false));
             wolf.goalSelector.addGoal(3, new WolfFindAndPickUpItemGoal(wolf));
+            wolf.goalSelector.addGoal(3, new FleeOnLowHealthGoal(wolf, 11.0F, 1.5D, 1.0D, 4.0F));
+            wolf.goalSelector.addGoal(2, new FleeExplodingCreeper(wolf, 11.0F, 1.5D, 1.5D));
         }
     }
 }
