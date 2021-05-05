@@ -55,6 +55,7 @@ public class WolfPlayerInteraction {
                         (packetBuffer) ->{packetBuffer.writeInt(handler.getInventory().getSlots());packetBuffer.writeInt(wolf.getEntityId());packetBuffer.writeCompoundTag(nbt);}
                     );
                 }
+                wolf.func_233687_w_(!wolf.isSitting());
             }
             else{
                 LogManager.getLogger().info(handler.getLevel(WolfStatsEnum.Love));
