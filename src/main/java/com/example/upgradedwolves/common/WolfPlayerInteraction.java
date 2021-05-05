@@ -4,12 +4,9 @@ import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.TrainingHandler;
 import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
+import com.example.upgradedwolves.capabilities.WolfType;
 import com.example.upgradedwolves.capabilities.TrainingHandler.ITraining;
 import com.example.upgradedwolves.containers.ContainerProviderWolfInventory;
-import com.example.upgradedwolves.entities.goals.FleeExplodingCreeper;
-import com.example.upgradedwolves.entities.goals.FleeOnLowHealthGoal;
-import com.example.upgradedwolves.entities.goals.WolfAutoAttackTargetGoal;
-import com.example.upgradedwolves.entities.goals.WolfFindAndPickUpItemGoal;
 import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
 import com.example.upgradedwolves.network.PacketHandler;
 import com.example.upgradedwolves.network.message.RenderMessage;
@@ -18,7 +15,6 @@ import org.apache.logging.log4j.LogManager;
 
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
@@ -74,6 +70,7 @@ public class WolfPlayerInteraction {
                         return;
                     else /*if (handler.getWolfType() != 0)*/{                                  
                         handler.setWolfType(item);
+                        handler.handleWolfGoals();
                         foodItem.shrink(1);
                         tHandler.resetAttribute();                                        
                     }
@@ -137,7 +134,7 @@ public class WolfPlayerInteraction {
             }
 
             if(wolf.getHeldItemMainhand() != ItemStack.EMPTY && wolf.getOwner() != null){
-                if(handler.getLevel(WolfStatsEnum.Intelligence) > 4){                
+                if(handler.getWolfType() == WolfType.Fighter.getValue() && handler.getLevel(WolfStatsEnum.Intelligence) > 4){                
                     LogManager.getLogger().info(wolf.getHeldItemMainhand());
                     wolf.getOwner().entityDropItem(wolf.getHeldItemMainhand());                    
                     wolf.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
@@ -160,10 +157,9 @@ public class WolfPlayerInteraction {
     public void AddWolfGoals(EntityJoinWorldEvent event){
         if(event.getEntity() instanceof WolfEntity){
             WolfEntity wolf = (WolfEntity)event.getEntity();
-            wolf.targetSelector.addGoal(4, new WolfAutoAttackTargetGoal(wolf,MonsterEntity.class,false));
-            wolf.goalSelector.addGoal(3, new WolfFindAndPickUpItemGoal(wolf));
-            wolf.goalSelector.addGoal(3, new FleeOnLowHealthGoal(wolf, 11.0F, 1.5D, 1.0D, 4.0F));
-            wolf.goalSelector.addGoal(2, new FleeExplodingCreeper(wolf, 11.0F, 1.5D, 1.5D));
+            IWolfStats handler = WolfStatsHandler.getHandler(wolf);
+
+            handler.handleWolfGoals();          
         }
     }
 }

@@ -3,6 +3,7 @@ package com.example.upgradedwolves.entities.goals;
 import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
+import com.example.upgradedwolves.capabilities.WolfType;
 
 import org.apache.logging.log4j.LogManager;
 
@@ -28,6 +29,8 @@ public class WolfAutoAttackTargetGoal extends NearestAttackableTargetGoal<Monste
 
     private boolean EntityAllowed(LivingEntity entity){
         IWolfStats handler = WolfStatsHandler.getHandler((WolfEntity)goalOwner);
+        if(handler.getWolfType() != WolfType.Fighter.getValue())
+            return false;
         int intelligence = handler.getLevel(WolfStatsEnum.Intelligence);
         boolean basicMobs = entity instanceof ZombieEntity || entity instanceof SpiderEntity;
         boolean hostileMobs = entity instanceof MonsterEntity && !(entity instanceof IAngerable) &&

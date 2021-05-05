@@ -3,6 +3,7 @@ package com.example.upgradedwolves.common;
 import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
+import com.example.upgradedwolves.capabilities.WolfType;
 import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
 
 import org.apache.logging.log4j.LogManager;
@@ -25,7 +26,9 @@ public class DamageHandler {
             WolfEntity wolf = (WolfEntity)event.getSource().getTrueSource();
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             event.setAmount(handler.getWolfStrength());                                          
-            handler.addXp(WolfStatsEnum.Strength, 2);
+            handler.addXp(WolfStatsEnum.Strength, handler.getWolfType() == WolfType.Fighter.getValue() ?
+            3 :
+            2);
             if(event.getEntity() instanceof MonsterEntity)
                 handler.addXp(WolfStatsEnum.Strength, 2);            
         }
