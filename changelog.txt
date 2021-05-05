@@ -9,11 +9,16 @@ Added
 	+Inventory menu
 +Wolf drops items on death
 +Wolf will now go after loose items.
++Wolves now flee if they are low on health.
++Wolves flee from exploding creepers if they are smart enough.
+
 
 Removed
 
 Fixed
-	*Wolves no longer hide items
+
+*Wolves no longer hide items
+*Modifiers for certain stats.	
 
 =========
 v 1.1
