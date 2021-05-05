@@ -52,7 +52,7 @@ public class WolfPlayerInteraction {
                     nbt.putFloat("intNum", handler.getStatRatio(WolfStatsEnum.Intelligence));
                     NetworkHooks.openGui((ServerPlayerEntity)event.getPlayer(),
                         wolfInventory,
-                        (packetBuffer) ->{packetBuffer.writeInt(1);packetBuffer.writeInt(wolf.getEntityId());packetBuffer.writeCompoundTag(nbt);}
+                        (packetBuffer) ->{packetBuffer.writeInt(handler.getInventory().getSlots());packetBuffer.writeInt(wolf.getEntityId());packetBuffer.writeCompoundTag(nbt);}
                     );
                 }
             }

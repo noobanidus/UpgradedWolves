@@ -84,9 +84,28 @@ public class WolfStatsHandler {
             }
         }
 
+        private void setInventorySize(){
+            if(inventory != null)
+                inventory.setSize(getInventorySize());
+            else
+                inventory = new ItemStackHandlerWolf(getInventorySize());
+        }
+
+        private int getInventorySize(){
+            if(getWolfType() == WolfType.Scavenger.getValue()){
+                return strengthLvl < 16 ? 3 + (strengthLvl * 3 / 5) : 9;
+            }
+            else if(getWolfType() != WolfType.NotSet.getValue()){
+                return strengthLvl < 16 ? 1 + (strengthLvl * 4 / 15) : 5;
+            }
+            return 1;
+        }
+
+        // TODO: consider renaming to update Wolf and acting upon that.
         @Override
         public void handleWolfGoals(){      
             resetGoals();
+            setInventorySize();
             Goal fleeHealth = new FleeOnLowHealthGoal(currentWolf, 7.0F, 1.5D, 1.0D, 4.0F),
                 fleeCreeper = new WolfFleeExplodingCreeper(currentWolf, 7.0F, 1.5D, 1.5D);
             if(getWolfType() == WolfType.Fighter.getValue()){
@@ -114,6 +133,7 @@ public class WolfStatsHandler {
                         strengthXp -= Math.pow(strengthLvl++,1.1) * 4;
                         PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> currentWolf), new SpawnLevelUpParticle( currentWolf.getEntityId(),wolfStats.ordinal()));
                         handleWolfGoals();
+                        setInventorySize();
                     }
                     strengthXp += amount;
                     break;
@@ -216,10 +236,10 @@ public class WolfStatsHandler {
         @Override
         public ItemStackHandlerWolf getInventory() {
             if(inventory == null)
-                inventory = new ItemStackHandlerWolf(1);
+                inventory = new ItemStackHandlerWolf(getInventorySize());
             return inventory;
         }
-        @Override
+        @Deprecated
         public boolean addItemStack(ItemStack item){
             int i = 0;
             while(item.getCount() > 0){
