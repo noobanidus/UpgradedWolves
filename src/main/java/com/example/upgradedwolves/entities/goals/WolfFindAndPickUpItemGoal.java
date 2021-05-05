@@ -44,7 +44,7 @@ public class WolfFindAndPickUpItemGoal extends Goal {
 
     public boolean shouldContinueExecuting() {
         ItemEntity item = (ItemEntity)wolf.world.getEntityByID(this.item.getEntityId());
-        if (item == null) {
+        if (item == null || wolfInventory.getAvailableSlot(item.getItem()) < 0) {
             return false;
         } else {
             double d0 = this.getTargetDistance();
