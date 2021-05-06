@@ -48,7 +48,7 @@ public class SpawnLevelUpParticle implements IMessage<SpawnLevelUpParticle> {
             WolfEntity wolf = (WolfEntity)mc.world.getEntityByID(message.wolfId);
             WolfStatsEnum stat = WolfStatsEnum.values()[message.statId];
             if(wolf.getOwner() == mc.player)
-                mc.player.sendMessage((ITextComponent)new StringTextComponent((wolf.hasCustomName() ? wolf.getCustomName() : "Wolf") + " has leveled up " + stat.toString()),
+                mc.player.sendMessage((ITextComponent)new StringTextComponent((wolf.hasCustomName() ? wolf.getCustomName().getString() : "Wolf") + " has leveled up " + stat.toString()),
             Util.DUMMY_UUID);
             Random r = new Random();
             BasicParticleType pt = ParticleTypes.FLASH;
