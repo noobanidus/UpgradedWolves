@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.example.upgradedwolves.UpgradedWolves;
+import com.example.upgradedwolves.entities.goals.DetectEnemiesGoal;
 import com.example.upgradedwolves.entities.goals.FleeOnLowHealthGoal;
 import com.example.upgradedwolves.entities.goals.WolfAutoAttackTargetGoal;
 import com.example.upgradedwolves.entities.goals.WolfFindAndPickUpItemGoal;
@@ -112,6 +113,11 @@ public class WolfStatsHandler {
                 Goal autoAttackGoal = new WolfAutoAttackTargetGoal(currentWolf,MonsterEntity.class,false);
                 allGoals.add(autoAttackGoal);
                 currentWolf.targetSelector.addGoal(4, autoAttackGoal);
+            }
+            if(getWolfType() == WolfType.Scavenger.getValue()){
+                Goal detect = new DetectEnemiesGoal(currentWolf,5D);
+                allGoals.add(detect);
+                currentWolf.goalSelector.addGoal(5, detect);
             }
             if(getWolfType() != WolfType.NotSet.getValue()){
                 Goal findItem = new WolfFindAndPickUpItemGoal(currentWolf);
