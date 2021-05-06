@@ -11,8 +11,9 @@ import net.minecraft.util.ResourceLocation;
 
 public class UpgradedWolfRenderer extends WolfRenderer {
 
-    public UpgradedWolfRenderer(EntityRendererManager p_i47187_1_) {
-        super(p_i47187_1_);        
+    public UpgradedWolfRenderer(EntityRendererManager rendererManager) {
+        super(rendererManager);
+        this.entityModel = new UpgradedWolfModel();
     }
 
     @Override

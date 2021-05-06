@@ -1,7 +1,11 @@
-.Unfinished version
+. v0.2
 
 Added
 +Scavenger wolf
+	+New Model!
+	+Has larger inventory space.
+	+Increases Speed stat faster than other wolves.
+	+Can detect enemies and mark them.
 
 +Added Inventory features
 	+Status bar
@@ -14,6 +18,7 @@ Added
 
 
 Removed
+(nothing)
 
 Fixed
 
