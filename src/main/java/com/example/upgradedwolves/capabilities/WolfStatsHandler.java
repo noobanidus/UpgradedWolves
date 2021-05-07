@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 import com.example.upgradedwolves.UpgradedWolves;
 import com.example.upgradedwolves.entities.goals.DetectEnemiesGoal;
 import com.example.upgradedwolves.entities.goals.FleeOnLowHealthGoal;
+import com.example.upgradedwolves.entities.goals.IUpdateableGoal;
 import com.example.upgradedwolves.entities.goals.WolfAutoAttackTargetGoal;
 import com.example.upgradedwolves.entities.goals.WolfFindAndPickUpItemGoal;
 import com.example.upgradedwolves.entities.goals.WolfFleeExplodingCreeper;
@@ -78,10 +79,17 @@ public class WolfStatsHandler {
             loveLvl = 10;
         }       
         
-        private void resetGoals(){
+        private void clearGoals(){
             for(int i = 0; i < allGoals.size(); i++){
                 currentWolf.goalSelector.removeGoal(allGoals.get(i));
                 allGoals.remove(allGoals.get(i));
+            }
+        }
+
+        private void resetGoals(){
+            for(int i = 0; i < allGoals.size();i++){
+                if(allGoals.get(i) instanceof IUpdateableGoal)
+                    ((IUpdateableGoal)allGoals.get(i)).Update(this, currentWolf);
             }
         }
 
@@ -104,9 +112,19 @@ public class WolfStatsHandler {
 
         // TODO: consider renaming to update Wolf and acting upon that.
         @Override
-        public void handleWolfGoals(){      
-            resetGoals();
-            setInventorySize();
+        public void handleWolfGoals(){
+            if(allGoals.size() == 0)
+                addGoals();
+            else{
+                setInventorySize();      
+                resetGoals();
+            }
+        }
+
+        @Override
+        public void addGoals(){
+            if(allGoals.size() > 0)
+                clearGoals();
             Goal fleeHealth = new FleeOnLowHealthGoal(currentWolf, 7.0F, 1.5D, 1.0D, 4.0F),
                 fleeCreeper = new WolfFleeExplodingCreeper(currentWolf, 7.0F, 1.5D, 1.5D);
             if(getWolfType() == WolfType.Fighter.getValue()){
@@ -127,19 +145,18 @@ public class WolfStatsHandler {
             allGoals.add(fleeHealth);
             allGoals.add(fleeCreeper);
             currentWolf.goalSelector.addGoal(3, fleeHealth);
-            currentWolf.goalSelector.addGoal(2, fleeCreeper);  
+            currentWolf.goalSelector.addGoal(2, fleeCreeper); 
         }
 
         @Override
         public void addXp(WolfStatsEnum wolfStats, int amount) {
-
+            
             switch (wolfStats) {
                 case Strength:
                     if (LevelUpFunction(strengthLvl,strengthXp + amount)){                        
                         strengthXp -= Math.pow(strengthLvl++,1.1) * 4;
                         PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> currentWolf), new SpawnLevelUpParticle( currentWolf.getEntityId(),wolfStats.ordinal()));
                         handleWolfGoals();
-                        setInventorySize();
                     }
                     strengthXp += amount;
                     break;

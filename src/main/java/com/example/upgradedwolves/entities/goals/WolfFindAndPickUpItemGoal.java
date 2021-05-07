@@ -13,7 +13,7 @@ import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.math.MathHelper;
 
-public class WolfFindAndPickUpItemGoal extends Goal {    
+public class WolfFindAndPickUpItemGoal extends Goal implements IUpdateableGoal{    
     WolfEntity wolf;
     ItemStackHandlerWolf wolfInventory;
     ItemEntity item;
@@ -85,5 +85,10 @@ public class WolfFindAndPickUpItemGoal extends Goal {
     @Override
     public void tick(){
         wolf.getMoveHelper().setMoveTo(item.getPosX(), item.getPosY(), item.getPosZ(), 1.0);
+    }
+
+    @Override
+    public void Update(IWolfStats handler, WolfEntity wolf) {        
+        
     }
 }

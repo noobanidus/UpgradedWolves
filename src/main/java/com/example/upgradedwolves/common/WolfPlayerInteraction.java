@@ -71,6 +71,7 @@ public class WolfPlayerInteraction {
                         return;
                     else /*if (handler.getWolfType() != 0)*/{                                  
                         handler.setWolfType(item);
+                        handler.addGoals();
                         handler.handleWolfGoals();
                         foodItem.shrink(1);
                         tHandler.resetAttribute();                                        

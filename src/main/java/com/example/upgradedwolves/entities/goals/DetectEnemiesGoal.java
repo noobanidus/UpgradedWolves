@@ -1,5 +1,7 @@
 package com.example.upgradedwolves.entities.goals;
 
+import com.example.upgradedwolves.capabilities.IWolfStats;
+
 import org.apache.logging.log4j.LogManager;
 
 import net.minecraft.entity.ai.goal.Goal;
@@ -8,7 +10,7 @@ import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 
-public class DetectEnemiesGoal extends Goal {
+public class DetectEnemiesGoal extends Goal implements IUpdateableGoal {
 
     int currentTicks = 0;
     int attemptTicks = 300;
@@ -63,5 +65,10 @@ public class DetectEnemiesGoal extends Goal {
     @Override
     public void tick(){
         this.wolf.getLookController().setLookPosition(detectedEntity.getEyePosition(1.0F));
+    }
+
+    @Override
+    public void Update(IWolfStats handler, WolfEntity wolf) {
+        
     }
 }

@@ -21,4 +21,5 @@ public interface IWolfStats {
     public WolfEntity getActiveWolf();
     public void setActiveWolf(WolfEntity entity);
     public void handleWolfGoals();
+    public void addGoals();
 }

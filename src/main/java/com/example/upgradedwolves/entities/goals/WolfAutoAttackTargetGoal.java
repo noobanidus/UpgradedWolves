@@ -17,7 +17,7 @@ import net.minecraft.entity.monster.SpiderEntity;
 import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.passive.WolfEntity;
 
-public class WolfAutoAttackTargetGoal extends NearestAttackableTargetGoal<MonsterEntity> {
+public class WolfAutoAttackTargetGoal extends NearestAttackableTargetGoal<MonsterEntity> implements IUpdateableGoal {
 
 
     
@@ -48,6 +48,11 @@ public class WolfAutoAttackTargetGoal extends NearestAttackableTargetGoal<Monste
         if(target != null)
             LogManager.getLogger().info(target);
         return super.shouldExecute();
+    }
+
+    @Override
+    public void Update(IWolfStats handler, WolfEntity wolf) {        
+        
     }
     
 }
