@@ -1,0 +1,19 @@
+{
+    "type":"minecraft:crafting_shaped",
+    "pattern":[
+        " l ",
+        "lfl",
+        " l "
+    ],
+    "key":{
+        "f":{
+            "item":"minecraft:feather"
+        },
+        "l":{
+            "item":"minecraft:leather"
+        }
+    },
+    "result":{
+        "item":"upgradedwolves:tennis_ball"
+    }
+}
