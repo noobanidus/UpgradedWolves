@@ -1,23 +1,23 @@
 package com.example.upgradedwolves.entities;
 
+import com.example.upgradedwolves.capabilities.IWolfStats;
+import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.init.ModEntities;
 import com.example.upgradedwolves.itemHandler.WolfToysHandler;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.IPacket;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -54,13 +54,36 @@ public class TennisBallEntity extends ProjectileItemEntity {
             BlockRayTraceResult blockResult = (BlockRayTraceResult)result;
             Vector3d vector3d1 = this.getMotion();
             this.setMotion(
-                blockResult.getFace().getAxis() == Direction.Axis.X ? -vector3d1.x * .5 : vector3d1.x,
-                blockResult.getFace().getAxis() == Direction.Axis.Y ? -vector3d1.y * .5 : vector3d1.y,
-                blockResult.getFace().getAxis() == Direction.Axis.Z ? -vector3d1.z * .5 : vector3d1.z
+                blockResult.getFace().getAxis() == Direction.Axis.X ? -vector3d1.x * .7 : vector3d1.x * .9,
+                blockResult.getFace().getAxis() == Direction.Axis.Y ? -vector3d1.y * .7 : vector3d1.y * .9,
+                blockResult.getFace().getAxis() == Direction.Axis.Z ? -vector3d1.z * .7 : vector3d1.z * .9
                 );
         }
         if(result.getType() == RayTraceResult.Type.ENTITY){
-            this.remove();
+            EntityRayTraceResult entityResult = (EntityRayTraceResult)result;
+            if(speedFactor()){
+                if(entityResult.getEntity() instanceof LivingEntity){
+                    LivingEntity entity = (LivingEntity)entityResult.getEntity();
+                    entity.attackEntityFrom(DamageSource.causePlayerDamage((PlayerEntity)this.func_234616_v_()), 1);
+                    double speed = this.getMotion().length() * .6;
+                    Vector3d bounceDirection = new Vector3d(entity.getPositionVec().x - this.getPositionVec().x,
+                                                                entity.getPositionVec().y - this.getPositionVec().y,
+                                                                entity.getPositionVec().z - this.getPositionVec().z)
+                                                                .normalize();
+                    this.setMotion(bounceDirection.scale(speed));
+                }
+            }            
+            else if(entityResult.getEntity() instanceof WolfEntity){
+                WolfEntity wolf = (WolfEntity)entityResult.getEntity();
+                IWolfStats handler = WolfStatsHandler.getHandler(wolf);
+                ItemStack tennisBallItem = new ItemStack(getDefaultItem());
+                int wolfSlot = handler.getInventory().getAvailableSlot(tennisBallItem);
+
+                if(wolfSlot >= 0){
+                    handler.getInventory().insertItem(wolfSlot, tennisBallItem, false);
+                    this.remove();
+                }
+            }
         }
 
     }
@@ -76,17 +99,23 @@ public class TennisBallEntity extends ProjectileItemEntity {
     @Override
     public void onCollideWithPlayer(PlayerEntity entityIn) {        
         if (!this.world.isRemote) {
-            boolean flag = this.func_234616_v_().getUniqueID() == entityIn.getUniqueID();
-            if (!entityIn.inventory.addItemStackToInventory(new ItemStack(getDefaultItem()))) {
+            boolean flag = this.func_234616_v_().getUniqueID() == entityIn.getUniqueID() && !speedFactor() && ticksExisted > 20;
+            if (flag && !entityIn.addItemStackToInventory(new ItemStack(getDefaultItem()))) {
                 flag = false;
             }
     
-            if (flag) {
+            if (flag) {                
                 entityIn.onItemPickup(this, 1);
                 this.remove();
             }
     
         }
+    }
+    public boolean speedFactor(){
+        double speed = this.getMotion().length();
+        if(speed > 1)
+            return true;
+        return false;
     }
 
 }
