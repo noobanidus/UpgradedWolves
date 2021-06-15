@@ -92,8 +92,8 @@ public class WolfScreen extends ContainerScreen<WolfContainer> {
         if(totalHearts == 1)
             this.blit(matrixStack, guiLeft + 76 + (index * 9), guiTop + 14, 19, 182, 9, 9);
 
-        buildXpBar(matrixStack, guiLeft + 113, guiTop + 31, 39, 179, (int)(spdNum * 52));
-        buildXpBar(matrixStack, guiLeft + 113, guiTop + 41, 39, 185, (int)(strNum * 52));
+        buildXpBar(matrixStack, guiLeft + 113, guiTop + 31, 39, 185, (int)(strNum * 52));
+        buildXpBar(matrixStack, guiLeft + 113, guiTop + 41, 39, 179, (int)(spdNum * 52));
         buildXpBar(matrixStack, guiLeft + 113, guiTop + 51, 94, 179, (int)(intNum * 52));
         extraSlots(matrixStack, slots - 1);
         
