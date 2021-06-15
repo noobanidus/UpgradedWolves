@@ -1,5 +1,7 @@
 package com.example.upgradedwolves.common;
 
+import java.util.Optional;
+
 import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.TrainingHandler;
 import com.example.upgradedwolves.capabilities.WolfStatsEnum;
@@ -7,6 +9,8 @@ import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.capabilities.WolfType;
 import com.example.upgradedwolves.capabilities.TrainingHandler.ITraining;
 import com.example.upgradedwolves.containers.ContainerProviderWolfInventory;
+import com.example.upgradedwolves.entities.goals.FollowOwnerVariableGoal;
+import com.example.upgradedwolves.entities.goals.WolfFindAndPickUpItemGoal;
 import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
 import com.example.upgradedwolves.network.PacketHandler;
 import com.example.upgradedwolves.network.message.RenderMessage;
@@ -14,6 +18,9 @@ import com.example.upgradedwolves.network.message.RenderMessage;
 import org.apache.logging.log4j.LogManager;
 
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.goal.FollowOwnerGoal;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.PrioritizedGoal;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -128,6 +135,13 @@ public class WolfPlayerInteraction {
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             ItemStackHandlerWolf wolfInventory = handler.getInventory();
 
+            Optional<PrioritizedGoal> optGoal = wolf.goalSelector.getRunningGoals().filter((goal) -> {
+                return goal.getGoal().getClass() == FollowOwnerGoal.class;
+            }).findFirst();
+            if(optGoal.isPresent()){
+                wolf.goalSelector.removeGoal(optGoal.get().getGoal());
+            }
+
             wolf.setCanPickUpLoot(false);
             for(ItemEntity itementity : wolf.world.getEntitiesWithinAABB(ItemEntity.class, wolf.getBoundingBox().grow(1.0D, 0.0D, 1.0D))) {
                 if (wolfInventory.getAvailableSlot(itementity.getItem()) >= 0) {
@@ -160,8 +174,21 @@ public class WolfPlayerInteraction {
         if(event.getEntity() instanceof WolfEntity){
             WolfEntity wolf = (WolfEntity)event.getEntity();
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
-
+            
+            FollowOwnerVariableGoal followOwnerVariableGoal = new FollowOwnerVariableGoal(wolf, 1.0D, 10.0F, 2.0F, false);            
+            wolf.goalSelector.addGoal(6, followOwnerVariableGoal);            
+            
             handler.handleWolfGoals();          
         }
+    }
+
+    public static Goal getWolfGoal(WolfEntity wolf){
+        Optional<PrioritizedGoal> optGoal = wolf.goalSelector.getRunningGoals().filter((goal) -> {
+            return goal.getGoal().getClass() == WolfFindAndPickUpItemGoal.class;
+        }).findFirst();
+        if(optGoal.isPresent()){
+            return optGoal.get().getGoal();
+        }
+        return null;
     }
 }

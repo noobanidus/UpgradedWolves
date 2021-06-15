@@ -3,8 +3,10 @@ package com.example.upgradedwolves.entities.goals;
 import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
+import com.example.upgradedwolves.entities.TennisBallEntity;
 import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.item.ItemEntity;
@@ -16,7 +18,7 @@ import net.minecraft.util.math.MathHelper;
 public class WolfFindAndPickUpItemGoal extends Goal implements IUpdateableGoal{    
     WolfEntity wolf;
     ItemStackHandlerWolf wolfInventory;
-    ItemEntity item;
+    Entity item;
     int unseenMemoryTicks;
     int targetUnseenTicks;
 
@@ -39,34 +41,53 @@ public class WolfFindAndPickUpItemGoal extends Goal implements IUpdateableGoal{
                 return true;
             }
         }
+        for(TennisBallEntity wolfToy : wolf.world.getEntitiesWithinAABB(TennisBallEntity.class, wolf.getBoundingBox().grow(36.0D, 0.0D, 36.0D))){
+            if (wolfInventory.getAvailableSlot(wolfToy.getItem()) >= 0 && canEasilyReach(wolfToy)){
+                item = wolfToy;
+                return true;
+            }
+        }
         return false;
     }
 
     public boolean shouldContinueExecuting() {
-        ItemEntity item = (ItemEntity)wolf.world.getEntityByID(this.item.getEntityId());
-        if (item == null || wolfInventory.getAvailableSlot(item.getItem()) < 0) {
-            return false;
-        } else {
-            double d0 = this.getTargetDistance();
-            if (wolf.getDistanceSq(item) > d0 * d0) {
-                this.item = null;
+        if(item instanceof ItemEntity){
+            ItemEntity item = (ItemEntity)wolf.world.getEntityByID(this.item.getEntityId());
+            if (item == null || wolfInventory.getAvailableSlot(item.getItem()) < 0) {
                 return false;
             } else {
-                if (wolf.getEntitySenses().canSee(item)) {
-                    this.targetUnseenTicks = 0;
-                } else if (++this.targetUnseenTicks > this.unseenMemoryTicks) {
-                    this.item = null;
-                    return false;
-                }                
-                return true; 
+                return shouldChase(1,item);
+            }
+        } else {
+            TennisBallEntity item = (TennisBallEntity)wolf.world.getEntityByID(this.item.getEntityId());
+            if (item == null || wolfInventory.getAvailableSlot(item.getItem()) < 0) {
+                return false;
+            } else {
+                return shouldChase(3, item);
             }
         }
+    }
+
+    private boolean shouldChase(double multiplier, Entity item){       
+        double d0 = this.getTargetDistance();
+        if (wolf.getDistanceSq(item) > d0 * d0 * multiplier) {
+            this.item = null;
+            return false;
+        } else {
+            if (wolf.getEntitySenses().canSee(item)) {
+                this.targetUnseenTicks = 0;
+            } else if (++this.targetUnseenTicks > this.unseenMemoryTicks * multiplier) {
+                this.item = null;
+                return false;
+            }                
+            return true; 
+        }        
     }
 
     protected double getTargetDistance() {
         return wolf.getAttributeValue(Attributes.FOLLOW_RANGE);
     }
-    private boolean canEasilyReach(ItemEntity target) {        
+    private boolean canEasilyReach(Entity target) {        
         Path path = wolf.getNavigator().getPathToEntity(target, 0);
         if (path == null) {
            return false;

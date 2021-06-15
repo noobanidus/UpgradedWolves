@@ -66,7 +66,7 @@ public class TennisBallEntity extends ProjectileItemEntity {
         }
         if(result.getType() == RayTraceResult.Type.ENTITY){
             EntityRayTraceResult entityResult = (EntityRayTraceResult)result;
-            if(speedFactor()){
+            if(speedFactor(1)){
                 if(entityResult.getEntity() instanceof LivingEntity){
                     LivingEntity entity = (LivingEntity)entityResult.getEntity();
                     entity.attackEntityFrom(DamageSource.causePlayerDamage((PlayerEntity)this.func_234616_v_()), 1);
@@ -79,15 +79,7 @@ public class TennisBallEntity extends ProjectileItemEntity {
                 }
             }            
             else if(entityResult.getEntity() instanceof WolfEntity){
-                WolfEntity wolf = (WolfEntity)entityResult.getEntity();
-                IWolfStats handler = WolfStatsHandler.getHandler(wolf);
-                ItemStack tennisBallItem = new ItemStack(getDefaultItem());
-                int wolfSlot = handler.getInventory().getAvailableSlot(tennisBallItem);
-
-                if(wolfSlot >= 0){
-                    handler.getInventory().insertItem(wolfSlot, tennisBallItem, false);
-                    this.remove();
-                }
+                wolfCollect((WolfEntity)entityResult.getEntity());
             }
         }
 
@@ -99,12 +91,31 @@ public class TennisBallEntity extends ProjectileItemEntity {
         if(timeOut >= 1200){
             this.remove();
         }
+        for(WolfEntity wolf : this.world.getEntitiesWithinAABB(WolfEntity.class, this.getBoundingBox())) {
+            onCollideWithWolf(wolf);    
+        }
+    }
+
+    public void onCollideWithWolf(WolfEntity wolf){
+        if(!speedFactor(0.5))
+            wolfCollect(wolf);
+    }
+
+    public void wolfCollect(WolfEntity wolf){        
+        IWolfStats handler = WolfStatsHandler.getHandler(wolf);
+        ItemStack tennisBallItem = new ItemStack(getDefaultItem());
+        int wolfSlot = handler.getInventory().getAvailableSlot(tennisBallItem);
+
+        if(wolfSlot >= 0){
+            handler.getInventory().insertItem(wolfSlot, tennisBallItem, false);
+            this.remove();
+        }
     }
 
     @Override
     public void onCollideWithPlayer(PlayerEntity entityIn) {        
         if (!this.world.isRemote) {
-            boolean flag = this.func_234616_v_().getUniqueID() == entityIn.getUniqueID() && !speedFactor() && ticksExisted > 20;
+            boolean flag = this.func_234616_v_().getUniqueID() == entityIn.getUniqueID() && !speedFactor(1) && ticksExisted > 20;
             if (flag && !entityIn.addItemStackToInventory(new ItemStack(getDefaultItem()))) {
                 flag = false;
             }
@@ -116,9 +127,9 @@ public class TennisBallEntity extends ProjectileItemEntity {
     
         }
     }
-    public boolean speedFactor(){
+    public boolean speedFactor(double factor){
         double speed = this.getMotion().length();
-        if(speed > 1)
+        if(speed > factor)
             return true;
         return false;
     }
