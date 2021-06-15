@@ -1,4 +1,17 @@
-. v0.2
+v 0.3
+
+Added
++Wolf toys.
+	+Tennis Ball
+
+Removed
+
+Fixed
+*Wolf screen showing mismatched xp bars
+
+
+================
+v 0.2
 
 Added
 +Scavenger wolf

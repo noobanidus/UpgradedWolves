@@ -114,7 +114,7 @@ public class WolfPlayerInteraction {
             WolfEntity wolf = (WolfEntity)event.getEntity();
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             //Scavenger Wolf Bonus
-            handler.addXp(WolfStatsEnum.Speed,(handler.getWolfType() == 2 ? 2 : 1));
+            handler.addXp(WolfStatsEnum.Speed,(handler.getWolfType() == 2 ? 1 : 0));
             PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getEntityId(),handler.getWolfType()) );
         }
     }
@@ -182,9 +182,9 @@ public class WolfPlayerInteraction {
         }
     }
 
-    public static Goal getWolfGoal(WolfEntity wolf){
+    public static Goal getWolfGoal(WolfEntity wolf, Class<?> goalType){
         Optional<PrioritizedGoal> optGoal = wolf.goalSelector.getRunningGoals().filter((goal) -> {
-            return goal.getGoal().getClass() == WolfFindAndPickUpItemGoal.class;
+            return goal.getGoal().getClass() == goalType;
         }).findFirst();
         if(optGoal.isPresent()){
             return optGoal.get().getGoal();

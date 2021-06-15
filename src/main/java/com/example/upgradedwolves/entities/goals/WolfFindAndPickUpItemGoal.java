@@ -14,6 +14,7 @@ import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 
 public class WolfFindAndPickUpItemGoal extends Goal implements IUpdateableGoal{    
     WolfEntity wolf;
@@ -21,6 +22,8 @@ public class WolfFindAndPickUpItemGoal extends Goal implements IUpdateableGoal{
     Entity item;
     int unseenMemoryTicks;
     int targetUnseenTicks;
+    Vector3d initialPoint;
+    Vector3d endPoint;
 
 
     public WolfFindAndPickUpItemGoal(WolfEntity owner){
@@ -44,6 +47,7 @@ public class WolfFindAndPickUpItemGoal extends Goal implements IUpdateableGoal{
         for(TennisBallEntity wolfToy : wolf.world.getEntitiesWithinAABB(TennisBallEntity.class, wolf.getBoundingBox().grow(36.0D, 0.0D, 36.0D))){
             if (wolfInventory.getAvailableSlot(wolfToy.getItem()) >= 0 && canEasilyReach(wolfToy)){
                 item = wolfToy;
+                initialPoint = wolf.getPositionVec();
                 return true;
             }
         }
@@ -60,7 +64,15 @@ public class WolfFindAndPickUpItemGoal extends Goal implements IUpdateableGoal{
             }
         } else {
             TennisBallEntity item = (TennisBallEntity)wolf.world.getEntityByID(this.item.getEntityId());
-            if (item == null || wolfInventory.getAvailableSlot(item.getItem()) < 0) {
+            if (endPoint != null){
+                double distance = initialPoint.distanceTo(endPoint);
+                IWolfStats stats = WolfStatsHandler.getHandler(wolf);
+                stats.addXp(WolfStatsEnum.Speed, (int)(distance/2));
+                endPoint = null;
+                initialPoint = null;
+                return false;
+            }
+            else if (item == null || wolfInventory.getAvailableSlot(item.getItem()) < 0) {
                 return false;
             } else {
                 return shouldChase(3, item);
@@ -111,5 +123,8 @@ public class WolfFindAndPickUpItemGoal extends Goal implements IUpdateableGoal{
     @Override
     public void Update(IWolfStats handler, WolfEntity wolf) {        
         
+    }
+    public void setEndPoint(Vector3d end){
+        endPoint = end;
     }
 }

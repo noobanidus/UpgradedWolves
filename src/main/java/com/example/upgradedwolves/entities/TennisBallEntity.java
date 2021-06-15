@@ -2,6 +2,8 @@ package com.example.upgradedwolves.entities;
 
 import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
+import com.example.upgradedwolves.common.WolfPlayerInteraction;
+import com.example.upgradedwolves.entities.goals.WolfFindAndPickUpItemGoal;
 import com.example.upgradedwolves.init.ModEntities;
 import com.example.upgradedwolves.itemHandler.WolfToysHandler;
 
@@ -108,6 +110,8 @@ public class TennisBallEntity extends ProjectileItemEntity {
 
         if(wolfSlot >= 0){
             handler.getInventory().insertItem(wolfSlot, tennisBallItem, false);
+            WolfFindAndPickUpItemGoal goal = (WolfFindAndPickUpItemGoal)WolfPlayerInteraction.getWolfGoal(wolf, WolfFindAndPickUpItemGoal.class);
+            goal.setEndPoint(wolf.getPositionVec());
             this.remove();
         }
     }

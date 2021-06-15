@@ -36,7 +36,7 @@ public class FollowOwnerVariableGoal extends FollowOwnerGoal{
             return false;
         else if(this.tameable.getDistanceSq(tameable.getOwner()) < (double)(this.dist * this.dist))
             return false;
-        else if(WolfPlayerInteraction.getWolfGoal((WolfEntity)tameable) != null)
+        else if(WolfPlayerInteraction.getWolfGoal((WolfEntity)tameable,WolfFindAndPickUpItemGoal.class) != null)
             return false;
         else
             return super.shouldExecute();
