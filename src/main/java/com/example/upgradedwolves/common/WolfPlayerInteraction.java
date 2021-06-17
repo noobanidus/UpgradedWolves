@@ -10,7 +10,7 @@ import com.example.upgradedwolves.capabilities.WolfType;
 import com.example.upgradedwolves.capabilities.TrainingHandler.ITraining;
 import com.example.upgradedwolves.containers.ContainerProviderWolfInventory;
 import com.example.upgradedwolves.entities.goals.FollowOwnerVariableGoal;
-import com.example.upgradedwolves.entities.goals.WolfFindAndPickUpItemGoal;
+import com.example.upgradedwolves.entities.goals.WolfBiasRoamGoal;
 import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
 import com.example.upgradedwolves.network.PacketHandler;
 import com.example.upgradedwolves.network.message.RenderMessage;
@@ -21,6 +21,7 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.FollowOwnerGoal;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.PrioritizedGoal;
+import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -141,6 +142,7 @@ public class WolfPlayerInteraction {
             if(optGoal.isPresent()){
                 wolf.goalSelector.removeGoal(optGoal.get().getGoal());
             }
+            removeWolfGoal(wolf, WaterAvoidingRandomWalkingGoal.class);
 
             wolf.setCanPickUpLoot(false);
             for(ItemEntity itementity : wolf.world.getEntitiesWithinAABB(ItemEntity.class, wolf.getBoundingBox().grow(1.0D, 0.0D, 1.0D))) {
@@ -175,8 +177,9 @@ public class WolfPlayerInteraction {
             WolfEntity wolf = (WolfEntity)event.getEntity();
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             
-            FollowOwnerVariableGoal followOwnerVariableGoal = new FollowOwnerVariableGoal(wolf, 1.0D, 10.0F, 2.0F, false);            
+            FollowOwnerVariableGoal followOwnerVariableGoal = new FollowOwnerVariableGoal(wolf, 1.0D, 30.0F, 2.0F, false);           
             wolf.goalSelector.addGoal(6, followOwnerVariableGoal);            
+            wolf.goalSelector.addGoal(8, new WolfBiasRoamGoal(wolf, 1.0, 30, 5));
             
             handler.handleWolfGoals();          
         }
@@ -190,5 +193,13 @@ public class WolfPlayerInteraction {
             return optGoal.get().getGoal();
         }
         return null;
+    }
+    public static void removeWolfGoal(WolfEntity wolf, Class<?> goalType){
+        Optional<PrioritizedGoal> optGoal = wolf.goalSelector.getRunningGoals().filter((goal) -> {
+            return goal.getGoal().getClass() == goalType;
+        }).findFirst();
+        if(optGoal.isPresent()){
+            wolf.goalSelector.removeGoal(optGoal.get().getGoal());
+        }
     }
 }
