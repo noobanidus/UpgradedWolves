@@ -297,6 +297,17 @@ public class WolfStatsHandler {
                     return 0;
             }  
         }
+        @Override
+        public void forceLevelUp(int amount) {
+            speedLvl += amount;
+            strengthLvl += amount;
+            intelligenceLvl += amount;
+            speedXp = 0;
+            strengthXp = 0;
+            intelligenceXp = 0;
+            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> currentWolf), new SpawnLevelUpParticle( currentWolf.getEntityId(),3));
+            handleWolfGoals();
+        }
         
 
     }

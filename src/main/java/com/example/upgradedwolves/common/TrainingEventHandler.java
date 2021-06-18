@@ -14,6 +14,7 @@ import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
@@ -85,6 +86,14 @@ public class TrainingEventHandler {
         if(player.getHeldItemMainhand().isFood() && player.getHeldItemMainhand().getItem().getFood().isMeat())
             return player.getHeldItemMainhand();
         else if(player.getHeldItemOffhand().isFood() && player.getHeldItemOffhand().getItem().getFood().isMeat())
+            return player.getHeldItemOffhand();
+        return null;
+    }
+    public static ItemStack getPlayerHoldingItemStack(PlayerEntity player, Class<? extends Item> item){
+        //Checks if the player is holding food in either hand.
+        if(item.isInstance(player.getHeldItemMainhand().getItem()))
+            return player.getHeldItemMainhand();
+        else if(item.isInstance(player.getHeldItemOffhand().getItem()))
             return player.getHeldItemOffhand();
         return null;
     }

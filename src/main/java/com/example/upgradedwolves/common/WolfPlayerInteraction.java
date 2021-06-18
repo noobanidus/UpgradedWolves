@@ -12,6 +12,7 @@ import com.example.upgradedwolves.containers.ContainerProviderWolfInventory;
 import com.example.upgradedwolves.entities.goals.FollowOwnerVariableGoal;
 import com.example.upgradedwolves.entities.goals.WolfBiasRoamGoal;
 import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
+import com.example.upgradedwolves.items.GoldenBone.GoldenBoneAbstract;
 import com.example.upgradedwolves.network.PacketHandler;
 import com.example.upgradedwolves.network.message.RenderMessage;
 
@@ -70,6 +71,7 @@ public class WolfPlayerInteraction {
                 LogManager.getLogger().info(handler.getWolfType());
                 handler.InitLove();       
                 final ItemStack foodItem = TrainingEventHandler.getFoodStack(event.getPlayer());
+                final ItemStack goldenBoneItem = TrainingEventHandler.getPlayerHoldingItemStack(event.getPlayer(), GoldenBoneAbstract.class);
                 if(Thread.currentThread().getName() == "Server thread")
                     PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getEntityId(),WolfStatsHandler.getHandler(wolf).getWolfType()) );
                 if(foodItem != null){
@@ -84,6 +86,12 @@ public class WolfPlayerInteraction {
                         foodItem.shrink(1);
                         tHandler.resetAttribute();                                        
                     }
+                } else if (goldenBoneItem != null){
+                    GoldenBoneAbstract goldenBone = (GoldenBoneAbstract)goldenBoneItem.getItem();
+                    if(Thread.currentThread().getName() == "Server thread")
+                        goldenBone.rightClickWolf(wolf,handler);
+                    if(!event.getPlayer().isCreative())
+                        goldenBoneItem.shrink(1);
                 }
             }
         }
