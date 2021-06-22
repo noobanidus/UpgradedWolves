@@ -30,5 +30,6 @@ public class GoldenBone extends GoldenBoneAbstract {
     @Override
     public void rightClickWolf(WolfEntity wolf,IWolfStats handler) {
         handler.forceLevelUp(1);
+        handler.showParticle(3);
     }
 }

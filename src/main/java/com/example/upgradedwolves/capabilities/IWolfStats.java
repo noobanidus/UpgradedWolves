@@ -23,4 +23,5 @@ public interface IWolfStats {
     public void handleWolfGoals();
     public void addGoals();
     public void forceLevelUp(int amount);
+    public void showParticle(int type);
 }

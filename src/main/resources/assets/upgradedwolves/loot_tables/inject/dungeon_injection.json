@@ -1,0 +1,60 @@
+{
+    "pools": [
+        {
+            "name": "high_gold_bone",
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "item",
+                    "name": "upgradedwolves:golden_bone",
+                    "weight": 15
+                },
+                {
+                    "type": "item",
+                    "name": "upgradedwolves:enchanted_golden_bone",
+                    "weight": 5
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:bone",
+                    "weight": 20
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:dandelion",
+                    "weight": 5
+                },
+                {
+                    "type": "empty",
+                    "weight": 55
+                }
+            ]
+        },
+        {
+            "name":"low_gold_bone",
+            "rolls":1,
+            "entries":[
+                {
+                    "type": "item",
+                    "name": "upgradedwolves:golden_bone",
+                    "weight": 20
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:bone",
+                    "weight": 15
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:dandelion",
+                    "weight": 15
+                },
+                {
+                    "type": "empty",
+                    "weight": 50
+                }
+
+            ]
+        }
+    ]
+}

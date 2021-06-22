@@ -155,7 +155,7 @@ public class WolfStatsHandler {
                 case Strength:
                     if (LevelUpFunction(strengthLvl,strengthXp + amount)){                        
                         strengthXp -= Math.pow(strengthLvl++,1.1) * 4;
-                        PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> currentWolf), new SpawnLevelUpParticle( currentWolf.getEntityId(),wolfStats.ordinal()));
+                        showParticle(1);
                         handleWolfGoals();
                     }
                     strengthXp += amount;
@@ -163,7 +163,7 @@ public class WolfStatsHandler {
                 case Speed:
                     if (LevelUpFunction(speedLvl,speedXp + amount)){                        
                         speedXp -= Math.pow(speedLvl++,1.1) * 4;
-                        PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> currentWolf), new SpawnLevelUpParticle( currentWolf.getEntityId(),wolfStats.ordinal()));
+                        showParticle(0);
                         handleWolfGoals();
                     }
                     speedXp += amount;
@@ -171,7 +171,7 @@ public class WolfStatsHandler {
                 case Intelligence:
                     if (LevelUpFunction(intelligenceLvl,intelligenceXp + amount)){                        
                         intelligenceXp -= Math.pow(intelligenceLvl++,1.1) * 4;
-                        PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> currentWolf), new SpawnLevelUpParticle( currentWolf.getEntityId(),wolfStats.ordinal()));
+                        showParticle(2);
                         handleWolfGoals();
                     }
                     intelligenceXp += amount;
@@ -304,9 +304,12 @@ public class WolfStatsHandler {
             intelligenceLvl += amount;
             speedXp = 0;
             strengthXp = 0;
-            intelligenceXp = 0;
-            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> currentWolf), new SpawnLevelUpParticle( currentWolf.getEntityId(),3));
+            intelligenceXp = 0;         
             handleWolfGoals();
+        }
+        @Override
+        public void showParticle(int type){
+            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> currentWolf), new SpawnLevelUpParticle( currentWolf.getEntityId(),type));
         }
         
 
