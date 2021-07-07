@@ -7,26 +7,44 @@
                 {
                     "type": "item",
                     "name": "upgradedwolves:golden_bone",
-                    "weight": 15
+                    "weight": 30
                 },
                 {
                     "type": "item",
                     "name": "upgradedwolves:enchanted_golden_bone",
-                    "weight": 5
+                    "weight": 10
                 },
                 {
                     "type": "item",
                     "name": "minecraft:bone",
-                    "weight": 20
+                    "weight": 30,
+                    "functions": [
+                        {
+                            "function": "minecraft:set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 8
+                            }
+                        }
+                    ]
                 },
                 {
                     "type": "item",
                     "name": "minecraft:dandelion",
-                    "weight": 5
+                    "weight": 20,
+                    "functions": [
+                        {
+                            "function": "minecraft:set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 8
+                            }
+                        }
+                    ]
                 },
                 {
                     "type": "empty",
-                    "weight": 55
+                    "weight": 10
                 }
             ]
         },
@@ -37,23 +55,40 @@
                 {
                     "type": "item",
                     "name": "upgradedwolves:golden_bone",
-                    "weight": 20
+                    "weight": 40
                 },
                 {
                     "type": "item",
                     "name": "minecraft:bone",
-                    "weight": 15
+                    "weight": 20,
+                    "functions": [
+                        {
+                            "function": "minecraft:set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 8
+                            }
+                        }
+                    ]
                 },
                 {
                     "type": "item",
                     "name": "minecraft:dandelion",
-                    "weight": 15
+                    "weight": 30,
+                    "functions": [
+                        {
+                            "function": "minecraft:set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 8
+                            }
+                        }
+                    ]
                 },
                 {
                     "type": "empty",
-                    "weight": 50
+                    "weight": 10
                 }
-
             ]
         }
     ]

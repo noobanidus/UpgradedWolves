@@ -2,7 +2,7 @@ package com.example.upgradedwolves;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-
+import net.minecraft.data.DataGenerator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
@@ -13,6 +13,7 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
@@ -29,9 +30,11 @@ import com.example.upgradedwolves.client.ClientHandler;
 import com.example.upgradedwolves.common.DamageHandler;
 import com.example.upgradedwolves.common.TrainingEventHandler;
 import com.example.upgradedwolves.common.WolfPlayerInteraction;
+import com.example.upgradedwolves.init.ModChestLoot;
 import com.example.upgradedwolves.init.ModContainers;
 import com.example.upgradedwolves.init.ModEntities;
 import com.example.upgradedwolves.itemHandler.WolfToysHandler;
+import com.example.upgradedwolves.loot_table.init.ModGlobalLootTableModifier;
 import com.example.upgradedwolves.network.PacketHandler;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -56,6 +59,7 @@ public class UpgradedWolves
         MinecraftForge.EVENT_BUS.register(new DamageHandler());
         MinecraftForge.EVENT_BUS.register(new WolfPlayerInteraction());
         MinecraftForge.EVENT_BUS.register(new TrainingEventHandler());
+        MinecraftForge.EVENT_BUS.register(new ModChestLoot());
         //Future reference for static registering...
         FMLJavaModLoadingContext.get().getModEventBus().register(ModContainers.class);
         FMLJavaModLoadingContext.get().getModEventBus().register(WolfToysHandler.class);

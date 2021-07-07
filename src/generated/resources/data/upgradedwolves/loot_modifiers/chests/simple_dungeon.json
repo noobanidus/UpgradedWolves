@@ -1,0 +1,29 @@
+{
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:chests/simple_dungeon"
+    }
+  ],
+  "chestItems": [
+    {
+      "item": "upgradedwolves:golden_bone",
+      "minItem": 1.0,
+      "maxItem": 1.0,
+      "chance": 0.3
+    },
+    {
+      "item": "upgradedwolves:enchanted_golden_bone",
+      "minItem": 1.0,
+      "maxItem": 1.0,
+      "chance": 0.06
+    },
+    {
+      "item": "minecraft:dandelion",
+      "minItem": 2.0,
+      "maxItem": 10.0,
+      "chance": 0.5
+    }
+  ],
+  "type": "upgradedwolves:chest_loot"
+}
