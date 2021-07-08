@@ -26,6 +26,8 @@ public class ClientHandler {
         RenderingRegistry.registerEntityRenderingHandler(EntityType.WOLF, UpgradedWolfRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.tennisBallEntityType,
             manager -> new SpriteRenderer<>(manager,Minecraft.getInstance().getItemRenderer()));
+            RenderingRegistry.registerEntityRenderingHandler(ModEntities.flyingDiskEntityType,
+            manager -> new SpriteRenderer<>(manager,Minecraft.getInstance().getItemRenderer()));
 
         ScreenManager.registerFactory(ModContainers.WOLF_CONTAINER, WolfScreen::new);
     }
