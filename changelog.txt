@@ -3,8 +3,12 @@ v 0.3
 Added
 +Wolf toys.
 	+Tennis Ball
+	+Flying Disk
+
++Golden Bone and Enchanted golden bone.
 
 +Wolves will conditionally travel a further distance without teleporting.
+
 
 Removed
 
