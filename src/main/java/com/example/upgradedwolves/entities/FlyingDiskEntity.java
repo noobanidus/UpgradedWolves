@@ -13,20 +13,19 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.entity.projectile.ProjectileItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.IPacket;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.Direction;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class FlyingDiskEntity extends ProjectileItemEntity implements IWolfChaseableEntity{
+public class FlyingDiskEntity extends WolfChaseableEntity{
 
     public int timeOut = 0;
     protected int flightTime = 100;
@@ -93,7 +92,6 @@ public class FlyingDiskEntity extends ProjectileItemEntity implements IWolfChase
     
     public void tick() {
         super.tick();
-        timeOut++;
         PlayerEntity player = (PlayerEntity)func_234616_v_();
         if(fly && player != null){
             Vector3d retrieveDirection = new Vector3d(player.getPositionVec().x - this.getPositionVec().x,
@@ -106,17 +104,6 @@ public class FlyingDiskEntity extends ProjectileItemEntity implements IWolfChase
                 this.setNoGravity(false);
             }
         }
-        if(timeOut >= 1200){
-            this.remove();
-        }
-        for(WolfEntity wolf : this.world.getEntitiesWithinAABB(WolfEntity.class, this.getBoundingBox())) {
-            onCollideWithWolf(wolf);    
-        }
-    }
-
-    public void onCollideWithWolf(WolfEntity wolf){
-        if(!speedFactor(0.5))
-            wolfCollect(wolf);
     }
 
     public void wolfCollect(WolfEntity wolf){        
@@ -132,28 +119,6 @@ public class FlyingDiskEntity extends ProjectileItemEntity implements IWolfChase
             }
             this.remove();
         }
-    }
-
-    @Override
-    public void onCollideWithPlayer(PlayerEntity entityIn) {        
-        if (!this.world.isRemote) {
-            boolean flag = this.func_234616_v_().getUniqueID() == entityIn.getUniqueID() && !speedFactor(1) && ticksExisted > 20;
-            if (flag && !entityIn.addItemStackToInventory(new ItemStack(getDefaultItem()))) {
-                flag = false;
-            }
-    
-            if (flag) {                
-                entityIn.onItemPickup(this, 1);
-                this.remove();
-            }
-    
-        }
-    }
-    public boolean speedFactor(double factor){
-        double speed = this.getMotion().length();
-        if(speed > factor)
-            return true;
-        return false;
     }
 
     @Override

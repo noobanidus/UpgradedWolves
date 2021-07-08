@@ -3,7 +3,7 @@ package com.example.upgradedwolves.entities.goals;
 import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
-import com.example.upgradedwolves.entities.TennisBallEntity;
+import com.example.upgradedwolves.entities.WolfChaseableEntity;
 import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
 
 import net.minecraft.entity.Entity;
@@ -44,7 +44,7 @@ public class WolfFindAndPickUpItemGoal extends Goal implements IUpdateableGoal{
                 return true;
             }
         }
-        for(TennisBallEntity wolfToy : wolf.world.getEntitiesWithinAABB(TennisBallEntity.class, wolf.getBoundingBox().grow(36.0D, 0.0D, 36.0D))){
+        for(WolfChaseableEntity wolfToy : wolf.world.getEntitiesWithinAABB(WolfChaseableEntity.class, wolf.getBoundingBox().grow(36.0D, 5.0D, 36.0D))){
             if (wolfInventory.getAvailableSlot(wolfToy.getItem()) >= 0 && canEasilyReach(wolfToy)){
                 item = wolfToy;
                 initialPoint = wolf.getPositionVec();
@@ -63,7 +63,7 @@ public class WolfFindAndPickUpItemGoal extends Goal implements IUpdateableGoal{
                 return shouldChase(1,item);
             }
         } else {
-            TennisBallEntity item = (TennisBallEntity)wolf.world.getEntityByID(this.item.getEntityId());
+            WolfChaseableEntity item = (WolfChaseableEntity)wolf.world.getEntityByID(this.item.getEntityId());
             if (endPoint != null){
                 double distance = initialPoint.distanceTo(endPoint);
                 IWolfStats stats = WolfStatsHandler.getHandler(wolf);
