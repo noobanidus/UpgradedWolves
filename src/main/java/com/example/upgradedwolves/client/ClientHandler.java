@@ -3,6 +3,7 @@ package com.example.upgradedwolves.client;
 import com.example.upgradedwolves.UpgradedWolves;
 import com.example.upgradedwolves.containers.WolfScreen;
 import com.example.upgradedwolves.entities.UpgradedWolfRenderer;
+import com.example.upgradedwolves.entities.plushy.MobPlushyRenderer;
 import com.example.upgradedwolves.init.ModContainers;
 import com.example.upgradedwolves.init.ModEntities;
 import com.example.upgradedwolves.loot_table.init.ModGlobalLootTableModifier;
@@ -11,6 +12,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.SpriteRenderer;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.entity.EntityType;
@@ -24,10 +26,14 @@ public class ClientHandler {
     @OnlyIn(Dist.CLIENT)
     public static void setup(){
         RenderingRegistry.registerEntityRenderingHandler(EntityType.WOLF, UpgradedWolfRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntities.mobPlushyEntityType,MobPlushyRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.tennisBallEntityType,
             manager -> new SpriteRenderer<>(manager,Minecraft.getInstance().getItemRenderer()));
-            RenderingRegistry.registerEntityRenderingHandler(ModEntities.flyingDiskEntityType,
+        RenderingRegistry.registerEntityRenderingHandler(ModEntities.flyingDiskEntityType,
             manager -> new SpriteRenderer<>(manager,Minecraft.getInstance().getItemRenderer()));
+
+        EntityRendererManager entityRendererManager = Minecraft.getInstance().getRenderManager();
+        entityRendererManager.register(ModEntities.mobPlushyEntityType, new MobPlushyRenderer(entityRendererManager));
 
         ScreenManager.registerFactory(ModContainers.WOLF_CONTAINER, WolfScreen::new);
     }
