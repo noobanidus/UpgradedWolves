@@ -14,6 +14,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -156,5 +157,19 @@ public class MobPlushyEntity extends ThrowableEntity {
         return super.isInRangeToRender3d(x, y, z);
         //return true;
     }
-    
+
+    public void writeAdditional(CompoundNBT compound) {
+        super.writeAdditional(compound);
+        ItemStack itemstack = this.func_213882_k();
+        if (!itemstack.isEmpty()) {
+           compound.put("Item", itemstack.write(new CompoundNBT()));
+        }
+  
+    }
+  
+    public void readAdditional(CompoundNBT compound) {
+        super.readAdditional(compound);
+        ItemStack itemstack = ItemStack.read(compound.getCompound("Item"));
+        this.setItem(itemstack);
+    }
 }
