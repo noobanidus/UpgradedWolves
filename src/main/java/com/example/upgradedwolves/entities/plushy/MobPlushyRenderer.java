@@ -1,7 +1,5 @@
 package com.example.upgradedwolves.entities.plushy;
 
-import java.util.ArrayList;
-
 import com.example.upgradedwolves.UpgradedWolves;
 import com.example.upgradedwolves.items.MobPlushy;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -12,43 +10,15 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.culling.ClippingHelper;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
 
 public class MobPlushyRenderer extends EntityRenderer<MobPlushyEntity> {
-    protected ModelRenderer head;
-    protected ModelRenderer body;
-    protected ArrayList<ModelRenderer> limbs;    
+    protected EntityModel model;  
 
     public MobPlushyRenderer(EntityRendererManager renderManager) {
         super(renderManager);
-        MobPlushyEntity plushEntity = (MobPlushyEntity)renderManager.pointedEntity;
-        this.head = new ModelRenderer(32, 32, 0, 0);
-        this.head.addBox(0F, 0.0F, 0F, 4.0F, 4.0F, 4.0F);
-        if(plushEntity != null){
-            MobPlushy plush = (MobPlushy)plushEntity.getItem().getItem();
-            
-            switch(plush.plushType){
-                case SKELETON:
-                BipedalModel();
-                break;
-                case ZOMBIE:
-                BipedalModel();
-                break;
-                case CREEPER:
-                CreeperModel();
-                break;
-            }
-        }
-    }
-
-    protected void BipedalModel(){
-
-    }
-
-    protected void CreeperModel(){
-
     }
 
     public static int getPackedOverlay(MobPlushyEntity livingEntityIn, float uIn) {
@@ -61,12 +31,25 @@ public class MobPlushyRenderer extends EntityRenderer<MobPlushyEntity> {
 
     @Override
     public void render(MobPlushyEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn,
-            IRenderTypeBuffer bufferIn, int packedLightIn) {        
+            IRenderTypeBuffer bufferIn, int packedLightIn) {
+        if(true){
+            MobPlushy plush = (MobPlushy)entityIn.getItem().getItem();
+            switch(plush.plushType){
+                case ZOMBIE:
+                model = new ZombiePlushyModel();
+                break;
+                case SKELETON:
+                model = new SkeletonPlushyModel();
+                break;
+                case CREEPER:
+                model = new CreeperPlushyModel();
+                break;
+            }
+        }
         matrixStackIn.push();
-        matrixStackIn.scale(2.0F, 2.0F, 2.0F);
-        int i = getPackedOverlay(entityIn, this.getOverlayProgress(entityIn, partialTicks));
+        int i = OverlayTexture.NO_OVERLAY;
         IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEntityCutoutNoCull(getEntityTexture(entityIn)));
-        head.render(matrixStackIn, ivertexbuilder, packedLightIn, i);
+        model.render(matrixStackIn, ivertexbuilder, packedLightIn, i, 1f, 1f, 1f, 1f);
         matrixStackIn.pop();
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
@@ -74,22 +57,21 @@ public class MobPlushyRenderer extends EntityRenderer<MobPlushyEntity> {
     @Override
     public boolean shouldRender(MobPlushyEntity livingEntityIn, ClippingHelper camera, double camX, double camY,
             double camZ) {
-        // TODO Auto-generated method stub
         return super.shouldRender(livingEntityIn, camera, camX, camY, camZ);
     }
 
     @Override
     public ResourceLocation getEntityTexture(MobPlushyEntity entity) {
-        // MobPlushy plush = (MobPlushy)entity.getItem().getItem();
-        // switch(plush.plushType){
-        //     case SKELETON:            
-        //     break;
-        //     case ZOMBIE:            
-        //     break;
-        //     case CREEPER:        
-        //     break;
-        // }
-        return UpgradedWolves.getId("pet_dog");
+        MobPlushy plush = (MobPlushy)entity.getItem().getItem();
+        switch(plush.plushType){
+            case SKELETON:            
+            return UpgradedWolves.getId("textures/entity/skeleton_plush.png");
+            case ZOMBIE:         
+            return UpgradedWolves.getId("textures/entity/zombie_plush.png");
+            case CREEPER:        
+            return UpgradedWolves.getId("textures/entity/creeper_plush.png");
+        }
+        return null;
     }
     
     
