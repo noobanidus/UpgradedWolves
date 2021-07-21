@@ -1,6 +1,5 @@
 package com.example.upgradedwolves.entities.plushy;
 
-import com.example.upgradedwolves.UpgradedWolves;
 import com.example.upgradedwolves.items.MobPlushy;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
@@ -31,21 +30,9 @@ public class MobPlushyRenderer extends EntityRenderer<MobPlushyEntity> {
 
     @Override
     public void render(MobPlushyEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn,
-            IRenderTypeBuffer bufferIn, int packedLightIn) {
-        if(true){
-            MobPlushy plush = (MobPlushy)entityIn.getItem().getItem();
-            switch(plush.plushType){
-                case ZOMBIE:
-                model = new ZombiePlushyModel();
-                break;
-                case SKELETON:
-                model = new SkeletonPlushyModel();
-                break;
-                case CREEPER:
-                model = new CreeperPlushyModel();
-                break;
-            }
-        }
+            IRenderTypeBuffer bufferIn, int packedLightIn) {        
+        MobPlushy plush = (MobPlushy)entityIn.getItem().getItem();
+        model = MobPlushy.getModelByPlushType(plush);        
         matrixStackIn.push();
         int i = OverlayTexture.NO_OVERLAY;
         IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEntityCutoutNoCull(getEntityTexture(entityIn)));
@@ -63,15 +50,7 @@ public class MobPlushyRenderer extends EntityRenderer<MobPlushyEntity> {
     @Override
     public ResourceLocation getEntityTexture(MobPlushyEntity entity) {
         MobPlushy plush = (MobPlushy)entity.getItem().getItem();
-        switch(plush.plushType){
-            case SKELETON:            
-            return UpgradedWolves.getId("textures/entity/skeleton_plush.png");
-            case ZOMBIE:         
-            return UpgradedWolves.getId("textures/entity/zombie_plush.png");
-            case CREEPER:        
-            return UpgradedWolves.getId("textures/entity/creeper_plush.png");
-        }
-        return null;
+        return MobPlushy.getPlushTexture(plush);
     }
     
     
