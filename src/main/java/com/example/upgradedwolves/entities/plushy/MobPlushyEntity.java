@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.example.upgradedwolves.common.TrainingEventHandler;
 import com.example.upgradedwolves.init.ModEntities;
 import com.example.upgradedwolves.itemHandler.WolfToysHandler;
 import com.example.upgradedwolves.items.MobPlushy;
@@ -12,6 +13,8 @@ import com.example.upgradedwolves.items.MobPlushy;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -22,6 +25,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
@@ -30,6 +34,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraft.util.Util;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraftforge.api.distmarker.Dist;
 
 public class MobPlushyEntity extends ThrowableEntity {
@@ -52,6 +57,12 @@ public class MobPlushyEntity extends ThrowableEntity {
 
     protected void onImpact(RayTraceResult result) {
         RayTraceResult.Type raytraceresult$type = result.getType();
+        if(raytraceresult$type == RayTraceResult.Type.ENTITY){
+            EntityRayTraceResult entityResult = (EntityRayTraceResult)result;
+            if(entityResult.getEntity() instanceof WolfEntity){
+                TrainingEventHandler.wolfCollectEntity(this, (WolfEntity)entityResult.getEntity(), getItem());
+            }
+        }
         if (raytraceresult$type == RayTraceResult.Type.BLOCK) {
             BlockRayTraceResult blockResult = (BlockRayTraceResult)result;
             if(blockResult.getFace().getAxis() == Direction.Axis.Y)
@@ -66,10 +77,28 @@ public class MobPlushyEntity extends ThrowableEntity {
             }
 
         }
-  
+    }
+    @Override
+    public void onCollideWithPlayer(PlayerEntity entityIn) {        
+        if (!this.world.isRemote) {
+            boolean flag = this.func_234616_v_().getUniqueID() == entityIn.getUniqueID() && ticksExisted > 20;
+            if (flag && !entityIn.addItemStackToInventory(getItem())) {
+                flag = false;
+            }
+    
+            if (flag) {                
+                entityIn.onItemPickup(this, 1);
+                this.remove();
+            }
+    
+        }
     }
 
-    //TODO: please fix this later.
+    public void onCollideWithWolf(WolfEntity wolf){
+        wolf.setHeldItem(Hand.MAIN_HAND, getItem());
+        this.remove(); 
+    }
+
     protected List<MobPlushy> plushTypes(){
         ArrayList<MobPlushy> plushes = new ArrayList<MobPlushy>();        
         plushes.add(WolfToysHandler.creeperPlushy);
@@ -109,6 +138,10 @@ public class MobPlushyEntity extends ThrowableEntity {
                     }
                 }
             }
+        }
+
+        for(WolfEntity wolf : this.world.getEntitiesWithinAABB(WolfEntity.class, this.getBoundingBox())) {
+            onCollideWithWolf(wolf);    
         }
         
         if (this.inGround) {

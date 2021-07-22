@@ -13,6 +13,7 @@ import com.example.upgradedwolves.entities.goals.IUpdateableGoal;
 import com.example.upgradedwolves.entities.goals.WolfAutoAttackTargetGoal;
 import com.example.upgradedwolves.entities.goals.WolfFindAndPickUpItemGoal;
 import com.example.upgradedwolves.entities.goals.WolfFleeExplodingCreeper;
+import com.example.upgradedwolves.entities.goals.WolfPlayWithPlushGoal;
 import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
 import com.example.upgradedwolves.network.PacketHandler;
 import com.example.upgradedwolves.network.message.SpawnLevelUpParticle;
@@ -126,7 +127,8 @@ public class WolfStatsHandler {
             if(allGoals.size() > 0)
                 clearGoals();
             Goal fleeHealth = new FleeOnLowHealthGoal(currentWolf, 7.0F, 1.5D, 1.0D, 4.0F),
-                fleeCreeper = new WolfFleeExplodingCreeper(currentWolf, 7.0F, 1.5D, 1.5D);
+                fleeCreeper = new WolfFleeExplodingCreeper(currentWolf, 7.0F, 1.5D, 1.5D),
+                playGoal = new WolfPlayWithPlushGoal(currentWolf);
             if(getWolfType() == WolfType.Fighter.getValue()){
                 Goal autoAttackGoal = new WolfAutoAttackTargetGoal(currentWolf,MonsterEntity.class,false);
                 allGoals.add(autoAttackGoal);
@@ -145,7 +147,8 @@ public class WolfStatsHandler {
             allGoals.add(fleeHealth);
             allGoals.add(fleeCreeper);
             currentWolf.goalSelector.addGoal(3, fleeHealth);
-            currentWolf.goalSelector.addGoal(2, fleeCreeper); 
+            currentWolf.goalSelector.addGoal(2, fleeCreeper);
+            currentWolf.goalSelector.addGoal(8, playGoal);
         }
 
         @Override

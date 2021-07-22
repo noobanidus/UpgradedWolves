@@ -1,5 +1,7 @@
 package com.example.upgradedwolves.entities;
 
+import com.example.upgradedwolves.common.TrainingEventHandler;
+
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.WolfEntity;
@@ -38,12 +40,8 @@ public abstract class WolfChaseableEntity extends ProjectileItemEntity {
     }
 
     public void onCollideWithWolf(WolfEntity wolf){
-        if(!speedFactor(0.5))
-            wolfCollect(wolf);
-    }
-
-    public void wolfCollect(WolfEntity wolf){  
-
+        if(!speedFactor(0.5))            
+            TrainingEventHandler.wolfCollectEntity(this, wolf, new ItemStack(getDefaultItem()));
     }
 
     @Override

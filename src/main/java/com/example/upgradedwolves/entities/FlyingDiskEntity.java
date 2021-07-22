@@ -1,9 +1,6 @@
 package com.example.upgradedwolves.entities;
 
-import com.example.upgradedwolves.capabilities.IWolfStats;
-import com.example.upgradedwolves.capabilities.WolfStatsHandler;
-import com.example.upgradedwolves.common.WolfPlayerInteraction;
-import com.example.upgradedwolves.entities.goals.WolfFindAndPickUpItemGoal;
+import com.example.upgradedwolves.common.TrainingEventHandler;
 import com.example.upgradedwolves.init.ModEntities;
 import com.example.upgradedwolves.itemHandler.WolfToysHandler;
 
@@ -83,8 +80,8 @@ public class FlyingDiskEntity extends WolfChaseableEntity{
                     this.setMotion(bounceDirection.scale(speed));
                 }
             }            
-            else if(entityResult.getEntity() instanceof WolfEntity){
-                wolfCollect((WolfEntity)entityResult.getEntity());
+            else if(entityResult.getEntity() instanceof WolfEntity){                
+                TrainingEventHandler.wolfCollectEntity(this, (WolfEntity)entityResult.getEntity(), new ItemStack(getDefaultItem()));
             }
         }
 
@@ -103,21 +100,6 @@ public class FlyingDiskEntity extends WolfChaseableEntity{
                 fly = false;
                 this.setNoGravity(false);
             }
-        }
-    }
-
-    public void wolfCollect(WolfEntity wolf){        
-        IWolfStats handler = WolfStatsHandler.getHandler(wolf);
-        ItemStack flyingDiskItem = new ItemStack(getDefaultItem());
-        int wolfSlot = handler.getInventory().getAvailableSlot(flyingDiskItem);
-
-        if(wolfSlot >= 0){
-            handler.getInventory().insertItem(wolfSlot, flyingDiskItem, false);
-            WolfFindAndPickUpItemGoal goal = (WolfFindAndPickUpItemGoal)WolfPlayerInteraction.getWolfGoal(wolf, WolfFindAndPickUpItemGoal.class);
-            if(goal != null){
-                goal.setEndPoint(wolf.getPositionVec());
-            }
-            this.remove();
         }
     }
 

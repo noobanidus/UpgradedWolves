@@ -4,6 +4,7 @@ import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.entities.WolfChaseableEntity;
+import com.example.upgradedwolves.entities.plushy.MobPlushyEntity;
 import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
 
 import net.minecraft.entity.Entity;
@@ -11,6 +12,7 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.math.MathHelper;
@@ -36,7 +38,7 @@ public class WolfFindAndPickUpItemGoal extends Goal implements IUpdateableGoal{
     @Override
     public boolean shouldExecute() {
         item = null;
-        if(item != null || wolf.isSitting())
+        if(item != null || wolf.isSitting() || wolf.getHeldItemMainhand() != ItemStack.EMPTY)
             return false;
         for(ItemEntity itementity : wolf.world.getEntitiesWithinAABB(ItemEntity.class, wolf.getBoundingBox().grow(12.0D, 0.0D, 12.0D))) {
             if (wolfInventory.getAvailableSlot(itementity.getItem()) >= 0 && canEasilyReach(itementity)) {                
@@ -51,6 +53,12 @@ public class WolfFindAndPickUpItemGoal extends Goal implements IUpdateableGoal{
                 return true;
             }
         }
+        for(MobPlushyEntity mobPlushy : wolf.world.getEntitiesWithinAABB(MobPlushyEntity.class, wolf.getBoundingBox().grow(12.0D, 0.0D, 12.0D))){
+            if (wolfInventory.getAvailableSlot(mobPlushy.getItem()) >= 0 && canEasilyReach(mobPlushy)){
+                item = mobPlushy;
+                return true;
+            }
+        }
         return false;
     }
 
@@ -62,7 +70,7 @@ public class WolfFindAndPickUpItemGoal extends Goal implements IUpdateableGoal{
             } else {
                 return shouldChase(1,item);
             }
-        } else {
+        } else if(item instanceof WolfChaseableEntity) {
             WolfChaseableEntity item = (WolfChaseableEntity)wolf.world.getEntityByID(this.item.getEntityId());
             if (endPoint != null){
                 double distance = initialPoint.distanceTo(endPoint);
@@ -76,6 +84,13 @@ public class WolfFindAndPickUpItemGoal extends Goal implements IUpdateableGoal{
                 return false;
             } else {
                 return shouldChase(3, item);
+            }
+        } else{
+            MobPlushyEntity item = (MobPlushyEntity)wolf.world.getEntityByID(this.item.getEntityId());
+            if (item == null || wolfInventory.getAvailableSlot(item.getItem()) < 0 || wolf.getHeldItemMainhand() != ItemStack.EMPTY) {
+                return false;
+            } else {
+                return shouldChase(1,item);
             }
         }
     }
