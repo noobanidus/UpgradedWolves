@@ -82,8 +82,9 @@ public class MobPlushyEntity extends ThrowableEntity {
     public void onCollideWithPlayer(PlayerEntity entityIn) {        
         if (!this.world.isRemote) {
             boolean flag = this.func_234616_v_().getUniqueID() == entityIn.getUniqueID() && ticksExisted > 20;
-            if (flag && !entityIn.addItemStackToInventory(getItem())) {
-                flag = false;
+            if (flag) {                
+                if(!entityIn.isCreative() && !entityIn.addItemStackToInventory(getItem()))
+                    flag = false;
             }
     
             if (flag) {                
@@ -122,7 +123,9 @@ public class MobPlushyEntity extends ThrowableEntity {
     }
 
     @Override
-    public void tick() {        
+    public void tick() {
+        if(getItem() == null)
+            this.remove();
         super.tick();
         BlockPos blockpos = this.getPosition();
         BlockState blockstate = this.world.getBlockState(blockpos);

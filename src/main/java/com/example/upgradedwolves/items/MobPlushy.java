@@ -23,7 +23,7 @@ public class MobPlushy extends Item {
     public MobPlushyType plushType;
 
     public MobPlushy(String registryName, MobPlushyType type) {
-        super(new Item.Properties().group(ItemGroup.MISC).setISTER(TilePlushyEntity::new));
+        super(new Item.Properties().maxStackSize(1).group(ItemGroup.MISC).setISTER(TilePlushyEntity::new));
         this.setRegistryName(UpgradedWolves.getId(registryName));
         plushType = type;
     }
