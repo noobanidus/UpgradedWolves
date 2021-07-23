@@ -32,21 +32,20 @@ public class WolfPlayWithPlushGoal extends Goal {
 
     @Override
     public boolean shouldContinueExecuting() {
-        if(timeLeftToPlay-- > 0){
-            ItemStack wolfHeldItem = wolf.getHeldItemMainhand();
-            IWolfStats handler = WolfStatsHandler.getHandler(wolf);
-            ItemStackHandlerWolf wolfInventory = handler.getInventory();
-            handler.addXp(WolfStatsEnum.Strength, 1);
-            int wolfSlot = wolfInventory.getAvailableSlot(wolfHeldItem);
-            if(wolfSlot >= 0){
-                ItemStack remaining = wolfInventory.insertItem(wolfSlot, wolfHeldItem, false);
-                wolf.setHeldItem(Hand.MAIN_HAND, remaining);
-            }
-            else{
-                wolf.entityDropItem(wolfHeldItem);                    
-                wolf.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
-            }
+        if(timeLeftToPlay-- > 0)
             return true;
+        ItemStack wolfHeldItem = wolf.getHeldItemMainhand();
+        IWolfStats handler = WolfStatsHandler.getHandler(wolf);
+        ItemStackHandlerWolf wolfInventory = handler.getInventory();
+        handler.addXp(WolfStatsEnum.Strength, 1);
+        int wolfSlot = wolfInventory.getAvailableSlot(wolfHeldItem);
+        if(wolfSlot >= 0){
+            ItemStack remaining = wolfInventory.insertItem(wolfSlot, wolfHeldItem, false);
+            wolf.setHeldItem(Hand.MAIN_HAND, remaining);
+        }
+        else{
+            wolf.entityDropItem(wolfHeldItem);                    
+            wolf.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
         }
         return false;
     }
