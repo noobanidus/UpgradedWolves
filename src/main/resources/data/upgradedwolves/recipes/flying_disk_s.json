@@ -1,0 +1,24 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "minecraft:painting"
+        },
+        {
+            "item": "minecraft:coal"
+        },
+        {
+            "item": "minecraft:clay_ball"
+        },
+        {
+            "item": "minecraft:snowball"
+        },
+        {
+            "item": "minecraft:tropical_fish_bucket"
+        }
+    ],
+    "result":{
+        "item":"upgradedwolves:flying_disk"
+    },
+    "group": "flying_disk"
+}

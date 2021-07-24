@@ -1,0 +1,24 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "minecraft:glass_bottle"
+        },
+        {
+            "item": "minecraft:charcoal"
+        },
+        {
+            "item": "minecraft:mushroom_stew"
+        },
+        {
+            "item": "minecraft:map"
+        },
+        {
+            "item": "minecraft:feather"
+        }
+    ],
+    "result":{
+        "item":"upgradedwolves:flying_disk"
+    },
+    "group": "flying_disk"
+}

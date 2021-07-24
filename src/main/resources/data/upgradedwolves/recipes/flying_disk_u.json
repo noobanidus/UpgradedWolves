@@ -1,0 +1,24 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "minecraft:oak_trapdoor"
+        },
+        {
+            "item": "minecraft:coal"
+        },
+        {
+            "item": "minecraft:glowstone"
+        },
+        {
+            "item": "minecraft:blue_ice"
+        },
+        {
+            "item": "minecraft:birch_leaves"
+        }
+    ],
+    "result":{
+        "item":"upgradedwolves:flying_disk"
+    },
+    "group": "flying_disk"
+}

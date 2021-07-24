@@ -1,0 +1,24 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "minecraft:egg"
+        },
+        {
+            "item": "minecraft:charcoal"
+        },
+        {
+            "item": "minecraft:arrow"
+        },
+        {
+            "item": "minecraft:porkchop"
+        },
+        {
+            "item": "minecraft:leather_leggings"
+        }
+    ],
+    "result":{
+        "item":"upgradedwolves:flying_disk"
+    },
+    "group": "flying_disk"
+}

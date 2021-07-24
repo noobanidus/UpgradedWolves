@@ -1,0 +1,24 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "minecraft:painting"
+        },
+        {
+            "item": "minecraft:coal"
+        },
+        {
+            "item": "minecraft:lapis_block"
+        },
+        {
+            "item": "minecraft:ladder"
+        },
+        {
+            "item": "minecraft:jungle_leaves"
+        }
+    ],
+    "result":{
+        "item":"upgradedwolves:flying_disk"
+    },
+    "group": "flying_disk"
+}
