@@ -21,6 +21,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -55,11 +56,16 @@ public class TennisBallEntity extends WolfChaseableEntity {
         if(result.getType() == RayTraceResult.Type.BLOCK){
             BlockRayTraceResult blockResult = (BlockRayTraceResult)result;
             Vector3d vector3d1 = this.getMotion();
-            this.setMotion(
-                blockResult.getFace().getAxis() == Direction.Axis.X ? -vector3d1.x * .7 : vector3d1.x * .9,
-                blockResult.getFace().getAxis() == Direction.Axis.Y ? -vector3d1.y * .7 : vector3d1.y * .9,
-                blockResult.getFace().getAxis() == Direction.Axis.Z ? -vector3d1.z * .7 : vector3d1.z * .9
-                );
+            if(this.getMotion().length() > 0.2)
+                this.world.playSound(this.getPosX(), this.getPosY(), this.getPosZ(), world.getBlockState(blockResult.getPos()).getBlock().getSoundType(null).getPlaceSound(), SoundCategory.BLOCKS, 0.5F, (1.0F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.2F) * 0.7F, false);
+            if(blockResult.getFace().getAxis() == Direction.Axis.Y && this.getMotion().length() < 0.1)
+                super.OnHitBlock(blockResult);
+            else
+                this.setMotion(
+                    blockResult.getFace().getAxis() == Direction.Axis.X ? -vector3d1.x * .7 : vector3d1.x * .9,
+                    blockResult.getFace().getAxis() == Direction.Axis.Y ? -vector3d1.y * .7 : vector3d1.y * .9,
+                    blockResult.getFace().getAxis() == Direction.Axis.Z ? -vector3d1.z * .7 : vector3d1.z * .9
+                    );
             RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_);
             if(raytraceresult.getType() != RayTraceResult.Type.MISS){
                 onImpact(raytraceresult);
@@ -98,7 +104,8 @@ public class TennisBallEntity extends WolfChaseableEntity {
         if(wolfSlot >= 0){
             handler.getInventory().insertItem(wolfSlot, tennisBallItem, false);
             WolfFindAndPickUpItemGoal goal = (WolfFindAndPickUpItemGoal)WolfPlayerInteraction.getWolfGoal(wolf, WolfFindAndPickUpItemGoal.class);
-            goal.setEndPoint(wolf.getPositionVec());
+            if(goal != null)
+                goal.setEndPoint(wolf.getPositionVec());
             this.remove();
         }
     }

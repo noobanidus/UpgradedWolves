@@ -16,6 +16,7 @@ import com.example.upgradedwolves.items.TugOfWarRopeItem;
 import com.example.upgradedwolves.items.GoldenBone.GoldenBoneAbstract;
 import com.example.upgradedwolves.network.PacketHandler;
 import com.example.upgradedwolves.network.message.RenderMessage;
+import com.example.upgradedwolves.items.MobPlushy;
 
 import org.apache.logging.log4j.LogManager;
 
@@ -165,19 +166,22 @@ public class WolfPlayerInteraction {
             }
 
             if(wolf.getHeldItemMainhand() != ItemStack.EMPTY && wolf.getOwner() != null){
-                if(handler.getWolfType() == WolfType.Fighter.getValue() && handler.getLevel(WolfStatsEnum.Intelligence) > 4){                
-                    LogManager.getLogger().info(wolf.getHeldItemMainhand());
-                    wolf.getOwner().entityDropItem(wolf.getHeldItemMainhand());                    
+                ItemStack wolfHeldItem = wolf.getHeldItemMainhand();
+                if(wolfHeldItem.getItem() instanceof MobPlushy){                    
+                    //Nothing happens as this code is left to an entity goal
+                } else if(handler.getWolfType() == WolfType.Fighter.getValue() && handler.getLevel(WolfStatsEnum.Intelligence) > 4){                
+                    LogManager.getLogger().info(wolfHeldItem);
+                    wolf.getOwner().entityDropItem(wolfHeldItem);                    
                     wolf.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
                 }
                 else{                                        
-                    int wolfSlot = wolfInventory.getAvailableSlot(wolf.getHeldItemMainhand());
+                    int wolfSlot = wolfInventory.getAvailableSlot(wolfHeldItem);
                     if(wolfSlot >= 0){
-                        ItemStack remaining = wolfInventory.insertItem(wolfSlot, wolf.getHeldItemMainhand(), false);
+                        ItemStack remaining = wolfInventory.insertItem(wolfSlot, wolfHeldItem, false);
                         wolf.setHeldItem(Hand.MAIN_HAND, remaining);
                     }
                     else{
-                        wolf.entityDropItem(wolf.getHeldItemMainhand());                    
+                        wolf.entityDropItem(wolfHeldItem);                    
                         wolf.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
                     }
                 }

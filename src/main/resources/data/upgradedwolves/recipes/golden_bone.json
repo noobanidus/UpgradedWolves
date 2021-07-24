@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "gGg",
+        "GBG",
+        "gGg"
+    ],
+    "key": {
+        "g": {
+            "item": "minecraft:gold_ingot"
+        },
+        "G": {
+            "item": "minecraft:gold_block"
+        },
+        "B": {
+            "item": "minecraft:bone_block"
+        }
+    },
+    "result":{
+        "item":"upgradedwolves:golden_bone"
+    }
+}

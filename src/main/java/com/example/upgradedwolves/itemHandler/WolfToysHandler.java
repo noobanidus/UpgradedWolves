@@ -1,10 +1,12 @@
 package com.example.upgradedwolves.itemHandler;
 
 import com.example.upgradedwolves.items.FlyingDisk;
+import com.example.upgradedwolves.items.MobPlushy;
 import com.example.upgradedwolves.items.TennisBall;
 import com.example.upgradedwolves.items.TugOfWarRopeItem;
 import com.example.upgradedwolves.items.GoldenBone.EnchantedGoldenBone;
 import com.example.upgradedwolves.items.GoldenBone.GoldenBone;
+import com.example.upgradedwolves.utils.MobPlushyType;
 
 import net.minecraft.item.Item;
 import net.minecraftforge.event.RegistryEvent;
@@ -18,6 +20,9 @@ public class WolfToysHandler {
     public static GoldenBone GOLDENBONE = null;
     public static EnchantedGoldenBone ENCHANTEDGOLDENBONE = null;
     public static TugOfWarRopeItem TUFOFWARROPE = null;
+    public static MobPlushy zombiePlushy = null;
+    public static MobPlushy skeletonPlushy = null;
+    public static MobPlushy creeperPlushy = null;
 
     @SubscribeEvent
     public static void registerItems(final RegistryEvent.Register<Item> event){
@@ -31,6 +36,13 @@ public class WolfToysHandler {
         event.getRegistry().register(FLYINGDISK);
         TUFOFWARROPE = new TugOfWarRopeItem();
         event.getRegistry().register(TUFOFWARROPE);
+
+        zombiePlushy = new MobPlushy("zombie_plush",MobPlushyType.ZOMBIE);
+        event.getRegistry().register(zombiePlushy);
+        skeletonPlushy = new MobPlushy("skeleton_plush",MobPlushyType.SKELETON);
+        event.getRegistry().register(skeletonPlushy);
+        creeperPlushy = new MobPlushy("creeper_plush",MobPlushyType.CREEPER);
+        event.getRegistry().register(creeperPlushy);
     }
 
 }

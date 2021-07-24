@@ -4,6 +4,7 @@ import com.example.upgradedwolves.UpgradedWolves;
 import com.example.upgradedwolves.entities.FlyingDiskEntity;
 import com.example.upgradedwolves.entities.TennisBallEntity;
 import com.example.upgradedwolves.entities.TugOfWarRopeEntity;
+import com.example.upgradedwolves.entities.plushy.MobPlushyEntity;
 
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
@@ -14,6 +15,7 @@ public class ModEntities {
     public static EntityType<TennisBallEntity> tennisBallEntityType;
     public static EntityType<FlyingDiskEntity> flyingDiskEntityType;
     public static EntityType<TugOfWarRopeEntity> tugOfWarKnot;
+    public static EntityType<MobPlushyEntity> mobPlushyEntityType;
 
 
     @SubscribeEvent
@@ -35,5 +37,12 @@ public class ModEntities {
         .trackingRange(10).func_233608_b_(Integer.MAX_VALUE)
         .setCustomClientFactory(TugOfWarRopeEntity::new).build(UpgradedWolves.getId("tug_of_war_knot").toString());
         event.getRegistry().register(tugOfWarKnot);
+                
+        mobPlushyEntityType = EntityType.Builder
+            .<MobPlushyEntity>create(MobPlushyEntity::new,EntityClassification.MISC)
+            .size(0.5F, 0.5F)
+            .build(UpgradedWolves.getId("mob_plushy_entity_type").toString());
+        mobPlushyEntityType.setRegistryName(UpgradedWolves.getId("mob_plushy_entity_type"));
+        event.getRegistry().register(mobPlushyEntityType);
     }
 }

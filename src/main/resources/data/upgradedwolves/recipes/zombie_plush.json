@@ -1,0 +1,19 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "#F#",
+        "FFF",
+        "#F#"
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:blue_dye"
+        },
+        "F": {
+            "item": "minecraft:feather"
+        }
+    },
+    "result":{
+        "item":"upgradedwolves:zombie_plush"
+    }
+}

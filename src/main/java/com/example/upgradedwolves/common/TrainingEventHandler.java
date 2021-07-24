@@ -1,7 +1,10 @@
 package com.example.upgradedwolves.common;
 
+import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.TrainingHandler;
+import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.capabilities.TrainingHandler.ITraining;
+import com.example.upgradedwolves.entities.goals.WolfFindAndPickUpItemGoal;
 import com.example.upgradedwolves.network.PacketHandler;
 import com.example.upgradedwolves.network.message.TrainingItemMessage;
 
@@ -10,8 +13,10 @@ import org.apache.logging.log4j.LogManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.CropsBlock;
 import net.minecraft.block.OreBlock;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
@@ -96,5 +101,18 @@ public class TrainingEventHandler {
         else if(item.isInstance(player.getHeldItemOffhand().getItem()))
             return player.getHeldItemOffhand();
         return null;
+    }
+
+    public static void wolfCollectEntity(Entity entity, WolfEntity wolf,ItemStack item){
+        IWolfStats handler = WolfStatsHandler.getHandler(wolf);        
+        int wolfSlot = handler.getInventory().getAvailableSlot(item);
+        if(wolfSlot >= 0){
+            handler.getInventory().insertItem(wolfSlot, item, false);
+            WolfFindAndPickUpItemGoal goal = (WolfFindAndPickUpItemGoal)WolfPlayerInteraction.getWolfGoal(wolf, WolfFindAndPickUpItemGoal.class);
+            if(goal != null){
+                goal.setEndPoint(wolf.getPositionVec());
+            }
+            entity.remove();
+        }
     }
 }
