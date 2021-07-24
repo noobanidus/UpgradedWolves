@@ -19,6 +19,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -54,13 +55,19 @@ public class FlyingDiskEntity extends WolfChaseableEntity{
     @Override
     protected void onImpact(RayTraceResult result) {
         if(result.getType() == RayTraceResult.Type.BLOCK){
+            this.timeOut += flightTime * variant;
             BlockRayTraceResult blockResult = (BlockRayTraceResult)result;
+            if(this.getMotion().length() > 0.2)
+                this.world.playSound(this.getPosX(), this.getPosY(), this.getPosZ(), world.getBlockState(blockResult.getPos()).getBlock().getSoundType(null).getPlaceSound(), SoundCategory.BLOCKS, 0.3F, (1.0F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.2F) * 0.7F, false);
             Vector3d vector3d1 = this.getMotion();
-            this.setMotion(
-                blockResult.getFace().getAxis() == Direction.Axis.X ? -vector3d1.x * .2 : vector3d1.x * .3,
-                blockResult.getFace().getAxis() == Direction.Axis.Y ? -vector3d1.y * .2 : vector3d1.y * .3,
-                blockResult.getFace().getAxis() == Direction.Axis.Z ? -vector3d1.z * .2 : vector3d1.z * .3
-                );
+            if(blockResult.getFace().getAxis() == Direction.Axis.Y && this.getMotion().length() < 0.1)
+                super.OnHitBlock(blockResult);
+            else
+                this.setMotion(
+                    blockResult.getFace().getAxis() == Direction.Axis.X ? -vector3d1.x * .2 : vector3d1.x * .3,
+                    blockResult.getFace().getAxis() == Direction.Axis.Y ? -vector3d1.y * .2 : vector3d1.y * .3,
+                    blockResult.getFace().getAxis() == Direction.Axis.Z ? -vector3d1.z * .2 : vector3d1.z * .3
+                    );
             RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_);
             if(raytraceresult.getType() != RayTraceResult.Type.MISS){
                 onImpact(raytraceresult);
@@ -96,7 +103,7 @@ public class FlyingDiskEntity extends WolfChaseableEntity{
                                                                     player.getPositionVec().z - this.getPositionVec().z)
                                                                     .normalize().scale(.01);
             this.addVelocity(retrieveDirection.x, retrieveDirection.y,retrieveDirection.z);
-            if(timeOut >= flightTime * variant){
+            if(timeOut++ >= flightTime * variant){
                 fly = false;
                 this.setNoGravity(false);
             }

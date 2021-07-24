@@ -55,6 +55,8 @@ public class UpgradedWolfRenderer extends WolfRenderer {
             matrixStackIn.rotate(Vector3f.YN.rotationDegrees(MathHelper.lerp(partialTicks, -wolf.prevRenderYawOffset, -wolf.renderYawOffset)));
             matrixStackIn.rotate(Vector3f.YP.rotationDegrees(MathHelper.lerp(partialTicks, -wolf.prevRotationYawHead, -wolf.rotationYawHead)));
             matrixStackIn.translate(1 * 0.0625, 8.5 * 0.0625, 5.5 * 0.0625);
+            matrixStackIn.rotate(Vector3f.XN.rotationDegrees(MathHelper.lerp(partialTicks, -wolf.prevRotationPitch, -wolf.rotationPitch)));
+            matrixStackIn.translate(-1 * 0.0625, 0, 0);
 
             matrixStackIn.translate(0, 1.0 * 0.0625, 0);
             matrixStackIn.rotate(Vector3f.XP.rotationDegrees(75F));
