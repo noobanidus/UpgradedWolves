@@ -96,7 +96,7 @@ public class WolfPlayerInteraction {
                     if(!event.getPlayer().isCreative())
                         goldenBoneItem.shrink(1);
                 } else if (tugOfWarRopeItem != null){
-                    wolf.setLeashHolder(event.getPlayer(), true);
+                    handler.setRopeHolder(event.getPlayer());
                     tugOfWarRopeItem.shrink(1);
                 }
             }

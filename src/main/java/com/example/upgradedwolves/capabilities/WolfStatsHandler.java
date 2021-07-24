@@ -65,6 +65,7 @@ public class WolfStatsHandler {
         int speedXp, strengthXp, intelligenceXp;
         //The wolves will have a maximum of 9 slots.       
         ItemStackHandlerWolf inventory;
+        Entity ropeHolder;
         WolfEntity currentWolf;
         List<Goal> allGoals = new ArrayList<Goal>();
 
@@ -313,6 +314,18 @@ public class WolfStatsHandler {
         @Override
         public void showParticle(int type){
             PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> currentWolf), new SpawnLevelUpParticle( currentWolf.getEntityId(),type));
+        }
+        @Override
+        public void setRopeHolder(Entity holder) {
+            ropeHolder = holder;
+        }
+        @Override
+        public Entity getRopeHolder() {            
+            return ropeHolder;
+        }
+        @Override
+        public void clearRopeHolder() {            
+            ropeHolder = null;
         }
         
 

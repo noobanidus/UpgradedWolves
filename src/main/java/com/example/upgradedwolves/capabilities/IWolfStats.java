@@ -2,6 +2,7 @@ package com.example.upgradedwolves.capabilities;
 
 import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.item.ItemStack;
 
@@ -24,4 +25,7 @@ public interface IWolfStats {
     public void addGoals();
     public void forceLevelUp(int amount);
     public void showParticle(int type);
+    public void setRopeHolder(Entity holder);
+    public Entity getRopeHolder();
+    public void clearRopeHolder();
 }
