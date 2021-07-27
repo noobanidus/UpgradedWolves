@@ -13,6 +13,8 @@ import net.minecraftforge.fml.network.NetworkEvent.Context;
 public class RenderMessage implements IMessage<RenderMessage> {
     int wolfId;
     int wolfValue;
+    //true render Wolf color; false render wolf leash
+    boolean renderType;
 
     public RenderMessage(){
         wolfId = 0;
@@ -22,18 +24,26 @@ public class RenderMessage implements IMessage<RenderMessage> {
     public RenderMessage(int id,int value){
         wolfId = id;
         wolfValue = value;
+        renderType = true;
+    }
+
+    public RenderMessage(int id, int value,boolean type){
+        wolfId = id;
+        wolfValue = value;
+        renderType = type;
     }
 
     @Override
     public void encode(RenderMessage message, PacketBuffer buffer) {
         buffer.writeInt(message.wolfId);
         buffer.writeInt(message.wolfValue);
+        buffer.writeBoolean(message.renderType);
     }
 
     @Override
     public RenderMessage decode(PacketBuffer buffer) {
         
-        return new RenderMessage(buffer.readInt(),buffer.readInt());
+        return new RenderMessage(buffer.readInt(),buffer.readInt(),buffer.readBoolean());
     }
 
     @Override
@@ -42,7 +52,10 @@ public class RenderMessage implements IMessage<RenderMessage> {
             Minecraft mc = Minecraft.getInstance();
             WolfEntity wolf = (WolfEntity)mc.world.getEntityByID(message.wolfId);
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
-            handler.setWolfType(message.wolfValue);
+            if(message.renderType)
+                handler.setWolfType(message.wolfValue);
+            else
+                handler.clearRopeHolder();
         });
         supplier.get().setPacketHandled(true);
 

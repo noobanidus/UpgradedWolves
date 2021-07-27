@@ -10,6 +10,7 @@ import com.example.upgradedwolves.capabilities.WolfType;
 import com.example.upgradedwolves.capabilities.TrainingHandler.ITraining;
 import com.example.upgradedwolves.containers.ContainerProviderWolfInventory;
 import com.example.upgradedwolves.entities.goals.FollowOwnerVariableGoal;
+import com.example.upgradedwolves.entities.goals.TugOfWarGaol;
 import com.example.upgradedwolves.entities.goals.WolfBiasRoamGoal;
 import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
 import com.example.upgradedwolves.items.TugOfWarRopeItem;
@@ -197,6 +198,7 @@ public class WolfPlayerInteraction {
             FollowOwnerVariableGoal followOwnerVariableGoal = new FollowOwnerVariableGoal(wolf, 1.0D, 30.0F, 2.0F, false);           
             wolf.goalSelector.addGoal(6, followOwnerVariableGoal);            
             wolf.goalSelector.addGoal(8, new WolfBiasRoamGoal(wolf, 1.0, 30, 5));
+            wolf.goalSelector.addGoal(2, new TugOfWarGaol(wolf));
             
             handler.handleWolfGoals();          
         }
