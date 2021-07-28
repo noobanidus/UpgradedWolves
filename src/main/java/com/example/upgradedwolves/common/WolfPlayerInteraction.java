@@ -98,6 +98,7 @@ public class WolfPlayerInteraction {
                         goldenBoneItem.shrink(1);
                 } else if (tugOfWarRopeItem != null){
                     handler.setRopeHolder(event.getPlayer());
+                    wolf.func_233687_w_(true);
                     tugOfWarRopeItem.shrink(1);
                 }
             }
