@@ -4,6 +4,12 @@ Added
 +Wolf toys.
 	+Tennis Ball
 	+Flying Disk
+	+Mob Plushies
+		+Variants:
+		+Zombie
+		+Creeper
+		+Skeleton
+	+Tug of War Rope
 
 +Golden Bone and Enchanted golden bone.
 
@@ -11,6 +17,7 @@ Added
 
 
 Removed
+(Nothing)
 
 Fixed
 *Wolf screen showing mismatched xp bars
