@@ -1,0 +1,19 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "#B ",
+        "# #",
+        "###"
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:string"
+        },
+        "B": {
+            "item": "minecraft:bone"
+        }
+    },
+    "result":{
+        "item":"upgradedwolves:tug_of_war_rope"
+    }
+}
