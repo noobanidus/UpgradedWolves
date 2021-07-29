@@ -1,11 +1,41 @@
-This mod improves the interactions with wolves by adding 4 different types of wolves.
+This mod improves the interactions with wolves by adding 3 different types of wolves.
 
-Currently the only implemented wolf is the fighter wolf.
+This mod adds new wolves types to the game in order to make wolves more interesting. Wolves gain stats, 
+are able to hold items, and will play with toys.
 
-In order to train wolves, you need to:
-1. hold a food item that can be fed to a wolf
-2. Perform the action related to the wolf type
-(Killing a Monster, Mining an ore block, talking to a villager, Farming a plant item)
-3. Feed the food item to a wolf.
+Wolf types will transform to other wolf types when the owner holds a food item while performing an action
+such as killing a mob or breaking an ore block.
 
-Over time the wolves will have special abilities to improve specific tasks for wolves to perform.
+[Image of default wolf and foodItem]
+
+Fighter wolf:
+
+The fighter wolf is the strongest variant of all wolves and is able to level up the strength variable faster than 
+other wolf types.
+
+The fighter wolf will automatically attack all enemies when it is smart enough and will automatically attack creepers when it is strong enough.
+
+[Image of fighter wolf]
+
+The scavenger wolf automatically collects items and holds more items
+
+The scavenger wolf levels up speed faster than wolf types
+
+[scavengerWolfImage]
+
+Wolf Toys:
+
+Flying disk
+-A throwable disk with a rediculous crafting recipe
+
+Tennis Ball
+-A throwable ball that wolves will chase.
+
+Mob Plushies
+-Plushies for wolves to play with
+
+Tug of war rope
+-A rope to play with your Wolf
+
+Golden Bones
+-A golden colored bone that levels up your wolf more quickly
