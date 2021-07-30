@@ -15,6 +15,7 @@ import com.example.upgradedwolves.entities.goals.WolfFindAndPickUpItemGoal;
 import com.example.upgradedwolves.entities.goals.WolfFleeExplodingCreeper;
 import com.example.upgradedwolves.entities.goals.WolfPlayWithPlushGoal;
 import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
+import com.example.upgradedwolves.itemHandler.WolfToysHandler;
 import com.example.upgradedwolves.network.PacketHandler;
 import com.example.upgradedwolves.network.message.SpawnLevelUpParticle;
 
@@ -26,6 +27,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -68,6 +70,7 @@ public class WolfStatsHandler {
         Entity ropeHolder;
         WolfEntity currentWolf;
         List<Goal> allGoals = new ArrayList<Goal>();
+        boolean tugOfWarActive = false;
 
         private boolean LevelUpFunction(int level, int xp) {
             return xp > Math.pow(level,1.1) * 4;
@@ -318,6 +321,8 @@ public class WolfStatsHandler {
         @Override
         public void setRopeHolder(Entity holder) {
             ropeHolder = holder;
+            tugOfWarActive = true;
+            currentWolf.setHeldItem(Hand.MAIN_HAND, new ItemStack(WolfToysHandler.TUFOFWARROPE));
         }
         @Override
         public Entity getRopeHolder() {            
@@ -326,6 +331,12 @@ public class WolfStatsHandler {
         @Override
         public void clearRopeHolder() {            
             ropeHolder = null;
+            tugOfWarActive = false;
+            currentWolf.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
+        }
+        @Override
+        public boolean getTugOfWarStatus() {            
+            return tugOfWarActive;
         }
         
 

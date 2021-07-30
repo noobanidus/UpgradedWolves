@@ -28,4 +28,5 @@ public interface IWolfStats {
     public void setRopeHolder(Entity holder);
     public Entity getRopeHolder();
     public void clearRopeHolder();
+    public boolean getTugOfWarStatus();
 }

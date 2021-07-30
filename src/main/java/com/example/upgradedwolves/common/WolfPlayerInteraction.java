@@ -52,6 +52,10 @@ public class WolfPlayerInteraction {
         if(event.getTarget() instanceof WolfEntity){
             final WolfEntity wolf = (WolfEntity) event.getTarget();            
             final IWolfStats handler = WolfStatsHandler.getHandler(wolf);
+            if(handler.getTugOfWarStatus()){
+                wolf.func_233687_w_(true);
+                return;
+            }
             if(wolf.getOwner() == event.getPlayer() && event.getPlayer().isCrouching()){
                 if(Thread.currentThread().getName() == "Server thread"){
                     INamedContainerProvider wolfInventory = new ContainerProviderWolfInventory(wolf,handler.getInventory());
@@ -167,7 +171,7 @@ public class WolfPlayerInteraction {
                 }
             }
 
-            if(wolf.getHeldItemMainhand() != ItemStack.EMPTY && wolf.getOwner() != null){
+            if(wolf.getHeldItemMainhand() != ItemStack.EMPTY && wolf.getOwner() != null && !handler.getTugOfWarStatus()){
                 ItemStack wolfHeldItem = wolf.getHeldItemMainhand();
                 if(wolfHeldItem.getItem() instanceof MobPlushy){                    
                     //Nothing happens as this code is left to an entity goal
