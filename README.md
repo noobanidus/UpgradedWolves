@@ -50,7 +50,7 @@ Golden Bones
 
 Recipes
 
-![Creeper Plush Recipe](https://github.com/Injourn/UpgradedWolves/blob/master/readmeImages/StrengthWolf.png?raw=true)
+![Creeper Plush Recipe](https://github.com/Injourn/UpgradedWolves/blob/master/readmeImages/CreeperPlushRecipe.png?raw=true)
 
 ![Flying Disk Recipe](https://github.com/Injourn/UpgradedWolves/blob/master/readmeImages/FlyingDiskRecipe.png?raw=true)
 
