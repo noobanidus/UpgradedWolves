@@ -96,7 +96,6 @@ public class UpgradedWolfRenderer extends WolfRenderer {
         float f = (float)(vector3d.x - d3);
         float f1 = (float)(vector3d.y - d4);
         float f2 = (float)(vector3d.z - d5);
-        float f3 = 0.025F;
         IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getLeash());
         Matrix4f matrix4f = matrixStackIn.getLast().getMatrix();
         float f4 = MathHelper.fastInvSqrt(f * f + f2 * f2) * 0.025F / 2.0F;

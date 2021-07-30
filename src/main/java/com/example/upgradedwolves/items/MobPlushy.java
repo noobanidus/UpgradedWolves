@@ -9,6 +9,7 @@ import com.example.upgradedwolves.entities.plushy.ZombiePlushyModel;
 import com.example.upgradedwolves.utils.MobPlushyType;
 
 import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -46,7 +47,7 @@ public class MobPlushy extends Item {
         }
         return ActionResult.resultConsume(itemstack);
     }
-    public static EntityModel getModelByPlushType(MobPlushy plushItem){
+    public static EntityModel<Entity> getModelByPlushType(MobPlushy plushItem){
         switch(plushItem.plushType){
             case ZOMBIE:
             return new ZombiePlushyModel();

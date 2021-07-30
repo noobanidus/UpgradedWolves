@@ -8,7 +8,6 @@ import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
 import org.apache.logging.log4j.LogManager;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;

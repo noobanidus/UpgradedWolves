@@ -57,7 +57,7 @@ public class TennisBallEntity extends WolfChaseableEntity {
             BlockRayTraceResult blockResult = (BlockRayTraceResult)result;
             Vector3d vector3d1 = this.getMotion();
             if(this.getMotion().length() > 0.2)
-                this.world.playSound(this.getPosX(), this.getPosY(), this.getPosZ(), world.getBlockState(blockResult.getPos()).getBlock().getSoundType(null).getPlaceSound(), SoundCategory.BLOCKS, 0.5F, (1.0F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.2F) * 0.7F, false);
+                this.world.playSound(this.getPosX(), this.getPosY(), this.getPosZ(), world.getBlockState(blockResult.getPos()).getBlock().getSoundType(null, null, null, null).getPlaceSound(), SoundCategory.BLOCKS, 0.5F, (1.0F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.2F) * 0.7F, false);
             if(blockResult.getFace().getAxis() == Direction.Axis.Y && this.getMotion().length() < 0.1)
                 super.OnHitBlock(blockResult);
             else

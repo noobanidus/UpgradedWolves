@@ -3,11 +3,8 @@ package com.example.upgradedwolves.entities.goals;
 import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.itemHandler.WolfToysHandler;
-import com.example.upgradedwolves.items.MobPlushy;
 import com.example.upgradedwolves.network.message.MovePlayerMessage;
 import com.example.upgradedwolves.network.message.RenderMessage;
-
-import org.apache.logging.log4j.LogManager;
 
 import com.example.upgradedwolves.network.PacketHandler;
 

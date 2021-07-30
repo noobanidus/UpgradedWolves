@@ -1,8 +1,5 @@
 package com.example.upgradedwolves.loot_table.init;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.example.upgradedwolves.UpgradedWolves;
 import com.example.upgradedwolves.itemHandler.WolfToysHandler;
 import com.example.upgradedwolves.loot_table.modifier.ChestLootModifier;
@@ -80,12 +77,4 @@ public class ModGlobalLootTableModifier extends GlobalLootModifierProvider{
             ));
         }
     }
-
-    private Map<String, ResourceLocation> getChestTables() {
-        Map<String, ResourceLocation> chestTables = new HashMap<>();
-        chestTables.put("golden_chest_loot", LootTables.CHESTS_SHIPWRECK_TREASURE);
-        chestTables.put("enchanted_chest_loot", LootTables.CHESTS_SIMPLE_DUNGEON);
-        return chestTables;
-    }
-    
 }

@@ -11,10 +11,11 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
 public class MobPlushyRenderer extends EntityRenderer<MobPlushyEntity> {
-    protected EntityModel model;  
+    protected EntityModel<Entity> model;  
 
     public MobPlushyRenderer(EntityRendererManager renderManager) {
         super(renderManager);
