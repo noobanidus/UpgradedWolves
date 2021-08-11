@@ -1,0 +1,7 @@
+{   
+    "image" : "imageName.png",
+    "active" : false,
+    "xLocation" : 0,
+    "yLocation" : 0,
+    "statType": 0
+}
