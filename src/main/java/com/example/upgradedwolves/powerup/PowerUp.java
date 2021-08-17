@@ -92,4 +92,8 @@ public abstract class PowerUp {
     }
 
     public abstract void LevelUpAction(WolfEntity wolf, WolfStatsEnum type, int number);
+
+    public Object getDisplay() {
+        return null;
+    }
 }

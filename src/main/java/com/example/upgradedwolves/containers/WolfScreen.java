@@ -1,6 +1,7 @@
 package com.example.upgradedwolves.containers;
 
 import com.example.upgradedwolves.UpgradedWolves;
+import com.example.upgradedwolves.powerup.gui.PowerUpGui;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -20,6 +21,7 @@ public class WolfScreen extends ContainerScreen<WolfContainer> {
     private static final ResourceLocation TABS = UpgradedWolves.getId("gui/wolf_tabs_gui.png");
     private static final ResourceLocation POWERUP = UpgradedWolves.getId("gui/wolf_powerup_gui.png");
     WolfEntity wolf;
+    PowerUpGui powerUpGui;
     String strength,speed,intelligence;
     float strNum,spdNum,intNum;
     int slots;
@@ -43,6 +45,7 @@ public class WolfScreen extends ContainerScreen<WolfContainer> {
         this.intelligence = "INT: " + intelligence;
         this.xSize = 174;
         this.ySize = 175;
+        this.powerUpGui = new PowerUpGui();
     }    
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
@@ -73,18 +76,22 @@ public class WolfScreen extends ContainerScreen<WolfContainer> {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if(button == 0){
             if((171 + guiLeft) < mouseX && mouseX < (207 + guiLeft)
-                && (7 + guiTop) < mouseY &&  mouseY < (31 + guiTop) )
+                && (7 + guiTop) < mouseY &&  mouseY < (31 + guiTop) ){
                 inventoryTab = true;
+                this.container.setupContainer();
+            }
             else if((171 + guiLeft) < mouseX && mouseX < (207 + guiLeft)
-                && (31 + guiTop) < mouseY && mouseY < (57 + guiTop))
+                && (31 + guiTop) < mouseY && mouseY < (57 + guiTop)){
                 inventoryTab = false;
+                this.container.clearContainer();
+            }
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
-        
+        powerUpGui.dragSelectedGui(dragX, dragY);
         return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
     }
 
@@ -147,7 +154,10 @@ public class WolfScreen extends ContainerScreen<WolfContainer> {
     }
 
     void drawPowerUpBackground(MatrixStack matrixStack, float partialTicks, int x, int y){
-
+        RenderSystem.pushMatrix();
+        RenderSystem.translatef((float)(guiLeft + 17), (float)(guiTop + 68), 0.0F);
+        powerUpGui.drawTabBackground(matrixStack);
+        RenderSystem.popMatrix();
     }
 
     void buildXpBar(MatrixStack matrixStack, int x,int y,int u,int v, int amount){

@@ -23,31 +23,16 @@ public class WolfContainer extends Container {
     public WolfEntity wolf;
     public ItemStackHandlerWolf wolfItemHandler;   
     public CompoundNBT nbt;
+    public PlayerInventory playerInventory;
 
     private WolfContainer(int id, PlayerInventory playerInventory,ItemStackHandlerWolf wolfStackHandler,WolfEntity wolf,CompoundNBT nbt) {
         super(ModContainers.WOLF_CONTAINER,id);
         this.wolf = wolf;
         this.wolfItemHandler = wolfStackHandler;
         this.nbt = nbt;
+        this.playerInventory = playerInventory;
 
-        int startX = 7;
-        int startY = 94;
-        //The delta X and delta Y are the same
-        int delta = 18;
-        //Player Inventory
-        for(int i = 0; i < 27; i++){
-            this.addSlot(new Slot(playerInventory,9 + i,startX + delta * (i % 9),startY + delta * (i/9)));
-        }
-        
-        // Hot bar
-        for(int i = 0; i < 9; i++){
-            this.addSlot(new Slot(playerInventory,i,startX + delta * (i % 9),152));
-        }
-        startY = 63;
-        //Wolf Inventory
-        for(int i = 0; i < wolfItemHandler.getSlots(); i++){
-            this.addSlot(new SlotItemHandler(wolfStackHandler,i,startX + delta * (i % 9),startY + delta * (i/9)));
-        }
+        setupContainer();
     }
 
     public static WolfContainer createContainerClientSide(int id, PlayerInventory inventory, PacketBuffer data){
@@ -113,5 +98,29 @@ public class WolfContainer extends Container {
         return true;
     }
 
+    public void clearContainer(){
+        this.inventorySlots.clear();
+    }
+
+    public void setupContainer(){
+        int startX = 7;
+        int startY = 94;
+        //The delta X and delta Y are the same
+        int delta = 18;
+        //Player Inventory
+        for(int i = 0; i < 27; i++){
+            this.addSlot(new Slot(playerInventory,9 + i,startX + delta * (i % 9),startY + delta * (i/9)));
+        }
+        
+        // Hot bar
+        for(int i = 0; i < 9; i++){
+            this.addSlot(new Slot(playerInventory,i,startX + delta * (i % 9),152));
+        }
+        startY = 63;
+        //Wolf Inventory
+        for(int i = 0; i < wolfItemHandler.getSlots(); i++){
+            this.addSlot(new SlotItemHandler(wolfItemHandler,i,startX + delta * (i % 9),startY + delta * (i/9)));
+        }
+    }
     
 }
