@@ -1,30 +1,27 @@
 package com.example.upgradedwolves.powerup.gui;
 
-import com.example.upgradedwolves.containers.WolfScreen;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
 public class PowerUpGui extends AbstractGui {
     Minecraft minecraft;
     private double scrollX;
     private double scrollY;
-    private int minX = Integer.MAX_VALUE;
-    private int minY = Integer.MAX_VALUE;
-    private int maxX = Integer.MIN_VALUE;
-    private int maxY = Integer.MIN_VALUE;
+    private int minX = -141;
+    private int minY = -93;
+    private int maxX = 141;
+    private int maxY = 93;
     private boolean centered;
     private float fade;
     
     public void drawTabBackground(MatrixStack matrixStack) {
         if (!this.centered) {
-           this.scrollX = (double)(117 - (this.maxX + this.minX) / 2);
-           this.scrollY = (double)(56 - (this.maxY + this.minY) / 2);
+           this.scrollX = (double)0;
+           this.scrollY = (double)0;
            this.centered = true;
         }
   
@@ -78,12 +75,12 @@ public class PowerUpGui extends AbstractGui {
   
      }
     public void dragSelectedGui(double dragX, double dragY) {
-        if (this.maxX - this.minX > 234) {
-            this.scrollX = MathHelper.clamp(this.scrollX + dragX, (double)(-(this.maxX - 234)), 0.0D);
+        if (this.maxX - this.minX > 141) {
+            this.scrollX = MathHelper.clamp(this.scrollX + dragX, (double)(-(this.maxX - 141)), 0.0D);
         }
 
-        if (this.maxY - this.minY > 113) {
-            this.scrollY = MathHelper.clamp(this.scrollY + dragY, (double)(-(this.maxY - 113)), 0.0D);
+        if (this.maxY - this.minY > 93) {
+            this.scrollY = MathHelper.clamp(this.scrollY + dragY, (double)(-(this.maxY - 93)), 0.0D);
         }
     }
 
