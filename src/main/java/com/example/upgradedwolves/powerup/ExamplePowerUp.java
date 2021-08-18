@@ -8,8 +8,8 @@ import net.minecraft.util.ResourceLocation;
 
 public class ExamplePowerUp extends PowerUp{
 
-    public ExamplePowerUp(int levelRequirement, ResourceLocation resourceLocation) {
-        super(levelRequirement, UpgradedWolves.getId("example_powerup"));        
+    public ExamplePowerUp(int levelRequirement) {
+        super(levelRequirement, UpgradedWolves.getId("powerups/example_powerup.json"));        
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.example.upgradedwolves.powerup.gui.PowerUpGui;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.entity.passive.WolfEntity;
@@ -45,7 +46,6 @@ public class WolfScreen extends ContainerScreen<WolfContainer> {
         this.intelligence = "INT: " + intelligence;
         this.xSize = 174;
         this.ySize = 175;
-        this.powerUpGui = new PowerUpGui();
     }    
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
@@ -115,6 +115,12 @@ public class WolfScreen extends ContainerScreen<WolfContainer> {
         drawTabs(matrixStack);
         
         InventoryScreen.drawEntityOnScreen(edgeSpacingX + 38, edgeSpacingY + 50, 40, (edgeSpacingX + 38) - x,(edgeSpacingY + 30) - y, wolf);
+    }
+
+    @Override
+    public void init(Minecraft minecraft, int width, int height) {
+        super.init(minecraft, width, height);
+        powerUpGui = new PowerUpGui(minecraft,wolf);
     }
 
     void drawInventoryForeground(MatrixStack matrixStack, int x, int y){

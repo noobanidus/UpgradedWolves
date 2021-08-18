@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import com.example.upgradedwolves.UpgradedWolves;
+import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.WolfStatsEnum;
+import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.google.gson.Gson;
 
 import org.apache.logging.log4j.LogManager;
@@ -23,8 +25,8 @@ public abstract class PowerUp {
     public final int xSize = 100;
     public final int ySize = 100;
 
-    public int xLocation;
-    public int yLocation;
+    protected int uLocation;
+    protected int vLocation;
 
     protected WolfEntity wolf;
     protected Goal relevantGoal;
@@ -58,8 +60,8 @@ public abstract class PowerUp {
             this.description = resourceLocation.getNamespace() + "." + resourceLocation.getPath() + ".description";
             this.active = POWER_UP_DATA.active;
             this.image = UpgradedWolves.getId(POWER_UP_DATA.image);
-            this.xLocation = POWER_UP_DATA.xLocation;
-            this.yLocation = POWER_UP_DATA.yLocation;
+            this.uLocation = POWER_UP_DATA.uLocation;
+            this.vLocation = POWER_UP_DATA.vLocation;
             this.statType = WolfStatsEnum.values()[POWER_UP_DATA.statType];
 
             this.relevantGoal = goal;
@@ -69,11 +71,6 @@ public abstract class PowerUp {
         catch(IOException e){
             LogManager.getLogger().error("Failed to load powerup: " + resourceLocation.getPath() + '\n' + e.getMessage());
         }
-    }
-    
-    public void setLocation(int xLocation, int yLocation){
-        this.xLocation = xLocation;
-        this.yLocation = yLocation;
     }
 
     public Goal OnLevelUp(WolfEntity wolf, WolfStatsEnum type, int number){        
@@ -95,5 +92,17 @@ public abstract class PowerUp {
 
     public Object getDisplay() {
         return null;
+    }
+
+    public int iconType(WolfEntity wolf){
+        int id = 0;
+        IWolfStats stats = WolfStatsHandler.getHandler(wolf);
+        if(stats.getLevel(statType) >= levelRequirement)
+            id += 3;
+        if(active)
+            id += 1;
+        else if(relevantGoal != null)
+            id += 2;
+        return id;
     }
 }
