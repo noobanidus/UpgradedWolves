@@ -8,5 +8,6 @@
     "item.upgradedwolves.creeper_plush":"Creeper Plush",
     "item.upgradedwolves.tug_of_war_rope":"Tug of War Rope",
     "powerup.upgradedwolves.example_powerup.name":"Test PowerUp Name",
-    "powerup.upgradedwolves.example_powerup.description":"Test PowerUp Description"
+    "powerup.upgradedwolves.example_powerup.description":"Test PowerUp Description",
+    "powerup.required.level":"%s Level %s Required"
 }

@@ -28,8 +28,8 @@ public abstract class PowerUp {
     public final int xSize = 100;
     public final int ySize = 100;
 
-    protected int uLocation;
-    protected int vLocation;
+    public int uLocation;
+    public int vLocation;
 
     protected WolfEntity wolf;
     protected Goal relevantGoal;
@@ -42,6 +42,7 @@ public abstract class PowerUp {
     protected String name;
     protected ResourceLocation image;
     protected WolfStatsEnum statType;
+    protected int givenLevel;
 
     private PowerUpData POWER_UP_DATA;
 
@@ -94,19 +95,22 @@ public abstract class PowerUp {
 
     public abstract void LevelUpAction(WolfEntity wolf, WolfStatsEnum type, int number);
 
-    public Object getDisplay() {
-        return null;
-    }
-
-    public int iconType(WolfEntity wolf){
-        int id = 0;
-        IWolfStats stats = WolfStatsHandler.getHandler(wolf);
-        if(stats.getLevel(statType) >= levelRequirement)
+    public int iconType(int level){
+        int id = 0;        
+        if(level >= levelRequirement)
             id += 3;
         if(active)
             id += 1;
         else if(relevantGoal != null)
             id += 2;
         return id;
+    }
+
+    public int requiredLevel(){
+        return levelRequirement;
+    }
+
+    public WolfStatsEnum levelType(){
+        return statType;
     }
 }

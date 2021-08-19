@@ -27,12 +27,13 @@ public class WolfScreen extends ContainerScreen<WolfContainer> {
     float strNum,spdNum,intNum;
     int slots;
     boolean inventoryTab = true;
+    CompoundNBT nbt;
 
     public WolfScreen(WolfContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
         this.wolf = screenContainer.wolf;
         this.slots = screenContainer.wolfItemHandler.getSlots();
-        CompoundNBT nbt = screenContainer.nbt;
+        this.nbt = screenContainer.nbt;
         // this.guiLeft = 0;
         // this.guiTop = 0;
         int strength = nbt.getInt("strLevel");
@@ -120,7 +121,7 @@ public class WolfScreen extends ContainerScreen<WolfContainer> {
     @Override
     public void init(Minecraft minecraft, int width, int height) {
         super.init(minecraft, width, height);
-        powerUpGui = new PowerUpGui(minecraft,wolf);
+        powerUpGui = new PowerUpGui(minecraft,wolf,nbt);
     }
 
     @Override

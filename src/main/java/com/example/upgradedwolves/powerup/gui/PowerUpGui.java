@@ -3,6 +3,7 @@ package com.example.upgradedwolves.powerup.gui;
 import java.util.ArrayList;
 
 import com.example.upgradedwolves.UpgradedWolves;
+import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.powerup.ExamplePowerUp;
 import com.example.upgradedwolves.powerup.PowerUp;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -11,10 +12,16 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.Color;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.gui.GuiUtils;
 
 public class PowerUpGui extends AbstractGui {
@@ -28,17 +35,20 @@ public class PowerUpGui extends AbstractGui {
    private boolean centered;
    private float fade;
    private FontRenderer font;
+   private CompoundNBT nbt;
    private static ResourceLocation background = new ResourceLocation("minecraft:textures/gui/advancements/backgrounds/stone.png");
    private static final ResourceLocation POWERUP = UpgradedWolves.getId("gui/wolf_powerup_gui.png");
    public static ArrayList<PowerUp> powerUps;
    public WolfEntity wolf;
 
+
     
-   public PowerUpGui(Minecraft minecraft,WolfEntity wolf) {
+   public PowerUpGui(Minecraft minecraft,WolfEntity wolf,CompoundNBT nbt) {
       this.minecraft = minecraft;      
       this.wolf = wolf;
       powerUps = setPowerups();
       font = minecraft.fontRenderer;
+      this.nbt = nbt;
    }
 
    private ArrayList<PowerUp> setPowerups(){
@@ -101,8 +111,20 @@ public class PowerUpGui extends AbstractGui {
       fill(matrixStack, 0, 0, 234, 113, MathHelper.floor(this.fade * 255.0F) << 24);
       boolean flag = false;
       ArrayList<ITextComponent> textBoxInfo = new ArrayList<ITextComponent>();
-      textBoxInfo.add(powerUp.getName());
-      textBoxInfo.add(powerUp.getDescription());
+      Style redStyle = Style.EMPTY.setColor(Color.fromTextFormatting(TextFormatting.RED)).setItalic(true);
+      if(levelDistance(powerUp) <= 0){
+         textBoxInfo.add(powerUp.getName());
+         textBoxInfo.add(powerUp.getDescription());
+      } else if(levelDistance(powerUp) <= 3){
+         textBoxInfo.add(powerUp.getName());
+         textBoxInfo.add(new StringTextComponent("???").setStyle(Style.EMPTY.setItalic(true)));
+         textBoxInfo.add(new TranslationTextComponent("powerup.required.level",powerUp.levelType().toString(),powerUp.requiredLevel()).setStyle(redStyle));
+      } else {
+         Style style = Style.EMPTY.setColor(Color.fromTextFormatting(TextFormatting.BLUE)).setItalic(true);
+         textBoxInfo.add(new StringTextComponent("???").setStyle(style));
+         textBoxInfo.add(new StringTextComponent("???").setStyle(Style.EMPTY.setItalic(true)));
+         textBoxInfo.add(new TranslationTextComponent("powerup.required.level",powerUp.levelType().toString(),powerUp.requiredLevel()).setStyle(redStyle));
+      }
       
       GuiUtils.drawHoveringText(matrixStack, textBoxInfo, mouseX, mouseY, width, height, width, font);
       RenderSystem.popMatrix();
@@ -128,7 +150,7 @@ public class PowerUpGui extends AbstractGui {
          for(int i = 0; i < powerUps.size(); i++){
             int x = 30 * (i % 4) + 13 + MathHelper.floor(this.scrollX) + xOffset;
             int y = 7 * i + MathHelper.floor(this.scrollY) + yOffset;
-            if(x< mouseX && mouseX < x + 26 &&
+            if(levelDistance(powerUps.get(i)) < 7 &&x< mouseX && mouseX < x + 26 &&
                y < mouseY && mouseY < y + 26)
                drawTabTooltips(matrixStack, mouseX, mouseY, width, height,powerUps.get(i));
          }
@@ -139,8 +161,13 @@ public class PowerUpGui extends AbstractGui {
       for(int i = 0; i < powerUps.size(); i++){
          int x = 30 * (i % 4) + 13;
          int y = 7 * i;
-         int id = powerUps.get(i).iconType(wolf);
-         displayIcon(matrixStack, id, x + xOffset, y + yOffset);
+         PowerUp powerUp = powerUps.get(i);
+         int id = powerUp.iconType(getNbtData(powerUp.levelType()));
+         if(levelDistance(powerUp) < 7)
+            displayIcon(matrixStack, id, x + xOffset, y + yOffset);
+         if(levelDistance(powerUp) < 3)
+            blit(matrixStack, x + xOffset + 4, y + yOffset + 5, powerUp.uLocation, powerUp.vLocation, 16, 16);
+         
       }
    }
 
@@ -151,20 +178,37 @@ public class PowerUpGui extends AbstractGui {
             blit(matrixStack, x, y, 0, 178, 25, 25);
          break;
          case 1:
-            blit(matrixStack, x, y, 25, 178, 26, 26);
+            blit(matrixStack, x - 1, y, 25, 178, 26, 26);
          break;
          case 2:
-            blit(matrixStack, x, y, 51, 178, 26, 26);
+            blit(matrixStack, x, y, 52, 178, 26, 26);
          break;
          case 3:
-            blit(matrixStack, x, y + 1, 0, 205, 25, 25);
+            blit(matrixStack, x, y, 0, 204, 25, 25);
          break;
          case 4:
-            blit(matrixStack, x, y, 25, 205, 26, 26);
+            blit(matrixStack, x - 1, y, 25, 204, 26, 26);
          break;
          case 5:
-            blit(matrixStack, x, y, 51, 205, 26, 26);
+            blit(matrixStack, x, y, 52, 204, 26, 26);
          break;
+      }
+   }
+
+   private int levelDistance(PowerUp powerUp){
+      return powerUp.requiredLevel() - getNbtData(powerUp.levelType());
+   }
+
+   private int getNbtData(WolfStatsEnum statType){
+      switch(statType){
+         case Speed:
+            return nbt.getInt("spdLevel");
+         case Strength:
+            return nbt.getInt("strLevel");
+         case Intelligence:
+            return nbt.getInt("intLevel");
+         default:
+            return Integer.MAX_VALUE;
       }
    }
 }
