@@ -17,7 +17,10 @@ import net.minecraft.entity.passive.WolfEntity;
 
 import net.minecraft.resources.SimpleResource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.Color;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public abstract class PowerUp {    
@@ -55,9 +58,9 @@ public abstract class PowerUp {
             SimpleResource iresource = (SimpleResource) Minecraft.getInstance().getResourceManager().getResource(resourceLocation);
             Gson itemData =  new Gson();
             POWER_UP_DATA = itemData.fromJson( new InputStreamReader(iresource.getInputStream()),PowerUpData.class);
-            
-            this.name = resourceLocation.getNamespace() + "." + resourceLocation.getPath() + ".name";
-            this.description = resourceLocation.getNamespace() + "." + resourceLocation.getPath() + ".description";
+            String powerUpName = resourceLocation.getPath().replace("powerups/", "").replace(".json", "");
+            this.name = "powerup." + resourceLocation.getNamespace() + "." + powerUpName + ".name";
+            this.description = "powerup." + resourceLocation.getNamespace() + "." + powerUpName + ".description";
             this.active = POWER_UP_DATA.active;
             this.image = UpgradedWolves.getId(POWER_UP_DATA.image);
             this.uLocation = POWER_UP_DATA.uLocation;
@@ -81,7 +84,8 @@ public abstract class PowerUp {
     }
 
     public ITextComponent getName(){
-        return new TranslationTextComponent(name);
+        Style style = Style.EMPTY.setColor(Color.fromTextFormatting(TextFormatting.BLUE));
+        return new TranslationTextComponent(name).setStyle(style);
     }
 
     public ITextComponent getDescription(){

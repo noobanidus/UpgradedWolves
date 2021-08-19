@@ -9,10 +9,13 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.fml.client.gui.GuiUtils;
 
 public class PowerUpGui extends AbstractGui {
    Minecraft minecraft;
@@ -24,6 +27,7 @@ public class PowerUpGui extends AbstractGui {
    private int maxY = 93;
    private boolean centered;
    private float fade;
+   private FontRenderer font;
    private static ResourceLocation background = new ResourceLocation("minecraft:textures/gui/advancements/backgrounds/stone.png");
    private static final ResourceLocation POWERUP = UpgradedWolves.getId("gui/wolf_powerup_gui.png");
    public static ArrayList<PowerUp> powerUps;
@@ -34,6 +38,7 @@ public class PowerUpGui extends AbstractGui {
       this.minecraft = minecraft;      
       this.wolf = wolf;
       powerUps = setPowerups();
+      font = minecraft.fontRenderer;
    }
 
    private ArrayList<PowerUp> setPowerups(){
@@ -90,14 +95,16 @@ public class PowerUpGui extends AbstractGui {
       RenderSystem.popMatrix();
    }
   
-   public void drawTabTooltips(MatrixStack matrixStack, int mouseX, int mouseY, int width, int height) {
+   public void drawTabTooltips(MatrixStack matrixStack, int mouseX, int mouseY, int width, int height,PowerUp powerUp) {
       RenderSystem.pushMatrix();
       RenderSystem.translatef(0.0F, 0.0F, 200.0F);
       fill(matrixStack, 0, 0, 234, 113, MathHelper.floor(this.fade * 255.0F) << 24);
       boolean flag = false;
-      int i = MathHelper.floor(this.scrollX);
-      int j = MathHelper.floor(this.scrollY);
-
+      ArrayList<ITextComponent> textBoxInfo = new ArrayList<ITextComponent>();
+      textBoxInfo.add(powerUp.getName());
+      textBoxInfo.add(powerUp.getDescription());
+      
+      GuiUtils.drawHoveringText(matrixStack, textBoxInfo, mouseX, mouseY, width, height, width, font);
       RenderSystem.popMatrix();
       if (flag) {
          this.fade = MathHelper.clamp(this.fade + 0.02F, 0.0F, 0.3F);
@@ -113,6 +120,18 @@ public class PowerUpGui extends AbstractGui {
 
       if (this.maxY - this.minY > 93) {
          this.scrollY = MathHelper.clamp(this.scrollY + dragY, (double)(-(this.maxY - 93)), 0.0D);
+      }
+   }
+
+   public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY, int width, int height,int xOffset, int yOffset) {
+      if(xOffset < mouseX && mouseX < xOffset + 141 && yOffset < mouseY && mouseY < yOffset + 93){
+         for(int i = 0; i < powerUps.size(); i++){
+            int x = 30 * (i % 4) + 13 + MathHelper.floor(this.scrollX) + xOffset;
+            int y = 7 * i + MathHelper.floor(this.scrollY) + yOffset;
+            if(x< mouseX && mouseX < x + 26 &&
+               y < mouseY && mouseY < y + 26)
+               drawTabTooltips(matrixStack, mouseX, mouseY, width, height,powerUps.get(i));
+         }
       }
    }
 
@@ -138,7 +157,7 @@ public class PowerUpGui extends AbstractGui {
             blit(matrixStack, x, y, 51, 178, 26, 26);
          break;
          case 3:
-            blit(matrixStack, x, y, 0, 205, 25, 25);
+            blit(matrixStack, x, y + 1, 0, 205, 25, 25);
          break;
          case 4:
             blit(matrixStack, x, y, 25, 205, 26, 26);

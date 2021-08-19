@@ -123,6 +123,14 @@ public class WolfScreen extends ContainerScreen<WolfContainer> {
         powerUpGui = new PowerUpGui(minecraft,wolf);
     }
 
+    @Override
+    protected void renderHoveredTooltip(MatrixStack matrixStack, int x, int y) {        
+        super.renderHoveredTooltip(matrixStack, x, y);
+        if(!inventoryTab){
+            powerUpGui.drawTooltips(matrixStack, x, y, width, height,guiLeft + 17,guiTop + 68);
+        }
+    }
+
     void drawInventoryForeground(MatrixStack matrixStack, int x, int y){
         final float PLAYER_LABEL_XPOS = 8;
         final float PLAYER_LABEL_DISTANCE_FROM_BOTTOM = (96 - 2);

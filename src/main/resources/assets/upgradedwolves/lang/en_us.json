@@ -6,5 +6,7 @@
     "item.upgradedwolves.zombie_plush":"Zombie Plush",
     "item.upgradedwolves.skeleton_plush":"Skeleton Plush",
     "item.upgradedwolves.creeper_plush":"Creeper Plush",
-    "item.upgradedwolves.tug_of_war_rope":"Tug of War Rope"
+    "item.upgradedwolves.tug_of_war_rope":"Tug of War Rope",
+    "powerup.upgradedwolves.example_powerup.name":"Test PowerUp Name",
+    "powerup.upgradedwolves.example_powerup.description":"Test PowerUp Description"
 }
