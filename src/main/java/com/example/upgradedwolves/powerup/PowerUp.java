@@ -2,6 +2,7 @@ package com.example.upgradedwolves.powerup;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
 
 import com.example.upgradedwolves.UpgradedWolves;
 import com.example.upgradedwolves.capabilities.IWolfStats;
@@ -32,7 +33,7 @@ public abstract class PowerUp {
     public int vLocation;
 
     protected WolfEntity wolf;
-    protected Goal relevantGoal;
+    protected Class<? extends Goal> relevantGoal;
     
     protected int levelRequirement;
     //Possibly won't be used Not sure how this will work
@@ -50,11 +51,11 @@ public abstract class PowerUp {
         initializePowerUp(levelRequirement, resourceLocation, null);
     }
 
-    public PowerUp(int levelRequirement, ResourceLocation resourceLocation,Goal goal){
+    public PowerUp(int levelRequirement, ResourceLocation resourceLocation,Class<? extends Goal> goal){
         initializePowerUp(levelRequirement, resourceLocation, goal);
     }
 
-    private void initializePowerUp(int levelRequirement, ResourceLocation resourceLocation,Goal goal){
+    private void initializePowerUp(int levelRequirement, ResourceLocation resourceLocation,Class<? extends Goal> goal){
         try{
             SimpleResource iresource = (SimpleResource) Minecraft.getInstance().getResourceManager().getResource(resourceLocation);
             Gson itemData =  new Gson();
@@ -79,8 +80,14 @@ public abstract class PowerUp {
 
     public Goal OnLevelUp(WolfEntity wolf, WolfStatsEnum type, int number){        
         LevelUpAction(wolf,type,number);
-        if(type == statType && number > levelRequirement)
-            return relevantGoal;
+        if(type == statType && number > levelRequirement){
+            try{
+                return goalConstructor(wolf);
+            } catch(Exception e){
+                LogManager.getLogger().error("Failed to instantiate Goal! \n" + e.getMessage());
+                return null;
+            }   
+        }
         return null;
     }
 
@@ -95,6 +102,8 @@ public abstract class PowerUp {
 
     public abstract void LevelUpAction(WolfEntity wolf, WolfStatsEnum type, int number);
 
+    protected abstract Goal goalConstructor(WolfEntity wolf)throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, SecurityException;
+    
     public int iconType(int level){
         int id = 0;        
         if(level >= levelRequirement)
