@@ -66,6 +66,7 @@ public class WolfPlayerInteraction {
                     nbt.putFloat("strNum", handler.getStatRatio(WolfStatsEnum.Strength));
                     nbt.putFloat("spdNum", handler.getStatRatio(WolfStatsEnum.Speed));
                     nbt.putFloat("intNum", handler.getStatRatio(WolfStatsEnum.Intelligence));
+                    nbt.putInt("wolfType", handler.getWolfType());
                     NetworkHooks.openGui((ServerPlayerEntity)event.getPlayer(),
                         wolfInventory,
                         (packetBuffer) ->{packetBuffer.writeInt(handler.getInventory().getSlots());packetBuffer.writeInt(wolf.getEntityId());packetBuffer.writeCompoundTag(nbt);}

@@ -4,8 +4,10 @@ import java.util.ArrayList;
 
 import com.example.upgradedwolves.UpgradedWolves;
 import com.example.upgradedwolves.capabilities.WolfStatsEnum;
+import com.example.upgradedwolves.capabilities.WolfType;
 import com.example.upgradedwolves.powerup.ExamplePowerUp;
 import com.example.upgradedwolves.powerup.PowerUp;
+import com.example.upgradedwolves.powerup.PowerUpList;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -38,7 +40,7 @@ public class PowerUpGui extends AbstractGui {
    private CompoundNBT nbt;
    private static ResourceLocation background = new ResourceLocation("minecraft:textures/gui/advancements/backgrounds/stone.png");
    private static final ResourceLocation POWERUP = UpgradedWolves.getId("gui/wolf_powerup_gui.png");
-   public static ArrayList<PowerUp> powerUps;
+   public PowerUp[] powerUps;
    public WolfEntity wolf;
 
 
@@ -46,18 +48,22 @@ public class PowerUpGui extends AbstractGui {
    public PowerUpGui(Minecraft minecraft,WolfEntity wolf,CompoundNBT nbt) {
       this.minecraft = minecraft;      
       this.wolf = wolf;
-      powerUps = setPowerups();
-      font = minecraft.fontRenderer;
       this.nbt = nbt;
+      powerUps = setPowerups();
+      font = minecraft.fontRenderer;      
    }
 
-   private ArrayList<PowerUp> setPowerups(){
-      ArrayList<PowerUp> powerUpList = new ArrayList<PowerUp>();
-      for(int i = 0; i < 30; i++){
-         powerUpList.add(new ExamplePowerUp(2 * i));
+   private PowerUp[] setPowerups(){
+      switch(nbt.getInt("wolfType")){
+         case 0:
+            return PowerUpList.notSet;
+         case 1: // Fighter type
+            return PowerUpList.StrengthWolf;
+         case 2: // Scavenger type
+            return PowerUpList.ScavengerWolf;
+         default:
+            return null;
       }
-      this.maxY = (7 * powerUpList.size() + 20);
-      return powerUpList;
    }
 
    public void drawTabBackground(MatrixStack matrixStack) {
@@ -147,21 +153,21 @@ public class PowerUpGui extends AbstractGui {
 
    public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY, int width, int height,int xOffset, int yOffset) {
       if(xOffset < mouseX && mouseX < xOffset + 141 && yOffset < mouseY && mouseY < yOffset + 93){
-         for(int i = 0; i < powerUps.size(); i++){
+         for(int i = 0; i < powerUps.length; i++){
             int x = 30 * (i % 4) + 13 + MathHelper.floor(this.scrollX) + xOffset;
             int y = 7 * i + MathHelper.floor(this.scrollY) + yOffset;
-            if(levelDistance(powerUps.get(i)) < 7 &&x< mouseX && mouseX < x + 26 &&
+            if(levelDistance(powerUps[i]) < 7 &&x< mouseX && mouseX < x + 26 &&
                y < mouseY && mouseY < y + 26)
-               drawTabTooltips(matrixStack, mouseX, mouseY, width, height,powerUps.get(i));
+               drawTabTooltips(matrixStack, mouseX, mouseY, width, height,powerUps[i]);
          }
       }
    }
 
    private void displayPowerUps(MatrixStack matrixStack,int xOffset,int yOffset){
-      for(int i = 0; i < powerUps.size(); i++){
+      for(int i = 0; i < powerUps.length; i++){
          int x = 30 * (i % 4) + 13;
          int y = 7 * i;
-         PowerUp powerUp = powerUps.get(i);
+         PowerUp powerUp = powerUps[i];
          int id = powerUp.iconType(getNbtData(powerUp.levelType()));
          if(levelDistance(powerUp) < 7)
             displayIcon(matrixStack, id, x + xOffset, y + yOffset);
