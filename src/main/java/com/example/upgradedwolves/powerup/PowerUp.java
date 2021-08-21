@@ -28,10 +28,10 @@ public abstract class PowerUp {
     //Must be a constant size
     public final int xSize = 100;
     public final int ySize = 100;
-
+    
     public int uLocation;
     public int vLocation;
-
+    
     protected WolfEntity wolf;
     protected Class<? extends Goal> relevantGoal;
     
@@ -44,7 +44,8 @@ public abstract class PowerUp {
     protected ResourceLocation image;
     protected WolfStatsEnum statType;
     protected int givenLevel;
-
+    protected int defaultPriority;
+    
     private PowerUpData POWER_UP_DATA;
 
     public PowerUp(int levelRequirement, ResourceLocation resourceLocation){
@@ -68,6 +69,8 @@ public abstract class PowerUp {
             this.uLocation = POWER_UP_DATA.uLocation;
             this.vLocation = POWER_UP_DATA.vLocation;
             this.statType = WolfStatsEnum.values()[POWER_UP_DATA.statType];
+            this.defaultPriority = POWER_UP_DATA.priority;
+            this.effectiveLevel = 0;
 
             this.relevantGoal = goal;
             this.levelRequirement = levelRequirement;
@@ -93,16 +96,26 @@ public abstract class PowerUp {
 
     public ITextComponent getName(){
         Style style = Style.EMPTY.setColor(Color.fromTextFormatting(TextFormatting.BLUE));
-        return new TranslationTextComponent(name).setStyle(style);
+        return new TranslationTextComponent(name,effectiveLevel > 0 ? effectiveLevel : "").setStyle(style);
     }
 
     public ITextComponent getDescription(){
         return new TranslationTextComponent(description);
     }
 
-    public abstract void LevelUpAction(WolfEntity wolf, WolfStatsEnum type, int number);
-
-    protected abstract Goal goalConstructor(WolfEntity wolf)throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, SecurityException;
+    public Goal fetchRelevantGoal(WolfEntity wolf){
+        IWolfStats handler = WolfStatsHandler.getHandler(wolf);
+        int statLevel = handler.getLevel(statType);
+        if(statLevel >= levelRequirement){
+            try{
+                return goalConstructor(wolf);
+            } catch(Exception e){
+                LogManager.getLogger().error("Failed to instantiate Goal! \n" + e.getMessage());
+                return null;
+            }   
+        }
+        return null;
+    }
     
     public int iconType(int level){
         int id = 0;        
@@ -122,4 +135,13 @@ public abstract class PowerUp {
     public WolfStatsEnum levelType(){
         return statType;
     }
+    
+    public int priority(){
+        return defaultPriority;
+    }
+
+    public abstract void LevelUpAction(WolfEntity wolf, WolfStatsEnum type, int number);
+
+    protected abstract Goal goalConstructor(WolfEntity wolf)throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, SecurityException;
+    
 }

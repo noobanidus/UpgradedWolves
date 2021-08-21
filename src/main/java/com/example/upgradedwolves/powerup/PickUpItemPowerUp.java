@@ -12,7 +12,7 @@ import net.minecraft.entity.passive.WolfEntity;
 public class PickUpItemPowerUp extends PowerUp {
 
     public PickUpItemPowerUp(int levelRequirement) {
-        super(levelRequirement, UpgradedWolves.getId("powerup/pick_up_item.json"),WolfFindAndPickUpItemGoal.class);        
+        super(levelRequirement, UpgradedWolves.getId("powerups/pick_up_item.json"),WolfFindAndPickUpItemGoal.class);        
     }
 
     @Override

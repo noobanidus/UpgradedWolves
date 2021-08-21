@@ -11,8 +11,8 @@ import net.minecraft.entity.passive.WolfEntity;
 
 public class DetectEnemyPowerUp extends PowerUp {
 
-    public DetectEnemyPowerUp(int levelRequirement,WolfEntity wolf) {
-        super(levelRequirement, UpgradedWolves.getId("powerup/detect_enemy.json"),DetectEnemiesGoal.class);
+    public DetectEnemyPowerUp(int levelRequirement) {
+        super(levelRequirement, UpgradedWolves.getId("powerups/detect_enemy.json"),DetectEnemiesGoal.class);
     }
 
     @Override

@@ -12,8 +12,8 @@ import net.minecraft.util.ResourceLocation;
 
 public class FleeCreeperPowerUp extends PowerUp {
 
-    public FleeCreeperPowerUp(int levelRequirement, ResourceLocation resourceLocation) {
-        super(levelRequirement, UpgradedWolves.getId("powerup/flee_creeper.json"),WolfFleeExplodingCreeper.class);        
+    public FleeCreeperPowerUp(int levelRequirement) {
+        super(levelRequirement, UpgradedWolves.getId("powerups/flee_creeper.json"),WolfFleeExplodingCreeper.class);        
     }
 
     @Override

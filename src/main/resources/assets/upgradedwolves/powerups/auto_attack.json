@@ -3,5 +3,6 @@
     "active" : false,
     "uLocation" : 0,
     "vLocation" : 0,
-    "statType": 2
+    "statType": 2,
+    "priority": 4
 }

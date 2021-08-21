@@ -6,4 +6,5 @@ public class PowerUpData {
     public int uLocation;
     public int vLocation;
     public int statType;
+    public int priority;
 }

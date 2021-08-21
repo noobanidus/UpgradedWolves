@@ -12,7 +12,7 @@ import net.minecraft.entity.passive.WolfEntity;
 public class FleeHealthPowerUp extends PowerUp {
 
     public FleeHealthPowerUp(int levelRequirement) {
-        super(levelRequirement, UpgradedWolves.getId("powerup/flee_health.json"),FleeOnLowHealthGoal.class);
+        super(levelRequirement, UpgradedWolves.getId("powerups/flee_health.json"),FleeOnLowHealthGoal.class);
     }
 
     @Override

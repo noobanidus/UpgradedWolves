@@ -12,8 +12,8 @@ import net.minecraft.entity.passive.WolfEntity;
 
 public class AutoAttackPowerUp extends PowerUp {
 
-    public AutoAttackPowerUp(int levelRequirement,WolfEntity wolf){
-        super(levelRequirement, UpgradedWolves.getId("powerup/auto_attack.json"),WolfAutoAttackTargetGoal.class);
+    public AutoAttackPowerUp(int levelRequirement){
+        super(levelRequirement, UpgradedWolves.getId("powerups/auto_attack.json"),WolfAutoAttackTargetGoal.class);
     }
 
     @Override

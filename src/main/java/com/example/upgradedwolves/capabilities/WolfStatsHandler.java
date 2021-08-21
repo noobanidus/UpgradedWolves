@@ -18,9 +18,12 @@ import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
 import com.example.upgradedwolves.itemHandler.WolfToysHandler;
 import com.example.upgradedwolves.network.PacketHandler;
 import com.example.upgradedwolves.network.message.SpawnLevelUpParticle;
+import com.example.upgradedwolves.powerup.PowerUp;
+import com.example.upgradedwolves.powerup.PowerUpList;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.item.ItemStack;
@@ -130,28 +133,30 @@ public class WolfStatsHandler {
         public void addGoals(){
             if(allGoals.size() > 0)
                 clearGoals();
-            Goal fleeHealth = new FleeOnLowHealthGoal(currentWolf, 7.0F, 1.5D, 1.0D, 4.0F),
-                fleeCreeper = new WolfFleeExplodingCreeper(currentWolf, 7.0F, 1.5D, 1.5D),
-                playGoal = new WolfPlayWithPlushGoal(currentWolf);
+            PowerUp[] wolfTypePowerUps = {};
             if(getWolfType() == WolfType.Fighter.getValue()){
-                Goal autoAttackGoal = new WolfAutoAttackTargetGoal(currentWolf,MonsterEntity.class,false);
-                allGoals.add(autoAttackGoal);
-                currentWolf.targetSelector.addGoal(4, autoAttackGoal);
+                wolfTypePowerUps = PowerUpList.StrengthWolf;
             }
             if(getWolfType() == WolfType.Scavenger.getValue()){
-                Goal detect = new DetectEnemiesGoal(currentWolf,5D);
-                allGoals.add(detect);
-                currentWolf.goalSelector.addGoal(5, detect);
+                wolfTypePowerUps = PowerUpList.ScavengerWolf;
             }
-            if(getWolfType() != WolfType.NotSet.getValue()){
-                Goal findItem = new WolfFindAndPickUpItemGoal(currentWolf);
-                allGoals.add(findItem);
-                currentWolf.goalSelector.addGoal(3, findItem);
+            if(getWolfType() == WolfType.NotSet.getValue()){
+                wolfTypePowerUps = PowerUpList.notSet;
             }
-            allGoals.add(fleeHealth);
-            allGoals.add(fleeCreeper);
-            currentWolf.goalSelector.addGoal(3, fleeHealth);
-            currentWolf.goalSelector.addGoal(2, fleeCreeper);
+
+            for (PowerUp powerUp : wolfTypePowerUps) {
+                Goal nextGoal = powerUp.fetchRelevantGoal(currentWolf);
+                if(nextGoal != null){
+                    allGoals.add(nextGoal);
+                    if(nextGoal instanceof TargetGoal)
+                        currentWolf.targetSelector.addGoal(powerUp.priority(), nextGoal);
+                    else
+                        currentWolf.goalSelector.addGoal(powerUp.priority(), nextGoal);
+                }
+            }
+
+            Goal playGoal = new WolfPlayWithPlushGoal(currentWolf);
+            allGoals.add(playGoal);
             currentWolf.goalSelector.addGoal(8, playGoal);
         }
 
