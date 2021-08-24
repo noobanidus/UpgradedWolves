@@ -17,6 +17,10 @@ public interface IWolfStats {
     public void InitLove();
     public double getWolfSpeed();
     public int getWolfStrength();
+    public double getDetectionBonus();
+    public void setSpeedBonus(double bonus);
+    public void setAttackBonus(double bonus);
+    public void setDetectionBonus(double bonus);
     public ItemStackHandlerWolf getInventory();
     public boolean addItemStack(ItemStack item);
     public WolfEntity getActiveWolf();

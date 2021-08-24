@@ -68,6 +68,7 @@ public class WolfStatsHandler {
 
         int speedLvl, strengthLvl, intelligenceLvl, loveLvl, wolfType;
         int speedXp, strengthXp, intelligenceXp;
+        double attackBonus,speedBonus,detectBonus;
         //The wolves will have a maximum of 9 slots.       
         ItemStackHandlerWolf inventory;
         Entity ropeHolder;
@@ -259,13 +260,18 @@ public class WolfStatsHandler {
         @Override
         public double getWolfSpeed() {
             //Wolf Generic Movement Speed is 0.3D
-            return 0.3D + (speedLvl * .01);
+            return 0.3D + (speedLvl * .01) + speedBonus;
         }
 
         @Override
         public int getWolfStrength() {
             //Base wolf Damage is 4
-            return 4 + (strengthLvl / 2);
+            return 4 + (int)attackBonus;
+        }
+
+        @Override
+        public double getDetectionBonus(){
+            return detectBonus;
         }
 
         @Override
@@ -274,17 +280,7 @@ public class WolfStatsHandler {
                 inventory = new ItemStackHandlerWolf(getInventorySize());
             return inventory;
         }
-        @Deprecated
-        public boolean addItemStack(ItemStack item){
-            int i = 0;
-            while(item.getCount() > 0){
-                item = inventory.insertItem(i, item, false);
-                if(i == 27)
-                    return false;
-                i++;
-            }
-            return true;
-        }
+        
         @Override
         public WolfEntity getActiveWolf() {
             return currentWolf;
@@ -342,6 +338,23 @@ public class WolfStatsHandler {
         @Override
         public boolean getTugOfWarStatus() {            
             return tugOfWarActive;
+        }
+        @Override
+        public void setSpeedBonus(double bonus) {
+            speedBonus = bonus;
+        }
+        @Override
+        public void setAttackBonus(double bonus) {
+            attackBonus = bonus;
+        }
+        @Override
+        public void setDetectionBonus(double bonus) {
+            detectBonus = bonus;
+        }
+        @Override
+        public boolean addItemStack(ItemStack item) {
+            // TODO Auto-generated method stub
+            return false;
         }
         
 
