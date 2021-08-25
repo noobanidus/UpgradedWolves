@@ -16,6 +16,7 @@ import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.monster.SpiderEntity;
 import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.util.math.MathHelper;
 
 public class WolfAutoAttackTargetGoal extends NearestAttackableTargetGoal<MonsterEntity> implements IUpdateableGoal {
 
@@ -25,6 +26,8 @@ public class WolfAutoAttackTargetGoal extends NearestAttackableTargetGoal<Monste
     public WolfAutoAttackTargetGoal(MobEntity p_i50313_1_, Class<MonsterEntity> class1, boolean p_i50313_3_) {
         super(p_i50313_1_, class1, p_i50313_3_);        
         targetEntitySelector.setCustomPredicate(entity -> (EntityAllowed(entity)));
+        IWolfStats handler = WolfStatsHandler.getHandler((WolfEntity)goalOwner);
+        targetEntitySelector.setDistance(MathHelper.clamp(10 + handler.getDetectionBonus()/2, 0, 30) );
     }
 
     private boolean EntityAllowed(LivingEntity entity){
@@ -52,7 +55,7 @@ public class WolfAutoAttackTargetGoal extends NearestAttackableTargetGoal<Monste
 
     @Override
     public void Update(IWolfStats handler, WolfEntity wolf) {        
-        
+        targetEntitySelector.setDistance(MathHelper.clamp(10 + handler.getDetectionBonus()/2, 0, 30) );
     }
     
 }

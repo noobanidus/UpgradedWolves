@@ -96,9 +96,13 @@ public class WolfStatsHandler {
         }
 
         private void resetGoals(){
+            PowerUp[] wolfTypePowerUps = getRelevantPowerUps();
             for(int i = 0; i < allGoals.size();i++){
                 if(allGoals.get(i) instanceof IUpdateableGoal)
                     ((IUpdateableGoal)allGoals.get(i)).Update(this, currentWolf);
+            }
+            for (PowerUp powerUp : wolfTypePowerUps) {
+                conditionallyAddPowerUp(powerUp);
             }
         }
 
@@ -134,26 +138,10 @@ public class WolfStatsHandler {
         public void addGoals(){
             if(allGoals.size() > 0)
                 clearGoals();
-            PowerUp[] wolfTypePowerUps = {};
-            if(getWolfType() == WolfType.Fighter.getValue()){
-                wolfTypePowerUps = PowerUpList.StrengthWolf;
-            }
-            if(getWolfType() == WolfType.Scavenger.getValue()){
-                wolfTypePowerUps = PowerUpList.ScavengerWolf;
-            }
-            if(getWolfType() == WolfType.NotSet.getValue()){
-                wolfTypePowerUps = PowerUpList.notSet;
-            }
+            PowerUp[] wolfTypePowerUps = getRelevantPowerUps();
 
             for (PowerUp powerUp : wolfTypePowerUps) {
-                Goal nextGoal = powerUp.fetchRelevantGoal(currentWolf);
-                if(nextGoal != null){
-                    allGoals.add(nextGoal);
-                    if(nextGoal instanceof TargetGoal)
-                        currentWolf.targetSelector.addGoal(powerUp.priority(), nextGoal);
-                    else
-                        currentWolf.goalSelector.addGoal(powerUp.priority(), nextGoal);
-                }
+                conditionallyAddPowerUp(powerUp);
             }
 
             Goal playGoal = new WolfPlayWithPlushGoal(currentWolf);
@@ -259,7 +247,7 @@ public class WolfStatsHandler {
 
         @Override
         public double getWolfSpeed() {
-            //Wolf Generic Movement Speed is 0.3D
+            //Wolf Base Movement Speed is 0.3D
             return 0.3D + (speedLvl * .01) + speedBonus;
         }
 
@@ -355,6 +343,31 @@ public class WolfStatsHandler {
         public boolean addItemStack(ItemStack item) {
             // TODO Auto-generated method stub
             return false;
+        }
+
+        private PowerUp[] getRelevantPowerUps(){            
+            if(getWolfType() == WolfType.Fighter.getValue()){
+                return PowerUpList.StrengthWolf;
+            }
+            if(getWolfType() == WolfType.Scavenger.getValue()){
+                return PowerUpList.ScavengerWolf;
+            }            
+            return PowerUpList.notSet;                    
+        }
+
+        private void conditionallyAddPowerUp(PowerUp powerUp){
+            Goal conditionalGoal = powerUp.fetchRelevantGoal(currentWolf);
+            if(conditionalGoal != null){
+                for(Goal goal : allGoals){
+                    if(goal.getClass() == conditionalGoal.getClass())
+                        return;
+                }
+                if(conditionalGoal instanceof TargetGoal)
+                    currentWolf.targetSelector.addGoal(powerUp.priority(), conditionalGoal);
+                else
+                    currentWolf.goalSelector.addGoal(powerUp.priority(), conditionalGoal);
+                allGoals.add(conditionalGoal);
+            }
         }
         
 

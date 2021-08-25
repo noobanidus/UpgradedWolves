@@ -24,6 +24,7 @@ public class WolfFindAndPickUpItemGoal extends Goal implements IUpdateableGoal{
     Entity item;
     int unseenMemoryTicks;
     int targetUnseenTicks;
+    double distance;
     Vector3d initialPoint;
     Vector3d endPoint;
 
@@ -33,6 +34,7 @@ public class WolfFindAndPickUpItemGoal extends Goal implements IUpdateableGoal{
         IWolfStats handler = WolfStatsHandler.getHandler(wolf);
         this.wolfInventory = handler.getInventory();
         this.unseenMemoryTicks = 10 * handler.getLevel(WolfStatsEnum.Intelligence);
+        distance = 12.0D + handler.getDetectionBonus();
     }
 
     @Override
@@ -137,7 +139,7 @@ public class WolfFindAndPickUpItemGoal extends Goal implements IUpdateableGoal{
 
     @Override
     public void Update(IWolfStats handler, WolfEntity wolf) {        
-        
+        distance = 12.0D + handler.getDetectionBonus();
     }
     public void setEndPoint(Vector3d end){
         endPoint = end;

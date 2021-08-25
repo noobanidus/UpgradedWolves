@@ -1,6 +1,7 @@
 package com.example.upgradedwolves.entities.goals;
 
 import com.example.upgradedwolves.capabilities.IWolfStats;
+import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 
 import org.apache.logging.log4j.LogManager;
 
@@ -21,9 +22,10 @@ public class DetectEnemiesGoal extends Goal implements IUpdateableGoal {
     WolfEntity wolf;
     MonsterEntity detectedEntity;
 
-    public DetectEnemiesGoal(WolfEntity wolf, double range){
+    public DetectEnemiesGoal(WolfEntity wolf){
         this.wolf = wolf;
-        this.range = range;
+        IWolfStats handler = WolfStatsHandler.getHandler(wolf);
+        this.range = 5 + handler.getDetectionBonus();
     }
 
     @Override
@@ -69,6 +71,6 @@ public class DetectEnemiesGoal extends Goal implements IUpdateableGoal {
 
     @Override
     public void Update(IWolfStats handler, WolfEntity wolf) {
-        
+        range = 5 + handler.getDetectionBonus();
     }
 }
