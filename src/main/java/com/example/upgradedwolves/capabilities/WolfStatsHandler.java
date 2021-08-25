@@ -102,6 +102,9 @@ public class WolfStatsHandler {
                     ((IUpdateableGoal)allGoals.get(i)).Update(this, currentWolf);
             }
             for (PowerUp powerUp : wolfTypePowerUps) {
+                speedBonus = 0;
+                attackBonus = 0;
+                detectBonus = 0;
                 conditionallyAddPowerUp(powerUp);
             }
         }

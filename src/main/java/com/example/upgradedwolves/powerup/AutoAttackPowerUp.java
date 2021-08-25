@@ -17,11 +17,6 @@ public class AutoAttackPowerUp extends PowerUp {
     }
 
     @Override
-    public void LevelUpAction(WolfEntity wolf, WolfStatsEnum type, int number) {        
-        
-    }
-
-    @Override
     protected Goal goalConstructor(WolfEntity wolf) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, SecurityException {
         return (Goal)relevantGoal.getDeclaredConstructors()[0].newInstance(wolf,MonsterEntity.class,false);
     }

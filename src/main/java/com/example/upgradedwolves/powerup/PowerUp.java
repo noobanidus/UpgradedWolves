@@ -81,8 +81,7 @@ public abstract class PowerUp {
         }
     }
 
-    public Goal OnLevelUp(WolfEntity wolf, WolfStatsEnum type, int number){        
-        LevelUpAction(wolf,type,number);
+    public Goal OnLevelUp(WolfEntity wolf, WolfStatsEnum type, int number){
         if(type == statType && number > levelRequirement){
             try{
                 return goalConstructor(wolf);
@@ -139,8 +138,6 @@ public abstract class PowerUp {
     public int priority(){
         return defaultPriority;
     }
-
-    public abstract void LevelUpAction(WolfEntity wolf, WolfStatsEnum type, int number);
 
     protected abstract Goal goalConstructor(WolfEntity wolf)throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, SecurityException;
     
