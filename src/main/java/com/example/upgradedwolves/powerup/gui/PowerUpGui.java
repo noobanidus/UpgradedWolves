@@ -120,7 +120,7 @@ public class PowerUpGui extends AbstractGui {
       Style redStyle = Style.EMPTY.setColor(Color.fromTextFormatting(TextFormatting.RED)).setItalic(true);
       if(levelDistance(powerUp) <= 0){
          textBoxInfo.add(powerUp.getName());
-         textBoxInfo.add(powerUp.getDescription());
+         textBoxInfo.add(powerUp.getDescription(wolf));
       } else if(levelDistance(powerUp) <= 3){
          textBoxInfo.add(powerUp.getName());
          textBoxInfo.add(new StringTextComponent("???").setStyle(Style.EMPTY.setItalic(true)));

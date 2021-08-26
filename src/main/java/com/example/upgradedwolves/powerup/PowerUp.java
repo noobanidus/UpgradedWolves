@@ -98,8 +98,8 @@ public abstract class PowerUp {
         return new TranslationTextComponent(name,effectiveLevel > 0 ? effectiveLevel : "").setStyle(style);
     }
 
-    public ITextComponent getDescription(){
-        return new TranslationTextComponent(description);
+    public ITextComponent getDescription(WolfEntity wolf){
+        return new TranslationTextComponent(description,wolf.hasCustomName() ? wolf.getCustomName() : "Wolf");
     }
 
     public Goal fetchRelevantGoal(WolfEntity wolf){

@@ -372,6 +372,21 @@ public class WolfStatsHandler {
                 allGoals.add(conditionalGoal);
             }
         }
+        @Override
+        public void addSpeedBonus(double bonus) {
+            speedBonus += bonus;
+            
+        }
+        @Override
+        public void addAttackBonus(double bonus) {
+            attackBonus += bonus;
+            
+        }
+        @Override
+        public void addDetectionBonus(double bonus) {
+            detectBonus += bonus;
+            
+        }
         
 
     }

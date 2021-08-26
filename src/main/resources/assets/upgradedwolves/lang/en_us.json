@@ -9,5 +9,21 @@
     "item.upgradedwolves.tug_of_war_rope":"Tug of War Rope",
     "powerup.upgradedwolves.example_powerup.name":"Test PowerUp Name %s",
     "powerup.upgradedwolves.example_powerup.description":"Test PowerUp Description",
-    "powerup.required.level":"%s Level %s Required"
+    "powerup.required.level":"%s Level %s Required",
+    "powerup.upgradedwolves.enhance_speed.name":"Speed Boost %s",
+    "powerup.upgradedwolves.enhance_speed.description":"Increases the speed of this wolf",
+    "powerup.upgradedwolves.enhance_attack.name":"Damage Boost %s",
+    "powerup.upgradedwolves.enhance_attack.description":"Increases the Damage of this wolf",
+    "powerup.upgradedwolves.enhance_detect.name":"Intelligence Boost %s",
+    "powerup.upgradedwolves.enhance_detect.description":"Increases the ability usage of this wolf",
+    "powerup.upgradedwolves.auto_attack.name":"Auto Attack Enemy",
+    "powerup.upgradedwolves.auto_attack.description":"%s will automatically attack some enemies",
+    "powerup.upgradedwolves.detect_enemy.name":"Scout enemy",
+    "powerup.upgradedwolves.detect_enemy.description":"Upon finding an enemy, %s will detect them for some time",
+    "powerup.upgradedwolves.flee_creeper.name":"Flee Creepers",
+    "powerup.upgradedwolves.flee_creeper.description":"%s will attempt to flee creepers that are about to explode",
+    "powerup.upgradedwolves.flee_health.name":"Flee Battle",
+    "powerup.upgradedwolves.flee_health.description":"%s will attempt to flee from enemies while they have low health",
+    "powerup.upgradedwolves.pick_up_item.name":"Item Hunder",
+    "powerup.upgradedwolves.pick_up_item.description":"%s will attempt to find items"
 }
