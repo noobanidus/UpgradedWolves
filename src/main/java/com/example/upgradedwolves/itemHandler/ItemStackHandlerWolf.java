@@ -3,6 +3,7 @@ package com.example.upgradedwolves.itemHandler;
 import javax.annotation.Nonnull;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.SwordItem;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
@@ -63,6 +64,14 @@ public class ItemStackHandlerWolf extends ItemStackHandler {
                 if(slotItem.getCount() != max)
                     return i;
             }
+        }
+        return -1;
+    }
+
+    public int getSword(){
+        for(int i = 0; i < getSlots(); i++){
+            if(getStackInSlot(i).getItem() instanceof SwordItem)
+                return i;
         }
         return -1;
     }

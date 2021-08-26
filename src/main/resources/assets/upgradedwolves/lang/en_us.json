@@ -24,6 +24,12 @@
     "powerup.upgradedwolves.flee_creeper.description":"%s will attempt to flee creepers that are about to explode",
     "powerup.upgradedwolves.flee_health.name":"Flee Battle",
     "powerup.upgradedwolves.flee_health.description":"%s will attempt to flee from enemies while they have low health",
-    "powerup.upgradedwolves.pick_up_item.name":"Item Hunder",
-    "powerup.upgradedwolves.pick_up_item.description":"%s will attempt to find items"
+    "powerup.upgradedwolves.pick_up_item.name":"Item Hunter",
+    "powerup.upgradedwolves.pick_up_item.description":"%s will attempt to find items",
+    "powerup.upgradedwolves.arrow_intercept.name":"Arrow Interceptor",
+    "powerup.upgradedwolves.arrow_intercept.description":"%s will attempt intercept enemy arrows and other projectiles",
+    "powerup.upgradedwolves.bark_stun.name":"Long Bark",
+    "powerup.upgradedwolves.bark_stun.description":"%s will Bark loudly, stun, and stun all enemies",
+    "powerup.upgradedwolves.use_sword.name":"Sword Usage",
+    "powerup.upgradedwolves.use_sword.description":"%s will use swords if %s one"
 }
