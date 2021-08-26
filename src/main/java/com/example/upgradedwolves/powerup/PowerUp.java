@@ -99,7 +99,7 @@ public abstract class PowerUp {
     }
 
     public ITextComponent getDescription(WolfEntity wolf){
-        return new TranslationTextComponent(description,wolf.hasCustomName() ? wolf.getCustomName() : "Wolf");
+        return new TranslationTextComponent(description,wolf.getName());
     }
 
     public Goal fetchRelevantGoal(WolfEntity wolf){

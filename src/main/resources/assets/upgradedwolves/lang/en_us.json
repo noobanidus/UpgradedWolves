@@ -31,5 +31,7 @@
     "powerup.upgradedwolves.bark_stun.name":"Long Bark",
     "powerup.upgradedwolves.bark_stun.description":"%s will Bark loudly, stun, and stun all enemies",
     "powerup.upgradedwolves.use_sword.name":"Sword Usage",
-    "powerup.upgradedwolves.use_sword.description":"%s will use swords if %s one"
+    "powerup.upgradedwolves.use_sword.description":"%s will use swords if %s one",
+
+    "chat.upgradedwolves.level_up":"%s has leveled up %s"
 }
