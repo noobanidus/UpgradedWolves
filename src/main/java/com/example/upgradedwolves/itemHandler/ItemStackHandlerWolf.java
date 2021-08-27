@@ -2,6 +2,9 @@ package com.example.upgradedwolves.itemHandler;
 
 import javax.annotation.Nonnull;
 
+import com.google.common.base.Predicate;
+
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.util.math.MathHelper;
@@ -71,6 +74,14 @@ public class ItemStackHandlerWolf extends ItemStackHandler {
     public int getSword(){
         for(int i = 0; i < getSlots(); i++){
             if(getStackInSlot(i).getItem() instanceof SwordItem)
+                return i;
+        }
+        return -1;
+    }
+
+    public int getArbitrayItem(Predicate<Item> parameter){
+        for(int i = 0; i < getSlots(); i++){
+            if(parameter.test(getStackInSlot(i).getItem()))
                 return i;
         }
         return -1;
