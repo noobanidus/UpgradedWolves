@@ -16,14 +16,11 @@ public abstract class CoolDownGoal extends Goal {
     }
 
     protected boolean active(){
-        return timeLeft <= 0;
+        return timeLeft-- <= 0;
     }
 
     @Override
     public void tick() {        
-        super.tick();
-        if (!active()){
-            timeLeft--;
-        }
+        super.tick();        
     }
 }
