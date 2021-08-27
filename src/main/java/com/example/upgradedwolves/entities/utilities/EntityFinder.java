@@ -1,5 +1,6 @@
 package com.example.upgradedwolves.entities.utilities;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -24,20 +25,13 @@ public class EntityFinder<T extends Entity> {
 
     public List<T> findReachableEntities(double xz, double y){
         List<T> retList = findWithinRange(xz, y);
-        for (T t : retList) {
-            if(!canEasilyReach(t)){
-                retList.remove(t);
-            }
-        }
+        retList.removeIf(next -> !canEasilyReach(next));
         return retList;
     }
 
     public List<T> findWithPredicate(double xz, double y, Predicate<T> predicate ){
         List<T> retList = findWithinRange(xz, y);
-        for (T t : retList) {
-            if(!predicate.test(t))
-                retList.remove(t);
-        }
+        retList.removeIf(predicate.negate());        
         return retList;
     }
 
