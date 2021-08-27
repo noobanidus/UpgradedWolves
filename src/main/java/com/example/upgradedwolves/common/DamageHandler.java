@@ -43,7 +43,11 @@ public class DamageHandler {
             wolf.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(handler.getWolfSpeed());
             LogManager.getLogger().info("Wolf intelligence Increased:" + handler.getXp(WolfStatsEnum.Intelligence) + " xp, lvl: " + handler.getLevel(WolfStatsEnum.Intelligence));
             if(wolf.getHeldItemMainhand() != null){
-                wolf.getOwner().entityDropItem(wolf.getHeldItemMainhand());
+                if(wolf.getOwner() != null){
+                    wolf.getOwner().entityDropItem(wolf.getHeldItemMainhand());
+                } else {
+                    wolf.entityDropItem(wolf.getHeldItemMainhand());
+                }
                 wolf.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);                
             }
         }

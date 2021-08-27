@@ -1,5 +1,6 @@
 package com.example.upgradedwolves.common;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.example.upgradedwolves.capabilities.IWolfStats;
@@ -25,6 +26,7 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.FollowOwnerGoal;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.PrioritizedGoal;
+import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.WolfEntity;
@@ -190,6 +192,18 @@ public class WolfPlayerInteraction {
                     else{
                         wolf.entityDropItem(wolfHeldItem);                    
                         wolf.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
+                    }
+                }
+            }
+            List<Goal> goalsToAdd = handler.getUnaddedGoals();
+            if(goalsToAdd.size() > 0){
+                for (Goal nextGoal : goalsToAdd) {
+                    PrioritizedGoal fullGoal = (PrioritizedGoal)nextGoal;
+                    if(fullGoal.getGoal() instanceof TargetGoal){
+                        wolf.targetSelector.addGoal(fullGoal.getPriority(), fullGoal.getGoal());
+                    }
+                    else{
+                        wolf.goalSelector.addGoal(fullGoal.getPriority(), fullGoal.getGoal());
                     }
                 }
             }

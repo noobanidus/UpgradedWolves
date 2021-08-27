@@ -11,7 +11,7 @@ import net.minecraft.entity.passive.WolfEntity;
 public class ArrowInterceptPowerUp extends PowerUp {
 
     public ArrowInterceptPowerUp(int levelRequirement) {
-        super(levelRequirement, UpgradedWolves.getId("powerups/arrow_intercept.java"),ArrowInterceptGoal.class);
+        super(levelRequirement, UpgradedWolves.getId("powerups/arrow_intercept.json"),ArrowInterceptGoal.class);
         
     }
 

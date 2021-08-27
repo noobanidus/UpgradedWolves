@@ -166,11 +166,15 @@ public class PowerUpGui extends AbstractGui {
    private void displayPowerUps(MatrixStack matrixStack,int xOffset,int yOffset){
       for(int i = 0; i < powerUps.length; i++){
          int x = 30 * (i % 4) + 13;
-         int y = 7 * i;
+         int y = 7 * i + 3;
          PowerUp powerUp = powerUps[i];
          int id = powerUp.iconType(getNbtData(powerUp.levelType()));
-         if(levelDistance(powerUp) < 7)
+         if(levelDistance(powerUp) < 7){
             displayIcon(matrixStack, id, x + xOffset, y + yOffset);
+            if(y > this.maxY - 30){
+               this.maxY += 7;
+            }
+         }
          if(levelDistance(powerUp) < 3)
             blit(matrixStack, x + xOffset + 4, y + yOffset + 5, powerUp.uLocation, powerUp.vLocation, 16, 16);
          

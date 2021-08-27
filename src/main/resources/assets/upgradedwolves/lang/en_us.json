@@ -32,6 +32,10 @@
     "powerup.upgradedwolves.bark_stun.description":"%s will Bark loudly, stun, and stun all enemies",
     "powerup.upgradedwolves.use_sword.name":"Sword Usage",
     "powerup.upgradedwolves.use_sword.description":"%s will use swords if %s one",
+    "powerup.upgradedwolves.disarm_enemy.name":"Enemy Disarm",
+    "powerup.upgradedwolves.disarm_enemy.description":"%s will attempt to disarm the enemy if possible",
+    "powerup.upgradedwolves.toss_arrow.name":"Arrow Launch",
+    "powerup.upgradedwolves.toss_arrow.description":"%s will Launch the arrow at the nearest enemy",
 
     "chat.upgradedwolves.level_up":"%s has leveled up %s"
 }

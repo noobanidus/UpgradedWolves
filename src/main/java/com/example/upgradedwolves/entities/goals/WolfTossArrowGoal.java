@@ -58,7 +58,7 @@ public class WolfTossArrowGoal extends CoolDownGoal {
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             ItemStack arrowStack = handler.getInventory().getStackInSlot(arrowStackSlot);
             if(arrowStack.getItem() instanceof ArrowItem)
-                attackEntityWithRangedAttack(target, 5, arrowStack);
+                attackEntityWithRangedAttack(target, 2 + handler.getWolfStrength(), arrowStack);
             startCoolDown();
             return false;
         }

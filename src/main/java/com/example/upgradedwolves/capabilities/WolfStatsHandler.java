@@ -1,6 +1,7 @@
 package com.example.upgradedwolves.capabilities;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -21,8 +22,11 @@ import com.example.upgradedwolves.network.message.SpawnLevelUpParticle;
 import com.example.upgradedwolves.powerup.PowerUp;
 import com.example.upgradedwolves.powerup.PowerUpList;
 
+import org.apache.logging.log4j.LogManager;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.PrioritizedGoal;
 import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.WolfEntity;
@@ -74,6 +78,7 @@ public class WolfStatsHandler {
         Entity ropeHolder;
         WolfEntity currentWolf;
         List<Goal> allGoals = new ArrayList<Goal>();
+        List<Goal> unaddedGoals = new ArrayList<Goal>();
         boolean tugOfWarActive = false;
 
         private boolean LevelUpFunction(int level, int xp) {
@@ -365,10 +370,19 @@ public class WolfStatsHandler {
                     if(goal.getClass() == conditionalGoal.getClass())
                         return;
                 }
-                if(conditionalGoal instanceof TargetGoal)
-                    currentWolf.targetSelector.addGoal(powerUp.priority(), conditionalGoal);
-                else
-                    currentWolf.goalSelector.addGoal(powerUp.priority(), conditionalGoal);
+                
+                if(conditionalGoal instanceof TargetGoal){                
+                    if(currentWolf.targetSelector.getRunningGoals().count() == 0)
+                        currentWolf.targetSelector.addGoal(powerUp.priority(), conditionalGoal);
+                    else
+                        unaddedGoals.add(new PrioritizedGoal(powerUp.priority(), conditionalGoal));
+                }
+                else{
+                    if(currentWolf.goalSelector.getRunningGoals().count() == 0)
+                        currentWolf.goalSelector.addGoal(powerUp.priority(), conditionalGoal);
+                    else
+                        unaddedGoals.add(new PrioritizedGoal(powerUp.priority(), conditionalGoal));
+                }
                 allGoals.add(conditionalGoal);
             }
         }
@@ -386,6 +400,12 @@ public class WolfStatsHandler {
         public void addDetectionBonus(double bonus) {
             detectBonus += bonus;
             
+        }
+        @Override
+        public List<Goal> getUnaddedGoals() {
+            List<Goal> retGoals = unaddedGoals;
+            unaddedGoals.clear();
+            return retGoals;
         }
         
 

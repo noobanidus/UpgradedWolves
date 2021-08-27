@@ -1,8 +1,11 @@
 package com.example.upgradedwolves.capabilities;
 
+import java.util.List;
+
 import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.item.ItemStack;
 
@@ -36,4 +39,5 @@ public interface IWolfStats {
     public Entity getRopeHolder();
     public void clearRopeHolder();
     public boolean getTugOfWarStatus();
+    public List<Goal> getUnaddedGoals();
 }
