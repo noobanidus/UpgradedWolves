@@ -11,7 +11,7 @@ import net.minecraft.entity.passive.WolfEntity;
 public class BarkStunPowerUp extends PowerUp {
 
     public BarkStunPowerUp(int levelRequirement) {
-        super(levelRequirement, UpgradedWolves.getId("powerups/bark_stun.java"), BarkStunGoal.class);
+        super(levelRequirement, UpgradedWolves.getId("powerups/bark_stun.json"), BarkStunGoal.class);
         //TODO Auto-generated constructor stub
     }
 
