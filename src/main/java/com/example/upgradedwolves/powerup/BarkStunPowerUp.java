@@ -18,7 +18,7 @@ public class BarkStunPowerUp extends PowerUp {
     @Override
     protected Goal goalConstructor(WolfEntity wolf) throws InstantiationException, IllegalAccessException,
             IllegalArgumentException, InvocationTargetException, SecurityException {        
-        return (Goal)relevantGoal.getConstructors()[0].newInstance(wolf);
+        return (Goal)relevantGoal.getDeclaredConstructors()[0].newInstance(wolf);
     }
     
 }

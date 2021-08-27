@@ -139,6 +139,10 @@ public abstract class PowerUp {
         return defaultPriority;
     }
 
+    protected Goal genericGoalConstructor(WolfEntity wolf) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, SecurityException {
+        return (Goal)relevantGoal.getDeclaredConstructors()[0].newInstance(wolf);
+    }
+
     protected abstract Goal goalConstructor(WolfEntity wolf)throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, SecurityException;
     
 }

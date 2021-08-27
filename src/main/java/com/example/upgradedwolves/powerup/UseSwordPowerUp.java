@@ -19,7 +19,7 @@ public class UseSwordPowerUp extends PowerUp {
     @Override
     protected Goal goalConstructor(WolfEntity wolf) throws InstantiationException, IllegalAccessException,
             IllegalArgumentException, InvocationTargetException, SecurityException {        
-        return (Goal)relevantGoal.getConstructors()[0].newInstance(wolf);
+        return genericGoalConstructor(wolf);
     }
     
     @Override
