@@ -40,4 +40,5 @@ public interface IWolfStats {
     public void clearRopeHolder();
     public boolean getTugOfWarStatus();
     public List<Goal> getUnaddedGoals();
+    public void clearUnaddedGoals();
 }

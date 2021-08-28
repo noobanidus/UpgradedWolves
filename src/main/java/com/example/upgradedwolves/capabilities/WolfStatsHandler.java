@@ -404,10 +404,13 @@ public class WolfStatsHandler {
         @Override
         public List<Goal> getUnaddedGoals() {
             List<Goal> retGoals = unaddedGoals;
-            unaddedGoals.clear();
             return retGoals;
         }
         
+        @Override
+        public void clearUnaddedGoals() {
+            unaddedGoals.clear();
+        }
 
     }
 

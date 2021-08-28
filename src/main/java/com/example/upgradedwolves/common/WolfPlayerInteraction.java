@@ -206,6 +206,7 @@ public class WolfPlayerInteraction {
                         wolf.goalSelector.addGoal(fullGoal.getPriority(), fullGoal.getGoal());
                     }
                 }
+                handler.clearUnaddedGoals();
             }
         }
     }
