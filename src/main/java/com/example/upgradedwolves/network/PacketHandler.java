@@ -5,6 +5,7 @@ import com.example.upgradedwolves.network.message.IMessage;
 import com.example.upgradedwolves.network.message.MovePlayerMessage;
 import com.example.upgradedwolves.network.message.RenderMessage;
 import com.example.upgradedwolves.network.message.SpawnLevelUpParticle;
+import com.example.upgradedwolves.network.message.SyncWolfHandMessage;
 import com.example.upgradedwolves.network.message.TrainingItemMessage;
 
 import net.minecraftforge.fml.network.NetworkRegistry;
@@ -30,6 +31,7 @@ public class PacketHandler
         register(RenderMessage.class, new RenderMessage());
         register(MovePlayerMessage.class, new MovePlayerMessage());
         register(SpawnLevelUpParticle.class, new SpawnLevelUpParticle());
+        register(SyncWolfHandMessage.class, new SyncWolfHandMessage());
         //register(ItemPacket.class,new ItemPacket(0,0));
     }
 

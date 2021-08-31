@@ -33,6 +33,7 @@ import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.SwordItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -174,9 +175,9 @@ public class WolfPlayerInteraction {
                 }
             }
 
-            if(wolf.getHeldItemMainhand() != ItemStack.EMPTY && wolf.getOwner() != null && !handler.getTugOfWarStatus()){
+            if(wolf.getHeldItemMainhand() != ItemStack.EMPTY && wolf.getOwner() != null && !handler.getTugOfWarStatus() && wolf.getAttackTarget() == null){
                 ItemStack wolfHeldItem = wolf.getHeldItemMainhand();
-                if(wolfHeldItem.getItem() instanceof MobPlushy){                    
+                if(wolfHeldItem.getItem() instanceof MobPlushy || (wolfHeldItem.getItem() instanceof SwordItem && Thread.currentThread().getName() != "Server thread")){                    
                     //Nothing happens as this code is left to an entity goal
                 } else if(handler.getWolfType() == WolfType.Fighter.getValue() && handler.getLevel(WolfStatsEnum.Intelligence) > 4){                
                     LogManager.getLogger().info(wolfHeldItem);

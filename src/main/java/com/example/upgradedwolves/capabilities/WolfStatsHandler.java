@@ -1,34 +1,27 @@
 package com.example.upgradedwolves.capabilities;
 
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.example.upgradedwolves.UpgradedWolves;
-import com.example.upgradedwolves.entities.goals.DetectEnemiesGoal;
-import com.example.upgradedwolves.entities.goals.FleeOnLowHealthGoal;
+import com.example.upgradedwolves.entities.goals.ClientGoal;
 import com.example.upgradedwolves.entities.goals.IUpdateableGoal;
-import com.example.upgradedwolves.entities.goals.WolfAutoAttackTargetGoal;
-import com.example.upgradedwolves.entities.goals.WolfFindAndPickUpItemGoal;
-import com.example.upgradedwolves.entities.goals.WolfFleeExplodingCreeper;
 import com.example.upgradedwolves.entities.goals.WolfPlayWithPlushGoal;
 import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
 import com.example.upgradedwolves.itemHandler.WolfToysHandler;
 import com.example.upgradedwolves.network.PacketHandler;
 import com.example.upgradedwolves.network.message.SpawnLevelUpParticle;
+import com.example.upgradedwolves.network.message.SyncWolfHandMessage;
 import com.example.upgradedwolves.powerup.PowerUp;
 import com.example.upgradedwolves.powerup.PowerUpList;
-
-import org.apache.logging.log4j.LogManager;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.PrioritizedGoal;
 import net.minecraft.entity.ai.goal.TargetGoal;
-import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -370,21 +363,26 @@ public class WolfStatsHandler {
                     if(goal.getClass() == conditionalGoal.getClass())
                         return;
                 }
-                
-                if(conditionalGoal instanceof TargetGoal){                
-                    if(currentWolf.targetSelector.getRunningGoals().count() == 0)
-                        currentWolf.targetSelector.addGoal(powerUp.priority(), conditionalGoal);
-                    else
-                        unaddedGoals.add(new PrioritizedGoal(powerUp.priority(), conditionalGoal));
-                }
-                else{
-                    if(currentWolf.goalSelector.getRunningGoals().count() == 0)
-                        currentWolf.goalSelector.addGoal(powerUp.priority(), conditionalGoal);
-                    else
-                        unaddedGoals.add(new PrioritizedGoal(powerUp.priority(), conditionalGoal));
-                }
+                addPendingGoal(powerUp.priority(),conditionalGoal);
                 allGoals.add(conditionalGoal);
+                
             }
+        }
+
+        public void addPendingGoal(int priority, Goal goal){
+            if(goal instanceof TargetGoal){                
+                if(currentWolf.targetSelector.getRunningGoals().count() == 0)
+                    currentWolf.targetSelector.addGoal(priority,goal);
+                else
+                    unaddedGoals.add(new PrioritizedGoal(priority,goal));
+            }
+            else{
+                if(currentWolf.goalSelector.getRunningGoals().count() == 0)
+                    currentWolf.goalSelector.addGoal(priority,goal);
+                else
+                    unaddedGoals.add(new PrioritizedGoal(priority,goal));
+            }
+            allGoals.add(goal);
         }
         @Override
         public void addSpeedBonus(double bonus) {

@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.entity.WolfRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.SwordItem;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -73,7 +74,12 @@ public class UpgradedWolfRenderer extends WolfRenderer {
             matrixStackIn.scale(0.5F, 0.5F, 0.5F);
 
             matrixStackIn.rotate(Vector3f.YP.rotationDegrees(90F));
-            matrixStackIn.rotate(Vector3f.XP.rotationDegrees(90F));
+            matrixStackIn.rotate(Vector3f.XP.rotationDegrees(90F));            
+            if(wolf.getHeldItemMainhand().getItem() instanceof SwordItem){
+                matrixStackIn.rotate(Vector3f.YP.rotationDegrees(90F));
+                matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(45F));
+                matrixStackIn.translate(6 * 0.0625, 6 * .0625, 0);
+            }
             Minecraft.getInstance().getItemRenderer().renderItem(itemStack, ItemCameraTransforms.TransformType.NONE,packedLightIn,OverlayTexture.NO_OVERLAY,matrixStackIn,bufferIn);
             matrixStackIn.pop();
         }

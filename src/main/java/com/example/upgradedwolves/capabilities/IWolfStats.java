@@ -41,4 +41,5 @@ public interface IWolfStats {
     public boolean getTugOfWarStatus();
     public List<Goal> getUnaddedGoals();
     public void clearUnaddedGoals();
+    public void addPendingGoal(int priority, Goal goal);
 }
