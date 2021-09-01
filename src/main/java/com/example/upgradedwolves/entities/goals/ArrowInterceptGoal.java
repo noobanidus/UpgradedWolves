@@ -22,14 +22,14 @@ public class ArrowInterceptGoal extends CoolDownGoal {
     public ArrowInterceptGoal(WolfEntity wolf){
         this.wolf = wolf;
         entityFinder = new EntityFinder<AbstractArrowEntity>(wolf,AbstractArrowEntity.class);
-        setCoolDownInSeconds(3600);
+        setCoolDownInSeconds(600);
         rand = new Random();
     }
 
     @Override
     public boolean shouldExecute() {
         if(active()){
-            List<AbstractArrowEntity> arrows = entityFinder.findWithPredicate(3, 2, arrow -> arrow.func_234616_v_() instanceof MobEntity);
+            List<AbstractArrowEntity> arrows = entityFinder.findWithPredicate(1, 1, arrow -> arrow.func_234616_v_() instanceof MobEntity && arrow.getMotion().length() > 0);
             if(arrows.size() > 0){
                 this.arrow = arrows.get(0);
                 return true;
@@ -48,6 +48,7 @@ public class ArrowInterceptGoal extends CoolDownGoal {
             wolf.entityDropItem(new ItemStack(Items.ARROW));
         }
         teleportToLocation(arrow.getPosX(), arrow.getPosY(), arrow.getPosZ());
+        arrow.remove();
     }
 
     private void teleportToLocation(double x, double y, double z) {        

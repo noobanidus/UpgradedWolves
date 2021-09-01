@@ -28,7 +28,7 @@ public class WolfTossArrowGoal extends CoolDownGoal {
     public WolfTossArrowGoal(WolfEntity wolf){
         this.wolf = wolf;
         this.entityFinder = new EntityFinder<MonsterEntity>(wolf,MonsterEntity.class);
-        setCoolDownInSeconds(60);
+        setCoolDownInSeconds(300);
     }
 
     @Override
@@ -60,10 +60,11 @@ public class WolfTossArrowGoal extends CoolDownGoal {
             if(arrowStack.getItem() instanceof ArrowItem)
                 attackEntityWithRangedAttack(target, 2 + handler.getWolfStrength(), arrowStack);
             startCoolDown();
-            return false;
+            return true;
         }
+        windUpTicks = 30;
         wolf.rotationYaw += 1;
-        return true;
+        return false;
     }
 
     private void attackEntityWithRangedAttack(LivingEntity target, float distanceFactor,ItemStack arrowStack) {
