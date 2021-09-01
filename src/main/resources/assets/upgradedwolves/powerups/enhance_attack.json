@@ -1,7 +1,7 @@
 {
     "image" : "image_name.png",
     "active" : false,
-    "uLocation" : 0,
-    "vLocation" : 0,
+    "uLocation" : 86,
+    "vLocation" : 182,
     "statType": 1
 }
