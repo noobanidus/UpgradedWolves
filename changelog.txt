@@ -1,3 +1,29 @@
+v 0.4 Wolf PowerUp Update
+
+Added
++Modularized Power ups
+
++PowerUp menu
+
++PowerUps
+	+Arrow Intercept PowerUp
+	+Bark Stun PowerUp
+	+Enemy disarm PowerUp
+	+Arrow Tossing PowerUp
+	+Sword usage PowerUp
+
++Several Intentional mispellings
++Better Translation Components, somewhat...
++Some other things, lol!
+
+Removed
+(Nothing)
+
+Fixed
+(Idk, I didn't keep track of things well this time around)
+
+=================
+
 v 0.3
 
 Added
