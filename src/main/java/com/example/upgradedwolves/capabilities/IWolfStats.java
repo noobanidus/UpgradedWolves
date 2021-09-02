@@ -42,4 +42,6 @@ public interface IWolfStats {
     public List<Goal> getUnaddedGoals();
     public void clearUnaddedGoals();
     public void addPendingGoal(int priority, Goal goal);
+    public void setRetrievalFlag(boolean set);
+    public boolean getRetrievalFlag();
 }

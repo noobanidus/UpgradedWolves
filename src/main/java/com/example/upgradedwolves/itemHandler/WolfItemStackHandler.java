@@ -40,7 +40,7 @@ public class WolfItemStackHandler extends ItemStackHandler {
 
         int emptyCount = 0;
         for(int i = 0; i < numberOfSlots; i++){
-            if(getStackInSlot(i) == ItemStack.EMPTY)
+            if(getStackInSlot(i).getItem() == ItemStack.EMPTY.getItem())
                 emptyCount++;
         }
 
@@ -59,7 +59,7 @@ public class WolfItemStackHandler extends ItemStackHandler {
 
     public int getAvailableSlot(ItemStack item){
         for(int i = 0; i < getSlots(); i++){
-            if(getStackInSlot(i) == ItemStack.EMPTY)
+            if(getStackInSlot(i).getItem() == ItemStack.EMPTY.getItem())
                 return i;
             else if(ItemHandlerHelper.canItemStacksStack(getStackInSlot(i), item)){
                 ItemStack slotItem = getStackInSlot(i);
@@ -79,11 +79,20 @@ public class WolfItemStackHandler extends ItemStackHandler {
         return -1;
     }
 
-    public int getArbitrayItem(Predicate<Item> parameter){
+    public int getArbitraryItem(Predicate<Item> parameter){
         for(int i = 0; i < getSlots(); i++){
             if(parameter.test(getStackInSlot(i).getItem()))
                 return i;
         }
         return -1;
+    }
+
+    public ItemStack insertIntoEmptySlot(ItemStack stack){
+        int slot = getAvailableSlot(stack);
+        ItemStack remaining = insertItem(slot, stack, false);
+        slot = getAvailableSlot(remaining);
+        if(slot > 0 && remaining.getItem() == ItemStack.EMPTY.getItem())
+            return insertItem(slot, remaining, false);
+        return remaining;
     }
 }

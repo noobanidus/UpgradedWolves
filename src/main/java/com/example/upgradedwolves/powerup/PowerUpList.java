@@ -22,11 +22,12 @@ public class PowerUpList {
     public static final PowerUp[] ScavengerWolf = {
         new FleeHealthPowerUp(2),
         new PickUpItemPowerUp(2),
-        new EnhanceSpeedPowerUp(5,1,0.5D),
+        new EnhanceSpeedPowerUp(5,1,0.05D),
         new FleeCreeperPowerUp(7),
         new DetectEnemyPowerUp(8),
         new EnhanceSpeedPowerUp(10,2,0.05D),
-        new EnhanceSpeedPowerUp(15,3,0.05D),
+        new RetrieveOnDeathPowerUp(12),
+        new EnhanceSpeedPowerUp(15,3,0.05D),        
         new EnhanceSpeedPowerUp(20,4,0.05D),
         new EnhanceSpeedPowerUp(25,5,0.05D)
     };

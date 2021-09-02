@@ -35,7 +35,7 @@ public class WolfTossArrowGoal extends CoolDownGoal {
     public boolean shouldExecute() {
         if(active() && wolf.getAttackTarget() != null){
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
-            int slot = handler.getInventory().getArbitrayItem(item -> item instanceof ArrowItem);
+            int slot = handler.getInventory().getArbitraryItem(item -> item instanceof ArrowItem);
             if(slot >= 0){
                 List<MonsterEntity> enemies = entityFinder.findWithPredicate(5, 3,enemy -> (!(enemy instanceof IAngerable) || ((IAngerable)enemy).getAttackTarget() != null) && wolf.getEntitySenses().canSee(enemy));
                 if(enemies.size() > 0){

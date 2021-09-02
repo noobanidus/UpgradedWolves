@@ -2,6 +2,8 @@ package com.example.upgradedwolves.common;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.TrainingHandler;
@@ -32,12 +34,14 @@ import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDestroyBlockEvent;
@@ -226,6 +230,42 @@ public class WolfPlayerInteraction {
             wolf.goalSelector.addGoal(2, new TugOfWarGaol(wolf));
             
             handler.handleWolfGoals();          
+        }
+    }
+    @SubscribeEvent
+    public void OnLivingDeath(LivingDeathEvent event){
+        if(event.getEntity() instanceof PlayerEntity){
+            PlayerEntity player = (PlayerEntity)event.getEntity();
+            EntityFinder<WolfEntity> entityFinder = new EntityFinder<WolfEntity>(player,WolfEntity.class);
+            List<WolfEntity> wolves = entityFinder.findWithPredicate(10, 10,wolf -> wolf.getOwner() == player);
+            //Why?
+            List<ItemStack> playerInventory = Stream.concat(Stream.concat(player.inventory.armorInventory.stream(), player.inventory.mainInventory.stream()),player.inventory.offHandInventory.stream()).collect(Collectors.toList());
+            for (WolfEntity wolf : wolves) {
+                IWolfStats handler = WolfStatsHandler.getHandler(wolf);
+                if(handler.getRetrievalFlag()){
+                    WolfItemStackHandler itemHandler = handler.getInventory();
+                    int slotsAvailable = itemHandler.getNumberOfEmptySlots();
+                    for (int i = 0; i < slotsAvailable; i++) {
+                        if(wolf.getRNG().nextInt(50) < 100){
+                            ItemStack nextItemToRetrieve = ItemStack.EMPTY;
+                            while(nextItemToRetrieve == ItemStack.EMPTY && playerInventory.size() > 0) {
+                                nextItemToRetrieve = playerInventory.get(wolf.getRNG().nextInt(playerInventory.size()));
+                                playerInventory.remove(nextItemToRetrieve);
+                            }
+                            if(nextItemToRetrieve != ItemStack.EMPTY){
+                                int slot = player.inventory.getSlotFor(nextItemToRetrieve);
+                                if(slot < 0){
+                                    LogManager.getLogger().debug("slot is less than one...");
+                                }
+                                if(slot >= 0){
+                                    itemHandler.insertIntoEmptySlot(nextItemToRetrieve.copy());                                
+                                    player.inventory.setInventorySlotContents(slot, ItemStack.EMPTY);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
