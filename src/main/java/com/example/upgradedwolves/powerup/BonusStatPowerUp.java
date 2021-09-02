@@ -7,15 +7,14 @@ import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public abstract class BonusStatPowerUp extends PowerUp{
     protected double bonus;
 
-    public BonusStatPowerUp(int levelRequirement, ResourceLocation resourceLocation,int effectiveLevel) {
-        super(levelRequirement, resourceLocation);
+    public BonusStatPowerUp(int levelRequirement, String resourceLocationName,int effectiveLevel) {
+        super(levelRequirement, resourceLocationName);
         this.effectiveLevel = effectiveLevel;
     }
 

@@ -48,16 +48,17 @@ public abstract class PowerUp {
     
     private PowerUpData POWER_UP_DATA;
 
-    public PowerUp(int levelRequirement, ResourceLocation resourceLocation){
-        initializePowerUp(levelRequirement, resourceLocation, null);
+    public PowerUp(int levelRequirement, String resourceLocationName){
+        initializePowerUp(levelRequirement, resourceLocationName, null);
     }
 
-    public PowerUp(int levelRequirement, ResourceLocation resourceLocation,Class<? extends Goal> goal){
-        initializePowerUp(levelRequirement, resourceLocation, goal);
+    public PowerUp(int levelRequirement, String resourceLocationName,Class<? extends Goal> goal){
+        initializePowerUp(levelRequirement, resourceLocationName, goal);
     }
 
-    private void initializePowerUp(int levelRequirement, ResourceLocation resourceLocation,Class<? extends Goal> goal){
-        try{
+    private void initializePowerUp(int levelRequirement, String resourceLocationName,Class<? extends Goal> goal){
+        ResourceLocation resourceLocation = UpgradedWolves.getId("powerups/" + resourceLocationName + ".json");
+        try{   
             SimpleResource iresource = (SimpleResource) Minecraft.getInstance().getResourceManager().getResource(resourceLocation);
             Gson itemData =  new Gson();
             POWER_UP_DATA = itemData.fromJson( new InputStreamReader(iresource.getInputStream()),PowerUpData.class);

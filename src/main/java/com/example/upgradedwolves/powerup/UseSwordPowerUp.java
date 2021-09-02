@@ -2,7 +2,6 @@ package com.example.upgradedwolves.powerup;
 
 import java.lang.reflect.InvocationTargetException;
 
-import com.example.upgradedwolves.UpgradedWolves;
 import com.example.upgradedwolves.entities.goals.UseSwordGoal;
 
 import net.minecraft.entity.ai.goal.Goal;
@@ -13,7 +12,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 public class UseSwordPowerUp extends PowerUp {
 
     public UseSwordPowerUp(int levelRequirement) {
-        super(levelRequirement, UpgradedWolves.getId("powerups/use_sword.json"),UseSwordGoal.class);        
+        super(levelRequirement, "use_sword",UseSwordGoal.class);        
     }
 
     @Override

@@ -2,8 +2,6 @@ package com.example.upgradedwolves.powerup;
 
 import java.lang.reflect.InvocationTargetException;
 
-import com.example.upgradedwolves.UpgradedWolves;
-import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.entities.goals.FleeOnLowHealthGoal;
 
 import net.minecraft.entity.ai.goal.Goal;
@@ -12,7 +10,7 @@ import net.minecraft.entity.passive.WolfEntity;
 public class FleeHealthPowerUp extends PowerUp {
 
     public FleeHealthPowerUp(int levelRequirement) {
-        super(levelRequirement, UpgradedWolves.getId("powerups/flee_health.json"),FleeOnLowHealthGoal.class);
+        super(levelRequirement, "flee_health",FleeOnLowHealthGoal.class);
     }
 
     @Override

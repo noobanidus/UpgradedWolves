@@ -2,8 +2,6 @@ package com.example.upgradedwolves.powerup;
 
 import java.lang.reflect.InvocationTargetException;
 
-import com.example.upgradedwolves.UpgradedWolves;
-import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.entities.goals.WolfAutoAttackTargetGoal;
 
 import net.minecraft.entity.ai.goal.Goal;
@@ -13,7 +11,7 @@ import net.minecraft.entity.passive.WolfEntity;
 public class AutoAttackPowerUp extends PowerUp {
 
     public AutoAttackPowerUp(int levelRequirement){
-        super(levelRequirement, UpgradedWolves.getId("powerups/auto_attack.json"),WolfAutoAttackTargetGoal.class);
+        super(levelRequirement, "auto_attack",WolfAutoAttackTargetGoal.class);
     }
 
     @Override
