@@ -10,7 +10,7 @@ import com.example.upgradedwolves.UpgradedWolves;
 import com.example.upgradedwolves.entities.goals.ClientGoal;
 import com.example.upgradedwolves.entities.goals.IUpdateableGoal;
 import com.example.upgradedwolves.entities.goals.WolfPlayWithPlushGoal;
-import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
+import com.example.upgradedwolves.itemHandler.WolfItemStackHandler;
 import com.example.upgradedwolves.itemHandler.WolfToysHandler;
 import com.example.upgradedwolves.network.PacketHandler;
 import com.example.upgradedwolves.network.message.SpawnLevelUpParticle;
@@ -67,7 +67,7 @@ public class WolfStatsHandler {
         int speedXp, strengthXp, intelligenceXp;
         double attackBonus,speedBonus,detectBonus;
         //The wolves will have a maximum of 9 slots.       
-        ItemStackHandlerWolf inventory;
+        WolfItemStackHandler inventory;
         Entity ropeHolder;
         WolfEntity currentWolf;
         List<Goal> allGoals = new ArrayList<Goal>();
@@ -111,7 +111,7 @@ public class WolfStatsHandler {
             if(inventory != null)
                 inventory.setSize(getInventorySize());
             else
-                inventory = new ItemStackHandlerWolf(getInventorySize());
+                inventory = new WolfItemStackHandler(getInventorySize());
         }
 
         private int getInventorySize(){
@@ -264,9 +264,9 @@ public class WolfStatsHandler {
         }
 
         @Override
-        public ItemStackHandlerWolf getInventory() {
+        public WolfItemStackHandler getInventory() {
             if(inventory == null)
-                inventory = new ItemStackHandlerWolf(getInventorySize());
+                inventory = new WolfItemStackHandler(getInventorySize());
             return inventory;
         }
         

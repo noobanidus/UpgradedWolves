@@ -4,7 +4,7 @@ import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.capabilities.WolfType;
-import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
+import com.example.upgradedwolves.itemHandler.WolfItemStackHandler;
 
 import org.apache.logging.log4j.LogManager;
 
@@ -55,7 +55,7 @@ public class DamageHandler {
         else if(event.getEntity() instanceof WolfEntity){
             WolfEntity wolf = (WolfEntity)event.getEntity();
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
-            ItemStackHandlerWolf wolfInventory = handler.getInventory();
+            WolfItemStackHandler wolfInventory = handler.getInventory();
             for(int i = 0; i < wolfInventory.getSlots(); i++){
                 wolf.entityDropItem(wolfInventory.getStackInSlot(i));
             }

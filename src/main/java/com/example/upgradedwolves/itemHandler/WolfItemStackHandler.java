@@ -11,14 +11,14 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class ItemStackHandlerWolf extends ItemStackHandler {
+public class WolfItemStackHandler extends ItemStackHandler {
     
     public static final int MIN_WOLF_SLOT = 1;
     public static final int MAX_WOLF_SLOT = 9;
 
     boolean isDirty = true;
 
-    public ItemStackHandlerWolf(int numberOfSlots){
+    public WolfItemStackHandler(int numberOfSlots){
         super(MathHelper.clamp(numberOfSlots, MIN_WOLF_SLOT, MAX_WOLF_SLOT));
         if(numberOfSlots < MIN_WOLF_SLOT || numberOfSlots > MAX_WOLF_SLOT){
             throw new IllegalArgumentException("Invalid number of slots: " + numberOfSlots);

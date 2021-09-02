@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
-import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
+import com.example.upgradedwolves.itemHandler.WolfItemStackHandler;
 import com.example.upgradedwolves.network.PacketHandler;
 import com.example.upgradedwolves.network.message.SyncWolfHandMessage;
 
@@ -28,7 +28,7 @@ public class UseSwordGoal extends Goal implements Serializable {
     public boolean shouldExecute() {
         if(wolf.getAttackTarget() != null){
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
-            ItemStackHandlerWolf wolfInventory = handler.getInventory();
+            WolfItemStackHandler wolfInventory = handler.getInventory();
             int swordSlot = wolfInventory.getSword();
             if(swordSlot >= 0){
                 sword = wolfInventory.extractItem(wolfInventory.getSword(), 1, false);

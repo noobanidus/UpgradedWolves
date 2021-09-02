@@ -13,7 +13,8 @@ import com.example.upgradedwolves.containers.ContainerProviderWolfInventory;
 import com.example.upgradedwolves.entities.goals.FollowOwnerVariableGoal;
 import com.example.upgradedwolves.entities.goals.TugOfWarGaol;
 import com.example.upgradedwolves.entities.goals.WolfBiasRoamGoal;
-import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
+import com.example.upgradedwolves.entities.utilities.EntityFinder;
+import com.example.upgradedwolves.itemHandler.WolfItemStackHandler;
 import com.example.upgradedwolves.items.TugOfWarRopeItem;
 import com.example.upgradedwolves.items.GoldenBone.GoldenBoneAbstract;
 import com.example.upgradedwolves.network.PacketHandler;
@@ -30,6 +31,7 @@ import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
@@ -37,6 +39,7 @@ import net.minecraft.item.SwordItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDestroyBlockEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
@@ -158,7 +161,7 @@ public class WolfPlayerInteraction {
         if(event.getEntity() instanceof WolfEntity){
             WolfEntity wolf = (WolfEntity)event.getEntity();
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
-            ItemStackHandlerWolf wolfInventory = handler.getInventory();
+            WolfItemStackHandler wolfInventory = handler.getInventory();
 
             Optional<PrioritizedGoal> optGoal = wolf.goalSelector.getRunningGoals().filter((goal) -> {
                 return goal.getGoal().getClass() == FollowOwnerGoal.class;

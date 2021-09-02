@@ -5,7 +5,7 @@ import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.entities.WolfChaseableEntity;
 import com.example.upgradedwolves.entities.plushy.MobPlushyEntity;
-import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
+import com.example.upgradedwolves.itemHandler.WolfItemStackHandler;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -20,7 +20,7 @@ import net.minecraft.util.math.vector.Vector3d;
 
 public class WolfFindAndPickUpItemGoal extends Goal implements IUpdateableGoal{    
     WolfEntity wolf;
-    ItemStackHandlerWolf wolfInventory;
+    WolfItemStackHandler wolfInventory;
     Entity item;
     int unseenMemoryTicks;
     int targetUnseenTicks;

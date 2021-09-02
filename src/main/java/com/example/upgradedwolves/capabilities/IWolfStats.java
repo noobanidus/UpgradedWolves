@@ -2,7 +2,7 @@ package com.example.upgradedwolves.capabilities;
 
 import java.util.List;
 
-import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
+import com.example.upgradedwolves.itemHandler.WolfItemStackHandler;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.goal.Goal;
@@ -27,7 +27,7 @@ public interface IWolfStats {
     public void addSpeedBonus(double bonus);
     public void addAttackBonus(double bonus);
     public void addDetectionBonus(double bonus);
-    public ItemStackHandlerWolf getInventory();
+    public WolfItemStackHandler getInventory();
     public boolean addItemStack(ItemStack item);
     public WolfEntity getActiveWolf();
     public void setActiveWolf(WolfEntity entity);

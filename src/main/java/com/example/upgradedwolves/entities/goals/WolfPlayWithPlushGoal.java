@@ -3,7 +3,7 @@ package com.example.upgradedwolves.entities.goals;
 import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
-import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
+import com.example.upgradedwolves.itemHandler.WolfItemStackHandler;
 import com.example.upgradedwolves.items.MobPlushy;
 
 import net.minecraft.entity.ai.goal.Goal;
@@ -36,7 +36,7 @@ public class WolfPlayWithPlushGoal extends Goal {
             return true;
         ItemStack wolfHeldItem = wolf.getHeldItemMainhand();
         IWolfStats handler = WolfStatsHandler.getHandler(wolf);
-        ItemStackHandlerWolf wolfInventory = handler.getInventory();
+        WolfItemStackHandler wolfInventory = handler.getInventory();
         handler.addXp(WolfStatsEnum.Strength, 1);
         int wolfSlot = wolfInventory.getAvailableSlot(wolfHeldItem);
         if(wolfSlot >= 0){

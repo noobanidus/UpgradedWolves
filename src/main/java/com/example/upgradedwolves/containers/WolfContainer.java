@@ -3,7 +3,7 @@ package com.example.upgradedwolves.containers;
 import javax.annotation.Nonnull;
 
 import com.example.upgradedwolves.init.ModContainers;
-import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
+import com.example.upgradedwolves.itemHandler.WolfItemStackHandler;
 
 import org.apache.logging.log4j.LogManager;
 
@@ -21,11 +21,11 @@ import net.minecraftforge.items.SlotItemHandler;
 public class WolfContainer extends Container {
 
     public WolfEntity wolf;
-    public ItemStackHandlerWolf wolfItemHandler;   
+    public WolfItemStackHandler wolfItemHandler;   
     public CompoundNBT nbt;
     public PlayerInventory playerInventory;
 
-    private WolfContainer(int id, PlayerInventory playerInventory,ItemStackHandlerWolf wolfStackHandler,WolfEntity wolf,CompoundNBT nbt) {
+    private WolfContainer(int id, PlayerInventory playerInventory,WolfItemStackHandler wolfStackHandler,WolfEntity wolf,CompoundNBT nbt) {
         super(ModContainers.WOLF_CONTAINER,id);
         this.wolf = wolf;
         this.wolfItemHandler = wolfStackHandler;
@@ -41,7 +41,7 @@ public class WolfContainer extends Container {
         CompoundNBT nbt = data.readCompoundTag();
 
         try{
-            ItemStackHandlerWolf wolfItemHandler = new ItemStackHandlerWolf(numberOfSlots);
+            WolfItemStackHandler wolfItemHandler = new WolfItemStackHandler(numberOfSlots);
             Minecraft mc = Minecraft.getInstance();
             WolfEntity wolf = (WolfEntity)mc.world.getEntityByID(wolfId);
 
@@ -52,7 +52,7 @@ public class WolfContainer extends Container {
         return null;
     }
 
-    public static WolfContainer createContainerServerSide(int id, PlayerInventory inventory,ItemStackHandlerWolf wolfItemHandler,WolfEntity wolf){
+    public static WolfContainer createContainerServerSide(int id, PlayerInventory inventory,WolfItemStackHandler wolfItemHandler,WolfEntity wolf){
         return new WolfContainer(id,inventory,wolfItemHandler,wolf,null);
     }
 

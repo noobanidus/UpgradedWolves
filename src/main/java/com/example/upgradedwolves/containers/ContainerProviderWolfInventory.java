@@ -1,6 +1,6 @@
 package com.example.upgradedwolves.containers;
 
-import com.example.upgradedwolves.itemHandler.ItemStackHandlerWolf;
+import com.example.upgradedwolves.itemHandler.WolfItemStackHandler;
 
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -11,8 +11,8 @@ import net.minecraft.util.text.StringTextComponent;
 
 public class ContainerProviderWolfInventory implements INamedContainerProvider {
     private WolfEntity wolf;
-    private ItemStackHandlerWolf wolfHandler ;
-    public ContainerProviderWolfInventory(WolfEntity wolf,ItemStackHandlerWolf wolfHandler){
+    private WolfItemStackHandler wolfHandler ;
+    public ContainerProviderWolfInventory(WolfEntity wolf,WolfItemStackHandler wolfHandler){
         this.wolf = wolf;
         this.wolfHandler = wolfHandler;
     }
