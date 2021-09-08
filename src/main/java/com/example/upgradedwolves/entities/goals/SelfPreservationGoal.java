@@ -23,12 +23,13 @@ public class SelfPreservationGoal extends Goal {
     public boolean shouldExecute() {
         IWolfStats handler = WolfStatsHandler.getHandler(wolf);
         WolfItemStackHandler wolfInventory = handler.getInventory();
-        if(wolf.getHealth() < 5 && wolfInventory.getArbitraryItem(item -> item.isFood()) >= 0){
+        if(wolf.getHealth() < 15 && wolfInventory.getArbitraryItem(item -> item.isFood()) >= 0){
             int inventorySlot = wolfInventory.getArbitraryItem(item -> item.isFood());
             ItemStack foodStack = wolfInventory.getStackInSlot(inventorySlot);
             healAmount = foodStack.getItem().getFood().getHealing();
             currentTime = 0;
-            return true;            
+            foodStack.shrink(1);
+            return true;
         }
         healAmount = 0;
         return false;
@@ -36,10 +37,10 @@ public class SelfPreservationGoal extends Goal {
 
     public boolean shouldContinueExecuting(){
         if(currentTime++ < eatingTime){
-            if(currentTime % 5 == 0)
+            if(currentTime % 4 == 0)
             wolf.playSound(SoundEvents.ENTITY_GENERIC_EAT, 0.5F + 0.5F * (float)wolf.getRNG().nextInt(2), (wolf.getRNG().nextFloat() - wolf.getRNG().nextFloat()) * 0.2F + 1.0F);
             return true;
-        }        
+        }   
         wolf.heal(healAmount);
         healAmount = 0;
         return false;

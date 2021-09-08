@@ -36,6 +36,11 @@
     "powerup.upgradedwolves.disarm_enemy.description":"%s will attempt to disarm the enemy if possible",
     "powerup.upgradedwolves.toss_arrow.name":"Arrow Launch",
     "powerup.upgradedwolves.toss_arrow.description":"%s will Launch the arrow at the nearest enemy",
+    "powerup.upgradedwolves.death_retrieval.name":"Item Recovery",
+    "powerup.upgradedwolves.death_retrieval.description":"%s will collect items upon it's owner's death",
+    "powerup.upgradedwolves.self_preservation.name":"Health Snack",
+    "powerup.upgradedwolves.self_preservation.description":"%s will automatically heal upon low health",
+
 
     "chat.upgradedwolves.level_up":"%s has leveled up %s"
 }
