@@ -26,6 +26,7 @@ public class PowerUpList {
         new FleeCreeperPowerUp(7),
         new DetectEnemyPowerUp(8),
         new EnhanceSpeedPowerUp(10,2,0.05D),
+        new SelfPreservationPowerUp(11),
         new RetrieveOnDeathPowerUp(12),
         new EnhanceSpeedPowerUp(15,3,0.05D),        
         new EnhanceSpeedPowerUp(20,4,0.05D),
