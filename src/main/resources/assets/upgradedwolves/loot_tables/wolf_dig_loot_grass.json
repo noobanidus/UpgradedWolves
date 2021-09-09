@@ -1,0 +1,37 @@
+[
+    {
+        "chance":60,
+        "items":[
+            "minecraft:fern",
+            "minecraft:brown_mushroom",
+            "minecraft:stick",
+            "minecraft:wheat_seeds",
+            "minecraft:paper",
+            "minecraft:rotten_flesh",
+            "minecraft:rose_bush",
+            "minecraft:grass"
+
+        ]
+    },
+    {
+        "chance":30,
+        "items":[
+            "minecraft:carrot",
+            "minecraft:potato",
+            "minecraft:bone",
+            "minecraft:tall_grass",
+            "minecraft:iron_nugget",
+            "minecraft:egg"
+        ]
+    },
+    {
+        "chance":10,
+        "items":[
+            "minecraft:flint",
+            "minecraft:gunpowder",
+            "minecraft:poisonous_potato",
+            "minecraft:iron_ingot",
+            "minecraft:coal"
+        ]
+    }
+]

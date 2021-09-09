@@ -1,0 +1,33 @@
+[
+    {
+        "chance":60,
+        "items":[
+            "minecraft:sand",
+            "minecraft:red_sand",
+            "minecraft:bone",
+            "minecraft:string",
+            "minecraft:stick",
+            "minecraft:brown_mushroom"
+        ]
+    },
+    {
+        "chance":30,
+        "items":[
+            "minecraft:dead_bush",
+            "minecraft:flint",
+            "minecraft:gold_nugget",
+            "minecraft:gunpowder",
+            "minecraft:paper",
+            "minecraft:rotten_flesh"
+        ]
+    },
+    {
+        "chance":10,
+        "items":[
+            "minecraft:glass_bottle",
+            "minecraft:gold_ingot",
+            "minecraft:glass",
+            "minecraft:saddle"
+        ]
+    }
+]
