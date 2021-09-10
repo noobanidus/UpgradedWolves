@@ -31,6 +31,7 @@ public class PowerUpList {
         new EnhanceSpeedPowerUp(15,3,0.05D), 
         new DigForItemPowerUp(17),
         new EnhanceSpeedPowerUp(20,4,0.05D),
+        new LootBonusPowerUp(22),
         new EnhanceSpeedPowerUp(25,5,0.05D)
     };
     public static final PowerUp[] newWolf = { /* Oh what's this? */};

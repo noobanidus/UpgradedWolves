@@ -10,7 +10,7 @@ import net.minecraft.entity.passive.WolfEntity;
 
 public class LootBonusPowerUp extends PowerUp {
 
-    public LootBonusPowerUp(int levelRequirement, String resourceLocationName) {
+    public LootBonusPowerUp(int levelRequirement) {
         super(levelRequirement, "loot_bonus");        
     }
 

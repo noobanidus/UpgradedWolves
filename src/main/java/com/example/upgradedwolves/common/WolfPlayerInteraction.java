@@ -26,6 +26,7 @@ import com.example.upgradedwolves.items.MobPlushy;
 import org.apache.logging.log4j.LogManager;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.FollowOwnerGoal;
 import net.minecraft.entity.ai.goal.Goal;
@@ -274,10 +275,10 @@ public class WolfPlayerInteraction {
 
     @SubscribeEvent
     public void SetLoot(LootingLevelEvent event){
-        if(event.getDamageSource().getTrueSource() instanceof ServerPlayerEntity){
-            ServerPlayerEntity player = (ServerPlayerEntity) event.getDamageSource().getTrueSource();
-            EntityFinder<WolfEntity> entityFinder = new EntityFinder<WolfEntity>(player,WolfEntity.class);
-            List<WolfEntity> wolves = entityFinder.findWithPredicate(10, 10,wolf -> wolf.getOwner() == player);
+        if(event.getDamageSource().getTrueSource() instanceof ServerPlayerEntity || event.getDamageSource().getTrueSource() instanceof WolfEntity){
+            LivingEntity user = (LivingEntity)event.getDamageSource().getTrueSource();
+            EntityFinder<WolfEntity> entityFinder = new EntityFinder<WolfEntity>(user,WolfEntity.class);
+            List<WolfEntity> wolves = entityFinder.findWithPredicate(10, 10,wolf -> wolf.getOwner() == user);
             for (WolfEntity wolf : wolves) {
                 IWolfStats handler = WolfStatsHandler.getHandler(wolf);
                 if(handler.getLootFlag()){
