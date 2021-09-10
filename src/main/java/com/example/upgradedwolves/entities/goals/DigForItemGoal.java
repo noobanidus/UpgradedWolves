@@ -3,6 +3,7 @@ package com.example.upgradedwolves.entities.goals;
 import com.example.upgradedwolves.loot_table.LootLoaders;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.passive.WolfEntity;
@@ -29,13 +30,13 @@ public class DigForItemGoal extends CoolDownGoal {
     @Override
     public boolean shouldExecute() {
         //Gets block "type" at the position below the wolf
-        BlockState blockStandingOn = wolf.world.getBlockState(wolf.getPosition().add(0, -1, 0));        
-        if(active() && blockStandingOn.getMaterial() == Material.EARTH || blockStandingOn.getMaterial() == Material.SAND){
+        BlockState blockStandingOn = wolf.world.getBlockState(wolf.getPosition().add(0, -1, 0));   
+        if(active() && !wolf.isSitting() && (isGrassBlock(blockStandingOn) || isSandBlock(blockStandingOn))){
             type = blockStandingOn;
             wolf.getNavigator().clearPath();
-            if(blockStandingOn.getMaterial() == Material.SAND){
+            if(isSandBlock(blockStandingOn)){
                 itemToDrop = LootLoaders.DigSand.getRandomItem();
-            } else if(blockStandingOn.getMaterial() == Material.EARTH){
+            } else if(isGrassBlock(blockStandingOn)){
                 itemToDrop = LootLoaders.DigGrass.getRandomItem();
             }
             return true;
@@ -57,4 +58,11 @@ public class DigForItemGoal extends CoolDownGoal {
         return false;
     }
     
+    private boolean isGrassBlock(BlockState blockStateIn){
+        return blockStateIn.isIn(Blocks.GRASS_BLOCK) || net.minecraftforge.common.Tags.Blocks.DIRT.contains(blockStateIn.getBlock());
+    }
+
+    private boolean isSandBlock(BlockState blockStateIn){
+        return blockStateIn.isIn(Blocks.SAND) ||blockStateIn.isIn(Blocks.RED_SAND);
+    }
 }

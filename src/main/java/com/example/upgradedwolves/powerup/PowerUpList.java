@@ -28,7 +28,8 @@ public class PowerUpList {
         new EnhanceSpeedPowerUp(10,2,0.05D),
         new SelfPreservationPowerUp(11),
         new RetrieveOnDeathPowerUp(12),
-        new EnhanceSpeedPowerUp(15,3,0.05D),        
+        new EnhanceSpeedPowerUp(15,3,0.05D), 
+        new DigForItemPowerUp(17),
         new EnhanceSpeedPowerUp(20,4,0.05D),
         new EnhanceSpeedPowerUp(25,5,0.05D)
     };

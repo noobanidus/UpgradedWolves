@@ -87,7 +87,7 @@ public abstract class PowerUp {
             try{
                 return goalConstructor(wolf);
             } catch(Exception e){
-                LogManager.getLogger().error("Failed to instantiate Goal! \n" + e.getMessage());
+                LogManager.getLogger().error("Failed to instantiate Goal! \n" + e.getMessage() + e.getStackTrace());
                 return null;
             }   
         }
