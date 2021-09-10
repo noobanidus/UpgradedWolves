@@ -1,14 +1,24 @@
 package com.example.upgradedwolves.entities.goals;
 
+import com.example.upgradedwolves.loot_table.LootLoaders;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.particles.BlockParticleData;
+import net.minecraft.particles.ParticleType;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class DigForItemGoal extends CoolDownGoal {
     public WolfEntity wolf;
     protected BlockState type;
     protected final int timer = 40;
     protected int currentTime;
+    protected ItemStack itemToDrop;
 
     public DigForItemGoal (WolfEntity wolf){
         this.wolf = wolf;
@@ -22,6 +32,12 @@ public class DigForItemGoal extends CoolDownGoal {
         BlockState blockStandingOn = wolf.world.getBlockState(wolf.getPosition().add(0, -1, 0));        
         if(active() && blockStandingOn.getMaterial() == Material.EARTH || blockStandingOn.getMaterial() == Material.SAND){
             type = blockStandingOn;
+            wolf.getNavigator().clearPath();
+            if(blockStandingOn.getMaterial() == Material.SAND){
+                itemToDrop = LootLoaders.DigSand.getRandomItem();
+            } else if(blockStandingOn.getMaterial() == Material.EARTH){
+                itemToDrop = LootLoaders.DigGrass.getRandomItem();
+            }
             return true;
         }
         return false;
@@ -30,10 +46,13 @@ public class DigForItemGoal extends CoolDownGoal {
     @Override
     public boolean shouldContinueExecuting() {
         if(currentTime++ < timer){
-            wolf.playSound(type.getBlock().getSoundType(null, null, null, null).getPlaceSound(), 0.5F, (1.0F + (wolf.getRNG().nextFloat() - wolf.getRNG().nextFloat()) * 0.2F) * 0.7F);
+            wolf.playSound(type.getBlock().getSoundType(null, null, null, null).getPlaceSound(), 0.5F, (1.0F + (wolf.getRNG().nextFloat() - wolf.getRNG().nextFloat()) * 0.2F) * 0.7F);            
+            Minecraft mc = Minecraft.getInstance();
+            mc.world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, type),false, wolf.getPosX(), wolf.getPosY(), wolf.getPosZ(),wolf.getRNG().nextDouble()/5, wolf.getRNG().nextDouble()/5, wolf.getRNG().nextDouble()/5);
             return true;
         }
         currentTime = 0;
+        wolf.entityDropItem(itemToDrop);
         startCoolDown();
         return false;
     }
