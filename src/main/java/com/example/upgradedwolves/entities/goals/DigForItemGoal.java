@@ -49,7 +49,8 @@ public class DigForItemGoal extends CoolDownGoal {
         if(currentTime++ < timer){
             wolf.playSound(type.getBlock().getSoundType(null, null, null, null).getPlaceSound(), 0.5F, (1.0F + (wolf.getRNG().nextFloat() - wolf.getRNG().nextFloat()) * 0.2F) * 0.7F);            
             Minecraft mc = Minecraft.getInstance();
-            mc.world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, type),false, wolf.getPosX(), wolf.getPosY(), wolf.getPosZ(),wolf.getRNG().nextDouble()/5, wolf.getRNG().nextDouble()/5, wolf.getRNG().nextDouble()/5);
+            if(mc.world != null)
+                mc.world.addParticle(new BlockParticleData(ParticleTypes.BLOCK, type),false, wolf.getPosX(), wolf.getPosY(), wolf.getPosZ(),wolf.getRNG().nextDouble()/5, wolf.getRNG().nextDouble()/5, wolf.getRNG().nextDouble()/5);
             return true;
         }
         currentTime = 0;
