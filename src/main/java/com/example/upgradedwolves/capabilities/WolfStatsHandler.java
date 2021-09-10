@@ -73,7 +73,7 @@ public class WolfStatsHandler {
         List<Goal> allGoals = new ArrayList<Goal>();
         List<Goal> unaddedGoals = new ArrayList<Goal>();
         boolean tugOfWarActive = false;
-        boolean deathRetrieval;
+        boolean deathRetrieval,lootAdder;
 
         private boolean LevelUpFunction(int level, int xp) {
             return xp > Math.pow(level,1.1) * 4;
@@ -417,6 +417,14 @@ public class WolfStatsHandler {
         @Override
         public boolean getRetrievalFlag() {
             return deathRetrieval;
+        }
+        @Override
+        public void setLootFlag(boolean set) {
+            lootAdder = set;            
+        }
+        @Override
+        public boolean getLootFlag() {            
+            return lootAdder;
         }
 
 

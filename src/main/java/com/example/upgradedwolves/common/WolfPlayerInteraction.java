@@ -25,6 +25,7 @@ import com.example.upgradedwolves.items.MobPlushy;
 
 import org.apache.logging.log4j.LogManager;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.FollowOwnerGoal;
 import net.minecraft.entity.ai.goal.Goal;
@@ -45,7 +46,9 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDestroyBlockEvent;
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.entity.living.LootingLevelEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -264,6 +267,21 @@ public class WolfPlayerInteraction {
                             }
                         }
                     }
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void SetLoot(LootingLevelEvent event){
+        if(event.getDamageSource().getTrueSource() instanceof ServerPlayerEntity){
+            ServerPlayerEntity player = (ServerPlayerEntity) event.getDamageSource().getTrueSource();
+            EntityFinder<WolfEntity> entityFinder = new EntityFinder<WolfEntity>(player,WolfEntity.class);
+            List<WolfEntity> wolves = entityFinder.findWithPredicate(10, 10,wolf -> wolf.getOwner() == player);
+            for (WolfEntity wolf : wolves) {
+                IWolfStats handler = WolfStatsHandler.getHandler(wolf);
+                if(handler.getLootFlag()){
+                    event.setLootingLevel(event.getLootingLevel() + 1);
                 }
             }
         }

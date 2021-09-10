@@ -44,4 +44,6 @@ public interface IWolfStats {
     public void addPendingGoal(int priority, Goal goal);
     public void setRetrievalFlag(boolean set);
     public boolean getRetrievalFlag();
+    public void setLootFlag(boolean set);
+    public boolean getLootFlag();
 }
