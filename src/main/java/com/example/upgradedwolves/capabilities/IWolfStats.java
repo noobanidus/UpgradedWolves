@@ -8,6 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 
 public interface IWolfStats {
     public void addXp(WolfStatsEnum wolfStats,int amount);
@@ -46,4 +47,6 @@ public interface IWolfStats {
     public boolean getRetrievalFlag();
     public void setLootFlag(boolean set);
     public boolean getLootFlag();
+    public BlockPos getRoamPoint();
+    public void setRoamPoint(BlockPos location);
 }

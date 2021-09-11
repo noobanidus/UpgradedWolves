@@ -115,10 +115,19 @@ public class WolfPlayerInteraction {
                         goldenBone.rightClickWolf(wolf,handler);
                     if(!event.getPlayer().isCreative())
                         goldenBoneItem.shrink(1);
+                    wolf.func_233687_w_(!wolf.isSitting());
                 } else if (tugOfWarRopeItem != null){
                     handler.setRopeHolder(event.getPlayer());
                     wolf.func_233687_w_(true);
                     tugOfWarRopeItem.shrink(1);
+                }
+                if(handler.getWolfType() ==  0/*3*/){
+                    if(handler.getRoamPoint() == null){
+                        handler.setRoamPoint(wolf.getPosition());
+                    } else {
+                        handler.setRoamPoint(null);
+                    }
+                    wolf.func_233687_w_(true);
                 }
             }
         }

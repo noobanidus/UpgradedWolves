@@ -26,8 +26,10 @@ import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -70,6 +72,7 @@ public class WolfStatsHandler {
         WolfItemStackHandler inventory;
         Entity ropeHolder;
         WolfEntity currentWolf;
+        BlockPos location;
         List<Goal> allGoals = new ArrayList<Goal>();
         List<Goal> unaddedGoals = new ArrayList<Goal>();
         boolean tugOfWarActive = false;
@@ -426,6 +429,14 @@ public class WolfStatsHandler {
         public boolean getLootFlag() {            
             return lootAdder;
         }
+        @Override
+        public BlockPos getRoamPoint() {            
+            return location;
+        }
+        @Override
+        public void setRoamPoint(BlockPos location) {
+            this.location = location;
+        }
 
 
     }
@@ -445,6 +456,7 @@ public class WolfStatsHandler {
             nbt.putInt("IntelligenceXp", instance.getXp(WolfStatsEnum.Intelligence));
             nbt.putInt("WolfType",instance.getWolfType());
             nbt.put("Inventory",instance.getInventory().serializeNBT());
+            nbt.put("RoamPosition",NBTUtil.writeBlockPos(instance.getRoamPoint()));
             return nbt;
         }
 
@@ -460,6 +472,7 @@ public class WolfStatsHandler {
             instance.addXp(WolfStatsEnum.Intelligence, next.getInt("IntelligenceXp"));
             instance.setWolfType(next.getInt("WolfType"));
             instance.getInventory().deserializeNBT(next.getCompound("Inventory"));
+            instance.setRoamPoint(NBTUtil.readBlockPos(next.getCompound("RoamPosition")));
             instance.InitLove();
         }
 
