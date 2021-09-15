@@ -66,7 +66,6 @@ public abstract class PowerUp {
             this.name = "powerup." + resourceLocation.getNamespace() + "." + powerUpName + ".name";
             this.description = "powerup." + resourceLocation.getNamespace() + "." + powerUpName + ".description";
             this.active = POWER_UP_DATA.active;
-            this.image = UpgradedWolves.getId(POWER_UP_DATA.image);
             this.uLocation = POWER_UP_DATA.uLocation;
             this.vLocation = POWER_UP_DATA.vLocation;
             this.statType = WolfStatsEnum.values()[POWER_UP_DATA.statType];

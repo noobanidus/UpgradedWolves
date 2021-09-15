@@ -34,7 +34,9 @@ public class PowerUpList {
         new LootBonusPowerUp(22),
         new EnhanceSpeedPowerUp(25,5,0.05D)
     };
-    public static final PowerUp[] newWolf = { /* Oh what's this? */};
+    public static final PowerUp[] newWolf = { /* Oh what's this? */
+        new FishForItemPowerUp(7)
+    };
     public static final PowerUp[] notSet = {
         new FleeHealthPowerUp(5),
         new FleeCreeperPowerUp(10),
