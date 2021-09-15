@@ -87,6 +87,14 @@ public class WolfItemStackHandler extends ItemStackHandler {
         return -1;
     }
 
+    public int getArbitraryItemStack(Predicate<ItemStack> parameter){
+        for(int i = 0; i < getSlots(); i++){
+            if(parameter.test(getStackInSlot(i)))
+                return i;
+        }
+        return -1;
+    }
+
     public ItemStack insertIntoEmptySlot(ItemStack stack){
         int slot = getAvailableSlot(stack);
         ItemStack remaining = insertItem(slot, stack, false);
