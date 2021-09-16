@@ -40,6 +40,20 @@
     "powerup.upgradedwolves.death_retrieval.description":"%s will collect items upon it's owner's death",
     "powerup.upgradedwolves.self_preservation.name":"Health Snack",
     "powerup.upgradedwolves.self_preservation.description":"%s will automatically heal upon low health",
+    "powerup.upgradedwolves.loot_bonus.name":"Sharp Sight",
+    "powerup.upgradedwolves.loot_bonus.description":"Being around %s will increase looting",
+    "powerup.upgradedwolves.dig_for_item.name":"Dig",
+    "powerup.upgradedwolves.dig_for_item.description":"%s will dig for items it finds",
+    "powerup.upgradedwolves.item_retrieval.name":"Recovery",
+    "powerup.upgradedwolves.item_retrieval.description":"%s will recover your items when you die",
+    "powerup.upgradedwolves.fish_catcher.name":"Diver",
+    "powerup.upgradedwolves.fish_catcher.description":"%s will collect items from the water",
+    "powerup.upgradedwolves.impress.name":"Show off",
+    "powerup.upgradedwolves.impress.description":"%s will attempt to impress villagers for a reward",
+    "powerup.upgradedwolves.share_item.name":"Treat Share",
+    "powerup.upgradedwolves.share_item.description":"%s share food items with friendly wolves",
+    "powerup.upgradedwolves.use_potion.name":"Toss Potion",
+    "powerup.upgradedwolves.use_potion.description":"%s will toss potions towards others if necessary",
 
 
     "chat.upgradedwolves.level_up":"%s has leveled up %s"

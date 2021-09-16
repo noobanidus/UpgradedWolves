@@ -121,7 +121,7 @@ public class WolfPlayerInteraction {
                     wolf.func_233687_w_(true);
                     tugOfWarRopeItem.shrink(1);
                 }
-                if(handler.getWolfType() ==  0/*3*/){
+                if(handler.getWolfType() ==  3){
                     if(handler.getRoamPoint() == null){
                         handler.setRoamPoint(wolf.getPosition());
                     } else {

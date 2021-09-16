@@ -1,3 +1,25 @@
+v 0.4.1 Scavenger wolf PowerUp
+
+Added
++PowerUps for scavenger wolf
+
++PowerUps
+	+Looting Aura PowerUp
+	+Digging for Item PowerUp
+	+Self Preservation PowerUp
+	+Item Retrieval PowerUp
+	+Use Potion PowerUp
+	+Item Sharing PowerUp
+	+Impress PowerUp
+
+Removed
+(I forgot again, sheesh!)
+
+Fixed
+(ditto...)
+
+================
+
 v 0.4 Wolf PowerUp Update
 
 Added
