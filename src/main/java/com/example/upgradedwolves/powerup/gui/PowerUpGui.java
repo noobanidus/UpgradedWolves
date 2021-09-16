@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import com.example.upgradedwolves.UpgradedWolves;
 import com.example.upgradedwolves.capabilities.WolfStatsEnum;
-import com.example.upgradedwolves.capabilities.WolfType;
-import com.example.upgradedwolves.powerup.ExamplePowerUp;
 import com.example.upgradedwolves.powerup.PowerUp;
 import com.example.upgradedwolves.powerup.PowerUpList;
 import com.mojang.blaze3d.matrix.MatrixStack;

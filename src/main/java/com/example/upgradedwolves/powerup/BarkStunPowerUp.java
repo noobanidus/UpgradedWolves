@@ -11,7 +11,6 @@ public class BarkStunPowerUp extends PowerUp {
 
     public BarkStunPowerUp(int levelRequirement) {
         super(levelRequirement, "bark_stun", BarkStunGoal.class);
-        //TODO Auto-generated constructor stub
     }
 
     @Override

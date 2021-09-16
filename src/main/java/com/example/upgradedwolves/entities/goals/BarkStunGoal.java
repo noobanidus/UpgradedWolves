@@ -3,17 +3,13 @@ package com.example.upgradedwolves.entities.goals;
 import java.util.List;
 import java.util.Random;
 
-import com.example.upgradedwolves.capabilities.IWolfStats;
-import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.entities.utilities.EntityFinder;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.IAngerable;
-import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
 
 public class BarkStunGoal extends CoolDownGoal {
@@ -44,8 +40,7 @@ public class BarkStunGoal extends CoolDownGoal {
 
     @Override
     public void startExecuting() {
-        wof.playSound(SoundEvents.ENTITY_WOLF_AMBIENT, 20, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.02F + .7F);
-        IWolfStats handler = WolfStatsHandler.getHandler(wof);
+        wof.playSound(SoundEvents.ENTITY_WOLF_AMBIENT, 20, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.02F + .7F);        
         for (MonsterEntity mobEntity : enemies) {
             Random r = new Random();
             mobEntity.setNoAI(true);

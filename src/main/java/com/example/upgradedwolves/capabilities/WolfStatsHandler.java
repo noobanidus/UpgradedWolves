@@ -7,14 +7,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.example.upgradedwolves.UpgradedWolves;
-import com.example.upgradedwolves.entities.goals.ClientGoal;
 import com.example.upgradedwolves.entities.goals.IUpdateableGoal;
 import com.example.upgradedwolves.entities.goals.WolfPlayWithPlushGoal;
 import com.example.upgradedwolves.itemHandler.WolfItemStackHandler;
 import com.example.upgradedwolves.itemHandler.WolfToysHandler;
 import com.example.upgradedwolves.network.PacketHandler;
 import com.example.upgradedwolves.network.message.SpawnLevelUpParticle;
-import com.example.upgradedwolves.network.message.SyncWolfHandMessage;
 import com.example.upgradedwolves.powerup.PowerUp;
 import com.example.upgradedwolves.powerup.PowerUpList;
 

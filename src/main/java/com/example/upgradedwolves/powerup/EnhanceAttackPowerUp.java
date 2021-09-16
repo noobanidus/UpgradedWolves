@@ -9,7 +9,6 @@ public class EnhanceAttackPowerUp extends BonusStatPowerUp {
     public EnhanceAttackPowerUp(int levelRequirement, int effectiveLevel, double bonus) {
         super(levelRequirement, "enhance_attack", effectiveLevel);
         this.bonus = bonus;
-        //TODO Auto-generated constructor stub
     }
 
     @Override

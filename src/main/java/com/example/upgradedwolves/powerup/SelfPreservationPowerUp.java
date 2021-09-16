@@ -2,7 +2,6 @@ package com.example.upgradedwolves.powerup;
 
 import java.lang.reflect.InvocationTargetException;
 
-import com.example.upgradedwolves.UpgradedWolves;
 import com.example.upgradedwolves.entities.goals.SelfPreservationGoal;
 
 import net.minecraft.entity.ai.goal.Goal;
