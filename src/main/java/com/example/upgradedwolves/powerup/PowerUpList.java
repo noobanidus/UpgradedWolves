@@ -2,7 +2,8 @@ package com.example.upgradedwolves.powerup;
 
 
 public class PowerUpList {
-    public static final PowerUp[] StrengthWolf = {     
+    public static final PowerUp[] StrengthWolf = {
+        new ImpressVillagerPowerUp(1),    
         new AutoAttackPowerUp(5),
         new EnhanceAttackPowerUp(5, 1, 1),
         new FleeHealthPowerUp(6),

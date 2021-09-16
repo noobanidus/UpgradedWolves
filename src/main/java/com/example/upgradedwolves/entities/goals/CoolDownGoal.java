@@ -7,7 +7,7 @@ public abstract class CoolDownGoal extends Goal {
     protected int defaultCooldown;    
 
     protected void setCoolDownInSeconds(double seconds){
-        timeLeft = (int)(seconds * 20 / 4);
+        timeLeft = (int)(seconds * 20 * 3 / 4);
         defaultCooldown = (int)(seconds * 20);
     }
 
