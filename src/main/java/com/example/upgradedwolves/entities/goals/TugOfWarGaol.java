@@ -1,6 +1,7 @@
 package com.example.upgradedwolves.entities.goals;
 
 import com.example.upgradedwolves.capabilities.IWolfStats;
+import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.itemHandler.WolfToysHandler;
 import com.example.upgradedwolves.network.message.MovePlayerMessage;
@@ -49,7 +50,8 @@ public class TugOfWarGaol extends Goal {
             playerIn = null;
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             handler.clearRopeHolder();
-            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getEntityId(),0,false) );
+            handler.addXp(WolfStatsEnum.Strength, 2);
+            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getEntityId(),0,0,false) );
             return false;
         }
     }

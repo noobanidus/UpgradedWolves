@@ -30,10 +30,10 @@ public class RenderMessage implements IMessage<RenderMessage> {
         renderType = true;
     }
 
-    public RenderMessage(int id, int value,boolean type){
+    public RenderMessage(int id, int value,int fur, boolean type){
         wolfId = id;
         wolfValue = value;
-        wolfFur = 0;
+        wolfFur = fur;
         renderType = type;
     }
 
@@ -41,13 +41,14 @@ public class RenderMessage implements IMessage<RenderMessage> {
     public void encode(RenderMessage message, PacketBuffer buffer) {
         buffer.writeInt(message.wolfId);
         buffer.writeInt(message.wolfValue);
+        buffer.writeInt(message.wolfFur);
         buffer.writeBoolean(message.renderType);
     }
 
     @Override
     public RenderMessage decode(PacketBuffer buffer) {
         
-        return new RenderMessage(buffer.readInt(),buffer.readInt(),buffer.readBoolean());
+        return new RenderMessage(buffer.readInt(),buffer.readInt(),buffer.readInt(),buffer.readBoolean());
     }
 
     @Override

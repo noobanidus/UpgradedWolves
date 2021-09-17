@@ -37,7 +37,7 @@ public class WolfPlayWithPlushGoal extends Goal {
         ItemStack wolfHeldItem = wolf.getHeldItemMainhand();
         IWolfStats handler = WolfStatsHandler.getHandler(wolf);
         WolfItemStackHandler wolfInventory = handler.getInventory();
-        handler.addXp(WolfStatsEnum.Strength, 1);
+        handler.addXp(WolfStatsEnum.Intelligence, 2);
         int wolfSlot = wolfInventory.getAvailableSlot(wolfHeldItem);
         if(wolfSlot >= 0){
             ItemStack remaining = wolfInventory.insertItem(wolfSlot, wolfHeldItem, false);

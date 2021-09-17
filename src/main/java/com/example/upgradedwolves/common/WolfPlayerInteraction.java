@@ -98,12 +98,13 @@ public class WolfPlayerInteraction {
                         return;
                     else{
                         handler.setWolfType(item);
+                        handler.setWolffur(wolf.world.rand.nextInt(3));
                         handler.addGoals();
                         handler.handleWolfGoals();
                         foodItem.shrink(1);
                         tHandler.resetAttribute();
                         if(Thread.currentThread().getName() == "Server thread")
-                            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getEntityId(),WolfStatsHandler.getHandler(wolf).getWolfType(),wolf.getRNG().nextInt(3)));
+                            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getEntityId(),WolfStatsHandler.getHandler(wolf).getWolfType(),handler.getWolfFur()));
                     }
                 } else if (goldenBoneItem != null){
                     GoldenBoneAbstract goldenBone = (GoldenBoneAbstract)goldenBoneItem.getItem();
