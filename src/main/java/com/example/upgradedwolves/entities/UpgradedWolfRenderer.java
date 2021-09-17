@@ -1,5 +1,8 @@
 package com.example.upgradedwolves.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.example.upgradedwolves.UpgradedWolves;
 import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
@@ -16,6 +19,7 @@ import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
@@ -26,6 +30,12 @@ import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 
 public class UpgradedWolfRenderer extends WolfRenderer {    
+    protected List<ResourceLocation> showWolfTextures = Util.make(new ArrayList<ResourceLocation>(), (textureList) -> {
+        textureList.add(UpgradedWolves.getId("textures/entity/silver_wolf.png"));
+        textureList.add(UpgradedWolves.getId("textures/entity/dark_wolf.png"));
+        textureList.add(UpgradedWolves.getId("textures/entity/spotted_wolf.png"));
+    });
+
 
     public UpgradedWolfRenderer(EntityRendererManager rendererManager) {
         super(rendererManager);
@@ -45,6 +55,12 @@ public class UpgradedWolfRenderer extends WolfRenderer {
                     return UpgradedWolves.getId("textures/entity/fighterwolf.png");
                 case 2:
                     return UpgradedWolves.getId("textures/entity/scavengerwolf.png");
+                case 3:
+                    String wolfName = wolf.getCustomName().getString();
+                    if(wolf.getCustomName().getString().equals("Strobe"))
+                        return showWolfTextures.get(wolf.getRNG().nextInt(3));
+                    return showWolfTextures.get(handler.getWolfFur());
+                    
             }
             return UpgradedWolves.getId("textures/entity/pet_dog.png");
         }

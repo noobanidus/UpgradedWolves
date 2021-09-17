@@ -13,23 +13,27 @@ import net.minecraftforge.fml.network.NetworkEvent.Context;
 public class RenderMessage implements IMessage<RenderMessage> {
     int wolfId;
     int wolfValue;
+    int wolfFur;
     //true render Wolf color; false render wolf leash
     boolean renderType;
 
     public RenderMessage(){
         wolfId = 0;
         wolfValue = 0;
+        wolfFur = 0;
     }
 
-    public RenderMessage(int id,int value){
+    public RenderMessage(int id,int value,int fur){
         wolfId = id;
         wolfValue = value;
+        wolfFur = fur;
         renderType = true;
     }
 
     public RenderMessage(int id, int value,boolean type){
         wolfId = id;
         wolfValue = value;
+        wolfFur = 0;
         renderType = type;
     }
 
@@ -52,8 +56,10 @@ public class RenderMessage implements IMessage<RenderMessage> {
             Minecraft mc = Minecraft.getInstance();
             WolfEntity wolf = (WolfEntity)mc.world.getEntityByID(message.wolfId);
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
-            if(message.renderType)
+            if(message.renderType){
                 handler.setWolfType(message.wolfValue);
+                handler.setWolffur(message.wolfFur);
+            }
             else
                 handler.clearRopeHolder();
         });

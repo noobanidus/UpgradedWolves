@@ -37,13 +37,13 @@ public class TrainingEventHandler {
         if(foodItem == null)
             return;
         //Checks if the player broke a block or harvested food
-        if(block instanceof CropsBlock){
-            ITraining handler = TrainingHandler.getHandler(foodItem);
-            handler.setAttribute(3);
-            if(Thread.currentThread().getName() == "Server thread"){                
-                PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)event.getPlayer()), new TrainingItemMessage(3, event.getPlayer().getEntityId()));
-            }
-        }
+        // if(block instanceof CropsBlock){
+        //     ITraining handler = TrainingHandler.getHandler(foodItem);
+        //     handler.setAttribute(3);
+        //     if(Thread.currentThread().getName() == "Server thread"){                
+        //         PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)event.getPlayer()), new TrainingItemMessage(3, event.getPlayer().getEntityId()));
+        //     }
+        // }
         else if(block instanceof OreBlock){
             LogManager.getLogger().info("Deep Bug");
             ITraining handler = TrainingHandler.getHandler(foodItem);
@@ -82,7 +82,7 @@ public class TrainingEventHandler {
             if(foodItem == null)
                 return;
             ITraining handler = TrainingHandler.getHandler(foodItem);
-            handler.setAttribute(4);
+            handler.setAttribute(3);
         }
     }
     

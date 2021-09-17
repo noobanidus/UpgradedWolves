@@ -49,4 +49,6 @@ public interface IWolfStats {
     public boolean getLootFlag();
     public BlockPos getRoamPoint();
     public void setRoamPoint(BlockPos location);
+    public int getWolfFur();
+    public void setWolffur(int color);
 }

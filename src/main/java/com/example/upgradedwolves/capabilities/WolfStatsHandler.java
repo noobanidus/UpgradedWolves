@@ -66,6 +66,7 @@ public class WolfStatsHandler {
         int speedLvl, strengthLvl, intelligenceLvl, loveLvl, wolfType;
         int speedXp, strengthXp, intelligenceXp;
         double attackBonus,speedBonus,detectBonus;
+        int wolfFur;
         //The wolves will have a maximum of 9 slots.       
         WolfItemStackHandler inventory;
         Entity ropeHolder;
@@ -228,8 +229,7 @@ public class WolfStatsHandler {
 
         @Override
         public void setWolfType(int type) {
-            wolfType = type;
-
+            wolfType = type;            
         }
 
         @Override
@@ -435,6 +435,15 @@ public class WolfStatsHandler {
         public void setRoamPoint(BlockPos location) {
             this.location = location;
         }
+        @Override
+        public int getWolfFur() {
+            
+            return wolfFur;
+        }
+        @Override
+        public void setWolffur(int color) {
+            wolfFur = color;            
+        }
 
 
     }
@@ -453,6 +462,7 @@ public class WolfStatsHandler {
             nbt.putInt("StrengthXp", instance.getXp(WolfStatsEnum.Strength));
             nbt.putInt("IntelligenceXp", instance.getXp(WolfStatsEnum.Intelligence));
             nbt.putInt("WolfType",instance.getWolfType());
+            nbt.putInt("WolfFur",instance.getWolfFur());
             nbt.put("Inventory",instance.getInventory().serializeNBT());
             nbt.put("RoamPosition",NBTUtil.writeBlockPos(instance.getRoamPoint()));
             return nbt;
@@ -469,6 +479,7 @@ public class WolfStatsHandler {
             instance.addXp(WolfStatsEnum.Strength, next.getInt("StrengthXp"));
             instance.addXp(WolfStatsEnum.Intelligence, next.getInt("IntelligenceXp"));
             instance.setWolfType(next.getInt("WolfType"));
+            instance.setWolffur(next.getInt("WolfFur"));
             instance.getInventory().deserializeNBT(next.getCompound("Inventory"));
             instance.setRoamPoint(NBTUtil.readBlockPos(next.getCompound("RoamPosition")));
             instance.InitLove();
