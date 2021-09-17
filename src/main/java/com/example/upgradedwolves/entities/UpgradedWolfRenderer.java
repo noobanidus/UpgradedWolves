@@ -55,9 +55,8 @@ public class UpgradedWolfRenderer extends WolfRenderer {
                     return UpgradedWolves.getId("textures/entity/fighterwolf.png");
                 case 2:
                     return UpgradedWolves.getId("textures/entity/scavengerwolf.png");
-                case 3:
-                    String wolfName = wolf.getCustomName().getString();
-                    if(wolf.getCustomName().getString().equals("Strobe"))
+                case 3:                    
+                    if(wolf.hasCustomName() && wolf.getCustomName().getString().equals("Strobe"))
                         return showWolfTextures.get(wolf.getRNG().nextInt(3));
                     return showWolfTextures.get(handler.getWolfFur());
                     
