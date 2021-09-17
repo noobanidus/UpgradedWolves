@@ -90,20 +90,20 @@ public class WolfPlayerInteraction {
                 handler.InitLove();       
                 final ItemStack foodItem = TrainingEventHandler.getFoodStack(event.getPlayer());
                 final ItemStack goldenBoneItem = TrainingEventHandler.getPlayerHoldingItemStack(event.getPlayer(), GoldenBoneAbstract.class);
-                final ItemStack tugOfWarRopeItem = TrainingEventHandler.getPlayerHoldingItemStack(event.getPlayer(), TugOfWarRopeItem.class);
-                if(Thread.currentThread().getName() == "Server thread")
-                    PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getEntityId(),WolfStatsHandler.getHandler(wolf).getWolfType(),wolf.getRNG().nextInt(3)));
+                final ItemStack tugOfWarRopeItem = TrainingEventHandler.getPlayerHoldingItemStack(event.getPlayer(), TugOfWarRopeItem.class);                
                 if(foodItem != null){
                     final ITraining tHandler = TrainingHandler.getHandler(foodItem);
                     final int item = tHandler.getAttribute();                
                     if(item == 0)
                         return;
-                    else /*if (handler.getWolfType() != 0)*/{                                  
+                    else{
                         handler.setWolfType(item);
                         handler.addGoals();
                         handler.handleWolfGoals();
                         foodItem.shrink(1);
-                        tHandler.resetAttribute();                                        
+                        tHandler.resetAttribute();
+                        if(Thread.currentThread().getName() == "Server thread")
+                            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getEntityId(),WolfStatsHandler.getHandler(wolf).getWolfType(),wolf.getRNG().nextInt(3)));
                     }
                 } else if (goldenBoneItem != null){
                     GoldenBoneAbstract goldenBone = (GoldenBoneAbstract)goldenBoneItem.getItem();
