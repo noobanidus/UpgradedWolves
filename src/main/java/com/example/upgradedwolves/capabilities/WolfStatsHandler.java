@@ -354,7 +354,10 @@ public class WolfStatsHandler {
             }
             if(getWolfType() == WolfType.Scavenger.getValue()){
                 return PowerUpList.ScavengerWolf;
-            }            
+            }
+            if(getWolfType() == WolfType.Show.getValue()){
+                return PowerUpList.ShowWolf;
+            }
             return PowerUpList.notSet;                    
         }
 

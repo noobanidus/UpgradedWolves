@@ -4,8 +4,7 @@ public enum WolfType {
     NotSet(0),
     Fighter(1),
     Scavenger(2),
-    Farmer(3),
-    Trading(4);
+    Show(3);
 
     private int value;
     private WolfType(int value){

@@ -59,6 +59,8 @@ public class PowerUpGui extends AbstractGui {
             return PowerUpList.StrengthWolf;
          case 2: // Scavenger type
             return PowerUpList.ScavengerWolf;
+         case 3:
+            return PowerUpList.ShowWolf;
          default:
             return null;
       }
