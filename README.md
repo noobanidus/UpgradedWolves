@@ -6,7 +6,9 @@ are able to hold items, and will play with toys.
 Wolf types will transform to other wolf types when the owner holds a food item while performing an action
 such as killing a mob or breaking an ore block.
 
-[Image of default wolf and foodItem]
+![Strength Tut](https://github.com/Injourn/UpgradedWolves/blob/master/readmeImages/StrengthWolfHowTo.gif?raw=true)
+![Scavenger Tut](https://github.com/Injourn/UpgradedWolves/blob/master/readmeImages/ScavengerWolfHowTo.gif?raw=true)
+![Show Tut](https://github.com/Injourn/UpgradedWolves/blob/master/readmeImages/showWolfHowTo.gif?raw=true)
 
 ![Feed the pup](https://github.com/Injourn/UpgradedWolves/blob/master/readmeImages/FeedingNormalWolf.png?raw=true)
 
