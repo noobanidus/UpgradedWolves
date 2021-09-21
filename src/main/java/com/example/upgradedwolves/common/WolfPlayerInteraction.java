@@ -233,9 +233,9 @@ public class WolfPlayerInteraction {
             WolfEntity wolf = (WolfEntity)event.getEntity();
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             
-            FollowOwnerVariableGoal followOwnerVariableGoal = new FollowOwnerVariableGoal(wolf, 1.0D, 30.0F, 2.0F, false);           
+            FollowOwnerVariableGoal followOwnerVariableGoal = new FollowOwnerVariableGoal(wolf, 1.0D, 10.0F, 2.0F, false);           
             wolf.goalSelector.addGoal(6, followOwnerVariableGoal);            
-            wolf.goalSelector.addGoal(8, new WolfBiasRoamGoal(wolf, 1.0, 30, 5));
+            wolf.goalSelector.addGoal(8, new WolfBiasRoamGoal(wolf, 1.0, 10, 5));
             wolf.goalSelector.addGoal(2, new TugOfWarGaol(wolf));
             
             handler.handleWolfGoals();          

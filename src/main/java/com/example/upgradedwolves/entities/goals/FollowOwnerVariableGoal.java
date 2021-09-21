@@ -1,5 +1,7 @@
 package com.example.upgradedwolves.entities.goals;
 
+import com.example.upgradedwolves.capabilities.IWolfStats;
+import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.common.WolfPlayerInteraction;
 
 import net.minecraft.block.BlockState;
@@ -36,11 +38,27 @@ public class FollowOwnerVariableGoal extends FollowOwnerGoal{
             return false;
         else if(this.tameable.getDistanceSq(tameable.getOwner()) < (double)(this.dist * this.dist))
             return false;
-        else if(WolfPlayerInteraction.getWolfGoal((WolfEntity)tameable,WolfFindAndPickUpItemGoal.class) != null)
-            return false;
+        else if(this.tameable instanceof WolfEntity){
+            WolfEntity wolf = (WolfEntity)tameable;
+            IWolfStats handler = WolfStatsHandler.getHandler(wolf);
+            if(WolfPlayerInteraction.getWolfGoal((WolfEntity)tameable,WolfFindAndPickUpItemGoal.class) != null || handler.getRoamPoint() != null)
+                return false;
+            else return true;
+        }        
         else
             return super.shouldExecute();
     }
+    
+    @Override
+    public boolean shouldContinueExecuting() {
+        if (this.navigator.noPath()) {
+           return false;
+        } else if (this.tameable.isSitting()) {
+           return false;
+        } else {
+           return !(this.tameable.getDistanceSq(tameable) <= (double)(this.dist * this.dist));
+        }
+     }
 
     private int getRandomNumber(int min, int max) {
         return this.tameable.getRNG().nextInt(max - min + 1) + min;
