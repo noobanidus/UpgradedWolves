@@ -3,6 +3,7 @@ package com.example.upgradedwolves.entities.goals;
 import java.util.List;
 import java.util.Random;
 
+import com.example.upgradedwolves.entities.utilities.AbilityEnhancer;
 import com.example.upgradedwolves.entities.utilities.EntityFinder;
 
 import net.minecraft.entity.MobEntity;
@@ -28,8 +29,9 @@ public class ArrowInterceptGoal extends CoolDownGoal {
 
     @Override
     public boolean shouldExecute() {
+        int bonus = AbilityEnhancer.increaseEveryLevel(wolf, 20, 3);
         if(active()){
-            List<AbstractArrowEntity> arrows = entityFinder.findWithPredicate(1, 1, arrow -> arrow.func_234616_v_() instanceof MobEntity && arrow.getMotion().length() > 0);
+            List<AbstractArrowEntity> arrows = entityFinder.findWithPredicate(1 + bonus, 1 + bonus, arrow -> arrow.func_234616_v_() instanceof MobEntity && arrow.getMotion().length() > 0);
             if(arrows.size() > 0){
                 this.arrow = arrows.get(0);
                 return true;

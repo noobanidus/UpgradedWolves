@@ -2,6 +2,8 @@ package com.example.upgradedwolves.entities.goals;
 
 import java.util.List;
 
+import com.example.upgradedwolves.entities.utilities.AbilityEnhancer;
+
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -39,6 +41,6 @@ public class FishForItemGoal extends CoolDownGoal {
         for (ItemStack itemStack : itemStackList) {
             wolf.entityDropItem(itemStack);
         }
-        startCoolDown();
+        startCoolDown(AbilityEnhancer.minMaxIncrease(wolf, 40, 10, 70));
     }
 }

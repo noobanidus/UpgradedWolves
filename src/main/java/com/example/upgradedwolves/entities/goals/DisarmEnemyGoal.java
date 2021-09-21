@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
+import com.example.upgradedwolves.entities.utilities.AbilityEnhancer;
 import com.example.upgradedwolves.entities.utilities.EntityFinder;
 
 import net.minecraft.entity.monster.MonsterEntity;
@@ -37,10 +38,11 @@ public class DisarmEnemyGoal extends CoolDownGoal{
     @Override
     public void startExecuting() {
         float next = wolf.getRNG().nextFloat() * 100;
-        if(next < 75){
+        int bonus = AbilityEnhancer.detectionSkill(wolf);
+        if(next < 40 + bonus){
             ItemStack item = target.getHeldItemMainhand();
             target.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);            
-            if(next < 25){
+            if(next < 10 + bonus){
                 IWolfStats handler = WolfStatsHandler.getHandler(wolf);
                 int itemSlot = handler.getInventory().getAvailableSlot(item);
                 if(itemSlot >= 0){

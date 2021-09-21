@@ -4,6 +4,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 
+import com.example.upgradedwolves.entities.utilities.AbilityEnhancer;
 import com.example.upgradedwolves.entities.utilities.EntityFinder;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
@@ -60,7 +61,7 @@ public class ImpressVillagerGoal extends CoolDownGoal {
                 target = villagers.get(0);
                 wolf.getNavigator().tryMoveToEntityLiving(target, 1);
                 jumpTime = wolf.getRNG().nextInt(140) + 60;
-                startCoolDown();
+                startCoolDown(AbilityEnhancer.increaseMin(wolf, 20) * 10);
                 return true;
             }
         }

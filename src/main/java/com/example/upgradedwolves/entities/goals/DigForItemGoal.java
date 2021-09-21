@@ -1,5 +1,6 @@
 package com.example.upgradedwolves.entities.goals;
 
+import com.example.upgradedwolves.entities.utilities.AbilityEnhancer;
 import com.example.upgradedwolves.loot_table.LootLoaders;
 
 import net.minecraft.block.BlockState;
@@ -51,7 +52,7 @@ public class DigForItemGoal extends CoolDownGoal {
         }
         currentTime = 0;
         wolf.entityDropItem(itemToDrop);
-        startCoolDown();
+        startCoolDown(AbilityEnhancer.increaseMin(wolf, 10) * 10);
         return false;
     }
     

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
+import com.example.upgradedwolves.entities.utilities.AbilityEnhancer;
 import com.example.upgradedwolves.entities.utilities.EntityFinder;
 
 import net.minecraft.entity.IAngerable;
@@ -59,7 +60,7 @@ public class WolfTossArrowGoal extends CoolDownGoal {
             ItemStack arrowStack = handler.getInventory().getStackInSlot(arrowStackSlot);
             if(arrowStack.getItem() instanceof ArrowItem)
                 attackEntityWithRangedAttack(target, 2 + handler.getWolfStrength(), arrowStack);
-            startCoolDown();
+            startCoolDown(AbilityEnhancer.minMaxIncrease(wolf, 200, 5, 150));
             return true;
         }
         windUpTicks = 30;

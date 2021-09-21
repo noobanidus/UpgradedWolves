@@ -1,7 +1,11 @@
 package com.example.upgradedwolves.entities.goals;
 
+import java.util.List;
+
 import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
+import com.example.upgradedwolves.entities.utilities.AbilityEnhancer;
+import com.example.upgradedwolves.entities.utilities.EntityFinder;
 
 import org.apache.logging.log4j.LogManager;
 
@@ -21,11 +25,13 @@ public class DetectEnemiesGoal extends Goal implements IUpdateableGoal {
     boolean coolDown = false;
     WolfEntity wolf;
     MonsterEntity detectedEntity;
+    EntityFinder<MonsterEntity> entityFinder;
 
     public DetectEnemiesGoal(WolfEntity wolf){
         this.wolf = wolf;
         IWolfStats handler = WolfStatsHandler.getHandler(wolf);
         this.range = 5 + handler.getDetectionBonus();
+        entityFinder = new EntityFinder<MonsterEntity>(wolf,MonsterEntity.class);
     }
 
     @Override
@@ -41,16 +47,16 @@ public class DetectEnemiesGoal extends Goal implements IUpdateableGoal {
             }
         if(currentTicks++ < attemptTicks)
             return false;
-        for(MonsterEntity monsterEntity : wolf.world.getEntitiesWithinAABB(MonsterEntity.class, wolf.getBoundingBox().grow(range, 0.0D, range))) {
-            if (wolf.getEntitySenses().canSee(monsterEntity)) {                
-                monsterEntity.addPotionEffect(new EffectInstance(Effect.get(24),600));
-                this.wolf.getLookController().setLookPosition(monsterEntity.getPositionVec());
-                detectedEntity = monsterEntity;
-                currentTicks = 0;
-                coolDown = true;
-                LogManager.getLogger().debug("I have found an enemy. Going on coolDown");
-                return true;
-            }
+        List<MonsterEntity> foundEntities = entityFinder.findWithPredicate(range, 0, x -> wolf.getEntitySenses().canSee(x));
+        foundEntities.addAll(entityFinder.findWithinRange(range/5, 0));
+        for(MonsterEntity monsterEntity : foundEntities) {
+            monsterEntity.addPotionEffect(new EffectInstance(Effect.get(24),120 + (10 * AbilityEnhancer.detectionSkill(wolf))));
+            this.wolf.getLookController().setLookPosition(monsterEntity.getPositionVec());
+            detectedEntity = monsterEntity;
+            currentTicks = 0;
+            coolDown = true;
+            LogManager.getLogger().debug("I have found an enemy. Going on coolDown");
+            return true;            
         }            
         return false;
     }

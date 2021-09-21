@@ -12,7 +12,11 @@ public abstract class CoolDownGoal extends Goal {
     }
 
     protected void startCoolDown(){
-        timeLeft = defaultCooldown;        
+        startCoolDown(0);
+    }
+
+    protected void startCoolDown(int reduction){
+        timeLeft = defaultCooldown - reduction;        
     }
 
     protected boolean active(){

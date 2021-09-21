@@ -3,6 +3,7 @@ package com.example.upgradedwolves.entities.goals;
 import java.util.List;
 import java.util.Random;
 
+import com.example.upgradedwolves.entities.utilities.AbilityEnhancer;
 import com.example.upgradedwolves.entities.utilities.EntityFinder;
 
 import net.minecraft.client.Minecraft;
@@ -17,17 +18,19 @@ public class BarkStunGoal extends CoolDownGoal {
     protected final WolfEntity wof;
     private List<MonsterEntity> enemies;
     private final Random rand;
-    private int stunDuration = 50;
+    private int stunDuration = 30;
 
     public BarkStunGoal(WolfEntity wolf){
         this.wof = wolf;
         this.entityFinder = new EntityFinder<>(wof, MonsterEntity.class);
+        stunDuration = 30 + AbilityEnhancer.minMaxIncrease(wof, 90, 10, 50);
         setCoolDownInSeconds(20);
         rand = new Random();
     }
 
     @Override
     public boolean shouldExecute() {
+        
         if(active()){
             List<MonsterEntity> entityList = entityFinder.findWithPredicate(5, 2, enemy -> !(enemy instanceof IAngerable) || ((IAngerable)enemy).getAttackTarget() != null);
             if(entityList.size() > 0){
@@ -52,11 +55,12 @@ public class BarkStunGoal extends CoolDownGoal {
     
     @Override
     public boolean shouldContinueExecuting() {
+        int bonus = AbilityEnhancer.minMaxIncrease(wof, 90, 10, 50);
         if(stunDuration-- <= 0){
             for (MonsterEntity mobEntity : enemies) {
                 mobEntity.setNoAI(false);
             }
-            stunDuration = 50;
+            stunDuration = 50 + bonus;
             return false;
         }
         return true;

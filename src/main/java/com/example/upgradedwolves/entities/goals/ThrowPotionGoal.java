@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
+import com.example.upgradedwolves.entities.utilities.AbilityEnhancer;
 import com.example.upgradedwolves.entities.utilities.EntityFinder;
 import com.example.upgradedwolves.itemHandler.WolfItemStackHandler;
 
@@ -39,7 +40,8 @@ public class ThrowPotionGoal extends Goal {
     @Override
     public boolean shouldExecute() {
         WolfItemStackHandler wolfItems = handler.getInventory();
-        List<LivingEntity> allyList = allyFinder.findWithPredicate(7, 3, ally ->
+        int bonus = AbilityEnhancer.increaseEveryLevel(wolf, 10, 3);
+        List<LivingEntity> allyList = allyFinder.findWithPredicate(7+ bonus, 3 + bonus, ally ->
         (ally == wolf.getOwner() || (ally instanceof TameableEntity && ((TameableEntity)ally).getOwner() == wolf.getOwner()) &&
         (ally.isBurning() || ally.getHealth() < 8)));
         for (LivingEntity livingEntity : allyList) {
