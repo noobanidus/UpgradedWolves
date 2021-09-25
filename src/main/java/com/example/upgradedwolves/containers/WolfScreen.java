@@ -2,16 +2,16 @@ package com.example.upgradedwolves.containers;
 
 import com.example.upgradedwolves.UpgradedWolves;
 import com.example.upgradedwolves.powerup.gui.PowerUpGui;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
-import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
@@ -21,13 +21,13 @@ public class WolfScreen extends ContainerScreen<WolfContainer> {
     private static final ResourceLocation INVENTORY = UpgradedWolves.getId("gui/wolf_chest_gui.png");
     private static final ResourceLocation TABS = UpgradedWolves.getId("gui/wolf_tabs_gui.png");
     private static final ResourceLocation POWERUP = UpgradedWolves.getId("gui/wolf_powerup_gui.png");
-    WolfEntity wolf;
+    Wolf wolf;
     PowerUpGui powerUpGui;
     String strength,speed,intelligence;
     float strNum,spdNum,intNum;
     int slots;
     boolean inventoryTab = true;
-    CompoundNBT nbt;
+    CompoundTag nbt;
 
     public WolfScreen(WolfContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
@@ -49,14 +49,14 @@ public class WolfScreen extends ContainerScreen<WolfContainer> {
         this.ySize = 175;
     }    
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
+    protected void drawGuiContainerForegroundLayer(PoseStack matrixStack, int x, int y) {
         final float BAG_LABEL_YPOS = 5;
         //TranslationTextComponent bagLabel = new TranslationTextComponent(StartupCommon.itemFlowerBag.getTranslationKey());
         ITextComponent bagLabel = new StringTextComponent("Wolf Inventory");
@@ -97,7 +97,7 @@ public class WolfScreen extends ContainerScreen<WolfContainer> {
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+    protected void drawGuiContainerBackgroundLayer(PoseStack matrixStack, float partialTicks, int x, int y) {
         RenderSystem.color4f(1f, 1f, 1f, 1f);
         int edgeSpacingX = (this.width - this.xSize) / 2;
         int edgeSpacingY = (this.height - this.ySize) / 2;
@@ -125,14 +125,14 @@ public class WolfScreen extends ContainerScreen<WolfContainer> {
     }
 
     @Override
-    protected void renderHoveredTooltip(MatrixStack matrixStack, int x, int y) {        
+    protected void renderHoveredTooltip(PoseStack matrixStack, int x, int y) {        
         super.renderHoveredTooltip(matrixStack, x, y);
         if(!inventoryTab){
             powerUpGui.drawTooltips(matrixStack, x, y, width, height,guiLeft + 17,guiTop + 68);
         }
     }
 
-    void drawInventoryForeground(MatrixStack matrixStack, int x, int y){
+    void drawInventoryForeground(PoseStack matrixStack, int x, int y){
         final float PLAYER_LABEL_XPOS = 8;
         final float PLAYER_LABEL_DISTANCE_FROM_BOTTOM = (96 - 2);
 
@@ -145,11 +145,11 @@ public class WolfScreen extends ContainerScreen<WolfContainer> {
         this.font.func_243248_b(matrixStack, new StringTextComponent(intelligence), 76, 49, Color.darkGray.getRGB());
     }
 
-    void drawPowerUpForeground(MatrixStack matrixStack, int x, int y){
+    void drawPowerUpForeground(PoseStack matrixStack, int x, int y){
 
     }
     
-    void drawInventoryBackground(MatrixStack matrixStack, float partialTicks, int x, int y,int edgeSpacingX, int edgeSpacingY){
+    void drawInventoryBackground(PoseStack matrixStack, float partialTicks, int x, int y,int edgeSpacingX, int edgeSpacingY){
         
         //Draw hearts
         int totalHearts = (int)wolf.getHealth();
@@ -168,24 +168,24 @@ public class WolfScreen extends ContainerScreen<WolfContainer> {
         extraSlots(matrixStack, slots - 1);
     }
 
-    void drawPowerUpBackground(MatrixStack matrixStack, float partialTicks, int x, int y){
+    void drawPowerUpBackground(PoseStack matrixStack, float partialTicks, int x, int y){
         RenderSystem.pushMatrix();
         RenderSystem.translatef((float)(guiLeft + 17), (float)(guiTop + 68), 0.0F);
         powerUpGui.drawTabBackground(matrixStack);
         RenderSystem.popMatrix();
     }
 
-    void buildXpBar(MatrixStack matrixStack, int x,int y,int u,int v, int amount){
+    void buildXpBar(PoseStack matrixStack, int x,int y,int u,int v, int amount){
         this.blit(matrixStack, x, y, u, v, amount, 5);
     }
     
-    void extraSlots(MatrixStack matrixStack,int amount){
+    void extraSlots(PoseStack matrixStack,int amount){
         for(int i = 0; i < amount; i++){
             this.blit(matrixStack, guiLeft + 24 + (i * 18), guiTop + 62, 0, 177, 18, 18);
         }
     }
 
-    void drawTabs(MatrixStack matrixStack){
+    void drawTabs(PoseStack matrixStack){
         this.minecraft.getTextureManager().bindTexture(TABS);
         if(inventoryTab){
             this.blit(matrixStack, guiLeft + 171, guiTop + 7, 0, 27, 36, 26);

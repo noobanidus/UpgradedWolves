@@ -8,31 +8,31 @@ import com.example.upgradedwolves.itemHandler.WolfItemStackHandler;
 import com.example.upgradedwolves.network.PacketHandler;
 import com.example.upgradedwolves.network.message.SyncWolfHandMessage;
 
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionHand;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
 
 @ClientGoal
 public class UseSwordGoal extends Goal implements Serializable {
-    protected final WolfEntity wolf;
+    protected final Wolf wolf;
     protected ItemStack sword;
 
     
-    public UseSwordGoal(WolfEntity wolf){
+    public UseSwordGoal(Wolf wolf){
         this.wolf = wolf;
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
         if(wolf.getAttackTarget() != null){
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             WolfItemStackHandler wolfInventory = handler.getInventory();
             int swordSlot = wolfInventory.getSword();
             if(swordSlot >= 0){
                 sword = wolfInventory.extractItem(wolfInventory.getSword(), 1, false);
-                wolf.setHeldItem(Hand.MAIN_HAND, sword);
+                wolf.setItemInHand(InteractionHand.MAIN_HAND, sword);
                 PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new SyncWolfHandMessage(wolf.getEntityId(),sword));
                 return true;
             }

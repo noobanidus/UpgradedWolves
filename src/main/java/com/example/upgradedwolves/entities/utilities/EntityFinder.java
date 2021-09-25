@@ -3,7 +3,7 @@ package com.example.upgradedwolves.entities.utilities;
 import java.util.List;
 import java.util.function.Predicate;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 
 public class EntityFinder<T extends Entity> {

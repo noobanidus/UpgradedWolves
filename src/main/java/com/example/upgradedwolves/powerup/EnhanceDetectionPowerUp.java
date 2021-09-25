@@ -2,7 +2,7 @@ package com.example.upgradedwolves.powerup;
 
 import com.example.upgradedwolves.capabilities.IWolfStats;
 
-import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.world.entity.animal.Wolf;
 
 public class EnhanceDetectionPowerUp extends BonusStatPowerUp {
 
@@ -12,7 +12,7 @@ public class EnhanceDetectionPowerUp extends BonusStatPowerUp {
     }
 
     @Override
-    protected void enhanceAttribute(WolfEntity wolf, IWolfStats handler) {
+    protected void enhanceAttribute(Wolf wolf, IWolfStats handler) {
         handler.addDetectionBonus(bonus);
     }   
     

@@ -4,16 +4,16 @@ import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.common.WolfPlayerInteraction;
 
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.BlockState;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.FollowOwnerGoal;
 import net.minecraft.pathfinding.WalkNodeProcessor;
 import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.World;
 
 public class FollowOwnerVariableGoal extends FollowOwnerGoal{
@@ -26,27 +26,27 @@ public class FollowOwnerVariableGoal extends FollowOwnerGoal{
         super(tameable, speed, minDist, maxDist, teleportToLeaves);
         this.tameable = tameable;
         this.dist = minDist;
-        this.navigator = tameable.getNavigator();
+        this.navigator = tameable.getNavigation();
     }
 
     public void setMinDistance(float dist){
         this.dist = dist;
     }
 
-    public boolean shouldExecute() {
+    public boolean canUse() {
         if(tameable.getOwner() == null)
             return false;
         else if(this.tameable.getDistanceSq(tameable.getOwner()) < (double)(this.dist * this.dist))
             return false;
-        else if(this.tameable instanceof WolfEntity){
-            WolfEntity wolf = (WolfEntity)tameable;
+        else if(this.tameable instanceof Wolf){
+            Wolf wolf = (Wolf)tameable;
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
-            if(WolfPlayerInteraction.getWolfGoal((WolfEntity)tameable,WolfFindAndPickUpItemGoal.class) != null || handler.getRoamPoint() != null)
+            if(WolfPlayerInteraction.getWolfGoal((Wolf)tameable,WolfFindAndPickUpItemGoal.class) != null || handler.getRoamPoint() != null)
                 return false;
             else return true;
         }        
         else
-            return super.shouldExecute();
+            return super.canUse();
     }
     
     @Override
@@ -65,7 +65,7 @@ public class FollowOwnerVariableGoal extends FollowOwnerGoal{
     }
 
     void teleportToEntity(){
-        BlockPos blockpos = this.tameable.getOwner().getPosition();
+        BlockPos blockpos = this.tameable.getOwner().getPosition(1);
 
         for(int i = 0; i < 10; ++i) {
             int j = this.getRandomNumber(-3, 3);
@@ -80,7 +80,7 @@ public class FollowOwnerVariableGoal extends FollowOwnerGoal{
 
     private boolean tryToTeleportToLocation(int x, int y, int z) {
         LivingEntity owner = tameable.getOwner();
-        if (Math.abs((double)x - owner.getPosX()) < 2.0D && Math.abs((double)z - owner.getPosZ()) < 2.0D) {
+        if (Math.abs((double)x - owner.getX()) < 2.0D && Math.abs((double)z - owner.getZ()) < 2.0D) {
            return false;
         } else if (!this.isTeleportFriendlyBlock(new BlockPos(x, y, z))) {
            return false;
@@ -100,7 +100,7 @@ public class FollowOwnerVariableGoal extends FollowOwnerGoal{
            if (blockstate.getBlock() instanceof LeavesBlock) {
               return false;
            } else {
-              BlockPos blockpos = pos.subtract(this.tameable.getPosition());
+              BlockPos blockpos = pos.subtract(this.tameable.getPosition(1));
               return world.hasNoCollisions(this.tameable, this.tameable.getBoundingBox().offset(blockpos));
            }
         }

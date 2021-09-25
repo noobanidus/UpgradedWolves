@@ -8,8 +8,8 @@ import com.example.upgradedwolves.network.message.SpawnLevelUpParticle;
 import com.example.upgradedwolves.network.message.SyncWolfHandMessage;
 import com.example.upgradedwolves.network.message.TrainingItemMessage;
 
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraftforge.fmllegacy.network.NetworkRegistry;
+import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
 
 public class PacketHandler
 {

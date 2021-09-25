@@ -9,9 +9,9 @@ import com.example.upgradedwolves.entities.utilities.EntityFinder;
 
 import org.apache.logging.log4j.LogManager;
 
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 
@@ -23,11 +23,11 @@ public class DetectEnemiesGoal extends Goal implements IUpdateableGoal {
     int lookAt = 100;
     double range;
     boolean coolDown = false;
-    WolfEntity wolf;
+    Wolf wolf;
     MonsterEntity detectedEntity;
     EntityFinder<MonsterEntity> entityFinder;
 
-    public DetectEnemiesGoal(WolfEntity wolf){
+    public DetectEnemiesGoal(Wolf wolf){
         this.wolf = wolf;
         IWolfStats handler = WolfStatsHandler.getHandler(wolf);
         this.range = 5 + handler.getDetectionBonus();
@@ -35,7 +35,7 @@ public class DetectEnemiesGoal extends Goal implements IUpdateableGoal {
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
         if(coolDown)
             if(currentTicks++ < coolDownTicks)
                 return false;
@@ -76,7 +76,7 @@ public class DetectEnemiesGoal extends Goal implements IUpdateableGoal {
     }
 
     @Override
-    public void Update(IWolfStats handler, WolfEntity wolf) {
+    public void Update(IWolfStats handler, Wolf wolf) {
         range = 5 + handler.getDetectionBonus();
     }
 }

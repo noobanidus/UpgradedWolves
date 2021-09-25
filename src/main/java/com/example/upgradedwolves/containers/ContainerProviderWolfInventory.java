@@ -2,17 +2,17 @@ package com.example.upgradedwolves.containers;
 
 import com.example.upgradedwolves.itemHandler.WolfItemStackHandler;
 
-import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
 public class ContainerProviderWolfInventory implements INamedContainerProvider {
-    private WolfEntity wolf;
+    private Wolf wolf;
     private WolfItemStackHandler wolfHandler ;
-    public ContainerProviderWolfInventory(WolfEntity wolf,WolfItemStackHandler wolfHandler){
+    public ContainerProviderWolfInventory(Wolf wolf,WolfItemStackHandler wolfHandler){
         this.wolf = wolf;
         this.wolfHandler = wolfHandler;
     }
@@ -23,7 +23,7 @@ public class ContainerProviderWolfInventory implements INamedContainerProvider {
     }
 
     @Override
-    public WolfContainer createMenu(int windowId, PlayerInventory inventory, PlayerEntity player){
+    public WolfContainer createMenu(int windowId, PlayerInventory inventory, Player player){
         
         WolfContainer wolfContainerServerSide = 
             WolfContainer.createContainerServerSide(windowId, inventory, wolfHandler, wolf);

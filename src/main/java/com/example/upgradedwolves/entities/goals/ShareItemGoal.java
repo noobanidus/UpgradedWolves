@@ -7,32 +7,32 @@ import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.entities.utilities.EntityFinder;
 import com.example.upgradedwolves.itemHandler.WolfItemStackHandler;
 
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.item.ItemStack;
 
 public class ShareItemGoal extends Goal {
-    protected final WolfEntity wolf;
+    protected final Wolf wolf;
     protected final IWolfStats handler;
-    protected WolfEntity target;
-    protected EntityFinder<WolfEntity> allyFinder;
+    protected Wolf target;
+    protected EntityFinder<Wolf> allyFinder;
     protected int slot;
 
-    public ShareItemGoal(WolfEntity wolf){
+    public ShareItemGoal(Wolf wolf){
         this.wolf = wolf;
         this.handler = WolfStatsHandler.getHandler(wolf);
-        allyFinder = new EntityFinder<WolfEntity>(this.wolf,WolfEntity.class);
+        allyFinder = new EntityFinder<Wolf>(this.wolf,Wolf.class);
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
         WolfItemStackHandler wolfItems = handler.getInventory();
-        List<WolfEntity> allyList = allyFinder.findWithPredicate(7, 3, ally -> (ally.getOwner() == wolf.getOwner()) &&
+        List<Wolf> allyList = allyFinder.findWithPredicate(7, 3, ally -> (ally.getOwner() == wolf.getOwner()) &&
         (ally.getHealth() <= 10));
-        for (WolfEntity livingEntity : allyList) {
+        for (Wolf livingEntity : allyList) {
             int slot = -1;
             if(livingEntity.getHealth() <= 10){
-                slot = wolfItems.getArbitraryItem(item -> item.isFood() && item.getFood().isMeat());
+                slot = wolfItems.getArbitraryItem(item -> item.isEdible() && item.getFood().isMeat());
             }
             if(slot >= 0){
                 this.slot = slot;
@@ -46,7 +46,7 @@ public class ShareItemGoal extends Goal {
     @Override
     public void startExecuting() {
         ItemStack stack = handler.getInventory().extractItem(slot, 1, false);
-        target.entityDropItem(stack);
+        target.spawnAtLocation(stack);
         target = null;
     }
 }

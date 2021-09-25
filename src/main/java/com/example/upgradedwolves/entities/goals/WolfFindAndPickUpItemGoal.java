@@ -7,19 +7,19 @@ import com.example.upgradedwolves.entities.WolfChaseableEntity;
 import com.example.upgradedwolves.entities.plushy.MobPlushyEntity;
 import com.example.upgradedwolves.itemHandler.WolfItemStackHandler;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.Mth;
+import com.mojang.math.Vector3d;
 
 public class WolfFindAndPickUpItemGoal extends Goal implements IUpdateableGoal{    
-    WolfEntity wolf;
+    Wolf wolf;
     WolfItemStackHandler wolfInventory;
     Entity item;
     int unseenMemoryTicks;
@@ -29,7 +29,7 @@ public class WolfFindAndPickUpItemGoal extends Goal implements IUpdateableGoal{
     Vector3d endPoint;
 
 
-    public WolfFindAndPickUpItemGoal(WolfEntity owner){
+    public WolfFindAndPickUpItemGoal(Wolf owner){
         this.wolf = owner;
         IWolfStats handler = WolfStatsHandler.getHandler(wolf);
         this.wolfInventory = handler.getInventory();
@@ -38,7 +38,7 @@ public class WolfFindAndPickUpItemGoal extends Goal implements IUpdateableGoal{
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
         item = null;
         if(item != null || wolf.isSitting() || wolf.getHeldItemMainhand() != ItemStack.EMPTY)
             return false;
@@ -117,7 +117,7 @@ public class WolfFindAndPickUpItemGoal extends Goal implements IUpdateableGoal{
         return wolf.getAttributeValue(Attributes.FOLLOW_RANGE);
     }
     private boolean canEasilyReach(Entity target) {        
-        Path path = wolf.getNavigator().getPathToEntity(target, 0);
+        Path path = wolf.getNavigation().getPathToEntity(target, 0);
         if (path == null) {
            return false;
         } else {
@@ -125,8 +125,8 @@ public class WolfFindAndPickUpItemGoal extends Goal implements IUpdateableGoal{
            if (pathpoint == null) {
               return false;
            } else {
-              int i = pathpoint.x - MathHelper.floor(target.getPosX());
-              int j = pathpoint.z - MathHelper.floor(target.getPosZ());
+              int i = pathpoint.x - Mth.floor(target.getX());
+              int j = pathpoint.z - Mth.floor(target.getZ());
               return (double)(i * i + j * j) <= 2.25D;
            }
         }
@@ -134,11 +134,11 @@ public class WolfFindAndPickUpItemGoal extends Goal implements IUpdateableGoal{
 
     @Override
     public void tick(){
-        wolf.getMoveHelper().setMoveTo(item.getPosX(), item.getPosY(), item.getPosZ(), 1.0);
+        wolf.getMoveHelper().setMoveTo(item.getX(), item.getY(), item.getZ(), 1.0);
     }
 
     @Override
-    public void Update(IWolfStats handler, WolfEntity wolf) {        
+    public void Update(IWolfStats handler, Wolf wolf) {        
         distance = 12.0D + handler.getDetectionBonus();
     }
     public void setEndPoint(Vector3d end){

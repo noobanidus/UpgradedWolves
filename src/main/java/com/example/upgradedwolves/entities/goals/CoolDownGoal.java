@@ -1,6 +1,6 @@
 package com.example.upgradedwolves.entities.goals;
 
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.Goal;
 
 public abstract class CoolDownGoal extends Goal {
     protected int timeLeft;

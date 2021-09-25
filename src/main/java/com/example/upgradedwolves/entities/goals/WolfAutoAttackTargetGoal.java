@@ -9,29 +9,29 @@ import org.apache.logging.log4j.LogManager;
 
 import net.minecraft.entity.IAngerable;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.monster.SpiderEntity;
 import net.minecraft.entity.monster.ZombieEntity;
-import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.util.Mth;
 
 public class WolfAutoAttackTargetGoal extends NearestAttackableTargetGoal<MonsterEntity> implements IUpdateableGoal {
 
 
     
 
-    public WolfAutoAttackTargetGoal(MobEntity p_i50313_1_, Class<MonsterEntity> class1, boolean p_i50313_3_) {
+    public WolfAutoAttackTargetGoal(Mob p_i50313_1_, Class<MonsterEntity> class1, boolean p_i50313_3_) {
         super(p_i50313_1_, class1, p_i50313_3_);        
         targetEntitySelector.setCustomPredicate(entity -> (EntityAllowed(entity)));
-        IWolfStats handler = WolfStatsHandler.getHandler((WolfEntity)goalOwner);
-        targetEntitySelector.setDistance(MathHelper.clamp(10 + handler.getDetectionBonus()/2, 0, 30) );
+        IWolfStats handler = WolfStatsHandler.getHandler((Wolf)goalOwner);
+        targetEntitySelector.setDistance(Mth.clamp(10 + handler.getDetectionBonus()/2, 0, 30) );
     }
 
     private boolean EntityAllowed(LivingEntity entity){
-        IWolfStats handler = WolfStatsHandler.getHandler((WolfEntity)goalOwner);
+        IWolfStats handler = WolfStatsHandler.getHandler((Wolf)goalOwner);
         if(handler.getWolfType() != WolfType.Fighter.getValue())
             return false;
         int intelligence = handler.getLevel(WolfStatsEnum.Intelligence);
@@ -46,16 +46,16 @@ public class WolfAutoAttackTargetGoal extends NearestAttackableTargetGoal<Monste
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
         findNearestTarget();
         if(target != null)
             LogManager.getLogger().info(target);
-        return super.shouldExecute();
+        return super.canUse();
     }
 
     @Override
-    public void Update(IWolfStats handler, WolfEntity wolf) {        
-        targetEntitySelector.setDistance(MathHelper.clamp(10 + handler.getDetectionBonus()/2, 0, 30) );
+    public void Update(IWolfStats handler, Wolf wolf) {        
+        targetEntitySelector.setDistance(Mth.clamp(10 + handler.getDetectionBonus()/2, 0, 30) );
     }
     
 }

@@ -9,18 +9,18 @@ import com.example.upgradedwolves.entities.utilities.EntityFinder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.IAngerable;
 import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.SoundEvents;
 
 public class BarkStunGoal extends CoolDownGoal {
     protected final EntityFinder<MonsterEntity> entityFinder;
-    protected final WolfEntity wof;
+    protected final Wolf wof;
     private List<MonsterEntity> enemies;
     private final Random rand;
     private int stunDuration = 30;
 
-    public BarkStunGoal(WolfEntity wolf){
+    public BarkStunGoal(Wolf wolf){
         this.wof = wolf;
         this.entityFinder = new EntityFinder<>(wof, MonsterEntity.class);
         stunDuration = 30 + AbilityEnhancer.minMaxIncrease(wof, 90, 10, 50);
@@ -29,7 +29,7 @@ public class BarkStunGoal extends CoolDownGoal {
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
         
         if(active()){
             List<MonsterEntity> entityList = entityFinder.findWithPredicate(5, 2, enemy -> !(enemy instanceof IAngerable) || ((IAngerable)enemy).getAttackTarget() != null);
@@ -48,7 +48,7 @@ public class BarkStunGoal extends CoolDownGoal {
             Random r = new Random();
             mobEntity.setNoAI(true);
             for(int i = 0; i < 10; i++)
-                Minecraft.getInstance().world.addParticle(ParticleTypes.FLAME, false, mobEntity.getPosition().getX() + r.nextDouble(), mobEntity.getPosition().getY() + r.nextDouble(), mobEntity.getPosition().getZ() + r.nextDouble(), r.nextDouble()/5, r.nextDouble()/5, r.nextDouble()/5);
+                Minecraft.getInstance().world.addParticle(ParticleTypes.FLAME, false, mobEntity.getPosition(1).getX() + r.nextDouble(), mobEntity.getPosition(1).getY() + r.nextDouble(), mobEntity.getPosition(1).getZ() + r.nextDouble(), r.nextDouble()/5, r.nextDouble()/5, r.nextDouble()/5);
         }
         startCoolDown();
     }

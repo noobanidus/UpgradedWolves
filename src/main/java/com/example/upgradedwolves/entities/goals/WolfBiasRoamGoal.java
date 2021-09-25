@@ -3,7 +3,7 @@ package com.example.upgradedwolves.entities.goals;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.goal.RandomWalkingGoal;
-import net.minecraft.util.math.vector.Vector3d;
+import com.mojang.math.Vector3d;
 
 public class WolfBiasRoamGoal extends RandomWalkingGoal {
     Vector3d bias;
@@ -17,10 +17,10 @@ public class WolfBiasRoamGoal extends RandomWalkingGoal {
         this.minDistance = minDistance;
     }
 
-    protected Vector3d getPosition(){
+    protected Vector3d getPosition(1){
         if (this.creature.isInWaterOrBubbleColumn()) {
             Vector3d vector3d = RandomPositionGenerator.getLandPos(this.creature, 15, 7);
-            return vector3d == null ? super.getPosition() : vector3d;
+            return vector3d == null ? super.getPosition(1) : vector3d;
         }
         return biasedPosition();
     }

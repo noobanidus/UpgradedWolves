@@ -9,28 +9,28 @@ import com.example.upgradedwolves.entities.plushy.ZombiePlushyModel;
 import com.example.upgradedwolves.utils.MobPlushyType;
 
 import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.World;
 
 public class MobPlushy extends Item {
     public MobPlushyType plushType;
 
     public MobPlushy(String registryName, MobPlushyType type) {
-        super(new Item.Properties().maxStackSize(1).group(ItemGroup.MISC).setISTER(TilePlushyEntity::new));
+        super(new Item.Properties().stacksTo(1).group(ItemGroup.MISC).setISTER(TilePlushyEntity::new));
         this.setRegistryName(UpgradedWolves.getId(registryName));
         plushType = type;
     }
     
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {        
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, Player playerIn, InteractionHand handIn) {        
         ItemStack itemstack = playerIn.getHeldItem(handIn);
         playerIn.setActiveHand(handIn);              
         if (!worldIn.isRemote) {

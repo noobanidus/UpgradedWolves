@@ -4,11 +4,11 @@ import java.util.List;
 
 import com.example.upgradedwolves.itemHandler.WolfItemStackHandler;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
 
 public interface IWolfStats {
     public void addXp(WolfStatsEnum wolfStats,int amount);
@@ -30,8 +30,8 @@ public interface IWolfStats {
     public void addDetectionBonus(double bonus);
     public WolfItemStackHandler getInventory();
     public boolean addItemStack(ItemStack item);
-    public WolfEntity getActiveWolf();
-    public void setActiveWolf(WolfEntity entity);
+    public Wolf getActiveWolf();
+    public void setActiveWolf(Wolf entity);
     public void handleWolfGoals();
     public void addGoals();
     public void forceLevelUp(int amount);

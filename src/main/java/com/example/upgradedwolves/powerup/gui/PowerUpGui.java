@@ -6,17 +6,17 @@ import com.example.upgradedwolves.UpgradedWolves;
 import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.powerup.PowerUp;
 import com.example.upgradedwolves.powerup.PowerUpList;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.Color;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
@@ -35,20 +35,20 @@ public class PowerUpGui extends AbstractGui {
    private boolean centered;
    private float fade;
    private FontRenderer font;
-   private CompoundNBT nbt;
+   private CompoundTag nbt;
    private static ResourceLocation background = new ResourceLocation("minecraft:textures/gui/advancements/backgrounds/stone.png");
    private static final ResourceLocation POWERUP = UpgradedWolves.getId("gui/wolf_powerup_gui.png");
    public PowerUp[] powerUps;
-   public WolfEntity wolf;
+   public Wolf wolf;
 
 
     
-   public PowerUpGui(Minecraft minecraft,WolfEntity wolf,CompoundNBT nbt) {
+   public PowerUpGui(Minecraft minecraft,Wolf wolf,CompoundTag nbt) {
       this.minecraft = minecraft;      
       this.wolf = wolf;
       this.nbt = nbt;
       powerUps = setPowerups();
-      font = minecraft.fontRenderer;      
+      font = minecraft.fontRenderer;
    }
 
    private PowerUp[] setPowerups(){
@@ -66,7 +66,7 @@ public class PowerUpGui extends AbstractGui {
       }
    }
 
-   public void drawTabBackground(MatrixStack matrixStack) {
+   public void drawTabBackground(PoseStack matrixStack) {
       if (!this.centered) {
          this.scrollX = (double)0;
          this.scrollY = (double)0;
@@ -84,8 +84,8 @@ public class PowerUpGui extends AbstractGui {
       fill(matrixStack, 141, 93, 0, 0, -16777216);
       RenderSystem.depthFunc(515);
 
-      int i = MathHelper.floor(this.scrollX);
-      int j = MathHelper.floor(this.scrollY);
+      int i = Mth.floor(this.scrollX);
+      int j = Mth.floor(this.scrollY);
       int k = i % 16;
       int l = j % 16;   
 
@@ -111,13 +111,13 @@ public class PowerUpGui extends AbstractGui {
       RenderSystem.popMatrix();
    }
   
-   public void drawTabTooltips(MatrixStack matrixStack, int mouseX, int mouseY, int width, int height,PowerUp powerUp) {
+   public void drawTabTooltips(PoseStack matrixStack, int mouseX, int mouseY, int width, int height,PowerUp powerUp) {
       RenderSystem.pushMatrix();
       RenderSystem.translatef(0.0F, 0.0F, 200.0F);
-      fill(matrixStack, 0, 0, 234, 113, MathHelper.floor(this.fade * 255.0F) << 24);
+      fill(matrixStack, 0, 0, 234, 113, Mth.floor(this.fade * 255.0F) << 24);
       boolean flag = false;
       ArrayList<ITextComponent> textBoxInfo = new ArrayList<ITextComponent>();
-      Style redStyle = Style.EMPTY.setColor(Color.fromTextFormatting(TextFormatting.RED)).setItalic(true);
+      Style redStyle = Style.EMPTY.setColor(TextColor.fromTextFormatting(TextFormatting.RED)).setItalic(true);
       if(levelDistance(powerUp) <= 0){
          textBoxInfo.add(powerUp.getName());
          textBoxInfo.add(powerUp.getDescription(wolf));
@@ -126,7 +126,7 @@ public class PowerUpGui extends AbstractGui {
          textBoxInfo.add(new StringTextComponent("???").setStyle(Style.EMPTY.setItalic(true)));
          textBoxInfo.add(new TranslationTextComponent("powerup.required.level",powerUp.levelType().toString(),powerUp.requiredLevel()).setStyle(redStyle));
       } else {
-         Style style = Style.EMPTY.setColor(Color.fromTextFormatting(TextFormatting.BLUE)).setItalic(true);
+         Style style = Style.EMPTY.setColor(TextColor.fromTextFormatting(TextFormatting.BLUE)).setItalic(true);
          textBoxInfo.add(new StringTextComponent("???").setStyle(style));
          textBoxInfo.add(new StringTextComponent("???").setStyle(Style.EMPTY.setItalic(true)));
          textBoxInfo.add(new TranslationTextComponent("powerup.required.level",powerUp.levelType().toString(),powerUp.requiredLevel()).setStyle(redStyle));
@@ -135,27 +135,27 @@ public class PowerUpGui extends AbstractGui {
       GuiUtils.drawHoveringText(matrixStack, textBoxInfo, mouseX, mouseY, width, height, width, font);
       RenderSystem.popMatrix();
       if (flag) {
-         this.fade = MathHelper.clamp(this.fade + 0.02F, 0.0F, 0.3F);
+         this.fade = Mth.clamp(this.fade + 0.02F, 0.0F, 0.3F);
       } else {
-         this.fade = MathHelper.clamp(this.fade - 0.04F, 0.0F, 1.0F);
+         this.fade = Mth.clamp(this.fade - 0.04F, 0.0F, 1.0F);
       }
 
    }
    public void dragSelectedGui(double dragX, double dragY) {
       if (this.maxX - this.minX > 141) {
-         this.scrollX = MathHelper.clamp(this.scrollX + dragX, (double)(-(this.maxX - 141)), 0.0D);
+         this.scrollX = Mth.clamp(this.scrollX + dragX, (double)(-(this.maxX - 141)), 0.0D);
       }
 
       if (this.maxY - this.minY > 93) {
-         this.scrollY = MathHelper.clamp(this.scrollY + dragY, (double)(-(this.maxY - 93)), 0.0D);
+         this.scrollY = Mth.clamp(this.scrollY + dragY, (double)(-(this.maxY - 93)), 0.0D);
       }
    }
 
-   public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY, int width, int height,int xOffset, int yOffset) {
+   public void drawTooltips(PoseStack matrixStack, int mouseX, int mouseY, int width, int height,int xOffset, int yOffset) {
       if(xOffset < mouseX && mouseX < xOffset + 141 && yOffset < mouseY && mouseY < yOffset + 93){
          for(int i = 0; i < powerUps.length; i++){
-            int x = 30 * (i % 4) + 13 + MathHelper.floor(this.scrollX) + xOffset;
-            int y = 7 * i + MathHelper.floor(this.scrollY) + yOffset;
+            int x = 30 * (i % 4) + 13 + Mth.floor(this.scrollX) + xOffset;
+            int y = 7 * i + Mth.floor(this.scrollY) + yOffset;
             if(levelDistance(powerUps[i]) < 7 &&x< mouseX && mouseX < x + 26 &&
                y < mouseY && mouseY < y + 26)
                drawTabTooltips(matrixStack, mouseX, mouseY, width, height,powerUps[i]);
@@ -163,7 +163,7 @@ public class PowerUpGui extends AbstractGui {
       }
    }
 
-   private void displayPowerUps(MatrixStack matrixStack,int xOffset,int yOffset){
+   private void displayPowerUps(PoseStack matrixStack,int xOffset,int yOffset){
       for(int i = 0; i < powerUps.length; i++){
          int x = 30 * (i % 4) + 13;
          int y = 7 * i + 3;
@@ -181,7 +181,7 @@ public class PowerUpGui extends AbstractGui {
       }
    }
 
-   private void displayIcon(MatrixStack matrixStack,int id,int x,int y){
+   private void displayIcon(PoseStack matrixStack,int id,int x,int y){
       //Too lazy to learn the delegate equivalent of JAVA this'll do
       switch(id){
          case 0:

@@ -4,21 +4,21 @@ import com.example.upgradedwolves.common.TrainingEventHandler;
 import com.example.upgradedwolves.init.ModEntities;
 import com.example.upgradedwolves.itemHandler.WolfToysHandler;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
+import com.mojang.math.Vector3d;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -57,13 +57,13 @@ public class FlyingDiskEntity extends WolfChaseableEntity{
         if(result.getType() == RayTraceResult.Type.BLOCK){
             this.timeOut += flightTime * variant;
             BlockRayTraceResult blockResult = (BlockRayTraceResult)result;
-            if(this.getMotion().length() > 0.2)
-                this.world.playSound(this.getPosX(), this.getPosY(), this.getPosZ(), world.getBlockState(blockResult.getPos()).getBlock().getSoundType(null,null,null,null).getPlaceSound(), SoundCategory.BLOCKS, 0.3F, (1.0F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.2F) * 0.7F, false);
-            Vector3d vector3d1 = this.getMotion();
-            if(blockResult.getFace().getAxis() == Direction.Axis.Y && this.getMotion().length() < 0.1)
+            if(this.getDeltaMovement().length() > 0.2)
+                this.world.playSound(this.getX(), this.getY(), this.getZ(), world.getBlockState(blockResult.getPos()).getBlock().getSoundType(null,null,null,null).getPlaceSound(), SoundCategory.BLOCKS, 0.3F, (1.0F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.2F) * 0.7F, false);
+            Vector3d vector3d1 = this.getDeltaMovement();
+            if(blockResult.getFace().getAxis() == Direction.Axis.Y && this.getDeltaMovement().length() < 0.1)
                 super.OnHitBlock(blockResult);
             else
-                this.setMotion(
+                this.setDeltaMovement(
                     blockResult.getFace().getAxis() == Direction.Axis.X ? -vector3d1.x * .2 : vector3d1.x * .3,
                     blockResult.getFace().getAxis() == Direction.Axis.Y ? -vector3d1.y * .2 : vector3d1.y * .3,
                     blockResult.getFace().getAxis() == Direction.Axis.Z ? -vector3d1.z * .2 : vector3d1.z * .3
@@ -78,17 +78,17 @@ public class FlyingDiskEntity extends WolfChaseableEntity{
             if(speedFactor(1)){
                 if(entityResult.getEntity() instanceof LivingEntity){
                     LivingEntity entity = (LivingEntity)entityResult.getEntity();
-                    entity.attackEntityFrom(DamageSource.causePlayerDamage((PlayerEntity)this.func_234616_v_()), 1);
-                    double speed = this.getMotion().length() * .6;
+                    entity.attackEntityFrom(DamageSource.causePlayerDamage((Player)this.func_234616_v_()), 1);
+                    double speed = this.getDeltaMovement().length() * .6;
                     Vector3d bounceDirection = new Vector3d(entity.getPositionVec().x - this.getPositionVec().x,
                                                                 entity.getPositionVec().y - this.getPositionVec().y,
                                                                 entity.getPositionVec().z - this.getPositionVec().z)
                                                                 .normalize();
-                    this.setMotion(bounceDirection.scale(speed));
+                    this.setDeltaMovement(bounceDirection.scale(speed));
                 }
             }            
-            else if(entityResult.getEntity() instanceof WolfEntity){                
-                TrainingEventHandler.wolfCollectEntity(this, (WolfEntity)entityResult.getEntity(), new ItemStack(getDefaultItem()));
+            else if(entityResult.getEntity() instanceof Wolf){                
+                TrainingEventHandler.wolfCollectEntity(this, (Wolf)entityResult.getEntity(), new ItemStack(getDefaultItem()));
             }
         }
 
@@ -96,7 +96,7 @@ public class FlyingDiskEntity extends WolfChaseableEntity{
     
     public void tick() {
         super.tick();
-        PlayerEntity player = (PlayerEntity)func_234616_v_();
+        Player player = (Player)func_234616_v_();
         if(fly && player != null){
             Vector3d retrieveDirection = new Vector3d(player.getPositionVec().x - this.getPositionVec().x,
                                                                     player.getPositionVec().y + 1.5 - this.getPositionVec().y,

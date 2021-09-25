@@ -4,19 +4,19 @@ import javax.annotation.Nullable;
 
 import com.example.upgradedwolves.common.TrainingEventHandler;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityType;
+import net.minecraft.world.level.block.BlockState;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.projectile.ProjectileItemEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.vector.Vector3d;
+import com.mojang.math.Vector3d;
 import net.minecraft.world.World;
 
 public abstract class WolfChaseableEntity extends ProjectileItemEntity {
@@ -45,11 +45,11 @@ public abstract class WolfChaseableEntity extends ProjectileItemEntity {
         if(timeOut >= 1200){
             this.remove();
         }
-        for(WolfEntity wolf : this.world.getEntitiesWithinAABB(WolfEntity.class, this.getBoundingBox())) {
+        for(Wolf wolf : this.world.getEntitiesWithinAABB(Wolf.class, this.getBoundingBox())) {
             onCollideWithWolf(wolf);    
         }
 
-        BlockPos blockpos = this.getPosition();
+        BlockPos blockpos = this.getPosition(1);
         BlockState blockstate = this.world.getBlockState(blockpos);
         if (!blockstate.isAir(this.world, blockpos)) {
             VoxelShape voxelshape = blockstate.getCollisionShape(this.world, blockpos);
@@ -72,13 +72,13 @@ public abstract class WolfChaseableEntity extends ProjectileItemEntity {
         }
     }
 
-    public void onCollideWithWolf(WolfEntity wolf){
+    public void onCollideWithWolf(Wolf wolf){
         if(!speedFactor(0.5))            
             TrainingEventHandler.wolfCollectEntity(this, wolf, new ItemStack(getDefaultItem()));
     }
 
     @Override
-    public void onCollideWithPlayer(PlayerEntity entityIn) {        
+    public void onCollideWithPlayer(Player entityIn) {        
         if (!this.world.isRemote) {
             boolean flag = this.func_234616_v_().getUniqueID() == entityIn.getUniqueID() && !speedFactor(1) && ticksExisted > 20;
             if (flag && !entityIn.addItemStackToInventory(new ItemStack(getDefaultItem()))) {
@@ -93,7 +93,7 @@ public abstract class WolfChaseableEntity extends ProjectileItemEntity {
         }
     }
     public boolean speedFactor(double factor){
-        double speed = this.getMotion().length();
+        double speed = this.getDeltaMovement().length();
         if(speed > factor)
             return true;
         return false;
@@ -110,17 +110,17 @@ public abstract class WolfChaseableEntity extends ProjectileItemEntity {
 
     private void notInBlock() {
         this.inGround = false;
-        Vector3d vector3d = this.getMotion();
-        this.setMotion(vector3d.mul((double)(this.rand.nextFloat() * 0.2F), (double)(this.rand.nextFloat() * 0.2F), (double)(this.rand.nextFloat() * 0.2F)));
+        Vector3d vector3d = this.getDeltaMovement();
+        this.setDeltaMovement(vector3d.mul((double)(this.rand.nextFloat() * 0.2F), (double)(this.rand.nextFloat() * 0.2F), (double)(this.rand.nextFloat() * 0.2F)));
     }
 
     protected void OnHitBlock(BlockRayTraceResult p_230299_1_) {
         this.inBlockState = this.world.getBlockState(p_230299_1_.getPos());
         super.func_230299_a_(p_230299_1_);
-        Vector3d vector3d = p_230299_1_.getHitVec().subtract(this.getPosX(), this.getPosY(), this.getPosZ());
-        this.setMotion(vector3d);
+        Vector3d vector3d = p_230299_1_.getHitVec().subtract(this.getX(), this.getY(), this.getZ());
+        this.setDeltaMovement(vector3d);
         Vector3d vector3d1 = vector3d.normalize().scale((double)0.05F);
-        this.setRawPosition(this.getPosX() - vector3d1.x, this.getPosY() - vector3d1.y, this.getPosZ() - vector3d1.z);
+        this.setRawPosition(this.getX() - vector3d1.x, this.getY() - vector3d1.y, this.getZ() - vector3d1.z);
         this.inGround = true;
     }
 

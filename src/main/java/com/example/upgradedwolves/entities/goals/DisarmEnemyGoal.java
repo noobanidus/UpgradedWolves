@@ -8,23 +8,23 @@ import com.example.upgradedwolves.entities.utilities.AbilityEnhancer;
 import com.example.upgradedwolves.entities.utilities.EntityFinder;
 
 import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionHand;
 
 public class DisarmEnemyGoal extends CoolDownGoal{
-    protected final WolfEntity wolf;
+    protected final Wolf wolf;
     protected final EntityFinder<MonsterEntity> entityFinder;
     protected MonsterEntity target;
 
-    public DisarmEnemyGoal(WolfEntity wolf){
+    public DisarmEnemyGoal(Wolf wolf){
         this.wolf = wolf;
         this.entityFinder = new EntityFinder<>(wolf,MonsterEntity.class);
         setCoolDownInSeconds(1800);
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
         if(active()){
             List<MonsterEntity> enemies = entityFinder.findWithPredicate(1.1, 1, enemy -> enemy.getHeldItemMainhand() != null);
             if(enemies.size() > 0){
@@ -41,14 +41,14 @@ public class DisarmEnemyGoal extends CoolDownGoal{
         int bonus = AbilityEnhancer.detectionSkill(wolf);
         if(next < 40 + bonus){
             ItemStack item = target.getHeldItemMainhand();
-            target.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);            
+            target.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);            
             if(next < 10 + bonus){
                 IWolfStats handler = WolfStatsHandler.getHandler(wolf);
                 int itemSlot = handler.getInventory().getAvailableSlot(item);
                 if(itemSlot >= 0){
                     handler.getInventory().insertItem(itemSlot, item, false);
                 } else {
-                    wolf.entityDropItem(item);
+                    wolf.spawnAtLocation(item);
                 }
             }
         }

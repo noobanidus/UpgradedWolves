@@ -8,9 +8,9 @@ import com.example.upgradedwolves.common.TrainingEventHandler;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent.Context;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.fmllegacy.network.NetworkEvent.Context;
 
 public class TrainingItemMessage implements IMessage<TrainingItemMessage> {
     int wolfValue;
@@ -24,14 +24,14 @@ public class TrainingItemMessage implements IMessage<TrainingItemMessage> {
         playerId = id;
     }
     @Override
-    public void encode(TrainingItemMessage message, PacketBuffer buffer) {                
+    public void encode(TrainingItemMessage message, FriendlyByteBuf buffer) {                
         
         buffer.writeInt(message.wolfValue);        
         buffer.writeInt(message.playerId);
     }
 
     @Override
-    public TrainingItemMessage decode(PacketBuffer buffer) {    
+    public TrainingItemMessage decode(FriendlyByteBuf buffer) {    
         return new TrainingItemMessage(buffer.readInt(),buffer.readInt());
     }
 
@@ -39,7 +39,7 @@ public class TrainingItemMessage implements IMessage<TrainingItemMessage> {
     public void handle(TrainingItemMessage message, Supplier<Context> supplier) {
         supplier.get().enqueueWork(() -> {
             Minecraft mc = Minecraft.getInstance();
-            ClientPlayerEntity player = (ClientPlayerEntity)mc.world.getEntityByID(message.playerId);
+            ClientPlayerEntity player = (ClientPlayerEntity)mc.level.getEntityByID(message.playerId);
             ItemStack foodItem = TrainingEventHandler.getFoodStack(player);
             ITraining handler = TrainingHandler.getHandler(foodItem);
             handler.setAttribute(message.wolfValue);

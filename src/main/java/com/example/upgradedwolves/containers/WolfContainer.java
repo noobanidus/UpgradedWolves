@@ -8,24 +8,24 @@ import com.example.upgradedwolves.itemHandler.WolfItemStackHandler;
 import org.apache.logging.log4j.LogManager;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class WolfContainer extends Container {
 
-    public WolfEntity wolf;
+    public Wolf wolf;
     public WolfItemStackHandler wolfItemHandler;   
-    public CompoundNBT nbt;
+    public CompoundTag nbt;
     public PlayerInventory playerInventory;
 
-    private WolfContainer(int id, PlayerInventory playerInventory,WolfItemStackHandler wolfStackHandler,WolfEntity wolf,CompoundNBT nbt) {
+    private WolfContainer(int id, PlayerInventory playerInventory,WolfItemStackHandler wolfStackHandler,Wolf wolf,CompoundTag nbt) {
         super(ModContainers.WOLF_CONTAINER,id);
         this.wolf = wolf;
         this.wolfItemHandler = wolfStackHandler;
@@ -35,15 +35,15 @@ public class WolfContainer extends Container {
         setupContainer();
     }
 
-    public static WolfContainer createContainerClientSide(int id, PlayerInventory inventory, PacketBuffer data){
+    public static WolfContainer createContainerClientSide(int id, PlayerInventory inventory, FriendlyByteBuf data){
         int numberOfSlots = data.readInt();
         int wolfId = data.readInt();
-        CompoundNBT nbt = data.readCompoundTag();
+        CompoundTag nbt = data.readCompoundTag();
 
         try{
             WolfItemStackHandler wolfItemHandler = new WolfItemStackHandler(numberOfSlots);
             Minecraft mc = Minecraft.getInstance();
-            WolfEntity wolf = (WolfEntity)mc.world.getEntityByID(wolfId);
+            Wolf wolf = (Wolf)mc.level.getEntityByID(wolfId);
 
             return new WolfContainer(id,inventory,wolfItemHandler, wolf,nbt);
         }catch(IllegalArgumentException iae){
@@ -52,13 +52,13 @@ public class WolfContainer extends Container {
         return null;
     }
 
-    public static WolfContainer createContainerServerSide(int id, PlayerInventory inventory,WolfItemStackHandler wolfItemHandler,WolfEntity wolf){
+    public static WolfContainer createContainerServerSide(int id, PlayerInventory inventory,WolfItemStackHandler wolfItemHandler,Wolf wolf){
         return new WolfContainer(id,inventory,wolfItemHandler,wolf,null);
     }
 
     @Nonnull
 	@Override
-	public ItemStack transferStackInSlot(PlayerEntity player, int sourceSlotIndex) {
+	public ItemStack transferStackInSlot(Player player, int sourceSlotIndex) {
         Slot sourceSlot = inventorySlots.get(sourceSlotIndex);
         if (sourceSlot == null || !sourceSlot.getHasStack()) return ItemStack.EMPTY;  //EMPTY_ITEM
         ItemStack sourceStack = sourceSlot.getStack();
@@ -93,7 +93,7 @@ public class WolfContainer extends Container {
 	}
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
+    public boolean canInteractWith(Player playerIn) {
         
         return true;
     }

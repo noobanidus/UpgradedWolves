@@ -13,8 +13,8 @@ public class FleeExplodingCreeper extends AvoidEntityGoal<CreeperEntity>{
     }
 
     @Override
-    public boolean shouldExecute() {
-        boolean mayExecute = super.shouldExecute();
+    public boolean canUse() {
+        boolean mayExecute = super.canUse();
         if(avoidTarget == null)
             return false;
         if(avoidTarget.hasIgnited() && !(this.entity instanceof TameableEntity && ((TameableEntity)this.entity).isSitting()))

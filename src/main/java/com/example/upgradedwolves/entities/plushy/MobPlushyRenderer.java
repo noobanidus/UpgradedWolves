@@ -1,7 +1,7 @@
 package com.example.upgradedwolves.entities.plushy;
 
 import com.example.upgradedwolves.items.MobPlushy;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -11,8 +11,8 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.resources.ResourceLocation;
 
 public class MobPlushyRenderer extends EntityRenderer<MobPlushyEntity> {
     protected EntityModel<Entity> model;  
@@ -30,7 +30,7 @@ public class MobPlushyRenderer extends EntityRenderer<MobPlushyEntity> {
      }
 
     @Override
-    public void render(MobPlushyEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn,
+    public void render(MobPlushyEntity entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn,
             IRenderTypeBuffer bufferIn, int packedLightIn) {        
         MobPlushy plush = (MobPlushy)entityIn.getItem().getItem();
         model = MobPlushy.getModelByPlushType(plush);        

@@ -4,8 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 
 import com.example.upgradedwolves.entities.goals.DetectEnemiesGoal;
 
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.animal.Wolf;
 
 public class DetectEnemyPowerUp extends PowerUp {
 
@@ -14,7 +14,7 @@ public class DetectEnemyPowerUp extends PowerUp {
     }
 
     @Override
-    protected Goal goalConstructor(WolfEntity wolf) throws InstantiationException, IllegalAccessException,
+    protected Goal goalConstructor(Wolf wolf) throws InstantiationException, IllegalAccessException,
             IllegalArgumentException, InvocationTargetException, SecurityException {        
         return (Goal)relevantGoal.getDeclaredConstructors()[0].newInstance(wolf);
     }

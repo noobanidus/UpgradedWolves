@@ -6,10 +6,11 @@ import javax.annotation.Nullable;
 import com.example.upgradedwolves.UpgradedWolves;
 
 import net.minecraft.item.Food;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.INBT;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.IntNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -40,8 +41,8 @@ public class TrainingHandler {
     @SubscribeEvent
     public void attachCapabilities(AttachCapabilitiesEvent<ItemStack> event) {
         ItemStack stack = (ItemStack)event.getObject();
-        if(stack.isFood()){
-            Food next = stack.getItem().getFood();
+        if(stack.isEdible()){
+            FoodProperties next = stack.getItem().getFoodProperties();
             if(next.isMeat()){
                 event.addCapability(UpgradedWolves.getId("capability_training"), new Provider());
             }
@@ -52,12 +53,12 @@ public class TrainingHandler {
     public static class Storage implements Capability.IStorage<ITraining> {
         @Nullable
         @Override
-        public INBT writeNBT(Capability<ITraining> capability, ITraining instance, Direction side) {
+        public Tag writeNBT(Capability<ITraining> capability, ITraining instance, Direction side) {
             return IntNBT.valueOf(instance.getAttribute());
         }
 
         @Override
-        public void readNBT(Capability<ITraining> capability, ITraining instance, Direction side, INBT nbt) {
+        public void readNBT(Capability<ITraining> capability, ITraining instance, Direction side, Tag nbt) {
             IntNBT next = (IntNBT)nbt;
             instance.setAttribute(next.getInt());
         }

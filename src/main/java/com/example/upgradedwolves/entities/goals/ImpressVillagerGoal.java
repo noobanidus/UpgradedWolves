@@ -9,24 +9,24 @@ import com.example.upgradedwolves.entities.utilities.EntityFinder;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
-import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameterSets;
 import net.minecraft.loot.LootParameters;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.LootTables;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.world.server.ServerWorld;
 
 public class ImpressVillagerGoal extends CoolDownGoal {
-    public final WolfEntity wolf;
+    public final Wolf wolf;
     public final EntityFinder<AbstractVillagerEntity> entityFinder;
     public AbstractVillagerEntity target;
     int jumpTime;
@@ -46,7 +46,7 @@ public class ImpressVillagerGoal extends CoolDownGoal {
         giftMap.put(VillagerProfession.WEAPONSMITH, LootTables.GAMEPLAY_HERO_OF_THE_VILLAGE_WEAPONSMITH_GIFT);
      });
 
-    public ImpressVillagerGoal(WolfEntity wolf){
+    public ImpressVillagerGoal(Wolf wolf){
         this.wolf = wolf;
         entityFinder = new EntityFinder<AbstractVillagerEntity>(wolf,AbstractVillagerEntity.class);
         setCoolDownInSeconds(1800);
@@ -54,12 +54,12 @@ public class ImpressVillagerGoal extends CoolDownGoal {
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
         if(active()){
             List<AbstractVillagerEntity> villagers = entityFinder.findWithinRange(5, 5);
             if(villagers.size() > 0){
                 target = villagers.get(0);
-                wolf.getNavigator().tryMoveToEntityLiving(target, 1);
+                wolf.getNavigation().tryMoveToEntityLiving(target, 1);
                 jumpTime = wolf.getRNG().nextInt(140) + 60;
                 startCoolDown(AbilityEnhancer.increaseMin(wolf, 20) * 10);
                 return true;
@@ -71,7 +71,7 @@ public class ImpressVillagerGoal extends CoolDownGoal {
     @Override
     public boolean shouldContinueExecuting() {
         if(jumpTime-- > 0){
-            wolf.getJumpController().setJumping();;
+            wolf.getJumpController().setJumping();
             return true;
         }
         giveItemToWolf();
@@ -82,7 +82,7 @@ public class ImpressVillagerGoal extends CoolDownGoal {
     private void giveItemToWolf(){
         List<ItemStack> stack = getItem(target);
         for (ItemStack itemStack : stack) {
-            wolf.entityDropItem(itemStack);
+            wolf.spawnAtLocation(itemStack);
         }
     }
 

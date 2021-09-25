@@ -2,8 +2,8 @@ package com.example.upgradedwolves.items.GoldenBone;
 
 import com.example.upgradedwolves.capabilities.IWolfStats;
 
-import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.item.Item;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.item.Item;
 
 
 public abstract class GoldenBoneAbstract extends Item {
@@ -12,5 +12,5 @@ public abstract class GoldenBoneAbstract extends Item {
         super(properties);
     }
 
-    public abstract void rightClickWolf(WolfEntity wolf,IWolfStats handler);
+    public abstract void rightClickWolf(Wolf wolf,IWolfStats handler);
 }

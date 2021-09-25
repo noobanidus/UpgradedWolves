@@ -5,8 +5,8 @@ import com.example.upgradedwolves.entities.FlyingDiskEntity;
 import com.example.upgradedwolves.entities.TennisBallEntity;
 import com.example.upgradedwolves.entities.plushy.MobPlushyEntity;
 
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
+import net.minecraft.world.entity.EntityClassification;
+import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 

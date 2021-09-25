@@ -6,14 +6,14 @@ import java.util.function.Supplier;
 import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.particles.BasicParticleType;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.network.NetworkEvent.Context;
+import net.minecraftforge.fmllegacy.network.NetworkEvent.Context;
 
 public class SpawnLevelUpParticle implements IMessage<SpawnLevelUpParticle> {
     int wolfId;
@@ -30,13 +30,13 @@ public class SpawnLevelUpParticle implements IMessage<SpawnLevelUpParticle> {
     }
 
     @Override
-    public void encode(SpawnLevelUpParticle message, PacketBuffer buffer) {
+    public void encode(SpawnLevelUpParticle message, FriendlyByteBuf buffer) {
         buffer.writeInt(message.wolfId);
         buffer.writeInt(message.statId);
     }
 
     @Override
-    public SpawnLevelUpParticle decode(PacketBuffer buffer) {
+    public SpawnLevelUpParticle decode(FriendlyByteBuf buffer) {
         
         return new SpawnLevelUpParticle(buffer.readInt(),buffer.readInt());
     }
@@ -45,7 +45,7 @@ public class SpawnLevelUpParticle implements IMessage<SpawnLevelUpParticle> {
     public void handle(SpawnLevelUpParticle message, Supplier<Context> supplier) {
         supplier.get().enqueueWork(() -> {
             Minecraft mc = Minecraft.getInstance();
-            WolfEntity wolf = (WolfEntity)mc.world.getEntityByID(message.wolfId);
+            Wolf wolf = (Wolf)mc.level.getEntityByID(message.wolfId);
             WolfStatsEnum stat = WolfStatsEnum.values()[message.statId];
             if(wolf.getOwner() == mc.player && message.statId != 3)
                 mc.player.sendMessage((ITextComponent)new TranslationTextComponent("chat.upgradedwolves.level_up",wolf.getName(),stat.toString()),
@@ -67,7 +67,7 @@ public class SpawnLevelUpParticle implements IMessage<SpawnLevelUpParticle> {
                 break;
             }
             for(int i = 0; i < 15; i++)
-                mc.world.addParticle(pt, false, wolf.getPosition().getX() + r.nextDouble(), wolf.getPosition().getY() + r.nextDouble(), wolf.getPosition().getZ() + r.nextDouble(), r.nextDouble()/5, r.nextDouble()/5, r.nextDouble()/5);
+                mc.level.addParticle(pt, false, wolf.getPosition(1).getX() + r.nextDouble(), wolf.getPosition(1).getY() + r.nextDouble(), wolf.getPosition(1).getZ() + r.nextDouble(), r.nextDouble()/5, r.nextDouble()/5, r.nextDouble()/5);
         });
         supplier.get().setPacketHandled(true);
     }

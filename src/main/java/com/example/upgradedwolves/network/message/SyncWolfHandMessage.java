@@ -3,11 +3,11 @@ package com.example.upgradedwolves.network.message;
 import java.util.function.Supplier;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.Hand;
-import net.minecraftforge.fml.network.NetworkEvent.Context;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.InteractionHand;
+import net.minecraftforge.fmllegacy.network.NetworkEvent.Context;
 
 public class SyncWolfHandMessage implements IMessage<SyncWolfHandMessage> {    
     int wolfId;
@@ -24,13 +24,13 @@ public class SyncWolfHandMessage implements IMessage<SyncWolfHandMessage> {
     }
 
     @Override
-    public void encode(SyncWolfHandMessage message, PacketBuffer buffer) {
+    public void encode(SyncWolfHandMessage message, FriendlyByteBuf buffer) {
         buffer.writeInt(message.wolfId);
         buffer.writeItemStack(message.item);
     }
 
     @Override
-    public SyncWolfHandMessage decode(PacketBuffer buffer) {
+    public SyncWolfHandMessage decode(FriendlyByteBuf buffer) {
         int id = buffer.readInt();
         ItemStack item = buffer.readItemStack();
         return new SyncWolfHandMessage(id,item);
@@ -40,8 +40,8 @@ public class SyncWolfHandMessage implements IMessage<SyncWolfHandMessage> {
     public void handle(SyncWolfHandMessage message, Supplier<Context> supplier) {
         supplier.get().enqueueWork(() -> {
             Minecraft mc = Minecraft.getInstance();
-            WolfEntity wolf = (WolfEntity)mc.world.getEntityByID(message.wolfId);            
-            wolf.setHeldItem(Hand.MAIN_HAND, message.item);
+            Wolf wolf = (Wolf)mc.level.getEntityByID(message.wolfId);            
+            wolf.setItemInHand(InteractionHand.MAIN_HAND, message.item);
         });
     }
 }

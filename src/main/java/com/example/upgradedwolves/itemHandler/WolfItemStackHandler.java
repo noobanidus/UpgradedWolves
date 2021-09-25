@@ -4,10 +4,10 @@ import javax.annotation.Nonnull;
 
 import com.google.common.base.Predicate;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.util.Mth;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -19,7 +19,7 @@ public class WolfItemStackHandler extends ItemStackHandler {
     boolean isDirty = true;
 
     public WolfItemStackHandler(int numberOfSlots){
-        super(MathHelper.clamp(numberOfSlots, MIN_WOLF_SLOT, MAX_WOLF_SLOT));
+        super(Mth.clamp(numberOfSlots, MIN_WOLF_SLOT, MAX_WOLF_SLOT));
         if(numberOfSlots < MIN_WOLF_SLOT || numberOfSlots > MAX_WOLF_SLOT){
             throw new IllegalArgumentException("Invalid number of slots: " + numberOfSlots);
         }

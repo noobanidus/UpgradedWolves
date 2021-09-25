@@ -4,9 +4,9 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent.Context;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.fmllegacy.network.NetworkEvent.Context;
 
 public class MovePlayerMessage implements IMessage<MovePlayerMessage> {
     UUID playerId;
@@ -29,25 +29,25 @@ public class MovePlayerMessage implements IMessage<MovePlayerMessage> {
     }
 
     @Override
-    public void encode(MovePlayerMessage message, PacketBuffer buffer) {
-        buffer.writeUniqueId(message.playerId);
+    public void encode(MovePlayerMessage message, FriendlyByteBuf buffer) {
+        buffer.writeUUID(message.playerId);
         buffer.writeDouble(message.d0);
         buffer.writeDouble(message.d1);
         buffer.writeDouble(message.d2);        
     }
 
     @Override
-    public MovePlayerMessage decode(PacketBuffer buffer) {
+    public MovePlayerMessage decode(FriendlyByteBuf buffer) {
         
-        return new MovePlayerMessage(buffer.readUniqueId(), buffer.readDouble(),buffer.readDouble(),buffer.readDouble());
+        return new MovePlayerMessage(buffer.readUUID(), buffer.readDouble(),buffer.readDouble(),buffer.readDouble());
     }
 
     @Override
     public void handle(MovePlayerMessage message, Supplier<Context> supplier) {
         supplier.get().enqueueWork(() -> {
             Minecraft mc = Minecraft.getInstance();
-            PlayerEntity playerIn = (PlayerEntity)mc.world.getPlayerByUuid(message.playerId);
-            playerIn.setMotion(playerIn.getMotion().add(Math.copySign(message.d0 * message.d0 * 0.5D, -message.d0), Math.copySign(message.d1 * message.d1 * 0.5D, -message.d1), Math.copySign(message.d2 * message.d2 * 0.5D, -message.d2)));
+            Player playerIn = (Player)mc.level.getPlayerByUUID(message.playerId);
+            playerIn.setDeltaMovement(playerIn.getDeltaMovement().add(Math.copySign(message.d0 * message.d0 * 0.5D, -message.d0), Math.copySign(message.d1 * message.d1 * 0.5D, -message.d1), Math.copySign(message.d2 * message.d2 * 0.5D, -message.d2)));
         });
         supplier.get().setPacketHandled(true);
         

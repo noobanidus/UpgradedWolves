@@ -16,18 +16,18 @@ import com.example.upgradedwolves.network.message.SpawnLevelUpParticle;
 import com.example.upgradedwolves.powerup.PowerUp;
 import com.example.upgradedwolves.powerup.PowerUpList;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.PrioritizedGoal;
-import net.minecraft.entity.ai.goal.TargetGoal;
-import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.WrappedGoal;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -36,7 +36,7 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
 
 public class WolfStatsHandler {
     @CapabilityInject(IWolfStats.class)
@@ -48,7 +48,7 @@ public class WolfStatsHandler {
     }
 
     @Nullable
-    public static IWolfStats getHandler(WolfEntity entity) {
+    public static IWolfStats getHandler(Wolf entity) {
         IWolfStats stats = entity.getCapability(CAPABILITY_WOLF_STATS, Direction.DOWN).orElse(null);
         stats.setActiveWolf(entity);
         return stats;
@@ -56,7 +56,7 @@ public class WolfStatsHandler {
 
     @SubscribeEvent
     public void attachCapabilities(AttachCapabilitiesEvent<Entity> event) {
-        if (event.getObject() instanceof WolfEntity) {
+        if (event.getObject() instanceof Wolf) {
             event.addCapability(UpgradedWolves.getId("wolf_stats"), new Provider());            
         }
     }
@@ -70,7 +70,7 @@ public class WolfStatsHandler {
         //The wolves will have a maximum of 9 slots.       
         WolfItemStackHandler inventory;
         Entity ropeHolder;
-        WolfEntity currentWolf;
+        Wolf currentWolf;
         BlockPos location;
         List<Goal> allGoals = new ArrayList<Goal>();
         List<Goal> unaddedGoals = new ArrayList<Goal>();
@@ -273,11 +273,11 @@ public class WolfStatsHandler {
         }
         
         @Override
-        public WolfEntity getActiveWolf() {
+        public Wolf getActiveWolf() {
             return currentWolf;
         }
         @Override
-        public void setActiveWolf(WolfEntity entity) {
+        public void setActiveWolf(Wolf entity) {
             if(currentWolf == null)
                 currentWolf = entity;
         }
@@ -314,7 +314,7 @@ public class WolfStatsHandler {
         public void setRopeHolder(Entity holder) {
             ropeHolder = holder;
             tugOfWarActive = true;
-            currentWolf.setHeldItem(Hand.MAIN_HAND, new ItemStack(WolfToysHandler.TUFOFWARROPE));
+            currentWolf.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(WolfToysHandler.TUFOFWARROPE));
         }
         @Override
         public Entity getRopeHolder() {            
@@ -324,7 +324,7 @@ public class WolfStatsHandler {
         public void clearRopeHolder() {            
             ropeHolder = null;
             tugOfWarActive = false;
-            currentWolf.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
+            currentWolf.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
         }
         @Override
         public boolean getTugOfWarStatus() {            
@@ -379,13 +379,13 @@ public class WolfStatsHandler {
                 if(currentWolf.targetSelector.getRunningGoals().count() == 0)
                     currentWolf.targetSelector.addGoal(priority,goal);
                 else
-                    unaddedGoals.add(new PrioritizedGoal(priority,goal));
+                    unaddedGoals.add(new WrappedGoal(priority,goal));
             }
             else{
                 if(currentWolf.goalSelector.getRunningGoals().count() == 0)
                     currentWolf.goalSelector.addGoal(priority,goal);
                 else
-                    unaddedGoals.add(new PrioritizedGoal(priority,goal));
+                    unaddedGoals.add(new WrappedGoal(priority,goal));
             }
             allGoals.add(goal);
         }
@@ -450,59 +450,50 @@ public class WolfStatsHandler {
 
 
     }
+    public static class Provider implements ICapabilitySerializable<CompoundTag>
+    {
+        final IWolfStats INSTANCE;
+        final Capability<IWolfStats> capability = CAPABILITY_WOLF_STATS;
 
-    public static class Storage implements Capability.IStorage<IWolfStats> {
+        public Provider(){
+            INSTANCE = new WolfStats();
+        }
 
         @Override
-        public INBT writeNBT(Capability<IWolfStats> capability, IWolfStats instance, Direction side) {
-            CompoundNBT nbt = new CompoundNBT();
-            instance.InitLove();          
-            nbt.putInt("SpeedLevel", instance.getLevel(WolfStatsEnum.Speed));
-            nbt.putInt("StrengthLevel", instance.getLevel(WolfStatsEnum.Strength));
-            nbt.putInt("IntelligenceLevel", instance.getLevel(WolfStatsEnum.Intelligence));
-            nbt.putInt("LoveLevel", instance.getLevel(WolfStatsEnum.Love));
-            nbt.putInt("SpeedXp", instance.getXp(WolfStatsEnum.Speed));
-            nbt.putInt("StrengthXp", instance.getXp(WolfStatsEnum.Strength));
-            nbt.putInt("IntelligenceXp", instance.getXp(WolfStatsEnum.Intelligence));
-            nbt.putInt("WolfType",instance.getWolfType());
-            nbt.putInt("WolfFur",instance.getWolfFur());
-            nbt.put("Inventory",instance.getInventory().serializeNBT());
-            nbt.put("RoamPosition",NBTUtil.writeBlockPos(instance.getRoamPoint()));
+        public CompoundTag serializeNBT()
+        {
+            CompoundTag nbt = new CompoundTag();
+            INSTANCE.InitLove();          
+            nbt.putInt("SpeedLevel", INSTANCE.getLevel(WolfStatsEnum.Speed));
+            nbt.putInt("StrengthLevel", INSTANCE.getLevel(WolfStatsEnum.Strength));
+            nbt.putInt("IntelligenceLevel", INSTANCE.getLevel(WolfStatsEnum.Intelligence));
+            nbt.putInt("LoveLevel", INSTANCE.getLevel(WolfStatsEnum.Love));
+            nbt.putInt("SpeedXp", INSTANCE.getXp(WolfStatsEnum.Speed));
+            nbt.putInt("StrengthXp", INSTANCE.getXp(WolfStatsEnum.Strength));
+            nbt.putInt("IntelligenceXp", INSTANCE.getXp(WolfStatsEnum.Intelligence));
+            nbt.putInt("WolfType",INSTANCE.getWolfType());
+            nbt.putInt("WolfFur",INSTANCE.getWolfFur());
+            nbt.put("Inventory",INSTANCE.getInventory().serializeNBT());
+            nbt.put("RoamPosition",NbtUtils.writeBlockPos(INSTANCE.getRoamPoint()));
             return nbt;
         }
 
         @Override
-        public void readNBT(Capability<IWolfStats> capability, IWolfStats instance, Direction side, INBT nbt) {            
-            CompoundNBT next = (CompoundNBT)nbt;            
-            instance.setLevel(WolfStatsEnum.Speed, next.getInt("SpeedLevel"));
-            instance.setLevel(WolfStatsEnum.Strength, next.getInt("StrengthLevel"));
-            instance.setLevel(WolfStatsEnum.Intelligence, next.getInt("IntelligenceLevel"));
-            instance.setLevel(WolfStatsEnum.Love, next.getInt("LoveLevel"));
-            instance.addXp(WolfStatsEnum.Speed, next.getInt("SpeedXp"));
-            instance.addXp(WolfStatsEnum.Strength, next.getInt("StrengthXp"));
-            instance.addXp(WolfStatsEnum.Intelligence, next.getInt("IntelligenceXp"));
-            instance.setWolfType(next.getInt("WolfType"));
-            instance.setWolffur(next.getInt("WolfFur"));
-            instance.getInventory().deserializeNBT(next.getCompound("Inventory"));
-            instance.setRoamPoint(NBTUtil.readBlockPos(next.getCompound("RoamPosition")));
-            instance.InitLove();
-        }
-
-    }
-    public static class Provider implements ICapabilitySerializable<CompoundNBT>
-    {
-        final IWolfStats INSTANCE = CAPABILITY_WOLF_STATS.getDefaultInstance();
-
-        @Override
-        public CompoundNBT serializeNBT()
+        public void deserializeNBT(CompoundTag compound)
         {
-            return (CompoundNBT) CAPABILITY_WOLF_STATS.getStorage().writeNBT(CAPABILITY_WOLF_STATS, INSTANCE, null);
-        }
-
-        @Override
-        public void deserializeNBT(CompoundNBT compound)
-        {
-            CAPABILITY_WOLF_STATS.getStorage().readNBT(CAPABILITY_WOLF_STATS, INSTANCE, null, compound);
+            CompoundTag next = (CompoundTag)compound;            
+            INSTANCE.setLevel(WolfStatsEnum.Speed, next.getInt("SpeedLevel"));
+            INSTANCE.setLevel(WolfStatsEnum.Strength, next.getInt("StrengthLevel"));
+            INSTANCE.setLevel(WolfStatsEnum.Intelligence, next.getInt("IntelligenceLevel"));
+            INSTANCE.setLevel(WolfStatsEnum.Love, next.getInt("LoveLevel"));
+            INSTANCE.addXp(WolfStatsEnum.Speed, next.getInt("SpeedXp"));
+            INSTANCE.addXp(WolfStatsEnum.Strength, next.getInt("StrengthXp"));
+            INSTANCE.addXp(WolfStatsEnum.Intelligence, next.getInt("IntelligenceXp"));
+            INSTANCE.setWolfType(next.getInt("WolfType"));
+            INSTANCE.setWolffur(next.getInt("WolfFur"));
+            INSTANCE.getInventory().deserializeNBT(next.getCompound("Inventory"));
+            INSTANCE.setRoamPoint(NbtUtils.readBlockPos(next.getCompound("RoamPosition")));
+            INSTANCE.InitLove();
         }
 
         @Nonnull

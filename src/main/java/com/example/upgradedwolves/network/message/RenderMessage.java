@@ -6,9 +6,9 @@ import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent.Context;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.fmllegacy.network.NetworkEvent.Context;
 
 public class RenderMessage implements IMessage<RenderMessage> {
     int wolfId;
@@ -38,7 +38,7 @@ public class RenderMessage implements IMessage<RenderMessage> {
     }
 
     @Override
-    public void encode(RenderMessage message, PacketBuffer buffer) {
+    public void encode(RenderMessage message, FriendlyByteBuf buffer) {
         buffer.writeInt(message.wolfId);
         buffer.writeInt(message.wolfValue);
         buffer.writeInt(message.wolfFur);
@@ -46,7 +46,7 @@ public class RenderMessage implements IMessage<RenderMessage> {
     }
 
     @Override
-    public RenderMessage decode(PacketBuffer buffer) {
+    public RenderMessage decode(FriendlyByteBuf buffer) {
         
         return new RenderMessage(buffer.readInt(),buffer.readInt(),buffer.readInt(),buffer.readBoolean());
     }
@@ -55,7 +55,7 @@ public class RenderMessage implements IMessage<RenderMessage> {
     public void handle(RenderMessage message, Supplier<Context> supplier) {
         supplier.get().enqueueWork(() -> {
             Minecraft mc = Minecraft.getInstance();
-            WolfEntity wolf = (WolfEntity)mc.world.getEntityByID(message.wolfId);
+            Wolf wolf = (Wolf)mc.level.getEntityByID(message.wolfId);
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             if(message.renderType){
                 handler.setWolfType(message.wolfValue);

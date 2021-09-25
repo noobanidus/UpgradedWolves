@@ -10,30 +10,30 @@ import com.example.upgradedwolves.entities.utilities.EntityFinder;
 import net.minecraft.entity.IAngerable;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.item.ArrowItem;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
 
 public class WolfTossArrowGoal extends CoolDownGoal {
-    protected final WolfEntity wolf;
+    protected final Wolf wolf;
     protected final EntityFinder<MonsterEntity> entityFinder;
     protected MonsterEntity target;
     protected int arrowStackSlot;
     int windUpTicks = 10;
 
 
-    public WolfTossArrowGoal(WolfEntity wolf){
+    public WolfTossArrowGoal(Wolf wolf){
         this.wolf = wolf;
         this.entityFinder = new EntityFinder<MonsterEntity>(wolf,MonsterEntity.class);
         setCoolDownInSeconds(300);
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
         if(active() && wolf.getAttackTarget() != null){
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             int slot = handler.getInventory().getArbitraryItem(item -> item instanceof ArrowItem);
@@ -69,11 +69,11 @@ public class WolfTossArrowGoal extends CoolDownGoal {
     }
 
     private void attackEntityWithRangedAttack(LivingEntity target, float distanceFactor,ItemStack arrowStack) {
-        AbstractArrowEntity abstractarrowentity = ProjectileHelper.fireArrow(wolf, arrowStack, distanceFactor);;
-        double d0 = target.getPosX() - wolf.getPosX();
-        double d1 = target.getPosYHeight(0.3333333333333333D) - abstractarrowentity.getPosY();
-        double d2 = target.getPosZ() - wolf.getPosZ();
-        double d3 = (double)MathHelper.sqrt(d0 * d0 + d2 * d2);
+        AbstractArrowEntity abstractarrowentity = ProjectileHelper.fireArrow(wolf, arrowStack, distanceFactor);
+        double d0 = target.getX() - wolf.getX();
+        double d1 = target.getPosYHeight(0.3333333333333333D) - abstractarrowentity.getY();
+        double d2 = target.getZ() - wolf.getZ();
+        double d3 = (double)Mth.sqrt(d0 * d0 + d2 * d2);
         abstractarrowentity.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, (float)(14 - wolf.world.getDifficulty().getId() * 4));
         wolf.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (wolf.getRNG().nextFloat() * 0.4F + 0.8F));
         wolf.world.addEntity(abstractarrowentity);

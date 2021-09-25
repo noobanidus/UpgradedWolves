@@ -13,12 +13,12 @@ import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.animal.Wolf;
 
 import net.minecraft.resources.SimpleResource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.Color;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
@@ -32,7 +32,7 @@ public abstract class PowerUp {
     public int uLocation;
     public int vLocation;
     
-    protected WolfEntity wolf;
+    protected Wolf wolf;
     protected Class<? extends Goal> relevantGoal;
     
     protected int levelRequirement;
@@ -81,7 +81,7 @@ public abstract class PowerUp {
         }
     }
 
-    public Goal OnLevelUp(WolfEntity wolf, WolfStatsEnum type, int number){
+    public Goal OnLevelUp(Wolf wolf, WolfStatsEnum type, int number){
         if(type == statType && number > levelRequirement){
             try{
                 return goalConstructor(wolf);
@@ -94,15 +94,15 @@ public abstract class PowerUp {
     }
 
     public ITextComponent getName(){
-        Style style = Style.EMPTY.setColor(Color.fromTextFormatting(TextFormatting.BLUE));
+        Style style = Style.EMPTY.setColor(TextColor.fromTextFormatting(TextFormatting.BLUE));
         return new TranslationTextComponent(name,effectiveLevel > 0 ? effectiveLevel : "").setStyle(style);
     }
 
-    public ITextComponent getDescription(WolfEntity wolf){
+    public ITextComponent getDescription(Wolf wolf){
         return new TranslationTextComponent(description,wolf.getName());
     }
 
-    public Goal fetchRelevantGoal(WolfEntity wolf){
+    public Goal fetchRelevantGoal(Wolf wolf){
         IWolfStats handler = WolfStatsHandler.getHandler(wolf);
         int statLevel = handler.getLevel(statType);
         if(statLevel >= levelRequirement){
@@ -139,10 +139,10 @@ public abstract class PowerUp {
         return defaultPriority;
     }
 
-    protected Goal genericGoalConstructor(WolfEntity wolf) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, SecurityException {
+    protected Goal genericGoalConstructor(Wolf wolf) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, SecurityException {
         return (Goal)relevantGoal.getDeclaredConstructors()[0].newInstance(wolf);
     }
 
-    protected abstract Goal goalConstructor(WolfEntity wolf)throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, SecurityException;
+    protected abstract Goal goalConstructor(Wolf wolf)throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, SecurityException;
     
 }

@@ -8,7 +8,7 @@ import com.example.upgradedwolves.items.GoldenBone.EnchantedGoldenBone;
 import com.example.upgradedwolves.items.GoldenBone.GoldenBone;
 import com.example.upgradedwolves.utils.MobPlushyType;
 
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 

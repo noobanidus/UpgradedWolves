@@ -4,25 +4,25 @@ import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 
-import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.world.entity.animal.Wolf;
 
 public class WolfFleeExplodingCreeper extends FleeExplodingCreeper implements IUpdateableGoal {
-    WolfEntity wolf;
+    Wolf wolf;
 
-    public WolfFleeExplodingCreeper(WolfEntity entityIn, float avoidDistanceIn, double farSpeedIn,
+    public WolfFleeExplodingCreeper(Wolf entityIn, float avoidDistanceIn, double farSpeedIn,
             double nearSpeedIn) {
         super(entityIn, avoidDistanceIn, farSpeedIn, nearSpeedIn);
         this.wolf = entityIn;
     }
     
     @Override
-    public boolean shouldExecute(){
+    public boolean canUse(){
         if(WolfStatsHandler.getHandler(wolf).getLevel(WolfStatsEnum.Intelligence) > 5)
-            return super.shouldExecute();
+            return super.canUse();
         return false;
     }
 
     @Override
-    public void Update(IWolfStats handler, WolfEntity wolf) {
+    public void Update(IWolfStats handler, Wolf wolf) {
     }
 }

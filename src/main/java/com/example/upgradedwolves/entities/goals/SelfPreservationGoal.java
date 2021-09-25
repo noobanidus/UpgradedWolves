@@ -4,29 +4,29 @@ import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.itemHandler.WolfItemStackHandler;
 
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.util.SoundEvents;
 
 public class SelfPreservationGoal extends Goal {
-    public WolfEntity wolf;
+    public Wolf wolf;
     final int eatingTime = 20 * 3;
     int currentTime = 0;
     int healAmount;
 
-    public SelfPreservationGoal(WolfEntity wolf){
+    public SelfPreservationGoal(Wolf wolf){
         this.wolf = wolf;
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
         IWolfStats handler = WolfStatsHandler.getHandler(wolf);
         WolfItemStackHandler wolfInventory = handler.getInventory();
-        if(wolf.getHealth() < 15 && wolfInventory.getArbitraryItem(item -> item.isFood()) >= 0){
-            int inventorySlot = wolfInventory.getArbitraryItem(item -> item.isFood());
+        if(wolf.getHealth() < 15 && wolfInventory.getArbitraryItem(item -> item.isEdible()) >= 0){
+            int inventorySlot = wolfInventory.getArbitraryItem(item -> item.isEdible());
             ItemStack foodStack = wolfInventory.getStackInSlot(inventorySlot);
-            healAmount = foodStack.getItem().getFood().getHealing();
+            healAmount = foodStack.getItem().getFoodProperties().getHealing();
             currentTime = 0;
             foodStack.shrink(1);
             return true;
