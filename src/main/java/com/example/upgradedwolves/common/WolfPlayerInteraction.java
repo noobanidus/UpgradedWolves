@@ -79,7 +79,7 @@ public class WolfPlayerInteraction {
                     nbt.putInt("wolfType", handler.getWolfType());
                     NetworkHooks.openGui((ServerPlayer)event.getPlayer(),
                         wolfInventory,
-                        (packetBuffer) ->{packetBuffer.writeInt(handler.getInventory().getSlots());packetBuffer.writeInt(wolf.getEntityId());packetBuffer.writeCompoundTag(nbt);}
+                        (packetBuffer) ->{packetBuffer.writeInt(handler.getInventory().getSlots());packetBuffer.writeInt(wolfgetId());packetBuffer.writeCompoundTag(nbt);}
                     );
                 }
                 wolf.func_233687_w_(!wolf.isSitting());
@@ -104,7 +104,7 @@ public class WolfPlayerInteraction {
                         foodItem.shrink(1);
                         tHandler.resetAttribute();
                         if(Thread.currentThread().getName() == "Server thread")
-                            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getEntityId(),WolfStatsHandler.getHandler(wolf).getWolfType(),handler.getWolfFur()));
+                            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolfgetId(),WolfStatsHandler.getHandler(wolf).getWolfType(),handler.getWolfFur()));
                     }
                 } else if (goldenBoneItem != null){
                     GoldenBoneAbstract goldenBone = (GoldenBoneAbstract)goldenBoneItem.getItem();
@@ -144,7 +144,7 @@ public class WolfPlayerInteraction {
     public void onStartTracking(PlayerEvent.StartTracking event){        
         event.getTarget().getCapability(WolfStatsHandler.CAPABILITY_WOLF_STATS).ifPresent(capability -> {
             Wolf wolf = (Wolf)event.getTarget();
-            PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getPlayer()), new RenderMessage(wolf.getEntityId(),capability.getWolfType(),WolfStatsHandler.getHandler(wolf).getWolfFur()));
+            PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getPlayer()), new RenderMessage(wolfgetId(),capability.getWolfType(),WolfStatsHandler.getHandler(wolf).getWolfFur()));
             wolf.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(capability.getWolfSpeed());
         });
     }
@@ -156,7 +156,7 @@ public class WolfPlayerInteraction {
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             //Scavenger Wolf Bonus
             handler.addXp(WolfStatsEnum.Speed,(handler.getWolfType() == 2 ? 1 : 0));
-            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getEntityId(),handler.getWolfType(),handler.getWolfFur()) );
+            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolfgetId(),handler.getWolfType(),handler.getWolfFur()) );
         }
     }
     @SubscribeEvent
@@ -166,7 +166,7 @@ public class WolfPlayerInteraction {
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             handler.addXp(WolfStatsEnum.Strength,1);
             handler.addXp(WolfStatsEnum.Intelligence,(handler.getWolfType() == 3 ? 2 : 1));
-            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getEntityId(),handler.getWolfType(),handler.getWolfFur()) );
+            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolfgetId(),handler.getWolfType(),handler.getWolfFur()) );
         }
     }
     @SubscribeEvent

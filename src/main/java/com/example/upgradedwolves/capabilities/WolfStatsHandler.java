@@ -33,6 +33,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -42,8 +43,7 @@ public class WolfStatsHandler {
     @CapabilityInject(IWolfStats.class)
     public static final Capability<IWolfStats> CAPABILITY_WOLF_STATS = null;
 
-    public static void register() {
-        CapabilityManager.INSTANCE.register(IWolfStats.class, new Storage(), WolfStats::new);
+    public static void register() {        
         MinecraftForge.EVENT_BUS.register(new WolfStatsHandler());
     }
 
@@ -59,6 +59,11 @@ public class WolfStatsHandler {
         if (event.getObject() instanceof Wolf) {
             event.addCapability(UpgradedWolves.getId("wolf_stats"), new Provider());            
         }
+    }
+
+    @SubscribeEvent
+    public void registerCapability(RegisterCapabilitiesEvent event){
+        event.register(IWolfStats.class);
     }
     
     public static class WolfStats implements IWolfStats {
@@ -308,7 +313,7 @@ public class WolfStatsHandler {
         }
         @Override
         public void showParticle(int type){
-            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> currentWolf), new SpawnLevelUpParticle( currentWolf.getEntityId(),type));
+            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> currentWolf), new SpawnLevelUpParticle( currentWolf.getId(),type));
         }
         @Override
         public void setRopeHolder(Entity holder) {

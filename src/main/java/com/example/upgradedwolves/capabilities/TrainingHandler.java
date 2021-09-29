@@ -5,11 +5,10 @@ import javax.annotation.Nullable;
 
 import com.example.upgradedwolves.UpgradedWolves;
 
-import net.minecraft.item.Food;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.Tag;
-import net.minecraft.nbt.IntNBT;
+import net.minecraft.nbt.IntTag;
 import net.minecraft.core.Direction;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
@@ -30,7 +29,6 @@ public class TrainingHandler {
         public int getAttribute();
     }
     public static void register() {
-        CapabilityManager.INSTANCE.register(ITraining.class, new Storage(), Training::new);
         MinecraftForge.EVENT_BUS.register(new TrainingHandler());
     }
     @Nullable
@@ -50,34 +48,28 @@ public class TrainingHandler {
         
     }
 
-    public static class Storage implements Capability.IStorage<ITraining> {
-        @Nullable
-        @Override
-        public Tag writeNBT(Capability<ITraining> capability, ITraining instance, Direction side) {
-            return IntNBT.valueOf(instance.getAttribute());
-        }
-
-        @Override
-        public void readNBT(Capability<ITraining> capability, ITraining instance, Direction side, Tag nbt) {
-            IntNBT next = (IntNBT)nbt;
-            instance.setAttribute(next.getInt());
-        }
-
-    }
-    public static class Provider implements ICapabilitySerializable<IntNBT>
+    public static class Provider implements ICapabilitySerializable<IntTag>
     {
-        final ITraining INSTANCE = CAPABILITY_TRAINING.getDefaultInstance();
+        final ITraining INSTANCE;        
+        final Capability<ITraining> capability = CAPABILITY_TRAINING;
 
-        @Override
-        public IntNBT serializeNBT()
-        {
-            return (IntNBT) CAPABILITY_TRAINING.getStorage().writeNBT(CAPABILITY_TRAINING, INSTANCE, null);
+        public Provider(){
+            INSTANCE = new Training();
         }
 
         @Override
-        public void deserializeNBT(IntNBT compound)
+        public IntTag serializeNBT()
         {
-            CAPABILITY_TRAINING.getStorage().readNBT(CAPABILITY_TRAINING, INSTANCE, null, compound);
+            return IntTag.valueOf(INSTANCE.getAttribute());
+            //return (IntTag) CAPABILITY_TRAINING.getStorage().writeNBT(CAPABILITY_TRAINING, INSTANCE, null);
+        }
+
+        @Override
+        public void deserializeNBT(IntTag compound)
+        {
+            IntTag next = (IntTag)compound;
+            INSTANCE.setAttribute(next.getAsInt());
+            //CAPABILITY_TRAINING.getStorage().readNBT(CAPABILITY_TRAINING, INSTANCE, null, compound);
         }
 
         @Nonnull

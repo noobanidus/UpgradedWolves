@@ -41,7 +41,7 @@ public class TrainingEventHandler {
         //     ITraining handler = TrainingHandler.getHandler(foodItem);
         //     handler.setAttribute(3);
         //     if(Thread.currentThread().getName() == "Server thread"){                
-        //         PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getPlayer()), new TrainingItemMessage(3, event.getPlayer().getEntityId()));
+        //         PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getPlayer()), new TrainingItemMessage(3, event.getPlayer()getId()));
         //     }
         // }
         else if(block instanceof OreBlock){
@@ -49,7 +49,7 @@ public class TrainingEventHandler {
             ITraining handler = TrainingHandler.getHandler(foodItem);
             handler.setAttribute(2);
             if(Thread.currentThread().getName() == "Server thread"){
-                PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getPlayer()), new TrainingItemMessage(2, event.getPlayer().getEntityId()));
+                PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getPlayer()), new TrainingItemMessage(2, event.getPlayer()getId()));
             }
         }
     }
@@ -67,7 +67,7 @@ public class TrainingEventHandler {
                 ITraining handler = TrainingHandler.getHandler(foodItem);
                 handler.setAttribute(1);                         
                 if(Thread.currentThread().getName() == "Server thread"){
-                    PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)player), new TrainingItemMessage(1, player.getEntityId()));
+                    PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)player), new TrainingItemMessage(1, playergetId()));
                 }
             }
         }

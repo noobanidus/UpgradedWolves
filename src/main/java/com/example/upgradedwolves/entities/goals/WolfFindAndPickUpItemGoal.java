@@ -66,14 +66,14 @@ public class WolfFindAndPickUpItemGoal extends Goal implements IUpdateableGoal{
 
     public boolean shouldContinueExecuting() {
         if(item instanceof ItemEntity){
-            ItemEntity item = (ItemEntity)wolf.world.getEntityByID(this.item.getEntityId());
+            ItemEntity item = (ItemEntity)wolf.world.getEntityByID(this.itemgetId());
             if (item == null || wolfInventory.getAvailableSlot(item.getItem()) < 0) {
                 return false;
             } else {
                 return shouldChase(1,item);
             }
         } else if(item instanceof WolfChaseableEntity) {
-            WolfChaseableEntity item = (WolfChaseableEntity)wolf.world.getEntityByID(this.item.getEntityId());
+            WolfChaseableEntity item = (WolfChaseableEntity)wolf.world.getEntityByID(this.itemgetId());
             if (endPoint != null){
                 double distance = initialPoint.distanceTo(endPoint);
                 IWolfStats stats = WolfStatsHandler.getHandler(wolf);
@@ -88,7 +88,7 @@ public class WolfFindAndPickUpItemGoal extends Goal implements IUpdateableGoal{
                 return shouldChase(3, item);
             }
         } else{
-            MobPlushyEntity item = (MobPlushyEntity)wolf.world.getEntityByID(this.item.getEntityId());
+            MobPlushyEntity item = (MobPlushyEntity)wolf.world.getEntityByID(this.itemgetId());
             if (item == null || wolfInventory.getAvailableSlot(item.getItem()) < 0 || wolf.getHeldItemMainhand() != ItemStack.EMPTY) {
                 return false;
             } else {

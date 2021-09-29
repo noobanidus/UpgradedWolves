@@ -51,7 +51,7 @@ public class TugOfWarGaol extends Goal {
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             handler.clearRopeHolder();
             handler.addXp(WolfStatsEnum.Strength, 2);
-            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getEntityId(),0,0,false) );
+            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolfgetId(),0,0,false) );
             return false;
         }
     }

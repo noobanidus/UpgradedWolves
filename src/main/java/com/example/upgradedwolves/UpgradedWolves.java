@@ -4,6 +4,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
@@ -22,8 +23,10 @@ import org.apache.logging.log4j.Logger;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.TrainingHandler;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
+import com.example.upgradedwolves.capabilities.TrainingHandler.ITraining;
 import com.example.upgradedwolves.client.ClientHandler;
 import com.example.upgradedwolves.common.DamageHandler;
 import com.example.upgradedwolves.common.TrainingEventHandler;
@@ -111,6 +114,11 @@ public class UpgradedWolves
         public static void onBlocksRegistry(final RegistryEvent.Register<Block> blockRegistryEvent) {
             // register a new block here
             LOGGER.info("HELLO from Register Block");
+        }
+        @SubscribeEvent
+        public void registerCapability(RegisterCapabilitiesEvent event){
+            event.register(IWolfStats.class);
+            event.register(ITraining.class);
         }
     }
 
