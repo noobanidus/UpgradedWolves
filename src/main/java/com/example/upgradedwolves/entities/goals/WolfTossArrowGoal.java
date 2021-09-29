@@ -8,7 +8,7 @@ import com.example.upgradedwolves.entities.utilities.AbilityEnhancer;
 import com.example.upgradedwolves.entities.utilities.EntityFinder;
 
 import net.minecraft.entity.IAngerable;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.entity.projectile.AbstractArrowEntity;

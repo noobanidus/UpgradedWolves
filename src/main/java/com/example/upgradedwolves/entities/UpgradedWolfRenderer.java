@@ -126,7 +126,7 @@ public class UpgradedWolfRenderer extends WolfRenderer {
         BlockPos blockpos = new BlockPos(entityLivingIn.getEyePosition(partialTicks));
         BlockPos blockpos1 = new BlockPos(leashHolder.getEyePosition(partialTicks));
         int i = this.getBlockLight(entityLivingIn, blockpos);
-        int j = leashHolder.isBurning() ? 15 : leashHolder.world.getLightFor(LightType.BLOCK, blockpos);
+        int j = leashHolder.isOnFire() ? 15 : leashHolder.world.getLightFor(LightType.BLOCK, blockpos);
         int k = entityLivingIn.world.getLightFor(LightType.SKY, blockpos);
         int l = entityLivingIn.world.getLightFor(LightType.SKY, blockpos1);
         renderSide(ivertexbuilder, matrix4f, f, f1, f2, i, j, k, l, 0.025F, 0.025F, f5, f6);

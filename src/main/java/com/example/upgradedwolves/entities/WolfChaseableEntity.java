@@ -6,7 +6,7 @@ import com.example.upgradedwolves.common.TrainingEventHandler;
 
 import net.minecraft.world.level.block.BlockState;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.projectile.ProjectileItemEntity;

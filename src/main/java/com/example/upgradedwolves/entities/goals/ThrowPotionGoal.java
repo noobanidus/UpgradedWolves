@@ -8,14 +8,14 @@ import com.example.upgradedwolves.entities.utilities.AbilityEnhancer;
 import com.example.upgradedwolves.entities.utilities.EntityFinder;
 import com.example.upgradedwolves.itemHandler.WolfItemStackHandler;
 
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.projectile.PotionEntity;
+import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.item.ThrowablePotionItem;
+import net.minecraft.world.item.ThrowablePotionItem;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
@@ -42,11 +42,11 @@ public class ThrowPotionGoal extends Goal {
         WolfItemStackHandler wolfItems = handler.getInventory();
         int bonus = AbilityEnhancer.increaseEveryLevel(wolf, 10, 3);
         List<LivingEntity> allyList = allyFinder.findWithPredicate(7+ bonus, 3 + bonus, ally ->
-        (ally == wolf.getOwner() || (ally instanceof TameableEntity && ((TameableEntity)ally).getOwner() == wolf.getOwner()) &&
-        (ally.isBurning() || ally.getHealth() < 8)));
+        (ally == wolf.getOwner() || (ally instanceof TamableAnimal && ((TamableAnimal)ally).getOwner() == wolf.getOwner()) &&
+        (ally.isOnFire() || ally.getHealth() < 8)));
         for (LivingEntity livingEntity : allyList) {
             int slot = -1;
-            if(livingEntity.isBurning() && !livingEntity.isPotionActive(Effects.FIRE_RESISTANCE)){
+            if(livingEntity.isOnFire() && !livingEntity.isPotionActive(Effects.FIRE_RESISTANCE)){
                 slot = burningQuestion(wolfItems,Effects.FIRE_RESISTANCE);
             }
             if(livingEntity.getHealth() < 8){
@@ -88,7 +88,7 @@ public class ThrowPotionGoal extends Goal {
         double d2 = target.getZ() + vector3d.z - wolf.getZ();
         float f = Mth.sqrt(d0 * d0 + d2 * d2);
 
-        PotionEntity potionentity = new PotionEntity(wolf.world, wolf);
+        ThrownPotion potionentity = new ThrownPotion(wolf.world, wolf);
         potionentity.setItem(potionStack);
         potionentity.rotationPitch -= -20.0F;
         potionentity.shoot(d0, d1 + (double)(f * 0.2F), d2, 0.75F, 8.0F);

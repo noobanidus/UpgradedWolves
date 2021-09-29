@@ -6,10 +6,10 @@ import com.example.upgradedwolves.common.WolfPlayerInteraction;
 
 import net.minecraft.world.level.block.BlockState;
 import net.minecraft.block.LeavesBlock;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.FollowOwnerGoal;
 import net.minecraft.pathfinding.WalkNodeProcessor;
-import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
@@ -17,11 +17,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.World;
 
 public class FollowOwnerVariableGoal extends FollowOwnerGoal{
-    TameableEntity tameable;
+    TamableAnimal tameable;
     float dist;
     PathNavigator navigator;
 
-    public FollowOwnerVariableGoal(TameableEntity tameable, double speed, float minDist, float maxDist,
+    public FollowOwnerVariableGoal(TamableAnimal tameable, double speed, float minDist, float maxDist,
             boolean teleportToLeaves) {
         super(tameable, speed, minDist, maxDist, teleportToLeaves);
         this.tameable = tameable;

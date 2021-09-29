@@ -8,7 +8,7 @@ import com.example.upgradedwolves.capabilities.WolfType;
 import org.apache.logging.log4j.LogManager;
 
 import net.minecraft.entity.IAngerable;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.monster.CreeperEntity;

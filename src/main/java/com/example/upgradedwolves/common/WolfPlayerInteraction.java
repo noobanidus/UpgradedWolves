@@ -25,7 +25,7 @@ import com.example.upgradedwolves.items.MobPlushy;
 
 import org.apache.logging.log4j.LogManager;
 
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.FollowOwnerGoal;
 import net.minecraft.world.entity.ai.goal.Goal;

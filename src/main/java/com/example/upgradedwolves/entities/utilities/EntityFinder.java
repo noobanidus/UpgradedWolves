@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import net.minecraft.world.entity.Entity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 
 public class EntityFinder<T extends Entity> {
     public final LivingEntity entityOwner;

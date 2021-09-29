@@ -3,7 +3,7 @@ package com.example.upgradedwolves.entities.goals;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.entity.monster.CreeperEntity;
-import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.world.entity.TamableAnimal;
 
 public class FleeExplodingCreeper extends AvoidEntityGoal<CreeperEntity>{
 
@@ -17,7 +17,7 @@ public class FleeExplodingCreeper extends AvoidEntityGoal<CreeperEntity>{
         boolean mayExecute = super.canUse();
         if(avoidTarget == null)
             return false;
-        if(avoidTarget.hasIgnited() && !(this.entity instanceof TameableEntity && ((TameableEntity)this.entity).isSitting()))
+        if(avoidTarget.hasIgnited() && !(this.entity instanceof TamableAnimal && ((TamableAnimal)this.entity).isSitting()))
             return mayExecute;
         return false;
     }

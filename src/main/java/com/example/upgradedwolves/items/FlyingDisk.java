@@ -3,7 +3,7 @@ package com.example.upgradedwolves.items;
 import com.example.upgradedwolves.UpgradedWolves;
 import com.example.upgradedwolves.entities.FlyingDiskEntity;
 
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.item.ItemGroup;

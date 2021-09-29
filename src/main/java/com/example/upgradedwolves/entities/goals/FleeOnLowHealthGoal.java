@@ -2,7 +2,7 @@ package com.example.upgradedwolves.entities.goals;
 
 import net.minecraft.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.entity.CreatureEntity;
 
 public class FleeOnLowHealthGoal extends AvoidEntityGoal<MonsterEntity> {
@@ -16,7 +16,7 @@ public class FleeOnLowHealthGoal extends AvoidEntityGoal<MonsterEntity> {
 
     @Override
     public boolean canUse() {
-        if(this.entity.getHealth() < minHealth && !(this.entity instanceof TameableEntity && ((TameableEntity)this.entity).isSitting()))
+        if(this.entity.getHealth() < minHealth && !(this.entity instanceof TamableAnimal && ((TamableAnimal)this.entity).isSitting()))
             return super.canUse();
         return false;
     }
