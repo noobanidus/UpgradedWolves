@@ -40,7 +40,7 @@ public class SyncWolfHandMessage implements IMessage<SyncWolfHandMessage> {
     public void handle(SyncWolfHandMessage message, Supplier<Context> supplier) {
         supplier.get().enqueueWork(() -> {
             Minecraft mc = Minecraft.getInstance();
-            Wolf wolf = (Wolf)mc.level.getEntityByID(message.wolfId);            
+            Wolf wolf = (Wolf)mc.level.getEntity(message.wolfId);            
             wolf.setItemInHand(InteractionHand.MAIN_HAND, message.item);
         });
     }

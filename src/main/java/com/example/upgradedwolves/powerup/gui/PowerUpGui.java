@@ -18,10 +18,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.fml.client.gui.GuiUtils;
 
 public class PowerUpGui extends AbstractGui {
@@ -89,7 +89,7 @@ public class PowerUpGui extends AbstractGui {
       int k = i % 16;
       int l = j % 16;   
 
-      this.minecraft.getTextureManager().bindTexture(background);
+      this.minecraft.getTextureManager().bindForSetup(background);
 
       for(int i1 = -1; i1 <= 15; ++i1) {
          for(int j1 = -1; j1 <= 8; ++j1) {
@@ -97,7 +97,7 @@ public class PowerUpGui extends AbstractGui {
          }
       }
 
-      this.minecraft.getTextureManager().bindTexture(POWERUP);
+      this.minecraft.getTextureManager().bindForSetup(POWERUP);
       
       displayPowerUps(matrixStack,i,j);
       
@@ -123,13 +123,13 @@ public class PowerUpGui extends AbstractGui {
          textBoxInfo.add(powerUp.getDescription(wolf));
       } else if(levelDistance(powerUp) <= 3){
          textBoxInfo.add(powerUp.getName());
-         textBoxInfo.add(new StringTextComponent("???").setStyle(Style.EMPTY.setItalic(true)));
-         textBoxInfo.add(new TranslationTextComponent("powerup.required.level",powerUp.levelType().toString(),powerUp.requiredLevel()).setStyle(redStyle));
+         textBoxInfo.add(new TextComponent("???").setStyle(Style.EMPTY.setItalic(true)));
+         textBoxInfo.add(new TranslatableComponent("powerup.required.level",powerUp.levelType().toString(),powerUp.requiredLevel()).setStyle(redStyle));
       } else {
          Style style = Style.EMPTY.setColor(TextColor.fromTextFormatting(TextFormatting.BLUE)).setItalic(true);
-         textBoxInfo.add(new StringTextComponent("???").setStyle(style));
-         textBoxInfo.add(new StringTextComponent("???").setStyle(Style.EMPTY.setItalic(true)));
-         textBoxInfo.add(new TranslationTextComponent("powerup.required.level",powerUp.levelType().toString(),powerUp.requiredLevel()).setStyle(redStyle));
+         textBoxInfo.add(new TextComponent("???").setStyle(style));
+         textBoxInfo.add(new TextComponent("???").setStyle(Style.EMPTY.setItalic(true)));
+         textBoxInfo.add(new TranslatableComponent("powerup.required.level",powerUp.levelType().toString(),powerUp.requiredLevel()).setStyle(redStyle));
       }
       
       GuiUtils.drawHoveringText(matrixStack, textBoxInfo, mouseX, mouseY, width, height, width, font);

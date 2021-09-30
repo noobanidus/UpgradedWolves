@@ -39,7 +39,7 @@ public class TrainingItemMessage implements IMessage<TrainingItemMessage> {
     public void handle(TrainingItemMessage message, Supplier<Context> supplier) {
         supplier.get().enqueueWork(() -> {
             Minecraft mc = Minecraft.getInstance();
-            ClientPlayerEntity player = (ClientPlayerEntity)mc.level.getEntityByID(message.playerId);
+            ClientPlayerEntity player = (ClientPlayerEntity)mc.level.getEntity(message.playerId);
             ItemStack foodItem = TrainingEventHandler.getFoodStack(player);
             ITraining handler = TrainingHandler.getHandler(foodItem);
             handler.setAttribute(message.wolfValue);

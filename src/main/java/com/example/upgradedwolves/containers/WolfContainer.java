@@ -12,9 +12,7 @@ import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.CompoundContainer;
-import net.minecraft.world.Container;
-import net.minecraft.inventory.container.Slot;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -28,24 +26,23 @@ public class WolfContainer extends AbstractContainerMenu {
     public Inventory playerInventory;
 
     private WolfContainer(int id, Inventory playerInventory,WolfItemStackHandler wolfStackHandler,Wolf wolf,CompoundTag nbt) {
-        super(ModContainers.WOLF_CONTAINER,id);
+        super(ModContainers.WOLF_CONTAINER.get(),id);
         this.wolf = wolf;
         this.wolfItemHandler = wolfStackHandler;
         this.nbt = nbt;
         this.playerInventory = playerInventory;
-
         setupContainer();
     }
 
     public static WolfContainer createContainerClientSide(int id, Inventory inventory, FriendlyByteBuf data){
         int numberOfSlots = data.readInt();
         int wolfId = data.readInt();
-        CompoundTag nbt = data.readCompoundTag();
+        CompoundTag nbt = data.readNbt();
 
         try{
             WolfItemStackHandler wolfItemHandler = new WolfItemStackHandler(numberOfSlots);
             Minecraft mc = Minecraft.getInstance();
-            Wolf wolf = (Wolf)mc.level.getEntityByID(wolfId);
+            Wolf wolf = (Wolf)mc.level.getEntity(wolfId);
 
             return new WolfContainer(id,inventory,wolfItemHandler, wolf,nbt);
         }catch(IllegalArgumentException iae){
@@ -61,21 +58,21 @@ public class WolfContainer extends AbstractContainerMenu {
     @Nonnull
 	@Override
 	public ItemStack quickMoveStack(Player player, int sourceSlotIndex) {
-        Slot sourceSlot = inventorySlots.get(sourceSlotIndex);
-        if (sourceSlot == null || !sourceSlot.getHasStack()) return ItemStack.EMPTY;  //EMPTY_ITEM
-        ItemStack sourceStack = sourceSlot.getStack();
+        Slot sourceSlot = slots.get(sourceSlotIndex);
+        if (sourceSlot == null || !sourceSlot.hasItem()) return ItemStack.EMPTY;  //EMPTY_ITEM
+        ItemStack sourceStack = sourceSlot.getItem();
         ItemStack copyOfSourceStack = sourceStack.copy();
         final int BAG_SLOT_COUNT = wolfItemHandler.getSlots();
 
         // Check if the slot clicked is one of the vanilla container slots
         if (sourceSlotIndex >= 0 && sourceSlotIndex < 27) {
         // This is a vanilla container slot so merge the stack into the bag inventory
-        if (!mergeItemStack(sourceStack, 28, 28 + BAG_SLOT_COUNT, false)){
+        if (!moveItemStackTo(sourceStack, 28, 28 + BAG_SLOT_COUNT, false)){
             return ItemStack.EMPTY;  // EMPTY_ITEM
         }
         } else if (sourceSlotIndex >= 28 && sourceSlotIndex < 28 + BAG_SLOT_COUNT) {
         // This is a bag slot so merge the stack into the players inventory
-        if (!mergeItemStack(sourceStack, 0, 27, false)) {
+        if (!moveItemStackTo(sourceStack, 0, 27, false)) {
             return ItemStack.EMPTY;
         }
         } else {
@@ -85,9 +82,9 @@ public class WolfContainer extends AbstractContainerMenu {
 
         // If stack size == 0 (the entire stack was moved) set slot contents to null
         if (sourceStack.getCount() == 0) {
-            sourceSlot.putStack(ItemStack.EMPTY);
+            sourceSlot.set(ItemStack.EMPTY);
         } else {
-            sourceSlot.onSlotChanged();
+            sourceSlot.setChanged();
         }
 
         sourceSlot.onTake(player, sourceStack);
@@ -95,7 +92,7 @@ public class WolfContainer extends AbstractContainerMenu {
 	}
 
     public void clearContainer(){
-        this.inventorySlots.clear();
+        this.slots.clear();
     }
 
     public void setupContainer(){

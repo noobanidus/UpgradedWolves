@@ -55,7 +55,7 @@ public class RenderMessage implements IMessage<RenderMessage> {
     public void handle(RenderMessage message, Supplier<Context> supplier) {
         supplier.get().enqueueWork(() -> {
             Minecraft mc = Minecraft.getInstance();
-            Wolf wolf = (Wolf)mc.level.getEntityByID(message.wolfId);
+            Wolf wolf = (Wolf)mc.level.getEntity(message.wolfId);
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             if(message.renderType){
                 handler.setWolfType(message.wolfValue);

@@ -7,7 +7,7 @@ import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.network.chat.TextComponent;
 
 public class ContainerProviderWolfInventory implements MenuProvider {
     private Wolf wolf;
@@ -19,7 +19,7 @@ public class ContainerProviderWolfInventory implements MenuProvider {
 
     @Override
     public Component getDisplayName(){
-        return new StringTextComponent("Inventory");
+        return new TextComponent("Inventory");
     }
 
     @Override

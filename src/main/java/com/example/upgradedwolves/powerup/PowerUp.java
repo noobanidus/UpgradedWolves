@@ -22,7 +22,7 @@ import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
 public abstract class PowerUp {    
     //Must be a constant size
@@ -95,11 +95,11 @@ public abstract class PowerUp {
 
     public Component getName(){
         Style style = Style.EMPTY.setColor(TextColor.fromTextFormatting(TextFormatting.BLUE));
-        return new TranslationTextComponent(name,effectiveLevel > 0 ? effectiveLevel : "").setStyle(style);
+        return new TranslatableComponent(name,effectiveLevel > 0 ? effectiveLevel : "").setStyle(style);
     }
 
     public Component getDescription(Wolf wolf){
-        return new TranslationTextComponent(description,wolf.getName());
+        return new TranslatableComponent(description,wolf.getName());
     }
 
     public Goal fetchRelevantGoal(Wolf wolf){

@@ -25,6 +25,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.phys.Vec3;
@@ -479,7 +480,7 @@ public class WolfStatsHandler {
             nbt.putInt("WolfType",INSTANCE.getWolfType());
             nbt.putInt("WolfFur",INSTANCE.getWolfFur());
             nbt.put("Inventory",INSTANCE.getInventory().serializeNBT());
-            nbt.put("RoamPosition",NbtUtils.writeBlockPos(INSTANCE.getRoamPoint()));
+            nbt.put("RoamPosition",NbtUtils.writeBlockPos(new BlockPos(INSTANCE.getRoamPoint())));
             return nbt;
         }
 
@@ -497,7 +498,7 @@ public class WolfStatsHandler {
             INSTANCE.setWolfType(next.getInt("WolfType"));
             INSTANCE.setWolffur(next.getInt("WolfFur"));
             INSTANCE.getInventory().deserializeNBT(next.getCompound("Inventory"));
-            INSTANCE.setRoamPoint(NbtUtils.readBlockPos(next.getCompound("RoamPosition")));
+            INSTANCE.setRoamPoint(Vec3.atCenterOf(NbtUtils.readBlockPos(next.getCompound("RoamPosition"))));
             INSTANCE.InitLove();
         }
 
