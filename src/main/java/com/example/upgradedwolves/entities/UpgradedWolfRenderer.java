@@ -13,6 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.WolfRenderer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.Wolf;
@@ -37,7 +38,7 @@ public class UpgradedWolfRenderer extends WolfRenderer {
     });
 
 
-    public UpgradedWolfRenderer(EntityRendererManager rendererManager) {
+    public UpgradedWolfRenderer(EntityRendererProvider.Context rendererManager) {
         super(rendererManager);
         this.entityModel = new UpgradedWolfModel();
         

@@ -15,7 +15,9 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.projectile.ThrowableEntity;
+import net.minecraft.world.entity.projectile.ThrowableProjectile;
+import net.minecraft.entity.projectile.ThrowableProjectile;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.IPacket;
@@ -37,14 +39,14 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraftforge.api.distmarker.Dist;
 
-public class MobPlushyEntity extends ThrowableEntity {
-    private static final DataParameter<ItemStack> ITEMSTACK_DATA = EntityDataManager.createKey(ThrowableEntity.class, DataSerializers.ITEMSTACK);
+public class MobPlushyEntity extends ThrowableProjectile {
+    private static final DataParameter<ItemStack> ITEMSTACK_DATA = EntityDataManager.createKey(ThrowableItemProjectile.class, DataSerializers.ITEMSTACK);
     private boolean inGround;
     @Nullable
     private BlockState inBlockState;
 
     public MobPlushyEntity(EntityType<? extends MobPlushyEntity> p_i50159_1_, World p_i50159_2_) {
-        super(p_i50159_1_, p_i50159_2_);        
+        super(p_i50159_1_, p_i50159_2_);      
     }
 
     public MobPlushyEntity(World worldIn, LivingEntity throwerIn) {

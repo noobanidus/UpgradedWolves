@@ -8,16 +8,18 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.world.entity.animal.Wolf;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
 import java.awt.*;
 
-public class WolfScreen extends ContainerScreen<WolfContainer> {
+public class WolfScreen extends AbstractContainerScreen<WolfContainer> {
     private static final ResourceLocation INVENTORY = UpgradedWolves.getId("gui/wolf_chest_gui.png");
     private static final ResourceLocation TABS = UpgradedWolves.getId("gui/wolf_tabs_gui.png");
     private static final ResourceLocation POWERUP = UpgradedWolves.getId("gui/wolf_powerup_gui.png");
@@ -29,7 +31,7 @@ public class WolfScreen extends ContainerScreen<WolfContainer> {
     boolean inventoryTab = true;
     CompoundTag nbt;
 
-    public WolfScreen(WolfContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
+    public WolfScreen(WolfContainer screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
         this.wolf = screenContainer.wolf;
         this.slots = screenContainer.wolfItemHandler.getSlots();
@@ -194,6 +196,11 @@ public class WolfScreen extends ContainerScreen<WolfContainer> {
             this.blit(matrixStack, guiLeft + 170, guiTop + 7, 0, 0, 36, 26);
             this.blit(matrixStack, guiLeft + 171, guiTop + 33, 0, 27, 36, 26);
         }
+    }
+    @Override
+    protected void renderBg(PoseStack p_97787_, float p_97788_, int p_97789_, int p_97790_) {
+        // TODO Auto-generated method stub
+        
     }
     
     

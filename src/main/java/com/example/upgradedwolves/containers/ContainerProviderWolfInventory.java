@@ -4,7 +4,7 @@ import com.example.upgradedwolves.itemHandler.WolfItemStackHandler;
 
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -23,7 +23,7 @@ public class ContainerProviderWolfInventory implements INamedContainerProvider {
     }
 
     @Override
-    public WolfContainer createMenu(int windowId, PlayerInventory inventory, Player player){
+    public WolfContainer createMenu(int windowId, Inventory inventory, Player player){
         
         WolfContainer wolfContainerServerSide = 
             WolfContainer.createContainerServerSide(windowId, inventory, wolfHandler, wolf);

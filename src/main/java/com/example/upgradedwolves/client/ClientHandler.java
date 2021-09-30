@@ -10,32 +10,30 @@ import com.example.upgradedwolves.loot_table.init.ModGlobalLootTableModifier;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.SpriteRenderer;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
+import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
 @Mod.EventBusSubscriber(modid = UpgradedWolves.ModId,bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientHandler {
     @OnlyIn(Dist.CLIENT)
     public static void setup(){
-        RenderingRegistry.registerEntityRenderingHandler(EntityType.WOLF, UpgradedWolfRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntities.mobPlushyEntityType,MobPlushyRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntities.tennisBallEntityType,
-            manager -> new SpriteRenderer<>(manager,Minecraft.getInstance().getItemRenderer()));
-        RenderingRegistry.registerEntityRenderingHandler(ModEntities.flyingDiskEntityType,
-            manager -> new SpriteRenderer<>(manager,Minecraft.getInstance().getItemRenderer()));
+        
+        EntityRenderers.register(EntityType.WOLF, UpgradedWolfRenderer::new);
+        EntityRenderers.register(ModEntities.mobPlushyEntityType,MobPlushyRenderer::new);
+        // EntityRenderers.register(ModEntities.tennisBallEntityType,
+        //     manager -> new ItemEntityRenderer(manager,Minecraft.getInstance().getItemRenderer()));
+        // EntityRenderers.register(ModEntities.flyingDiskEntityType,
+        //     manager -> new ItemEntityRenderer(manager,Minecraft.getInstance().getItemRenderer()));
 
-        EntityRendererManager entityRendererManager = Minecraft.getInstance().getRenderManager();
-        entityRendererManager.register(ModEntities.mobPlushyEntityType, new MobPlushyRenderer(entityRendererManager));
+        // EntityRendererManager entityRendererManager = Minecraft.getInstance().getRenderManager();
+        // entityRendererManager.register(ModEntities.mobPlushyEntityType, new MobPlushyRenderer(entityRendererManager));
 
-        ScreenManager.registerFactory(ModContainers.WOLF_CONTAINER, WolfScreen::new);
+        MenuScreens.register(ModContainers.WOLF_CONTAINER.get(), WolfScreen::new);        
     }
 
     @SubscribeEvent

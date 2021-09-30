@@ -10,22 +10,24 @@ import org.apache.logging.log4j.LogManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.CompoundContainer;
+import net.minecraft.world.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class WolfContainer extends Container {
+public class WolfContainer extends AbstractContainerMenu {
 
     public Wolf wolf;
     public WolfItemStackHandler wolfItemHandler;   
     public CompoundTag nbt;
-    public PlayerInventory playerInventory;
+    public Inventory playerInventory;
 
-    private WolfContainer(int id, PlayerInventory playerInventory,WolfItemStackHandler wolfStackHandler,Wolf wolf,CompoundTag nbt) {
+    private WolfContainer(int id, Inventory playerInventory,WolfItemStackHandler wolfStackHandler,Wolf wolf,CompoundTag nbt) {
         super(ModContainers.WOLF_CONTAINER,id);
         this.wolf = wolf;
         this.wolfItemHandler = wolfStackHandler;
@@ -35,7 +37,7 @@ public class WolfContainer extends Container {
         setupContainer();
     }
 
-    public static WolfContainer createContainerClientSide(int id, PlayerInventory inventory, FriendlyByteBuf data){
+    public static WolfContainer createContainerClientSide(int id, Inventory inventory, FriendlyByteBuf data){
         int numberOfSlots = data.readInt();
         int wolfId = data.readInt();
         CompoundTag nbt = data.readCompoundTag();
@@ -52,13 +54,13 @@ public class WolfContainer extends Container {
         return null;
     }
 
-    public static WolfContainer createContainerServerSide(int id, PlayerInventory inventory,WolfItemStackHandler wolfItemHandler,Wolf wolf){
+    public static WolfContainer createContainerServerSide(int id, Inventory inventory,WolfItemStackHandler wolfItemHandler,Wolf wolf){
         return new WolfContainer(id,inventory,wolfItemHandler,wolf,null);
     }
 
     @Nonnull
 	@Override
-	public ItemStack transferStackInSlot(Player player, int sourceSlotIndex) {
+	public ItemStack quickMoveStack(Player player, int sourceSlotIndex) {
         Slot sourceSlot = inventorySlots.get(sourceSlotIndex);
         if (sourceSlot == null || !sourceSlot.getHasStack()) return ItemStack.EMPTY;  //EMPTY_ITEM
         ItemStack sourceStack = sourceSlot.getStack();
@@ -92,12 +94,6 @@ public class WolfContainer extends Container {
         return copyOfSourceStack;
 	}
 
-    @Override
-    public boolean canInteractWith(Player playerIn) {
-        
-        return true;
-    }
-
     public void clearContainer(){
         this.inventorySlots.clear();
     }
@@ -121,6 +117,11 @@ public class WolfContainer extends Container {
         for(int i = 0; i < wolfItemHandler.getSlots(); i++){
             this.addSlot(new SlotItemHandler(wolfItemHandler,i,startX + delta * (i % 9),startY + delta * (i/9)));
         }
+    }
+
+    @Override
+    public boolean stillValid(Player p_38874_) {        
+        return true;
     }
     
 }
