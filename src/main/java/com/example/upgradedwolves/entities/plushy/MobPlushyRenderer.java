@@ -37,7 +37,7 @@ public class MobPlushyRenderer extends EntityRenderer<MobPlushyEntity> {
         model = MobPlushy.getModelByPlushType(plush);        
         matrixStackIn.push();
         int i = OverlayTexture.NO_OVERLAY;
-        IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEntityCutoutNoCull(getEntityTexture(entityIn)));
+        IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEntityCutoutNoCull(getTextureLocation(entityIn)));
         model.render(matrixStackIn, ivertexbuilder, packedLightIn, i, 1f, 1f, 1f, 1f);
         matrixStackIn.pop();
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
@@ -50,7 +50,7 @@ public class MobPlushyRenderer extends EntityRenderer<MobPlushyEntity> {
     }
 
     @Override
-    public ResourceLocation getEntityTexture(MobPlushyEntity entity) {
+    public ResourceLocation getTextureLocation(MobPlushyEntity entity) {
         MobPlushy plush = (MobPlushy)entity.getItem().getItem();
         return MobPlushy.getPlushTexture(plush);
     }

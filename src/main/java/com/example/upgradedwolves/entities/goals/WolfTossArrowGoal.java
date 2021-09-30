@@ -9,7 +9,7 @@ import com.example.upgradedwolves.entities.utilities.EntityFinder;
 
 import net.minecraft.entity.IAngerable;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
@@ -20,15 +20,15 @@ import net.minecraft.util.Mth;
 
 public class WolfTossArrowGoal extends CoolDownGoal {
     protected final Wolf wolf;
-    protected final EntityFinder<MonsterEntity> entityFinder;
-    protected MonsterEntity target;
+    protected final EntityFinder<Monster> entityFinder;
+    protected Monster target;
     protected int arrowStackSlot;
     int windUpTicks = 10;
 
 
     public WolfTossArrowGoal(Wolf wolf){
         this.wolf = wolf;
-        this.entityFinder = new EntityFinder<MonsterEntity>(wolf,MonsterEntity.class);
+        this.entityFinder = new EntityFinder<Monster>(wolf,Monster.class);
         setCoolDownInSeconds(300);
     }
 
@@ -38,7 +38,7 @@ public class WolfTossArrowGoal extends CoolDownGoal {
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             int slot = handler.getInventory().getArbitraryItem(item -> item instanceof ArrowItem);
             if(slot >= 0){
-                List<MonsterEntity> enemies = entityFinder.findWithPredicate(5, 3,enemy -> (!(enemy instanceof IAngerable) || ((IAngerable)enemy).getAttackTarget() != null) && wolf.getEntitySenses().canSee(enemy));
+                List<Monster> enemies = entityFinder.findWithPredicate(5, 3,enemy -> (!(enemy instanceof IAngerable) || ((IAngerable)enemy).getAttackTarget() != null) && wolf.getEntitySenses().canSee(enemy));
                 if(enemies.size() > 0){
                     target = enemies.get(0);
                     return true;
@@ -74,8 +74,8 @@ public class WolfTossArrowGoal extends CoolDownGoal {
         double d1 = target.getPosYHeight(0.3333333333333333D) - abstractarrowentity.getY();
         double d2 = target.getZ() - wolf.getZ();
         double d3 = (double)Mth.sqrt(d0 * d0 + d2 * d2);
-        abstractarrowentity.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, (float)(14 - wolf.world.getDifficulty().getId() * 4));
-        wolf.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (wolf.getRNG().nextFloat() * 0.4F + 0.8F));
-        wolf.world.addEntity(abstractarrowentity);
+        abstractarrowentity.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, (float)(14 - wolf.level.getDifficulty().getId() * 4));
+        wolf.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (wolf.getRandom().nextFloat() * 0.4F + 0.8F));
+        wolf.level.addEntity(abstractarrowentity);
      }
 }

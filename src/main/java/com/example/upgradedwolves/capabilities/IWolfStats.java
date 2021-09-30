@@ -8,7 +8,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 
 public interface IWolfStats {
     public void addXp(WolfStatsEnum wolfStats,int amount);
@@ -47,8 +47,8 @@ public interface IWolfStats {
     public boolean getRetrievalFlag();
     public void setLootFlag(boolean set);
     public boolean getLootFlag();
-    public BlockPos getRoamPoint();
-    public void setRoamPoint(BlockPos location);
+    public Vec3 getRoamPoint();
+    public void setRoamPoint(Vec3 location);
     public int getWolfFur();
     public void setWolffur(int color);
 }

@@ -7,13 +7,13 @@ import com.example.upgradedwolves.common.WolfPlayerInteraction;
 import net.minecraft.world.level.block.BlockState;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.FollowOwnerGoal;
+import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
 import net.minecraft.pathfinding.WalkNodeProcessor;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.World;
 
 public class FollowOwnerVariableGoal extends FollowOwnerGoal{
@@ -53,7 +53,7 @@ public class FollowOwnerVariableGoal extends FollowOwnerGoal{
     public boolean shouldContinueExecuting() {
         if (this.navigator.noPath()) {
            return false;
-        } else if (this.tameable.isSitting()) {
+        } else if (this.tameable.isInSittingPose()) {
            return false;
         } else {
            return !(this.tameable.getDistanceSq(tameable) <= (double)(this.dist * this.dist));
@@ -61,11 +61,11 @@ public class FollowOwnerVariableGoal extends FollowOwnerGoal{
      }
 
     private int getRandomNumber(int min, int max) {
-        return this.tameable.getRNG().nextInt(max - min + 1) + min;
+        return this.tameable.getRandom().nextInt(max - min + 1) + min;
     }
 
     void teleportToEntity(){
-        BlockPos blockpos = this.tameable.getOwner().getPosition(1);
+        Vec3 blockpos = this.tameable.getOwner().getPosition(1);
 
         for(int i = 0; i < 10; ++i) {
             int j = this.getRandomNumber(-3, 3);
@@ -82,7 +82,7 @@ public class FollowOwnerVariableGoal extends FollowOwnerGoal{
         LivingEntity owner = tameable.getOwner();
         if (Math.abs((double)x - owner.getX()) < 2.0D && Math.abs((double)z - owner.getZ()) < 2.0D) {
            return false;
-        } else if (!this.isTeleportFriendlyBlock(new BlockPos(x, y, z))) {
+        } else if (!this.isTeleportFriendlyBlock(new Vec3(x, y, z))) {
            return false;
         } else {
            this.tameable.setLocationAndAngles((double)x + 0.5D, (double)y, (double)z + 0.5D, this.tameable.rotationYaw, this.tameable.rotationPitch);
@@ -90,7 +90,7 @@ public class FollowOwnerVariableGoal extends FollowOwnerGoal{
            return true;
         }
     }
-    private boolean isTeleportFriendlyBlock(BlockPos pos) {
+    private boolean isTeleportFriendlyBlock(Vec3 pos) {
         World world = tameable.world;
         PathNodeType pathnodetype = WalkNodeProcessor.func_237231_a_(world, pos.toMutable());
         if (pathnodetype != PathNodeType.WALKABLE) {
@@ -100,7 +100,7 @@ public class FollowOwnerVariableGoal extends FollowOwnerGoal{
            if (blockstate.getBlock() instanceof LeavesBlock) {
               return false;
            } else {
-              BlockPos blockpos = pos.subtract(this.tameable.getPosition(1));
+              Vec3 blockpos = pos.subtract(this.tameable.getPosition(1));
               return world.hasNoCollisions(this.tameable, this.tameable.getBoundingBox().offset(blockpos));
            }
         }

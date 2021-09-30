@@ -1,17 +1,18 @@
 package com.example.upgradedwolves.entities.goals;
 
-import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.ai.goal.RandomWalkingGoal;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+
 import com.mojang.math.Vector3d;
 
-public class WolfBiasRoamGoal extends RandomWalkingGoal {
+public class WolfBiasRoamGoal extends RandomStrollGoal {
     Vector3d bias;
     double maxDistance;
     double minDistance;
 
-    public WolfBiasRoamGoal(CreatureEntity creature, double speedIn,double maxDistance, double minDistance) {
-        super(creature, speedIn);
+    public WolfBiasRoamGoal(PathfinderMob creature, double speedIn,double maxDistance, double minDistance) {
+        super(creature, speedIn);    
         bias = creature.getPositionVec();
         this.maxDistance = maxDistance;
         this.minDistance = minDistance;

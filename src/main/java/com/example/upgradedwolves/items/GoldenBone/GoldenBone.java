@@ -8,7 +8,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
@@ -21,9 +21,9 @@ public class GoldenBone extends GoldenBoneAbstract {
     }
 
     @Override
-    public ITextComponent getDisplayName(ItemStack stack) {
+    public Component getDisplayName(ItemStack stack) {
         Style style = Style.EMPTY.setColor(TextColor.fromTextFormatting(TextFormatting.AQUA));
-        ITextComponent component = new StringTextComponent(super.getDisplayName(stack).getString()).setStyle(style);
+        Component component = new StringTextComponent(super.getDisplayName(stack).getString()).setStyle(style);
         return component;
     }
 

@@ -8,8 +8,8 @@ import com.example.upgradedwolves.itemHandler.WolfItemStackHandler;
 
 import org.apache.logging.log4j.LogManager;
 
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.InteractionHand;
@@ -22,31 +22,31 @@ public class DamageHandler {
     //When the entity is attacked by a wolf
     @SubscribeEvent(priority=EventPriority.HIGHEST)
     public void onEntityHurt(LivingHurtEvent event) {
-        if(event.getSource().getTrueSource() != null && event.getSource().getTrueSource() instanceof Wolf){
-            Wolf wolf = (Wolf)event.getSource().getTrueSource();
+        if(event.getSource().getDirectEntity() != null && event.getSource().getDirectEntity() instanceof Wolf){
+            Wolf wolf = (Wolf)event.getSource().getDirectEntity();
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             event.setAmount(handler.getWolfStrength());                                          
             handler.addXp(WolfStatsEnum.Strength, handler.getWolfType() == WolfType.Fighter.getValue() ?
             3 :
             2);
-            if(event.getEntity() instanceof MonsterEntity)
-                handler.addXp(WolfStatsEnum.Strength, 2);            
+            if(event.getEntity() instanceof Monster)
+                handler.addXp(WolfStatsEnum.Strength, 2);           
         }
     }
     @SubscribeEvent
     public void onWolfKill(LivingDeathEvent event){
-        if(event.getSource().getTrueSource() != null && event.getSource().getTrueSource() instanceof Wolf){
-            Wolf wolf = (Wolf)event.getSource().getTrueSource();
+        if(event.getSource().getDirectEntity() != null && event.getSource().getDirectEntity() instanceof Wolf){
+            Wolf wolf = (Wolf)event.getSource().getDirectEntity();
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);                                        
             handler.addXp(WolfStatsEnum.Intelligence, 1);
             handler.addXp(WolfStatsEnum.Speed,2);
             wolf.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(handler.getWolfSpeed());
             LogManager.getLogger().info("Wolf intelligence Increased:" + handler.getXp(WolfStatsEnum.Intelligence) + " xp, lvl: " + handler.getLevel(WolfStatsEnum.Intelligence));
-            if(wolf.getHeldItemMainhand() != null){
+            if(wolf.getMainHandItem() != null){
                 if(wolf.getOwner() != null){
-                    wolf.getOwner().spawnAtLocation(wolf.getHeldItemMainhand());
+                    wolf.getOwner().spawnAtLocation(wolf.getMainHandItem());
                 } else {
-                    wolf.spawnAtLocation(wolf.getHeldItemMainhand());
+                    wolf.spawnAtLocation(wolf.getMainHandItem());
                 }
                 wolf.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);                
             }

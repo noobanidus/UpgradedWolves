@@ -10,7 +10,7 @@ import com.example.upgradedwolves.entities.utilities.EntityFinder;
 import org.apache.logging.log4j.LogManager;
 
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
@@ -24,14 +24,14 @@ public class DetectEnemiesGoal extends Goal implements IUpdateableGoal {
     double range;
     boolean coolDown = false;
     Wolf wolf;
-    MonsterEntity detectedEntity;
-    EntityFinder<MonsterEntity> entityFinder;
+    Monster detectedEntity;
+    EntityFinder<Monster> entityFinder;
 
     public DetectEnemiesGoal(Wolf wolf){
         this.wolf = wolf;
         IWolfStats handler = WolfStatsHandler.getHandler(wolf);
         this.range = 5 + handler.getDetectionBonus();
-        entityFinder = new EntityFinder<MonsterEntity>(wolf,MonsterEntity.class);
+        entityFinder = new EntityFinder<Monster>(wolf,Monster.class);
     }
 
     @Override
@@ -47,9 +47,9 @@ public class DetectEnemiesGoal extends Goal implements IUpdateableGoal {
             }
         if(currentTicks++ < attemptTicks)
             return false;
-        List<MonsterEntity> foundEntities = entityFinder.findWithPredicate(range, 0, x -> wolf.getEntitySenses().canSee(x));
+        List<Monster> foundEntities = entityFinder.findWithPredicate(range, 0, x -> wolf.getEntitySenses().canSee(x));
         foundEntities.addAll(entityFinder.findWithinRange(range/5, 0));
-        for(MonsterEntity monsterEntity : foundEntities) {
+        for(Monster monsterEntity : foundEntities) {
             monsterEntity.addPotionEffect(new EffectInstance(Effect.get(24),120 + (10 * AbilityEnhancer.detectionSkill(wolf))));
             this.wolf.getLookController().setLookPosition(monsterEntity.getPositionVec());
             detectedEntity = monsterEntity;

@@ -21,7 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Util;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.util.Mth;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3d;
@@ -45,21 +45,21 @@ public class UpgradedWolfRenderer extends WolfRenderer {
     }
 
     @Override
-    public ResourceLocation getEntityTexture(Wolf wolf){
+    public ResourceLocation getTextureLocation(Wolf wolf){
         if(!wolf.isTamed())
-            return super.getEntityTexture(wolf);
+            return super.getTextureLocation(wolf);
         else{
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             switch(handler.getWolfType()){
                 case 0:
-                    return super.getEntityTexture(wolf);
+                    return super.getTextureLocation(wolf);
                 case 1:
                     return UpgradedWolves.getId("textures/entity/fighterwolf.png");
                 case 2:
                     return UpgradedWolves.getId("textures/entity/scavengerwolf.png");
                 case 3:                    
                     if(wolf.hasCustomName() && wolf.getCustomName().getString().equals("Strobe"))
-                        return showWolfTextures.get(wolf.getRNG().nextInt(3));
+                        return showWolfTextures.get(wolf.getRandom().nextInt(3));
                     return showWolfTextures.get(handler.getWolfFur());
                     
             }
@@ -75,8 +75,8 @@ public class UpgradedWolfRenderer extends WolfRenderer {
     public void render(Wolf wolf, float entityYaw, float partialTicks, PoseStack matrixStackIn,
             IRenderTypeBuffer bufferIn, int packedLightIn) {        
         super.render(wolf, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
-        if(!wolf.getHeldItemMainhand().isEmpty()){
-            ItemStack itemStack = wolf.getHeldItemMainhand();
+        if(!wolf.getMainHandItem().isEmpty()){
+            ItemStack itemStack = wolf.getMainHandItem();
             matrixStackIn.push();
             matrixStackIn.rotate(Vector3f.YP.rotationDegrees(Mth.lerp(partialTicks, -wolf.prevRenderYawOffset, -wolf.renderYawOffset)));
             matrixStackIn.translate(-1 * 0.0625, 0, 7 * 0.0625);
@@ -92,7 +92,7 @@ public class UpgradedWolfRenderer extends WolfRenderer {
 
             matrixStackIn.rotate(Vector3f.YP.rotationDegrees(90F));
             matrixStackIn.rotate(Vector3f.XP.rotationDegrees(90F));        
-            if(wolf.getHeldItemMainhand().getItem() instanceof SwordItem){
+            if(wolf.getMainHandItem().getItem() instanceof SwordItem){
                 matrixStackIn.rotate(Vector3f.YP.rotationDegrees(90F));
                 matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(45F));
                 matrixStackIn.translate(6 * 0.0625, 6 * .0625, 0);
@@ -124,8 +124,8 @@ public class UpgradedWolfRenderer extends WolfRenderer {
         float f4 = Mth.fastInvSqrt(f * f + f2 * f2) * 0.025F / 2.0F;
         float f5 = f2 * f4;
         float f6 = f * f4;
-        BlockPos blockpos = new BlockPos(entityLivingIn.getEyePosition(partialTicks));
-        BlockPos blockpos1 = new BlockPos(leashHolder.getEyePosition(partialTicks));
+        Vec3 blockpos = new Vec3(entityLivingIn.getEyePosition(partialTicks));
+        Vec3 blockpos1 = new Vec3(leashHolder.getEyePosition(partialTicks));
         int i = this.getBlockLight(entityLivingIn, blockpos);
         int j = leashHolder.isOnFire() ? 15 : leashHolder.world.getLightFor(LightType.BLOCK, blockpos);
         int k = entityLivingIn.world.getLightFor(LightType.SKY, blockpos);

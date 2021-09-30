@@ -11,7 +11,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.particles.BasicParticleType;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Util;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fmllegacy.network.NetworkEvent.Context;
 
@@ -48,7 +48,7 @@ public class SpawnLevelUpParticle implements IMessage<SpawnLevelUpParticle> {
             Wolf wolf = (Wolf)mc.level.getEntityByID(message.wolfId);
             WolfStatsEnum stat = WolfStatsEnum.values()[message.statId];
             if(wolf.getOwner() == mc.player && message.statId != 3)
-                mc.player.sendMessage((ITextComponent)new TranslationTextComponent("chat.upgradedwolves.level_up",wolf.getName(),stat.toString()),
+                mc.player.sendMessage((Component)new TranslationTextComponent("chat.upgradedwolves.level_up",wolf.getName(),stat.toString()),
             Util.DUMMY_UUID);
             Random r = new Random();
             BasicParticleType pt = ParticleTypes.FLASH;

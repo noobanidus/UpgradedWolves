@@ -11,7 +11,7 @@ import com.google.common.collect.Maps;
 
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.item.ItemStack;
@@ -60,7 +60,7 @@ public class ImpressVillagerGoal extends CoolDownGoal {
             if(villagers.size() > 0){
                 target = villagers.get(0);
                 wolf.getNavigation().tryMoveToEntityLiving(target, 1);
-                jumpTime = wolf.getRNG().nextInt(140) + 60;
+                jumpTime = wolf.getRandom().nextInt(140) + 60;
                 startCoolDown(AbilityEnhancer.increaseMin(wolf, 20) * 10);
                 return true;
             }
@@ -90,12 +90,12 @@ public class ImpressVillagerGoal extends CoolDownGoal {
         if (villagerEntity.isChild()) {
             return ImmutableList.of(new ItemStack(Items.POPPY));
         } else {
-            if(villagerEntity instanceof VillagerEntity){
-                VillagerEntity villager = (VillagerEntity)villagerEntity;
+            if(villagerEntity instanceof Villager){
+                Villager villager = (Villager)villagerEntity;
                 VillagerProfession villagerprofession = villager.getVillagerData().getProfession();
                 if (GIFTS.containsKey(villagerprofession)) {
                     LootTable loottable = villager.world.getServer().getLootTableManager().getLootTableFromLocation(GIFTS.get(villagerprofession));
-                    LootContext.Builder lootcontext$builder = (new LootContext.Builder((ServerWorld)villager.world)).withParameter(LootParameters.field_237457_g_, villager.getPositionVec()).withParameter(LootParameters.THIS_ENTITY, villager).withRandom(villager.getRNG());
+                    LootContext.Builder lootcontext$builder = (new LootContext.Builder((ServerWorld)villager.world)).withParameter(LootParameters.field_237457_g_, villager.getPositionVec()).withParameter(LootParameters.THIS_ENTITY, villager).withRandom(villager.getRandom());
                     return loottable.generate(lootcontext$builder.build(LootParameterSets.GIFT));
                 } else {
                     return ImmutableList.of(new ItemStack(Items.WHEAT_SEEDS));

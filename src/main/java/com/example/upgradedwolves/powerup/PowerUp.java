@@ -19,7 +19,7 @@ import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.resources.SimpleResource;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -93,12 +93,12 @@ public abstract class PowerUp {
         return null;
     }
 
-    public ITextComponent getName(){
+    public Component getName(){
         Style style = Style.EMPTY.setColor(TextColor.fromTextFormatting(TextFormatting.BLUE));
         return new TranslationTextComponent(name,effectiveLevel > 0 ? effectiveLevel : "").setStyle(style);
     }
 
-    public ITextComponent getDescription(Wolf wolf){
+    public Component getDescription(Wolf wolf){
         return new TranslationTextComponent(description,wolf.getName());
     }
 

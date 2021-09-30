@@ -22,7 +22,7 @@ public class WolfPlayWithPlushGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        ItemStack heldItem = wolf.getHeldItemMainhand();
+        ItemStack heldItem = wolf.getMainHandItem();
         if(heldItem != ItemStack.EMPTY && heldItem.getItem() instanceof MobPlushy){
             timeLeftToPlay = (int)((20*15) + Math.random() * (20*15));
             return true;
@@ -34,7 +34,7 @@ public class WolfPlayWithPlushGoal extends Goal {
     public boolean shouldContinueExecuting() {
         if(timeLeftToPlay-- > 0)
             return true;
-        ItemStack wolfHeldItem = wolf.getHeldItemMainhand();
+        ItemStack wolfHeldItem = wolf.getMainHandItem();
         IWolfStats handler = WolfStatsHandler.getHandler(wolf);
         WolfItemStackHandler wolfInventory = handler.getInventory();
         handler.addXp(WolfStatsEnum.Intelligence, 2);

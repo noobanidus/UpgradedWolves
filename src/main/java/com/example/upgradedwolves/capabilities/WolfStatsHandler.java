@@ -27,7 +27,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -76,7 +76,7 @@ public class WolfStatsHandler {
         WolfItemStackHandler inventory;
         Entity ropeHolder;
         Wolf currentWolf;
-        BlockPos location;
+        Vec3 location;
         List<Goal> allGoals = new ArrayList<Goal>();
         List<Goal> unaddedGoals = new ArrayList<Goal>();
         boolean tugOfWarActive = false;
@@ -436,11 +436,11 @@ public class WolfStatsHandler {
             return lootAdder;
         }
         @Override
-        public BlockPos getRoamPoint() {            
+        public Vec3 getRoamPoint() {            
             return location;
         }
         @Override
-        public void setRoamPoint(BlockPos location) {
+        public void setRoamPoint(Vec3 location) {
             this.location = location;
         }
         @Override

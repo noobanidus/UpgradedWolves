@@ -2,14 +2,14 @@ package com.example.upgradedwolves.containers;
 
 import com.example.upgradedwolves.itemHandler.WolfItemStackHandler;
 
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.text.StringTextComponent;
 
-public class ContainerProviderWolfInventory implements INamedContainerProvider {
+public class ContainerProviderWolfInventory implements MenuProvider {
     private Wolf wolf;
     private WolfItemStackHandler wolfHandler ;
     public ContainerProviderWolfInventory(Wolf wolf,WolfItemStackHandler wolfHandler){
@@ -18,7 +18,7 @@ public class ContainerProviderWolfInventory implements INamedContainerProvider {
     }
 
     @Override
-    public ITextComponent getDisplayName(){
+    public Component getDisplayName(){
         return new StringTextComponent("Inventory");
     }
 

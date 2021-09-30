@@ -7,7 +7,7 @@ import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.animal.Wolf;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public abstract class BonusStatPowerUp extends PowerUp{
@@ -37,7 +37,7 @@ public abstract class BonusStatPowerUp extends PowerUp{
     }
 
     @Override
-    public ITextComponent getDescription(Wolf wolf){
+    public Component getDescription(Wolf wolf){
         return new TranslationTextComponent(description,wolf.hasCustomName() ? wolf.getCustomName() : "this wolf");
     }
     

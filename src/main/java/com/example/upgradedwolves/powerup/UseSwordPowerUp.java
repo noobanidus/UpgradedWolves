@@ -6,7 +6,7 @@ import com.example.upgradedwolves.entities.goals.UseSwordGoal;
 
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.animal.Wolf;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class UseSwordPowerUp extends PowerUp {
@@ -22,7 +22,7 @@ public class UseSwordPowerUp extends PowerUp {
     }
     
     @Override
-    public ITextComponent getDescription(Wolf wolf) {
+    public Component getDescription(Wolf wolf) {
         String name1 = wolf.hasCustomName() ? wolf.getCustomName().getString() : "Wolf";
         String name2 = wolf.hasCustomName() ? wolf.getCustomName().getString() + " has" : "they have";
         return new TranslationTextComponent(description,name1,name2);

@@ -17,7 +17,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
@@ -116,7 +116,7 @@ public class PowerUpGui extends AbstractGui {
       RenderSystem.translatef(0.0F, 0.0F, 200.0F);
       fill(matrixStack, 0, 0, 234, 113, Mth.floor(this.fade * 255.0F) << 24);
       boolean flag = false;
-      ArrayList<ITextComponent> textBoxInfo = new ArrayList<ITextComponent>();
+      ArrayList<Component> textBoxInfo = new ArrayList<Component>();
       Style redStyle = Style.EMPTY.setColor(TextColor.fromTextFormatting(TextFormatting.RED)).setItalic(true);
       if(levelDistance(powerUp) <= 0){
          textBoxInfo.add(powerUp.getName());

@@ -25,7 +25,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
@@ -33,7 +33,7 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import com.mojang.math.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 import net.minecraft.util.Util;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -129,7 +129,7 @@ public class MobPlushyEntity extends ThrowableProjectile {
         if(getItem() == null)
             this.remove();
         super.tick();
-        BlockPos blockpos = this.getPosition(1);
+        Vec3 blockpos = this.getPosition(1);
         BlockState blockstate = this.world.getBlockState(blockpos);
         if (!blockstate.isAir(this.world, blockpos)) {
             VoxelShape voxelshape = blockstate.getCollisionShape(this.world, blockpos);

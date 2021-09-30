@@ -14,7 +14,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.text.StringTextComponent;
 
 import java.awt.*;
@@ -61,7 +61,7 @@ public class WolfScreen extends AbstractContainerScreen<WolfContainer> {
     protected void drawGuiContainerForegroundLayer(PoseStack matrixStack, int x, int y) {
         final float BAG_LABEL_YPOS = 5;
         //TranslationTextComponent bagLabel = new TranslationTextComponent(StartupCommon.itemFlowerBag.getTranslationKey());
-        ITextComponent bagLabel = new StringTextComponent("Wolf Inventory");
+        Component bagLabel = new StringTextComponent("Wolf Inventory");
         if(wolf.hasCustomName())
             bagLabel = wolf.getCustomName();
         float BAG_LABEL_XPOS = (xSize * .7F) - this.font.getStringWidth(bagLabel.getString()) / 2.0F;                  // centre the label

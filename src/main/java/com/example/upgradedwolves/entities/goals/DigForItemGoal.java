@@ -27,8 +27,8 @@ public class DigForItemGoal extends CoolDownGoal {
     @Override
     public boolean canUse() {
         //Gets block "type" at the position below the wolf
-        BlockState blockStandingOn = wolf.world.getBlockState(wolf.getPosition(1).add(0, -1, 0));   
-        if(active() && !wolf.isSitting() && (isGrassBlock(blockStandingOn) || isSandBlock(blockStandingOn))){
+        BlockState blockStandingOn = wolf.level.getBlockState(wolf.getPosition(1).add(0, -1, 0));   
+        if(active() && !wolf.isInSittingPose() && (isGrassBlock(blockStandingOn) || isSandBlock(blockStandingOn))){
             type = blockStandingOn;
             wolf.getNavigation().clearPath();
             if(isSandBlock(blockStandingOn)){
@@ -44,10 +44,10 @@ public class DigForItemGoal extends CoolDownGoal {
     @Override
     public boolean shouldContinueExecuting() {
         if(currentTime++ < timer){
-            wolf.playSound(type.getBlock().getSoundType(null, null, null, null).getPlaceSound(), 0.5F, (1.0F + (wolf.getRNG().nextFloat() - wolf.getRNG().nextFloat()) * 0.2F) * 0.7F);            
+            wolf.playSound(type.getBlock().getSoundType(null, null, null, null).getPlaceSound(), 0.5F, (1.0F + (wolf.getRandom().nextFloat() - wolf.getRandom().nextFloat()) * 0.2F) * 0.7F);            
             Minecraft mc = Minecraft.getInstance();
             if(mc.level != null)
-                mc.level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, type),false, wolf.getX(), wolf.getY(), wolf.getZ(),wolf.getRNG().nextDouble()/5, wolf.getRNG().nextDouble()/5, wolf.getRNG().nextDouble()/5);
+                mc.level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, type),false, wolf.getX(), wolf.getY(), wolf.getZ(),wolf.getRandom().nextDouble()/5, wolf.getRandom().nextDouble()/5, wolf.getRandom().nextDouble()/5);
             return true;
         }
         currentTime = 0;

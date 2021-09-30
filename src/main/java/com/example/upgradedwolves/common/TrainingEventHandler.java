@@ -11,11 +11,10 @@ import com.example.upgradedwolves.network.message.TrainingItemMessage;
 import org.apache.logging.log4j.LogManager;
 
 import net.minecraft.world.level.block.Block;
-import net.minecraft.block.CropsBlock;
-import net.minecraft.block.OreBlock;
+import net.minecraft.world.level.block.OreBlock;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.level.ServerPlayer;
@@ -49,7 +48,7 @@ public class TrainingEventHandler {
             ITraining handler = TrainingHandler.getHandler(foodItem);
             handler.setAttribute(2);
             if(Thread.currentThread().getName() == "Server thread"){
-                PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getPlayer()), new TrainingItemMessage(2, event.getPlayer()getId()));
+                PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getPlayer()), new TrainingItemMessage(2, event.getPlayer().getId()));
             }
         }
     }
@@ -57,17 +56,17 @@ public class TrainingEventHandler {
     @SubscribeEvent
     public void MobKill(LivingDeathEvent event){
         
-        if(event.getSource().getTrueSource() instanceof Player){
-            Player player = (Player)event.getSource().getTrueSource();
+        if(event.getSource().getDirectEntity() instanceof Player){
+            Player player = (Player)event.getSource().getDirectEntity();
             ItemStack foodItem = getFoodStack(player);
             if(foodItem == null)
                 return;
-            if(event.getEntity() instanceof MonsterEntity){
+            if(event.getEntity() instanceof Monster){
                 LogManager.getLogger().info("Killed");
                 ITraining handler = TrainingHandler.getHandler(foodItem);
                 handler.setAttribute(1);                         
                 if(Thread.currentThread().getName() == "Server thread"){
-                    PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)player), new TrainingItemMessage(1, playergetId()));
+                    PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)player), new TrainingItemMessage(1, player.getId()));
                 }
             }
         }
@@ -75,7 +74,7 @@ public class TrainingEventHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void VillagerInteract(EntityInteract event){
         
-        if(event.getTarget() instanceof VillagerEntity){
+        if(event.getTarget() instanceof Villager){
             LogManager.getLogger().info("Spoke");
             Player player = (Player)event.getPlayer();
             ItemStack foodItem = getFoodStack(player);
@@ -88,18 +87,18 @@ public class TrainingEventHandler {
     
     public static ItemStack getFoodStack(Player player){
         //Checks if the player is holding food in either hand.
-        if(player.getHeldItemMainhand().isEdible() && player.getHeldItemMainhand().getItem().getFoodProperties().isMeat())
-            return player.getHeldItemMainhand();
-        else if(player.getHeldItemOffhand().isEdible() && player.getHeldItemOffhand().getItem().getFoodProperties().isMeat())
-            return player.getHeldItemOffhand();
+        if(player.getMainHandItem().isEdible() && player.getMainHandItem().getItem().getFoodProperties().isMeat())
+            return player.getMainHandItem();
+        else if(player.getOffhandItem().isEdible() && player.getOffhandItem().getItem().getFoodProperties().isMeat())
+            return player.getOffhandItem();
         return null;
     }
     public static ItemStack getPlayerHoldingItemStack(Player player, Class<? extends Item> item){
         //Checks if the player is holding food in either hand.
-        if(item.isInstance(player.getHeldItemMainhand().getItem()))
-            return player.getHeldItemMainhand();
-        else if(item.isInstance(player.getHeldItemOffhand().getItem()))
-            return player.getHeldItemOffhand();
+        if(item.isInstance(player.getMainHandItem().getItem()))
+            return player.getMainHandItem();
+        else if(item.isInstance(player.getOffhandItem().getItem()))
+            return player.getOffhandItem();
         return null;
     }
 
@@ -110,9 +109,9 @@ public class TrainingEventHandler {
             handler.getInventory().insertItem(wolfSlot, item, false);
             WolfFindAndPickUpItemGoal goal = (WolfFindAndPickUpItemGoal)WolfPlayerInteraction.getWolfGoal(wolf, WolfFindAndPickUpItemGoal.class);
             if(goal != null){
-                goal.setEndPoint(wolf.getPositionVec());
+                goal.setEndPoint(wolf.getPosition(0));
             }
-            entity.remove();
+            entity.kill();
         }
     }
 }

@@ -38,7 +38,7 @@ public class SelfPreservationGoal extends Goal {
     public boolean shouldContinueExecuting(){
         if(currentTime++ < eatingTime){
             if(currentTime % 4 == 0)
-            wolf.playSound(SoundEvents.ENTITY_GENERIC_EAT, 0.5F + 0.5F * (float)wolf.getRNG().nextInt(2), (wolf.getRNG().nextFloat() - wolf.getRNG().nextFloat()) * 0.2F + 1.0F);
+            wolf.playSound(SoundEvents.ENTITY_GENERIC_EAT, 0.5F + 0.5F * (float)wolf.getRandom().nextInt(2), (wolf.getRandom().nextFloat() - wolf.getRandom().nextFloat()) * 0.2F + 1.0F);
             return true;
         }   
         wolf.heal(healAmount);

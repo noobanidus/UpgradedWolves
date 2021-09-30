@@ -26,9 +26,9 @@ public class FishForItemGoal extends CoolDownGoal {
     @Override
     public boolean canUse() {
         if(active() && wolf.isInWater()){
-            ServerWorld world = (ServerWorld)wolf.world;
-            LootContext.Builder lootcontext$builder = (new LootContext.Builder(world).withRandom(wolf.getRNG()).withParameter(LootParameters.field_237457_g_, wolf.getPositionVec()).withParameter(LootParameters.TOOL, new ItemStack(Items.FISHING_ROD)));
-            LootTable loottable = wolf.world.getServer().getLootTableManager().getLootTableFromLocation(LootTables.GAMEPLAY_FISHING);
+            ServerWorld world = (ServerWorld)wolf.level;
+            LootContext.Builder lootcontext$builder = (new LootContext.Builder(world).withRandom(wolf.getRandom()).withParameter(LootParameters.field_237457_g_, wolf.getPositionVec()).withParameter(LootParameters.TOOL, new ItemStack(Items.FISHING_ROD)));
+            LootTable loottable = wolf.level.getServer().getLootTableManager().getLootTableFromLocation(LootTables.GAMEPLAY_FISHING);
             itemStackList = loottable.generate(lootcontext$builder.build(LootParameterSets.FISHING));
             return true;
         }

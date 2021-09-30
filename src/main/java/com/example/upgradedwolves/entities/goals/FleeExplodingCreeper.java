@@ -1,15 +1,15 @@
 package com.example.upgradedwolves.entities.goals;
 
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.ai.goal.AvoidEntityGoal;
-import net.minecraft.entity.monster.CreeperEntity;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.TamableAnimal;
 
-public class FleeExplodingCreeper extends AvoidEntityGoal<CreeperEntity>{
+public class FleeExplodingCreeper extends AvoidEntityGoal<Creeper>{
 
-    public FleeExplodingCreeper(CreatureEntity entityIn, float avoidDistanceIn,
+    public FleeExplodingCreeper(PathfinderMob entityIn, float avoidDistanceIn,
             double farSpeedIn, double nearSpeedIn) {
-        super(entityIn, CreeperEntity.class, avoidDistanceIn, farSpeedIn, nearSpeedIn);        
+        super(entityIn, Creeper.class, avoidDistanceIn, farSpeedIn, nearSpeedIn);        
     }
 
     @Override
@@ -17,7 +17,7 @@ public class FleeExplodingCreeper extends AvoidEntityGoal<CreeperEntity>{
         boolean mayExecute = super.canUse();
         if(avoidTarget == null)
             return false;
-        if(avoidTarget.hasIgnited() && !(this.entity instanceof TamableAnimal && ((TamableAnimal)this.entity).isSitting()))
+        if(avoidTarget.hasIgnited() && !(this.entity instanceof TamableAnimal && ((TamableAnimal)this.entity).isInSittingPose()))
             return mayExecute;
         return false;
     }

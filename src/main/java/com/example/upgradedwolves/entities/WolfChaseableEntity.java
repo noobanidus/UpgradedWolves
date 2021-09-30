@@ -13,7 +13,7 @@ import net.minecraft.entity.projectile.ProjectileItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.VoxelShape;
 import com.mojang.math.Vector3d;
@@ -49,7 +49,7 @@ public abstract class WolfChaseableEntity extends ProjectileItemEntity {
             onCollideWithWolf(wolf);    
         }
 
-        BlockPos blockpos = this.getPosition(1);
+        Vec3 blockpos = this.getPosition(1);
         BlockState blockstate = this.world.getBlockState(blockpos);
         if (!blockstate.isAir(this.world, blockpos)) {
             VoxelShape voxelshape = blockstate.getCollisionShape(this.world, blockpos);

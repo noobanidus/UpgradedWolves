@@ -23,7 +23,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.core.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
 public class TennisBallEntity extends WolfChaseableEntity {
 
