@@ -1,43 +1,42 @@
 package com.example.upgradedwolves.entities.goals;
 
-import net.minecraft.entity.ai.RandomPositionGenerator;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 
-import com.mojang.math.Vector3d;
-
 public class WolfBiasRoamGoal extends RandomStrollGoal {
-    Vector3d bias;
+    Vec3 bias;
     double maxDistance;
     double minDistance;
 
     public WolfBiasRoamGoal(PathfinderMob creature, double speedIn,double maxDistance, double minDistance) {
         super(creature, speedIn);    
-        bias = creature.getPositionVec();
+        bias = creature.getPosition(1);
         this.maxDistance = maxDistance;
         this.minDistance = minDistance;
     }
 
-    protected Vector3d getPosition(1){
-        if (this.creature.isInWaterOrBubbleColumn()) {
-            Vector3d vector3d = RandomPositionGenerator.getLandPos(this.creature, 15, 7);
-            return vector3d == null ? super.getPosition(1) : vector3d;
+    protected Vec3 getPosition(){
+        if (this.mob.isInWaterOrBubble()) {
+            Vec3 vector3d = DefaultRandomPos.getPos(this.mob, 15, 7);
+            return vector3d == null ? super.getPosition() : vector3d;
         }
         return biasedPosition();
     }
 
-    protected Vector3d biasedPosition(){
-        Vector3d position = creature.getPositionVec();
+    protected Vec3 biasedPosition(){
+        Vec3 position = mob.getPosition(1);
         double distance = position.distanceTo(bias);
 
         if(distance < minDistance){
-            return RandomPositionGenerator.getLandPos(this.creature, 10, 7);
+            return DefaultRandomPos.getPos(this.mob, 10, 7);
         } else if(distance > maxDistance){
             return bias;
         } else {            
-            Vector3d nextPosition = RandomPositionGenerator.func_234133_a_(this.creature,
+            Vec3 nextPosition = DefaultRandomPos.getPosTowards(this.mob,
              10, 7,
-              bias
+              bias,1
                 );
             return nextPosition;            
         }

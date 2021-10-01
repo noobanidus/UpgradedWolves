@@ -36,7 +36,7 @@ public class DisarmEnemyGoal extends CoolDownGoal{
     }
 
     @Override
-    public void startExecuting() {
+    public void start() {
         float next = wolf.getRandom().nextFloat() * 100;
         int bonus = AbilityEnhancer.detectionSkill(wolf);
         if(next < 40 + bonus){

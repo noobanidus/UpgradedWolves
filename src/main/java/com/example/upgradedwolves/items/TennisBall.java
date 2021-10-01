@@ -13,8 +13,8 @@ import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.Level;
 
 public class TennisBall extends Item {
 
@@ -36,14 +36,14 @@ public class TennisBall extends Item {
     }
     
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, Player playerIn, InteractionHand handIn) {        
+    public ActionResult<ItemStack> onItemRightClick(Level worldIn, Player playerIn, InteractionHand handIn) {        
         ItemStack itemstack = playerIn.getHeldItem(handIn);
         playerIn.setActiveHand(handIn);
         return ActionResult.resultConsume(itemstack);
     }
 
     @Override
-    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
+    public void onPlayerStoppedUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int timeLeft) {
         Player playerIn = (Player)entityLiving;
         int time = getUseDuration(stack) - timeLeft;
         float bonus = Math.max(0,Math.min(15,time/3)) / 10.0F;
@@ -52,8 +52,8 @@ public class TennisBall extends Item {
             TennisBallEntity tennisBallEntity = new TennisBallEntity(worldIn, playerIn);
             tennisBallEntity.setItem(stack);
             tennisBallEntity.setShooter(playerIn);
-            tennisBallEntity.func_234612_a_(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 0.5F + bonus, 1.0F);
-            worldIn.addEntity(tennisBallEntity);
+            tennisBallEntity.func_234612_a_(playerIn, playerIn.getXRot(), playerIn.getYRot(), 0.0F, 0.5F + bonus, 1.0F);
+            worldIn.addFreshEntity(tennisBallEntity);
         }
 
         playerIn.addStat(Stats.ITEM_USED.get(this));

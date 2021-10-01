@@ -32,7 +32,7 @@ public class ShareItemGoal extends Goal {
         for (Wolf livingEntity : allyList) {
             int slot = -1;
             if(livingEntity.getHealth() <= 10){
-                slot = wolfItems.getArbitraryItem(item -> item.isEdible() && item.getFood().isMeat());
+                slot = wolfItems.getArbitraryItem(item -> item.isEdible() && item.getFoodProperties().isMeat());
             }
             if(slot >= 0){
                 this.slot = slot;
@@ -44,7 +44,7 @@ public class ShareItemGoal extends Goal {
     }
 
     @Override
-    public void startExecuting() {
+    public void start() {
         ItemStack stack = handler.getInventory().extractItem(slot, 1, false);
         target.spawnAtLocation(stack);
         target = null;

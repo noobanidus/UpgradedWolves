@@ -7,11 +7,11 @@ import com.example.upgradedwolves.entities.utilities.AbilityEnhancer;
 import com.example.upgradedwolves.entities.utilities.EntityFinder;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.IAngerable;
+import net.minecraft.world.entity.NeutralMob;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.animal.Wolf;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvents;
 
 public class BarkStunGoal extends CoolDownGoal {
     protected final EntityFinder<Monster> entityFinder;
@@ -30,9 +30,8 @@ public class BarkStunGoal extends CoolDownGoal {
 
     @Override
     public boolean canUse() {
-        
         if(active()){
-            List<Monster> entityList = entityFinder.findWithPredicate(5, 2, enemy -> !(enemy instanceof IAngerable) || ((IAngerable)enemy).getAttackTarget() != null);
+            List<Monster> entityList = entityFinder.findWithPredicate(5, 2, enemy -> !(enemy instanceof NeutralMob) || ((NeutralMob)enemy).getTarget() != null);
             if(entityList.size() > 0){
                 enemies = entityList;
                 return true;
@@ -42,23 +41,23 @@ public class BarkStunGoal extends CoolDownGoal {
     }
 
     @Override
-    public void startExecuting() {
-        wof.playSound(SoundEvents.ENTITY_WOLF_AMBIENT, 20, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.02F + .7F);        
+    public void start() {
+        wof.playSound(SoundEvents.WOLF_AMBIENT, 20, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.02F + .7F);        
         for (Monster mobEntity : enemies) {
             Random r = new Random();
-            mobEntity.setNoAI(true);
+            mobEntity.setNoAi(true);
             for(int i = 0; i < 10; i++)
-                Minecraft.getInstance().world.addParticle(ParticleTypes.FLAME, false, mobEntity.getPosition(1).getX() + r.nextDouble(), mobEntity.getPosition(1).getY() + r.nextDouble(), mobEntity.getPosition(1).getZ() + r.nextDouble(), r.nextDouble()/5, r.nextDouble()/5, r.nextDouble()/5);
+                Minecraft.getInstance().level.addParticle(ParticleTypes.FLAME, false, mobEntity.getPosition(1).x() + r.nextDouble(), mobEntity.getPosition(1).y() + r.nextDouble(), mobEntity.getPosition(1).z() + r.nextDouble(), r.nextDouble()/5, r.nextDouble()/5, r.nextDouble()/5);
         }
         startCoolDown();
     }
     
     @Override
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
         int bonus = AbilityEnhancer.minMaxIncrease(wof, 90, 10, 50);
         if(stunDuration-- <= 0){
             for (Monster mobEntity : enemies) {
-                mobEntity.setNoAI(false);
+                mobEntity.setNoAi(false);
             }
             stunDuration = 50 + bonus;
             return false;

@@ -9,7 +9,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.projectile.ProjectileHelper;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.IPacket;
@@ -17,10 +17,10 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import com.mojang.math.Vector3d;
-import net.minecraft.util.DamageSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.core.Direction;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
 public class FlyingDiskEntity extends WolfChaseableEntity{
@@ -30,15 +30,15 @@ public class FlyingDiskEntity extends WolfChaseableEntity{
     protected float variant;
     protected boolean fly = true;
 
-    public FlyingDiskEntity(EntityType<? extends FlyingDiskEntity> p_i50159_1_, World p_i50159_2_) {
+    public FlyingDiskEntity(EntityType<? extends FlyingDiskEntity> p_i50159_1_, Level p_i50159_2_) {
         super(p_i50159_1_, p_i50159_2_);
     }
 
-    public FlyingDiskEntity(World worldIn, LivingEntity throwerIn) {
+    public FlyingDiskEntity(Level worldIn, LivingEntity throwerIn) {
         super(ModEntities.flyingDiskEntityType, throwerIn, worldIn);
     }
 
-    public FlyingDiskEntity(World worldIn, double x, double y, double z) {
+    public FlyingDiskEntity(Level worldIn, double x, double y, double z) {
         super(ModEntities.flyingDiskEntityType, x, y, z, worldIn);
     }
 
@@ -78,11 +78,11 @@ public class FlyingDiskEntity extends WolfChaseableEntity{
             if(speedFactor(1)){
                 if(entityResult.getEntity() instanceof LivingEntity){
                     LivingEntity entity = (LivingEntity)entityResult.getEntity();
-                    entity.attackEntityFrom(DamageSource.causePlayerDamage((Player)this.func_234616_v_()), 1);
+                    entity.hurt(DamageSource.causePlayerDamage((Player)this.getOwner()), 1);
                     double speed = this.getDeltaMovement().length() * .6;
-                    Vector3d bounceDirection = new Vector3d(entity.getPositionVec().x - this.getPositionVec().x,
-                                                                entity.getPositionVec().y - this.getPositionVec().y,
-                                                                entity.getPositionVec().z - this.getPositionVec().z)
+                    Vector3d bounceDirection = new Vector3d(entity.getPosition(1).x - this.getPosition(1).x,
+                                                                entity.getPosition(1).y - this.getPosition(1).y,
+                                                                entity.getPosition(1).z - this.getPosition(1).z)
                                                                 .normalize();
                     this.setDeltaMovement(bounceDirection.scale(speed));
                 }
@@ -96,11 +96,11 @@ public class FlyingDiskEntity extends WolfChaseableEntity{
     
     public void tick() {
         super.tick();
-        Player player = (Player)func_234616_v_();
+        Player player = (Player)getOwner();
         if(fly && player != null){
-            Vector3d retrieveDirection = new Vector3d(player.getPositionVec().x - this.getPositionVec().x,
-                                                                    player.getPositionVec().y + 1.5 - this.getPositionVec().y,
-                                                                    player.getPositionVec().z - this.getPositionVec().z)
+            Vector3d retrieveDirection = new Vector3d(player.getPosition(1).x - this.getPosition(1).x,
+                                                                    player.getPosition(1).y + 1.5 - this.getPosition(1).y,
+                                                                    player.getPosition(1).z - this.getPosition(1).z)
                                                                     .normalize().scale(.01);
             this.addVelocity(retrieveDirection.x, retrieveDirection.y,retrieveDirection.z);
             if(timeOut++ >= flightTime * variant){

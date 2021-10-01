@@ -5,9 +5,9 @@ import com.example.upgradedwolves.itemHandler.WolfToysHandler;
 import com.example.upgradedwolves.loot_table.modifier.ChestLootModifier;
 
 import net.minecraft.data.DataGenerator;
-import net.minecraft.item.Items;
-import net.minecraft.loot.LootTables;
-import net.minecraft.loot.RandomValueRange;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.storage.loot.LootTables;
+import net.minecraft.world.level.storage.loot.RandomValueRange;
 import net.minecraft.util.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.data.GlobalLootModifierProvider;
@@ -16,7 +16,7 @@ import net.minecraftforge.common.loot.LootTableIdCondition;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraft.loot.conditions.ILootCondition;
+import net.minecraft.world.level.storage.loot.conditions.ILootCondition;
 
 public class ModGlobalLootTableModifier extends GlobalLootModifierProvider{
     public static final DeferredRegister<GlobalLootModifierSerializer<?>> LOOT_MODIFIERS = DeferredRegister.create(ForgeRegistries.LOOT_MODIFIER_SERIALIZERS,UpgradedWolves.ModId);

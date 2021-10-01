@@ -16,7 +16,7 @@ public class FleeOnLowHealthGoal extends AvoidEntityGoal<Monster> {
 
     @Override
     public boolean canUse() {
-        if(this.entity.getHealth() < minHealth && !(this.entity instanceof TamableAnimal && ((TamableAnimal)this.entity).isInSittingPose()))
+        if(this.mob.getHealth() < minHealth && !(this.mob instanceof TamableAnimal && ((TamableAnimal)this.mob).isInSittingPose()))
             return super.canUse();
         return false;
     }

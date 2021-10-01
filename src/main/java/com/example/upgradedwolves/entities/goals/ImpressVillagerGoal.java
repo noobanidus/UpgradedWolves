@@ -10,56 +10,56 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.entity.merchant.villager.VillagerProfession;
+import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameterSets;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.loot.LootTable;
-import net.minecraft.loot.LootTables;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Util;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.Util;
+import net.minecraft.server.level.ServerLevel;
 
 public class ImpressVillagerGoal extends CoolDownGoal {
     public final Wolf wolf;
-    public final EntityFinder<AbstractVillagerEntity> entityFinder;
-    public AbstractVillagerEntity target;
+    public final EntityFinder<AbstractVillager> entityFinder;
+    public AbstractVillager target;
     int jumpTime;
     private static final Map<VillagerProfession, ResourceLocation> GIFTS = Util.make(Maps.newHashMap(), (giftMap) -> {
-        giftMap.put(VillagerProfession.ARMORER, LootTables.GAMEPLAY_HERO_OF_THE_VILLAGE_ARMORER_GIFT);
-        giftMap.put(VillagerProfession.BUTCHER, LootTables.GAMEPLAY_HERO_OF_THE_VILLAGE_BUTCHER_GIFT);
-        giftMap.put(VillagerProfession.CARTOGRAPHER, LootTables.GAMEPLAY_HERO_OF_THE_VILLAGE_CARTOGRAPHER_GIFT);
-        giftMap.put(VillagerProfession.CLERIC, LootTables.GAMEPLAY_HERO_OF_THE_VILLAGE_CLERIC_GIFT);
-        giftMap.put(VillagerProfession.FARMER, LootTables.GAMEPLAY_HERO_OF_THE_VILLAGE_FARMER_GIFT);
-        giftMap.put(VillagerProfession.FISHERMAN, LootTables.GAMEPLAY_HERO_OF_THE_VILLAGE_FISHERMAN_GIFT);
-        giftMap.put(VillagerProfession.FLETCHER, LootTables.GAMEPLAY_HERO_OF_THE_VILLAGE_FLETCHER_GIFT);
-        giftMap.put(VillagerProfession.LEATHERWORKER, LootTables.GAMEPLAY_HERO_OF_THE_VILLAGE_LEATHERWORKER_GIFT);
-        giftMap.put(VillagerProfession.LIBRARIAN, LootTables.GAMEPLAY_HERO_OF_THE_VILLAGE_LIBRARIAN_GIFT);
-        giftMap.put(VillagerProfession.MASON, LootTables.GAMEPLAY_HERO_OF_THE_VILLAGE_MASON_GIFT);
-        giftMap.put(VillagerProfession.SHEPHERD, LootTables.GAMEPLAY_HERO_OF_THE_VILLAGE_SHEPHERD_GIFT);
-        giftMap.put(VillagerProfession.TOOLSMITH, LootTables.GAMEPLAY_HERO_OF_THE_VILLAGE_TOOLSMITH_GIFT);
-        giftMap.put(VillagerProfession.WEAPONSMITH, LootTables.GAMEPLAY_HERO_OF_THE_VILLAGE_WEAPONSMITH_GIFT);
+        giftMap.put(VillagerProfession.ARMORER, BuiltInLootTables.ARMORER_GIFT);
+        giftMap.put(VillagerProfession.BUTCHER, BuiltInLootTables.BUTCHER_GIFT);
+        giftMap.put(VillagerProfession.CARTOGRAPHER, BuiltInLootTables.CARTOGRAPHER_GIFT);
+        giftMap.put(VillagerProfession.CLERIC, BuiltInLootTables.CLERIC_GIFT);
+        giftMap.put(VillagerProfession.FARMER, BuiltInLootTables.FARMER_GIFT);
+        giftMap.put(VillagerProfession.FISHERMAN, BuiltInLootTables.FISHERMAN_GIFT);
+        giftMap.put(VillagerProfession.FLETCHER, BuiltInLootTables.FLETCHER_GIFT);
+        giftMap.put(VillagerProfession.LEATHERWORKER, BuiltInLootTables.LEATHERWORKER_GIFT);
+        giftMap.put(VillagerProfession.LIBRARIAN, BuiltInLootTables.LIBRARIAN_GIFT);
+        giftMap.put(VillagerProfession.MASON, BuiltInLootTables.MASON_GIFT);
+        giftMap.put(VillagerProfession.SHEPHERD, BuiltInLootTables.SHEPHERD_GIFT);
+        giftMap.put(VillagerProfession.TOOLSMITH, BuiltInLootTables.TOOLSMITH_GIFT);
+        giftMap.put(VillagerProfession.WEAPONSMITH, BuiltInLootTables.WEAPONSMITH_GIFT);
      });
 
     public ImpressVillagerGoal(Wolf wolf){
         this.wolf = wolf;
-        entityFinder = new EntityFinder<AbstractVillagerEntity>(wolf,AbstractVillagerEntity.class);
+        entityFinder = new EntityFinder<AbstractVillager>(wolf,AbstractVillager.class);
         setCoolDownInSeconds(1800);
-        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE,Goal.Flag.JUMP));
+        this.setFlags(EnumSet.of(Goal.Flag.MOVE,Goal.Flag.JUMP));
     }
 
     @Override
     public boolean canUse() {
         if(active()){
-            List<AbstractVillagerEntity> villagers = entityFinder.findWithinRange(5, 5);
+            List<AbstractVillager> villagers = entityFinder.findWithinRange(5, 5);
             if(villagers.size() > 0){
                 target = villagers.get(0);
-                wolf.getNavigation().tryMoveToEntityLiving(target, 1);
+                wolf.getNavigation().moveTo(target, 1);
                 jumpTime = wolf.getRandom().nextInt(140) + 60;
                 startCoolDown(AbilityEnhancer.increaseMin(wolf, 20) * 10);
                 return true;
@@ -69,9 +69,9 @@ public class ImpressVillagerGoal extends CoolDownGoal {
     }
 
     @Override
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
         if(jumpTime-- > 0){
-            wolf.getJumpController().setJumping();
+            wolf.getJumpControl().jump();
             return true;
         }
         giveItemToWolf();
@@ -86,17 +86,17 @@ public class ImpressVillagerGoal extends CoolDownGoal {
         }
     }
 
-    private List<ItemStack> getItem(AbstractVillagerEntity villagerEntity){
-        if (villagerEntity.isChild()) {
+    private List<ItemStack> getItem(AbstractVillager villagerEntity){
+        if (villagerEntity.isBaby()) {
             return ImmutableList.of(new ItemStack(Items.POPPY));
         } else {
             if(villagerEntity instanceof Villager){
                 Villager villager = (Villager)villagerEntity;
                 VillagerProfession villagerprofession = villager.getVillagerData().getProfession();
                 if (GIFTS.containsKey(villagerprofession)) {
-                    LootTable loottable = villager.world.getServer().getLootTableManager().getLootTableFromLocation(GIFTS.get(villagerprofession));
-                    LootContext.Builder lootcontext$builder = (new LootContext.Builder((ServerWorld)villager.world)).withParameter(LootParameters.field_237457_g_, villager.getPositionVec()).withParameter(LootParameters.THIS_ENTITY, villager).withRandom(villager.getRandom());
-                    return loottable.generate(lootcontext$builder.build(LootParameterSets.GIFT));
+                    LootTable loottable = villager.level.getServer().getLootTables().get(GIFTS.get(villagerprofession));
+                    LootContext.Builder lootcontext$builder = (new LootContext.Builder((ServerLevel)villager.level)).withParameter(LootContextParams.ORIGIN, villager.getPosition(1)).withParameter(LootContextParams.THIS_ENTITY, villager).withRandom(villager.getRandom());
+                    return loottable.getRandomItems(lootcontext$builder.create(LootContextParamSets.GIFT));
                 } else {
                     return ImmutableList.of(new ItemStack(Items.WHEAT_SEEDS));
                 }

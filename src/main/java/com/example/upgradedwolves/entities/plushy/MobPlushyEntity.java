@@ -10,7 +10,7 @@ import com.example.upgradedwolves.init.ModEntities;
 import com.example.upgradedwolves.itemHandler.WolfToysHandler;
 import com.example.upgradedwolves.items.MobPlushy;
 
-import net.minecraft.world.level.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Wolf;
@@ -31,10 +31,10 @@ import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.shapes.VoxelShape;
 import com.mojang.math.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fmllegacy.network.NetworkHooks;
-import net.minecraft.util.Util;
+import net.minecraft.Util;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraftforge.api.distmarker.Dist;
@@ -45,15 +45,15 @@ public class MobPlushyEntity extends ThrowableProjectile {
     @Nullable
     private BlockState inBlockState;
 
-    public MobPlushyEntity(EntityType<? extends MobPlushyEntity> p_i50159_1_, World p_i50159_2_) {
+    public MobPlushyEntity(EntityType<? extends MobPlushyEntity> p_i50159_1_, Level p_i50159_2_) {
         super(p_i50159_1_, p_i50159_2_);      
     }
 
-    public MobPlushyEntity(World worldIn, LivingEntity throwerIn) {
+    public MobPlushyEntity(Level worldIn, LivingEntity throwerIn) {
         super(ModEntities.mobPlushyEntityType, throwerIn, worldIn);
     }
 
-    public MobPlushyEntity(World worldIn, double x, double y, double z) {
+    public MobPlushyEntity(Level worldIn, double x, double y, double z) {
         super(ModEntities.mobPlushyEntityType, x, y, z, worldIn);
     }    
 
@@ -83,7 +83,7 @@ public class MobPlushyEntity extends ThrowableProjectile {
     @Override
     public void onCollideWithPlayer(Player entityIn) {        
         if (!this.world.isRemote) {
-            boolean flag = this.func_234616_v_().getUniqueID() == entityIn.getUniqueID() && ticksExisted > 20;
+            boolean flag = this.getOwner().getUUID() == entityIn.getUUID() && ticksExisted > 20;
             if (flag) {                
                 if(!entityIn.isCreative() && !entityIn.addItemStackToInventory(getItem()))
                     flag = false;
@@ -134,7 +134,7 @@ public class MobPlushyEntity extends ThrowableProjectile {
         if (!blockstate.isAir(this.world, blockpos)) {
             VoxelShape voxelshape = blockstate.getCollisionShape(this.world, blockpos);
             if (!voxelshape.isEmpty()) {
-                Vector3d vector3d1 = this.getPositionVec();
+                Vector3d vector3d1 = this.getPosition(1);
 
                 for(AxisAlignedBB axisalignedbb : voxelshape.toBoundingBoxList()) {
                     if (axisalignedbb.offset(blockpos).contains(vector3d1)) {
@@ -145,7 +145,7 @@ public class MobPlushyEntity extends ThrowableProjectile {
             }
         }
 
-        for(Wolf wolf : this.world.getEntitiesWithinAABB(Wolf.class, this.getBoundingBox())) {
+        for(Wolf wolf : this.world.getEntitiesOfClass(Wolf.class, this.getBoundingBox())) {
             onCollideWithWolf(wolf);    
         }
         
@@ -157,7 +157,7 @@ public class MobPlushyEntity extends ThrowableProjectile {
     }
 
     private boolean stillInGround(){
-        return this.inGround && this.world.hasNoCollisions((new AxisAlignedBB(this.getPositionVec(), this.getPositionVec())).grow(0.06D));
+        return this.inGround && this.world.hasNoCollisions((new AxisAlignedBB(this.getPosition(1), this.getPosition(1))).expandTowards(0.06D));
     }
 
     private void notInBlock() {

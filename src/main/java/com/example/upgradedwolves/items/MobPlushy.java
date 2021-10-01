@@ -18,7 +18,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 public class MobPlushy extends Item {
     public MobPlushyType plushType;
@@ -30,15 +30,15 @@ public class MobPlushy extends Item {
     }
     
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, Player playerIn, InteractionHand handIn) {        
+    public ActionResult<ItemStack> onItemRightClick(Level worldIn, Player playerIn, InteractionHand handIn) {        
         ItemStack itemstack = playerIn.getHeldItem(handIn);
         playerIn.setActiveHand(handIn);              
         if (!worldIn.isRemote) {
             MobPlushyEntity mobPlushyEntity = new MobPlushyEntity(worldIn, playerIn);
             mobPlushyEntity.setItem(itemstack);
             mobPlushyEntity.setShooter(playerIn);
-            mobPlushyEntity.func_234612_a_(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 0.5F, 1.0F);
-            worldIn.addEntity(mobPlushyEntity);
+            mobPlushyEntity.func_234612_a_(playerIn, playerIn.getXRot(), playerIn.getYRot(), 0.0F, 0.5F, 1.0F);
+            worldIn.addFreshEntity(mobPlushyEntity);
         }
 
         playerIn.addStat(Stats.ITEM_USED.get(this));

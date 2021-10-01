@@ -31,7 +31,7 @@ public class WolfPlayWithPlushGoal extends Goal {
     }
 
     @Override
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
         if(timeLeftToPlay-- > 0)
             return true;
         ItemStack wolfHeldItem = wolf.getMainHandItem();

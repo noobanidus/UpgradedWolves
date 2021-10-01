@@ -6,13 +6,13 @@ import com.example.upgradedwolves.entities.utilities.AbilityEnhancer;
 
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameterSets;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.loot.LootTable;
-import net.minecraft.loot.LootTables;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.server.level.ServerLevel;
 
 public class FishForItemGoal extends CoolDownGoal {
     protected final Wolf wolf;
@@ -26,18 +26,18 @@ public class FishForItemGoal extends CoolDownGoal {
     @Override
     public boolean canUse() {
         if(active() && wolf.isInWater()){
-            ServerWorld world = (ServerWorld)wolf.level;
-            LootContext.Builder lootcontext$builder = (new LootContext.Builder(world).withRandom(wolf.getRandom()).withParameter(LootParameters.field_237457_g_, wolf.getPositionVec()).withParameter(LootParameters.TOOL, new ItemStack(Items.FISHING_ROD)));
-            LootTable loottable = wolf.level.getServer().getLootTableManager().getLootTableFromLocation(LootTables.GAMEPLAY_FISHING);
-            itemStackList = loottable.generate(lootcontext$builder.build(LootParameterSets.FISHING));
+            ServerLevel world = (ServerLevel)wolf.level;
+            LootContext.Builder lootcontext$builder = (new LootContext.Builder(world).withRandom(wolf.getRandom()).withParameter(LootContextParams.ORIGIN, wolf.getPosition(1)).withParameter(LootContextParams.TOOL, new ItemStack(Items.FISHING_ROD)));
+            LootTable loottable = wolf.level.getServer().getLootTables().get(BuiltInLootTables.FISHING);
+            itemStackList = loottable.getRandomItems(lootcontext$builder.create(LootContextParamSets.FISHING));
             return true;
         }
         return false;
     }
     
     @Override
-    public void startExecuting() {        
-        super.startExecuting();
+    public void start() {        
+        super.start();
         for (ItemStack itemStack : itemStackList) {
             wolf.spawnAtLocation(itemStack);
         }

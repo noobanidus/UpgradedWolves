@@ -16,7 +16,7 @@ public class EntityFinder<T extends Entity> {
     }
 
     public List<T> findWithinRange(double xz, double y){
-        return entityOwner.world.getEntitiesWithinAABB(entityType, entityOwner.getBoundingBox().grow(xz, y, xz));
+        return entityOwner.level.getEntitiesOfClass(entityType, entityOwner.getBoundingBox().expandTowards(xz, y, xz));
     }
 
     public List<T> findWithPredicate(double xz, double y, Predicate<T> predicate ){

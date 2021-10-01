@@ -9,11 +9,11 @@ import com.example.upgradedwolves.entities.utilities.EntityFinder;
 
 import org.apache.logging.log4j.LogManager;
 
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.animal.Wolf;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
 
 public class DetectEnemiesGoal extends Goal implements IUpdateableGoal {
 
@@ -47,11 +47,11 @@ public class DetectEnemiesGoal extends Goal implements IUpdateableGoal {
             }
         if(currentTicks++ < attemptTicks)
             return false;
-        List<Monster> foundEntities = entityFinder.findWithPredicate(range, 0, x -> wolf.getEntitySenses().canSee(x));
+        List<Monster> foundEntities = entityFinder.findWithPredicate(range, 0, x -> wolf.getSensing().hasLineOfSight(x));
         foundEntities.addAll(entityFinder.findWithinRange(range/5, 0));
         for(Monster monsterEntity : foundEntities) {
-            monsterEntity.addPotionEffect(new EffectInstance(Effect.get(24),120 + (10 * AbilityEnhancer.detectionSkill(wolf))));
-            this.wolf.getLookController().setLookPosition(monsterEntity.getPositionVec());
+            monsterEntity.addEffect(new MobEffectInstance(MobEffect.byId(24),120 + (10 * AbilityEnhancer.detectionSkill(wolf))));
+            this.wolf.getLookControl().setLookAt(monsterEntity.getPosition(1));
             detectedEntity = monsterEntity;
             currentTicks = 0;
             coolDown = true;
@@ -62,7 +62,7 @@ public class DetectEnemiesGoal extends Goal implements IUpdateableGoal {
     }
 
     @Override
-    public boolean shouldContinueExecuting() {        
+    public boolean canContinueToUse() {        
         if(currentTicks++ < lookAt)
             return true;
         currentTicks = 0;
@@ -72,7 +72,7 @@ public class DetectEnemiesGoal extends Goal implements IUpdateableGoal {
 
     @Override
     public void tick(){
-        this.wolf.getLookController().setLookPosition(detectedEntity.getEyePosition(1.0F));
+        this.wolf.getLookControl().setLookAt(detectedEntity.getEyePosition(1.0F));
     }
 
     @Override

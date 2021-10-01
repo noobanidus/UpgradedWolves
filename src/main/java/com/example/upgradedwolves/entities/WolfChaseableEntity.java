@@ -4,12 +4,13 @@ import javax.annotation.Nullable;
 
 import com.example.upgradedwolves.common.TrainingEventHandler;
 
-import net.minecraft.world.level.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.projectile.ProjectileItemEntity;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -17,9 +18,9 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.VoxelShape;
 import com.mojang.math.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
-public abstract class WolfChaseableEntity extends ProjectileItemEntity {
+public abstract class WolfChaseableEntity extends Projectile {
     
     public int timeOut = 0;
     protected float onHitScalar = 0.7f;
@@ -27,15 +28,15 @@ public abstract class WolfChaseableEntity extends ProjectileItemEntity {
     @Nullable
     private BlockState inBlockState;
 
-    public WolfChaseableEntity(EntityType<? extends WolfChaseableEntity> p_i50159_1_, World p_i50159_2_) {
+    public WolfChaseableEntity(EntityType<? extends WolfChaseableEntity> p_i50159_1_, Level p_i50159_2_) {
         super(p_i50159_1_, p_i50159_2_);
     }
 
-    public WolfChaseableEntity(EntityType<? extends WolfChaseableEntity> p_i50159_1_, LivingEntity throwerIn, World worldIn) {
+    public WolfChaseableEntity(EntityType<? extends WolfChaseableEntity> p_i50159_1_, LivingEntity throwerIn, Level worldIn) {
         super(p_i50159_1_, throwerIn, worldIn);
     }
 
-    public WolfChaseableEntity(EntityType<? extends WolfChaseableEntity> p_i50159_1_, double x, double y, double z, World worldIn) {
+    public WolfChaseableEntity(EntityType<? extends WolfChaseableEntity> p_i50159_1_, double x, double y, double z, Level worldIn) {
         super(p_i50159_1_, x, y, z, worldIn);
     }
 
@@ -54,7 +55,7 @@ public abstract class WolfChaseableEntity extends ProjectileItemEntity {
         if (!blockstate.isAir(this.world, blockpos)) {
             VoxelShape voxelshape = blockstate.getCollisionShape(this.world, blockpos);
             if (!voxelshape.isEmpty()) {
-                Vector3d vector3d1 = this.getPositionVec();
+                Vector3d vector3d1 = this.getPosition(1);
 
                 for(AxisAlignedBB axisalignedbb : voxelshape.toBoundingBoxList()) {
                     if (axisalignedbb.offset(blockpos).contains(vector3d1)) {
@@ -80,7 +81,7 @@ public abstract class WolfChaseableEntity extends ProjectileItemEntity {
     @Override
     public void onCollideWithPlayer(Player entityIn) {        
         if (!this.world.isRemote) {
-            boolean flag = this.func_234616_v_().getUniqueID() == entityIn.getUniqueID() && !speedFactor(1) && ticksExisted > 20;
+            boolean flag = this.getOwner().getUUID() == entityIn.getUUID() && !speedFactor(1) && ticksExisted > 20;
             if (flag && !entityIn.addItemStackToInventory(new ItemStack(getDefaultItem()))) {
                 flag = false;
             }
@@ -100,12 +101,12 @@ public abstract class WolfChaseableEntity extends ProjectileItemEntity {
     }
 
     @Override
-    protected Item getDefaultItem() {
+    protected Item getPickupItem() {
         return null;
     }
 
     private boolean stillInGround(){
-        return this.inGround && this.world.hasNoCollisions((new AxisAlignedBB(this.getPositionVec(), this.getPositionVec())).grow(0.06D));
+        return this.inGround && this.world.hasNoCollisions((new AxisAlignedBB(this.getPosition(1), this.getPosition(1))).expandTowards(0.06D));
     }
 
     private void notInBlock() {

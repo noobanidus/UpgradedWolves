@@ -13,8 +13,8 @@ import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.Level;
 
 public class FlyingDisk extends Item {
 
@@ -36,14 +36,14 @@ public class FlyingDisk extends Item {
     }
     
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, Player playerIn, InteractionHand handIn) {        
+    public ActionResult<ItemStack> onItemRightClick(Level worldIn, Player playerIn, InteractionHand handIn) {        
         ItemStack itemstack = playerIn.getHeldItem(handIn);
         playerIn.setActiveHand(handIn);
         return ActionResult.resultConsume(itemstack);
     }
 
     @Override
-    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
+    public void onPlayerStoppedUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int timeLeft) {
         Player playerIn = (Player)entityLiving;
         int time = getUseDuration(stack) - timeLeft;
         float bonus = Math.max(0,Math.min(8,time/3)) / 10.0F;
@@ -53,8 +53,8 @@ public class FlyingDisk extends Item {
             flyingDiskEntity.setItem(stack);
             flyingDiskEntity.setShooter(playerIn);
             flyingDiskEntity.setNoGravity(true);
-            flyingDiskEntity.func_234612_a_(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 0.2F + bonus, 1.0F);
-            worldIn.addEntity(flyingDiskEntity);
+            flyingDiskEntity.func_234612_a_(playerIn, playerIn.getXRot(), playerIn.getYRot(), 0.0F, 0.2F + bonus, 1.0F);
+            worldIn.addFreshEntity(flyingDiskEntity);
         }
 
         playerIn.addStat(Stats.ITEM_USED.get(this));

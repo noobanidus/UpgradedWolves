@@ -20,7 +20,7 @@ import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Util;
+import net.minecraft.Util;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.util.Mth;
 import com.mojang.math.Matrix4f;
@@ -83,7 +83,7 @@ public class UpgradedWolfRenderer extends WolfRenderer {
             matrixStackIn.rotate(Vector3f.YN.rotationDegrees(Mth.lerp(partialTicks, -wolf.prevRenderYawOffset, -wolf.renderYawOffset)));
             matrixStackIn.rotate(Vector3f.YP.rotationDegrees(Mth.lerp(partialTicks, -wolf.prevRotationYawHead, -wolf.rotationYawHead)));
             matrixStackIn.translate(1 * 0.0625, 8.5 * 0.0625, 5.5 * 0.0625);
-            matrixStackIn.rotate(Vector3f.XN.rotationDegrees(Mth.lerp(partialTicks, -wolf.prevRotationPitch, -wolf.rotationPitch)));
+            matrixStackIn.rotate(Vector3f.XN.rotationDegrees(Mth.lerp(partialTicks, -wolf.prevRotationPitch, -wolf.getXRot())));
             matrixStackIn.translate(-1 * 0.0625, 0, 0);
 
             matrixStackIn.translate(0, 1.0 * 0.0625, 0);

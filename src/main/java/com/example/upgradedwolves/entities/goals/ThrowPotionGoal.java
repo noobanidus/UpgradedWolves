@@ -16,13 +16,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ThrowablePotionItem;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import com.mojang.math.Vector3d;
 
 public class ThrowPotionGoal extends Goal {
     protected final Wolf wolf;
@@ -46,13 +46,13 @@ public class ThrowPotionGoal extends Goal {
         (ally.isOnFire() || ally.getHealth() < 8)));
         for (LivingEntity livingEntity : allyList) {
             int slot = -1;
-            if(livingEntity.isOnFire() && !livingEntity.isPotionActive(Effects.FIRE_RESISTANCE)){
-                slot = burningQuestion(wolfItems,Effects.FIRE_RESISTANCE);
+            if(livingEntity.isOnFire() && !livingEntity.hasEffect(MobEffects.FIRE_RESISTANCE)){
+                slot = burningQuestion(wolfItems,MobEffects.FIRE_RESISTANCE);
             }
             if(livingEntity.getHealth() < 8){
-                slot = burningQuestion(wolfItems, Effects.INSTANT_HEALTH);
+                slot = burningQuestion(wolfItems, MobEffects.HEALTH_BOOST);
                 if(slot < 0)
-                    slot = burningQuestion(wolfItems, Effects.REGENERATION);
+                    slot = burningQuestion(wolfItems, MobEffects.REGENERATION);
             }
             if(slot >= 0){
                 this.slot = slot;
@@ -64,38 +64,38 @@ public class ThrowPotionGoal extends Goal {
     }
 
     @Override
-    public void startExecuting() {        
-        super.startExecuting();
+    public void start() {        
+        super.start();
         ItemStack potionStack = handler.getInventory().extractItem(slot, 1, false);
         WolfThrowPotion(potionStack);
         target = null;
     }
 
     //Gets a potion with a certain effect
-    private int burningQuestion(WolfItemStackHandler wolfItems,Effect effectType){
-        return wolfItems.getArbitraryItemStack(x -> x.getItem() instanceof ThrowablePotionItem && remainingWithEffect(PotionUtils.getEffectsFromStack(x),effectType));
+    private int burningQuestion(WolfItemStackHandler wolfItems,MobEffect effectType){
+        return wolfItems.getArbitraryItemStack(x -> x.getItem() instanceof ThrowablePotionItem && remainingWithEffect(PotionUtils.getCustomEffects(x),effectType));
     }
 
-    private boolean remainingWithEffect(List<EffectInstance> effects, Effect effectType){
-        effects.removeIf(y -> y.getPotion() != effectType);
+    private boolean remainingWithEffect(List<MobEffectInstance> effects, MobEffect effectType){
+        effects.removeIf(y -> y.getEffect() != effectType);
         return effects.size() > 0;
     }
 
     private void WolfThrowPotion(ItemStack potionStack){
-        Vector3d vector3d = target.getDeltaMovement();
+        Vec3 vector3d = target.getDeltaMovement();
         double d0 = target.getX() + vector3d.x - wolf.getX();
-        double d1 = target.getPosYEye() - (double)1.1F - wolf.getY();
+        double d1 = target.getEyeY() - (double)1.1F - wolf.getY();
         double d2 = target.getZ() + vector3d.z - wolf.getZ();
-        float f = Mth.sqrt(d0 * d0 + d2 * d2);
+        float f = Mth.sqrt((float)(d0 * d0 + d2 * d2));
 
         ThrownPotion potionentity = new ThrownPotion(wolf.level, wolf);
         potionentity.setItem(potionStack);
-        potionentity.rotationPitch -= -20.0F;
+        potionentity.setXRot(potionentity.getXRot() - 20.0F);
         potionentity.shoot(d0, d1 + (double)(f * 0.2F), d2, 0.75F, 8.0F);
         if (!wolf.isSilent()) {
-            wolf.level.playSound((Player)null, wolf.getX(), wolf.getY(), wolf.getZ(), SoundEvents.ENTITY_SPLASH_POTION_THROW, wolf.getSoundCategory(), 1.0F, 0.8F + wolf.getRandom().nextFloat() * 0.4F);
+            wolf.level.playSound((Player)null, wolf.getX(), wolf.getY(), wolf.getZ(), SoundEvents.SPLASH_POTION_THROW, wolf.getSoundSource(), 1.0F, 0.8F + wolf.getRandom().nextFloat() * 0.4F);
         }
-        wolf.level.addEntity(potionentity);             
+        wolf.level.addFreshEntity(potionentity);             
     }
     
 }

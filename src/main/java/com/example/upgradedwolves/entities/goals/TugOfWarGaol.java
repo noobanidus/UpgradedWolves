@@ -9,13 +9,13 @@ import com.example.upgradedwolves.network.message.RenderMessage;
 
 import com.example.upgradedwolves.network.PacketHandler;
 
-import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.pathfinding.Path;
-import com.mojang.math.Vector3d;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.pathfinder.Path;
 import net.minecraftforge.fmllegacy.network.PacketDistributor;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -41,8 +41,8 @@ public class TugOfWarGaol extends Goal {
         return false;
     }
 
-    public boolean shouldContinueExecuting(){
-        double distance = wolf.getPosition(1).distanceSq(playerIn.getPosition(1));
+    public boolean canContinueToUse(){
+        double distance = wolf.getPosition(1).distanceToSqr(playerIn.getPosition(1));
         if(timeActive++ < 20*15 && distance < 64){
             return true;
         } else {
@@ -51,7 +51,7 @@ public class TugOfWarGaol extends Goal {
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             handler.clearRopeHolder();
             handler.addXp(WolfStatsEnum.Strength, 2);
-            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolfgetId(),0,0,false) );
+            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getId(),0,0,false) );
             return false;
         }
     }
@@ -59,7 +59,7 @@ public class TugOfWarGaol extends Goal {
     @Override
     public void tick() {        
         super.tick();
-        if(wolf.getNavigation().noPath()){
+        if(wolf.getNavigation().isDone()){
             setWolfPath();
         }
         float distance = wolf.distanceTo(playerIn);
@@ -68,18 +68,20 @@ public class TugOfWarGaol extends Goal {
             double d1 = (playerIn.getY() - wolf.getY()) / (double)distance;
             double d2 = (playerIn.getZ() - wolf.getZ()) / (double)distance;
             wolf.setDeltaMovement(wolf.getDeltaMovement().add(Math.copySign(d0 * d0 * 0.5D, d0), Math.copySign(d1 * d1 * 0.5D, d1), Math.copySign(d2 * d2 * 0.5D, d2)));
-            PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)playerIn), new MovePlayerMessage(playerIn.getUniqueID(),d0,d1,d2));
+            PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)playerIn), new MovePlayerMessage(playerIn.getUUID(),d0,d1,d2));
         }
         
     }
 
     private void setWolfPath(){
-        Vector3d position;
+        Vec3 position;
+        
         for(int i = 0; i < 10; i++){
-            position = RandomPositionGenerator.findRandomTargetBlockAwayFrom(wolf,10,3,playerIn.getPositionVec());
+            
+            position = DefaultRandomPos.getPosAway(wolf,10,3,playerIn.getPosition(1));;
             if(position != null){
-                Path path = wolf.getNavigation().getPathToPos(position.x,position. y, position.z, 0);
-                wolf.getNavigation().setPath(path, .5);
+                Path path = wolf.getNavigation().createPath(position.x,position. y, position.z, 0);
+                wolf.getNavigation().moveTo(path, .5);
                 break;
             }
         }        

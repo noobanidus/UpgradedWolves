@@ -4,22 +4,23 @@ import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.common.WolfPlayerInteraction;
 
-import net.minecraft.world.level.block.BlockState;
-import net.minecraft.block.LeavesBlock;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
+import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
-import net.minecraft.pathfinding.WalkNodeProcessor;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.Wolf;
-import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.World;
 
 public class FollowOwnerVariableGoal extends FollowOwnerGoal{
     TamableAnimal tameable;
     float dist;
-    PathNavigator navigator;
+    PathNavigation navigator;
 
     public FollowOwnerVariableGoal(TamableAnimal tameable, double speed, float minDist, float maxDist,
             boolean teleportToLeaves) {
@@ -36,7 +37,7 @@ public class FollowOwnerVariableGoal extends FollowOwnerGoal{
     public boolean canUse() {
         if(tameable.getOwner() == null)
             return false;
-        else if(this.tameable.getDistanceSq(tameable.getOwner()) < (double)(this.dist * this.dist))
+        else if(this.tameable.distanceToSqr(tameable.getOwner()) < (double)(this.dist * this.dist))
             return false;
         else if(this.tameable instanceof Wolf){
             Wolf wolf = (Wolf)tameable;
@@ -50,13 +51,13 @@ public class FollowOwnerVariableGoal extends FollowOwnerGoal{
     }
     
     @Override
-    public boolean shouldContinueExecuting() {
-        if (this.navigator.noPath()) {
+    public boolean canContinueToUse() {
+        if (this.navigator.isDone()) {
            return false;
         } else if (this.tameable.isInSittingPose()) {
            return false;
         } else {
-           return !(this.tameable.getDistanceSq(tameable) <= (double)(this.dist * this.dist));
+           return !(this.tameable.distanceToSqr(tameable) <= (double)(this.dist * this.dist));
         }
      }
 
@@ -71,37 +72,37 @@ public class FollowOwnerVariableGoal extends FollowOwnerGoal{
             int j = this.getRandomNumber(-3, 3);
             int k = this.getRandomNumber(-1, 1);
             int l = this.getRandomNumber(-3, 3);
-            boolean flag = this.tryToTeleportToLocation(blockpos.getX() + j, blockpos.getY() + k, blockpos.getZ() + l);
+            boolean flag = this.tryToTeleportToLocation(blockpos.x() + j, blockpos.y() + k, blockpos.z() + l);
             if (flag) {
                 return;
             }
         }
     }
 
-    private boolean tryToTeleportToLocation(int x, int y, int z) {
+    private boolean tryToTeleportToLocation(double x, double y, double z) {
         LivingEntity owner = tameable.getOwner();
         if (Math.abs((double)x - owner.getX()) < 2.0D && Math.abs((double)z - owner.getZ()) < 2.0D) {
            return false;
-        } else if (!this.isTeleportFriendlyBlock(new Vec3(x, y, z))) {
+        } else if (!this.isTeleportFriendlyBlock(new BlockPos(x, y, z))) {
            return false;
         } else {
-           this.tameable.setLocationAndAngles((double)x + 0.5D, (double)y, (double)z + 0.5D, this.tameable.rotationYaw, this.tameable.rotationPitch);
-           this.navigator.clearPath();
+           this.tameable.lerpTo((double)x + 0.5D, (double)y, (double)z + 0.5D, this.tameable.getYRot(), this.tameable.getXRot(),1,false);
+           this.navigator.stop();
            return true;
         }
     }
-    private boolean isTeleportFriendlyBlock(Vec3 pos) {
-        World world = tameable.world;
-        PathNodeType pathnodetype = WalkNodeProcessor.func_237231_a_(world, pos.toMutable());
-        if (pathnodetype != PathNodeType.WALKABLE) {
+    private boolean isTeleportFriendlyBlock(BlockPos pos) {
+        Level world = tameable.level;
+        BlockPathTypes blockpathtypes = WalkNodeEvaluator.getBlockPathTypeStatic(world, pos.mutable());
+        if (blockpathtypes != BlockPathTypes.WALKABLE) {
            return false;
         } else {
-           BlockState blockstate = world.getBlockState(pos.down());
+           BlockState blockstate = world.getBlockState(new BlockPos(pos));
            if (blockstate.getBlock() instanceof LeavesBlock) {
               return false;
            } else {
-              Vec3 blockpos = pos.subtract(this.tameable.getPosition(1));
-              return world.hasNoCollisions(this.tameable, this.tameable.getBoundingBox().offset(blockpos));
+              BlockPos blockpos = pos.subtract(this.tameable.blockPosition());
+              return world.noCollision(this.tameable, this.tameable.getBoundingBox().move(blockpos));
            }
         }
      }
@@ -109,13 +110,13 @@ public class FollowOwnerVariableGoal extends FollowOwnerGoal{
     @Override
     public void tick() {
         LivingEntity owner = tameable.getOwner();
-        this.tameable.getLookController().setLookPositionWithEntity(owner, 10.0F, (float)this.tameable.getVerticalFaceSpeed());
+        this.tameable.getLookControl().setLookAt(owner, 10.0F, (float)this.tameable.getMaxHeadXRot());
             
-         if (!this.tameable.getLeashed() && !tameable.isPassenger()) {
-            if (this.tameable.getDistanceSq(owner) >= 900.0D * 25 || this.navigator.getPathToEntity(owner, 1) == null) {
+         if (!this.tameable.isLeashed() && !tameable.isPassenger()) {
+            if (this.tameable.distanceToSqr(owner) >= 900.0D * 25) {
                this.teleportToEntity();
             } else {
-               this.navigator.tryMoveToEntityLiving(owner, 1);
+               this.navigator.moveTo(owner, 1);
             }
         }
     }

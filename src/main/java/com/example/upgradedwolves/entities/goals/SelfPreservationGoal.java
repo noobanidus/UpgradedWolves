@@ -7,7 +7,7 @@ import com.example.upgradedwolves.itemHandler.WolfItemStackHandler;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.sounds.SoundEvents;
 
 public class SelfPreservationGoal extends Goal {
     public Wolf wolf;
@@ -26,7 +26,7 @@ public class SelfPreservationGoal extends Goal {
         if(wolf.getHealth() < 15 && wolfInventory.getArbitraryItem(item -> item.isEdible()) >= 0){
             int inventorySlot = wolfInventory.getArbitraryItem(item -> item.isEdible());
             ItemStack foodStack = wolfInventory.getStackInSlot(inventorySlot);
-            healAmount = foodStack.getItem().getFoodProperties().getHealing();
+            healAmount = foodStack.getItem().getFoodProperties().getNutrition();
             currentTime = 0;
             foodStack.shrink(1);
             return true;
@@ -35,10 +35,10 @@ public class SelfPreservationGoal extends Goal {
         return false;
     }
 
-    public boolean shouldContinueExecuting(){
+    public boolean canContinueToUse(){
         if(currentTime++ < eatingTime){
             if(currentTime % 4 == 0)
-            wolf.playSound(SoundEvents.ENTITY_GENERIC_EAT, 0.5F + 0.5F * (float)wolf.getRandom().nextInt(2), (wolf.getRandom().nextFloat() - wolf.getRandom().nextFloat()) * 0.2F + 1.0F);
+            wolf.playSound(SoundEvents.GENERIC_EAT, 0.5F + 0.5F * (float)wolf.getRandom().nextInt(2), (wolf.getRandom().nextFloat() - wolf.getRandom().nextFloat()) * 0.2F + 1.0F);
             return true;
         }   
         wolf.heal(healAmount);

@@ -7,14 +7,14 @@ import com.example.upgradedwolves.capabilities.WolfType;
 
 import org.apache.logging.log4j.LogManager;
 
-import net.minecraft.entity.IAngerable;
+import net.minecraft.world.entity.NeutralMob;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.goal.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.entity.monster.SpiderEntity;
-import net.minecraft.entity.monster.ZombieEntity;
+import net.minecraft.world.entity.monster.Spider;
+import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.util.Mth;
 
@@ -24,20 +24,20 @@ public class WolfAutoAttackTargetGoal extends NearestAttackableTargetGoal<Monste
     
 
     public WolfAutoAttackTargetGoal(Mob p_i50313_1_, Class<Monster> class1, boolean p_i50313_3_) {
-        super(p_i50313_1_, class1, p_i50313_3_);        
-        targetEntitySelector.setCustomPredicate(entity -> (EntityAllowed(entity)));
-        IWolfStats handler = WolfStatsHandler.getHandler((Wolf)goalOwner);
-        targetEntitySelector.setDistance(Mth.clamp(10 + handler.getDetectionBonus()/2, 0, 30) );
+        super(p_i50313_1_, class1, p_i50313_3_);
+        targetConditions.selector(entity -> (EntityAllowed(entity)));
+        IWolfStats handler = WolfStatsHandler.getHandler((Wolf)mob);
+        targetConditions.range(Mth.clamp(10 + handler.getDetectionBonus()/2, 0, 30) );
     }
 
     private boolean EntityAllowed(LivingEntity entity){
-        IWolfStats handler = WolfStatsHandler.getHandler((Wolf)goalOwner);
+        IWolfStats handler = WolfStatsHandler.getHandler((Wolf)mob);
         if(handler.getWolfType() != WolfType.Fighter.getValue())
             return false;
         int intelligence = handler.getLevel(WolfStatsEnum.Intelligence);
-        boolean basicMobs = entity instanceof ZombieEntity || entity instanceof SpiderEntity;
-        boolean hostileMobs = entity instanceof Monster && !(entity instanceof IAngerable) &&
-         !(entity instanceof Creeper) || entity instanceof SpiderEntity;        
+        boolean basicMobs = entity instanceof Zombie || entity instanceof Spider;
+        boolean hostileMobs = entity instanceof Monster && !(entity instanceof NeutralMob) &&
+         !(entity instanceof Creeper) || entity instanceof Spider;        
         if(intelligence >= 5 && basicMobs)
             return true;
         else if(intelligence >= 10 && hostileMobs)
@@ -47,7 +47,7 @@ public class WolfAutoAttackTargetGoal extends NearestAttackableTargetGoal<Monste
 
     @Override
     public boolean canUse() {
-        findNearestTarget();
+        findTarget();
         if(target != null)
             LogManager.getLogger().info(target);
         return super.canUse();
@@ -55,7 +55,7 @@ public class WolfAutoAttackTargetGoal extends NearestAttackableTargetGoal<Monste
 
     @Override
     public void Update(IWolfStats handler, Wolf wolf) {        
-        targetEntitySelector.setDistance(Mth.clamp(10 + handler.getDetectionBonus()/2, 0, 30) );
+        targetConditions.range(Mth.clamp(10 + handler.getDetectionBonus()/2, 0, 30) );
     }
     
 }

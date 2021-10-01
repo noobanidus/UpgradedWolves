@@ -9,8 +9,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.particles.BasicParticleType;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.Util;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.fmllegacy.network.NetworkEvent.Context;
@@ -67,7 +67,7 @@ public class SpawnLevelUpParticle implements IMessage<SpawnLevelUpParticle> {
                 break;
             }
             for(int i = 0; i < 15; i++)
-                mc.level.addParticle(pt, false, wolf.getPosition(1).getX() + r.nextDouble(), wolf.getPosition(1).getY() + r.nextDouble(), wolf.getPosition(1).getZ() + r.nextDouble(), r.nextDouble()/5, r.nextDouble()/5, r.nextDouble()/5);
+                mc.level.addParticle(pt, false, wolf.getPosition(1).x() + r.nextDouble(), wolf.getPosition(1).y() + r.nextDouble(), wolf.getPosition(1).z() + r.nextDouble(), r.nextDouble()/5, r.nextDouble()/5, r.nextDouble()/5);
         });
         supplier.get().setPacketHandled(true);
     }

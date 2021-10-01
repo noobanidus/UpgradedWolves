@@ -26,14 +26,14 @@ public class UseSwordGoal extends Goal implements Serializable {
 
     @Override
     public boolean canUse() {
-        if(wolf.getAttackTarget() != null){
+        if(wolf.getTarget() != null){
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             WolfItemStackHandler wolfInventory = handler.getInventory();
             int swordSlot = wolfInventory.getSword();
             if(swordSlot >= 0){
                 sword = wolfInventory.extractItem(wolfInventory.getSword(), 1, false);
                 wolf.setItemInHand(InteractionHand.MAIN_HAND, sword);
-                PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new SyncWolfHandMessage(wolfgetId(),sword));
+                PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new SyncWolfHandMessage(wolf.getId(),sword));
                 return true;
             }
         }
@@ -41,9 +41,9 @@ public class UseSwordGoal extends Goal implements Serializable {
     }
 
     @Override
-    public boolean shouldContinueExecuting() {        
-        if(wolf.getAttackTarget() != null && super.shouldContinueExecuting()){
-            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new SyncWolfHandMessage(wolfgetId(),ItemStack.EMPTY));
+    public boolean canContinueToUse() {        
+        if(wolf.getTarget() != null && super.canContinueToUse()){
+            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new SyncWolfHandMessage(wolf.getId(),ItemStack.EMPTY));
             return false;
         }
         return true;
