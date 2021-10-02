@@ -16,37 +16,36 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
-import net.minecraft.entity.projectile.ThrowableProjectile;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.shapes.VoxelShape;
-import com.mojang.math.Vector3d;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fmllegacy.network.NetworkHooks;
 import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraftforge.api.distmarker.Dist;
 
 public class MobPlushyEntity extends ThrowableProjectile {
-    private static final DataParameter<ItemStack> ITEMSTACK_DATA = EntityDataManager.createKey(ThrowableItemProjectile.class, DataSerializers.ITEMSTACK);
+    private static final EntityDataAccessor<ItemStack> ITEMSTACK_DATA = SynchedEntityData.defineId(ThrowableProjectile.class, EntityDataSerializers.ITEM_STACK);
     private boolean inGround;
     @Nullable
     private BlockState inBlockState;
 
     public MobPlushyEntity(EntityType<? extends MobPlushyEntity> p_i50159_1_, Level p_i50159_2_) {
-        super(p_i50159_1_, p_i50159_2_);      
+        super(p_i50159_1_, p_i50159_2_);
+         
     }
 
     public MobPlushyEntity(Level worldIn, LivingEntity throwerIn) {
@@ -57,41 +56,45 @@ public class MobPlushyEntity extends ThrowableProjectile {
         super(ModEntities.mobPlushyEntityType, x, y, z, worldIn);
     }    
 
-    protected void onImpact(RayTraceResult result) {
-        RayTraceResult.Type raytraceresult$type = result.getType();
-        if(raytraceresult$type == RayTraceResult.Type.ENTITY){
-            EntityRayTraceResult entityResult = (EntityRayTraceResult)result;
+    @Override
+    protected void onHit(HitResult result) {
+        HitResult.Type raytraceresult$type = result.getType();
+        if(raytraceresult$type == HitResult.Type.ENTITY){
+            EntityHitResult entityResult = (EntityHitResult)result;        
             if(entityResult.getEntity() instanceof Wolf){
                 TrainingEventHandler.wolfCollectEntity(this, (Wolf)entityResult.getEntity(), getItem());
             }
+            else if(entityResult.getEntity() instanceof Player){
+            }
         }
-        if (raytraceresult$type == RayTraceResult.Type.BLOCK) {
-            BlockRayTraceResult blockResult = (BlockRayTraceResult)result;
-            if(blockResult.getFace().getAxis() == Direction.Axis.Y)
+        if (raytraceresult$type == HitResult.Type.BLOCK) {
+            BlockHitResult blockResult = (BlockHitResult)result;
+            if(blockResult.getDirection().getAxis() == Direction.Axis.Y)
                 this.OnHitBlock(blockResult);
             else{
-                Vector3d vector3d1 = this.getDeltaMovement();
+                Vec3 vector3d1 = this.getDeltaMovement();
                 this.setDeltaMovement(
-                    blockResult.getFace().getAxis() == Direction.Axis.X ? -vector3d1.x * .3 : vector3d1.x * .5,
+                    blockResult.getDirection().getAxis() == Direction.Axis.X ? -vector3d1.x * .3 : vector3d1.x * .5,
                     vector3d1.y * .5,
-                    blockResult.getFace().getAxis() == Direction.Axis.Z ? -vector3d1.z * .3 : vector3d1.z * .5
+                    blockResult.getDirection().getAxis() == Direction.Axis.Z ? -vector3d1.z * .3 : vector3d1.z * .5
                 );
             }
 
         }
     }
+
     @Override
-    public void onCollideWithPlayer(Player entityIn) {        
-        if (!this.world.isRemote) {
-            boolean flag = this.getOwner().getUUID() == entityIn.getUUID() && ticksExisted > 20;
+    public void playerTouch(Player entityIn) {        
+        if (!this.level.isClientSide) {
+            boolean flag = this.getOwner().getUUID() == entityIn.getUUID() && tickCount > 20;
             if (flag) {                
-                if(!entityIn.isCreative() && !entityIn.addItemStackToInventory(getItem()))
+                if(!entityIn.isCreative() && !entityIn.addItem(getItem()))
                     flag = false;
             }
     
             if (flag) {                
-                entityIn.onItemPickup(this, 1);
-                this.remove();
+                entityIn.take(this, 1);
+                this.kill();
             }
     
         }
@@ -99,7 +102,7 @@ public class MobPlushyEntity extends ThrowableProjectile {
 
     public void onCollideWithWolf(Wolf wolf){
         wolf.setItemInHand(InteractionHand.MAIN_HAND, getItem());
-        this.remove(); 
+        this.kill(); 
     }
 
     protected List<MobPlushy> plushTypes(){
@@ -116,28 +119,28 @@ public class MobPlushyEntity extends ThrowableProjectile {
     }
 
     protected ItemStack func_213882_k() {
-        return this.getDataManager().get(ITEMSTACK_DATA);
+        return this.getEntityData().get(ITEMSTACK_DATA);
     }
 
     @Override
-    public IPacket<?> createSpawnPacket() {        
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
     public void tick() {
         if(getItem() == null)
-            this.remove();
+            this.kill();
         super.tick();
         Vec3 blockpos = this.getPosition(1);
-        BlockState blockstate = this.world.getBlockState(blockpos);
-        if (!blockstate.isAir(this.world, blockpos)) {
-            VoxelShape voxelshape = blockstate.getCollisionShape(this.world, blockpos);
+        BlockState blockstate = this.level.getBlockState(new BlockPos(blockpos));
+        if (!blockstate.isAir()) {
+            VoxelShape voxelshape = blockstate.getCollisionShape(this.level, new BlockPos(blockpos));
             if (!voxelshape.isEmpty()) {
-                Vector3d vector3d1 = this.getPosition(1);
+                Vec3 vector3d1 = this.getPosition(1);
 
-                for(AxisAlignedBB axisalignedbb : voxelshape.toBoundingBoxList()) {
-                    if (axisalignedbb.offset(blockpos).contains(vector3d1)) {
+                for(AABB axisalignedbb : voxelshape.toAabbs()) {
+                    if (axisalignedbb.expandTowards(blockpos).contains(vector3d1)) {
                         this.inGround = true;
                         break;
                     }
@@ -145,7 +148,7 @@ public class MobPlushyEntity extends ThrowableProjectile {
             }
         }
 
-        for(Wolf wolf : this.world.getEntitiesOfClass(Wolf.class, this.getBoundingBox())) {
+        for(Wolf wolf : this.level.getEntitiesOfClass(Wolf.class, this.getBoundingBox())) {
             onCollideWithWolf(wolf);    
         }
         
@@ -157,33 +160,28 @@ public class MobPlushyEntity extends ThrowableProjectile {
     }
 
     private boolean stillInGround(){
-        return this.inGround && this.world.hasNoCollisions((new AxisAlignedBB(this.getPosition(1), this.getPosition(1))).expandTowards(0.06D));
+        return this.inGround && this.level.noCollision((new AABB(this.getPosition(1), this.getPosition(1))).expandTowards(0.06D,0.06D,0.06D));
     }
 
     private void notInBlock() {
         this.inGround = false;
-        Vector3d vector3d = this.getDeltaMovement();
-        this.setDeltaMovement(vector3d.mul((double)(this.rand.nextFloat() * 0.2F), (double)(this.rand.nextFloat() * 0.2F), (double)(this.rand.nextFloat() * 0.2F)));
+        Vec3 vector3d = this.getDeltaMovement();
+        this.setDeltaMovement(vector3d.multiply((double)(this.random.nextFloat() * 0.2F), (double)(this.random.nextFloat() * 0.2F), (double)(this.random.nextFloat() * 0.2F)));
     }
 
-    protected void OnHitBlock(BlockRayTraceResult p_230299_1_) {
-        this.inBlockState = this.world.getBlockState(p_230299_1_.getPos());
-        super.func_230299_a_(p_230299_1_);
-        Vector3d vector3d = p_230299_1_.getHitVec().subtract(this.getX(), this.getY(), this.getZ());
+    protected void OnHitBlock(BlockHitResult p_230299_1_) {
+        this.inBlockState = this.level.getBlockState(p_230299_1_.getBlockPos());
+        super.onHitBlock(p_230299_1_);
+        Vec3 vector3d = p_230299_1_.getLocation().subtract(this.getX(), this.getY(), this.getZ());
         this.setDeltaMovement(vector3d);
-        Vector3d vector3d1 = vector3d.normalize().scale((double)0.05F);
-        this.setRawPosition(this.getX() - vector3d1.x, this.getY() - vector3d1.y, this.getZ() - vector3d1.z);
+        Vec3 vector3d1 = vector3d.normalize().scale((double)0.05F);
+        this.setPosRaw(this.getX() - vector3d1.x, this.getY() - vector3d1.y, this.getZ() - vector3d1.z);
         this.inGround = true;
-    }
-
-    @Override
-    protected void registerData() {
-        this.getDataManager().register(ITEMSTACK_DATA, ItemStack.EMPTY); 
     }
 
     public void setItem(ItemStack stack) {
         if (plushTypes().contains(stack.getItem()) || stack.hasTag()) {
-           this.getDataManager().set(ITEMSTACK_DATA, Util.make(stack.copy(), (p_213883_0_) -> {
+           this.getEntityData().set(ITEMSTACK_DATA, Util.make(stack.copy(), (p_213883_0_) -> {
               p_213883_0_.setCount(1);
            }));
         }
@@ -192,22 +190,28 @@ public class MobPlushyEntity extends ThrowableProjectile {
 
     @OnlyIn(Dist.CLIENT)
     public boolean isInRangeToRender3d(double x, double y, double z) {
-        return super.isInRangeToRender3d(x, y, z);
+        return super.shouldRender(x, y, z);
         //return true;
     }
 
     public void writeAdditional(CompoundTag compound) {
-        super.writeAdditional(compound);
+        super.addAdditionalSaveData(compound);
         ItemStack itemstack = this.func_213882_k();
         if (!itemstack.isEmpty()) {
-           compound.put("Item", itemstack.write(new CompoundTag()));
+           compound.put("Item", itemstack.save(new CompoundTag()));
         }
   
     }
   
     public void readAdditional(CompoundTag compound) {
-        super.readAdditional(compound);
-        ItemStack itemstack = ItemStack.read(compound.getCompound("Item"));
+        super.readAdditionalSaveData(compound);
+        ItemStack itemstack = ItemStack.of(compound.getCompound("Item"));
         this.setItem(itemstack);
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        this.getEntityData().define(ITEMSTACK_DATA, ItemStack.EMPTY); 
+        
     }
 }

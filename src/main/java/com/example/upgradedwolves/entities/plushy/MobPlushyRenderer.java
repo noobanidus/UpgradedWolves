@@ -2,15 +2,15 @@ package com.example.upgradedwolves.entities.plushy;
 
 import com.example.upgradedwolves.items.MobPlushy;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.VertexBuffer;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.culling.ClippingHelper;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.resources.ResourceLocation;
@@ -23,7 +23,7 @@ public class MobPlushyRenderer extends EntityRenderer<MobPlushyEntity> {
     }
 
     public static int getPackedOverlay(MobPlushyEntity livingEntityIn, float uIn) {
-        return OverlayTexture.getPackedUV(OverlayTexture.getU(uIn), OverlayTexture.getV(false));
+        return OverlayTexture.pack(OverlayTexture.u(uIn), OverlayTexture.v(false));
      }
 
     protected float getOverlayProgress(MobPlushyEntity livingEntityIn, float partialTicks) {
@@ -32,19 +32,19 @@ public class MobPlushyRenderer extends EntityRenderer<MobPlushyEntity> {
 
     @Override
     public void render(MobPlushyEntity entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn,
-            IRenderTypeBuffer bufferIn, int packedLightIn) {        
+            MultiBufferSource bufferIn, int packedLightIn) {        
         MobPlushy plush = (MobPlushy)entityIn.getItem().getItem();
         model = MobPlushy.getModelByPlushType(plush);        
-        matrixStackIn.push();
+        matrixStackIn.pushPose();
         int i = OverlayTexture.NO_OVERLAY;
-        IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.getEntityCutoutNoCull(getTextureLocation(entityIn)));
-        model.render(matrixStackIn, ivertexbuilder, packedLightIn, i, 1f, 1f, 1f, 1f);
-        matrixStackIn.pop();
+        VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(entityIn)));
+        model.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, i, 1f, 1f, 1f, 1f);
+        matrixStackIn.popPose();
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
 
     @Override
-    public boolean shouldRender(MobPlushyEntity livingEntityIn, ClippingHelper camera, double camX, double camY,
+    public boolean shouldRender(MobPlushyEntity livingEntityIn, Frustum camera, double camX, double camY,
             double camZ) {
         return super.shouldRender(livingEntityIn, camera, camX, camY, camZ);
     }

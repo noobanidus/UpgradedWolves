@@ -13,10 +13,10 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import com.mojang.math.Vector3d;
 import net.minecraft.world.level.Level;
 
@@ -44,20 +44,20 @@ public abstract class WolfChaseableEntity extends Projectile {
         super.tick();
         timeOut++;
         if(timeOut >= 1200){
-            this.remove();
+            this.kill();
         }
-        for(Wolf wolf : this.world.getEntitiesWithinAABB(Wolf.class, this.getBoundingBox())) {
+        for(Wolf wolf : this.level.getEntitiesWithinAABB(Wolf.class, this.getBoundingBox())) {
             onCollideWithWolf(wolf);    
         }
 
         Vec3 blockpos = this.getPosition(1);
-        BlockState blockstate = this.world.getBlockState(blockpos);
-        if (!blockstate.isAir(this.world, blockpos)) {
-            VoxelShape voxelshape = blockstate.getCollisionShape(this.world, blockpos);
+        BlockState blockstate = this.level.getBlockState(blockpos);
+        if (!blockstate.isAir(this.level, blockpos)) {
+            VoxelShape voxelshape = blockstate.getCollisionShape(this.level, blockpos);
             if (!voxelshape.isEmpty()) {
                 Vector3d vector3d1 = this.getPosition(1);
 
-                for(AxisAlignedBB axisalignedbb : voxelshape.toBoundingBoxList()) {
+                for(AABB axisalignedbb : voxelshape.toBoundingBoxList()) {
                     if (axisalignedbb.offset(blockpos).contains(vector3d1)) {
                         this.inGround = true;
                         break;
@@ -79,16 +79,16 @@ public abstract class WolfChaseableEntity extends Projectile {
     }
 
     @Override
-    public void onCollideWithPlayer(Player entityIn) {        
-        if (!this.world.isRemote) {
-            boolean flag = this.getOwner().getUUID() == entityIn.getUUID() && !speedFactor(1) && ticksExisted > 20;
-            if (flag && !entityIn.addItemStackToInventory(new ItemStack(getDefaultItem()))) {
+    public void playerTouch(Player entityIn) {        
+        if (!this.level.isRemote) {
+            boolean flag = this.getOwner().getUUID() == entityIn.getUUID() && !speedFactor(1) && tickCount > 20;
+            if (flag && !entityIn.addItem(new ItemStack(getDefaultItem()))) {
                 flag = false;
             }
     
             if (flag) {                
-                entityIn.onItemPickup(this, 1);
-                this.remove();
+                entityIn.take(this, 1);
+                this.kill();
             }
     
         }
@@ -106,17 +106,17 @@ public abstract class WolfChaseableEntity extends Projectile {
     }
 
     private boolean stillInGround(){
-        return this.inGround && this.world.hasNoCollisions((new AxisAlignedBB(this.getPosition(1), this.getPosition(1))).expandTowards(0.06D));
+        return this.inGround && this.level.hasNoCollisions((new AABB(this.getPosition(1), this.getPosition(1))).expandTowards(0.06D));
     }
 
     private void notInBlock() {
         this.inGround = false;
         Vector3d vector3d = this.getDeltaMovement();
-        this.setDeltaMovement(vector3d.mul((double)(this.rand.nextFloat() * 0.2F), (double)(this.rand.nextFloat() * 0.2F), (double)(this.rand.nextFloat() * 0.2F)));
+        this.setDeltaMovement(vector3d.mul((double)(this.random.nextFloat() * 0.2F), (double)(this.random.nextFloat() * 0.2F), (double)(this.random.nextFloat() * 0.2F)));
     }
 
-    protected void OnHitBlock(BlockRayTraceResult p_230299_1_) {
-        this.inBlockState = this.world.getBlockState(p_230299_1_.getPos());
+    protected void OnHitBlock(BlockHitResult p_230299_1_) {
+        this.inBlockState = this.level.getBlockState(p_230299_1_.getPos());
         super.func_230299_a_(p_230299_1_);
         Vector3d vector3d = p_230299_1_.getHitVec().subtract(this.getX(), this.getY(), this.getZ());
         this.setDeltaMovement(vector3d);

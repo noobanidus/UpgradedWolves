@@ -1,4 +1,4 @@
-package com.example.upgradedwolves.entities.plushy;
+/*package com.example.upgradedwolves.entities.plushy;
 
 import java.util.concurrent.Callable;
 
@@ -12,7 +12,7 @@ import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.minecraft.client.model.EntityModel;
 
 public class TilePlushyEntity extends ItemStackTileEntityRenderer implements Callable<ItemStackTileEntityRenderer> {
     
@@ -20,6 +20,7 @@ public class TilePlushyEntity extends ItemStackTileEntityRenderer implements Cal
     protected EntityModel<Entity> model;
 
     public TilePlushyEntity(){
+        
         instance = this;
     }
 
@@ -44,4 +45,4 @@ public class TilePlushyEntity extends ItemStackTileEntityRenderer implements Cal
         
         return instance;
     }
-}
+}*/

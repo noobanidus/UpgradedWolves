@@ -1,10 +1,16 @@
 package com.example.upgradedwolves.entities.plushy;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.world.entity.Entity;
 
 // Made with Blockbench 3.9.2
@@ -13,55 +19,53 @@ import net.minecraft.world.entity.Entity;
 
 
 public class ZombiePlushyModel extends EntityModel<Entity> {
-	private final ModelPart bone;
-	private final ModelPart bone2;
-	private final ModelPart cube_r1;
-	private final ModelPart bb_main;
+	private final ModelPart root;
+	private final ModelPart head;
+	private final ModelPart leftArm;
+	private final ModelPart rightArm;
+	private final ModelPart rightLeg;
+	private final ModelPart leftLeg;
 
-	public ZombiePlushyModel() {
-		textureWidth = 32;
-		textureHeight = 32;
+	public ZombiePlushyModel(ModelPart modelPart) {
+		this.root = modelPart;
+		this.head = modelPart.getChild("head");
+		this.leftArm = modelPart.getChild("leg1");
+		this.rightArm = modelPart.getChild("leg2");
+		this.rightLeg = modelPart.getChild("leg3");
+		this.leftLeg = modelPart.getChild("leg4");
+	}
+
+	public static LayerDefinition createBodyLayer(CubeDeformation deformation) {
+		MeshDefinition meshdefinition = new MeshDefinition();
+		PartDefinition partdefinition = meshdefinition.getRoot();
+
+		partdefinition.addOrReplaceChild("head", CubeListBuilder.create().texOffs(8, 16).addBox(-2.0F, 5.0F, -1.5F, 2.0F, 5.0F, 2.0F,deformation),PartPose.rotation(1.5708F, 0.0F, 0.0F));
+		partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(16, 0).addBox(-0.0F, 5.0F, -1.5F, 2.0F, 5.0F, 2.0F,deformation),PartPose.rotation(1.5708F, 0.0F, 0.0F));
+
+		partdefinition.addOrReplaceChild("leg1", CubeListBuilder.create().texOffs(0, 15).addBox(2.0F, -1.5F, 0.0F, 2.0F, 6.0F, 2.0F,deformation),PartPose.rotation(0.0F, 0.0F, 0.0F));
+		partdefinition.addOrReplaceChild("leg2", CubeListBuilder.create().texOffs(12, 8).addBox(-4.0F, -1.5F, 0.0F, 2.0F, 6.0F, 2.0F,deformation),PartPose.rotation(0.0F, 0.0F, 0.0F));
+	
+		partdefinition.addOrReplaceChild("leg3", CubeListBuilder.create().texOffs(0, 0).addBox(-2.0F, -4.0F, -2.5F, 4.0F, 4.0F, 4.0F,deformation),PartPose.rotation(1.5708F, 0.0F, 0.0F));
+		partdefinition.addOrReplaceChild("leg4", CubeListBuilder.create().texOffs(0, 8).addBox(-2.0F, 0.0F, -1.5F, 4.0F, 5.0F, 2.0F,deformation),PartPose.rotation(1.5708F, 0.0F, 0.0F));
 		
-		bone = new ModelPart(this);
-		bone.setRotationPoint(0.0F, 0.0F, 0.0F);
-		setRotationAngle(bone, 1.5708F, 0.0F, 0.0F);
-		bone.setTextureOffset(8, 16).addBox(-2.0F, 5.0F, -1.5F, 2.0F, 5.0F, 2.0F, 0.0F, false);
-		bone.setTextureOffset(16, 0).addBox(-0.0F, 5.0F, -1.5F, 2.0F, 5.0F, 2.0F, 0.0F, false);
-
-		bone2 = new ModelPart(this);
-		bone2.setRotationPoint(0.0F, 1.0F, 0.0F);
-		
-
-		cube_r1 = new ModelPart(this);
-		cube_r1.setRotationPoint(0.0F, 0.0F, 0.0F);
-		bone2.addChild(cube_r1);
-		setRotationAngle(cube_r1, 0F, 0.0F, 0.0F);
-		cube_r1.setTextureOffset(0, 15).addBox(2.0F, -1.5F, 0.0F, 2.0F, 6.0F, 2.0F, 0.0F, false);
-		cube_r1.setTextureOffset(12, 8).addBox(-4.0F, -1.5F, 0.0F, 2.0F, 6.0F, 2.0F, 0.0F, false);
-
-		bb_main = new ModelPart(this);
-		bb_main.setRotationPoint(0.0F, 0.0F, 0.0F);
-		setRotationAngle(bb_main, 1.5708F, 0.0F, 0.0F);
-		bb_main.setTextureOffset(0, 0).addBox(-2.0F, -4.0F, -2.5F, 4.0F, 4.0F, 4.0F, 0.0F, false);
-		bb_main.setTextureOffset(0, 8).addBox(-2.0F, 0.0F, -1.5F, 4.0F, 5.0F, 2.0F, 0.0F, false);
-
+		return LayerDefinition.create(meshdefinition, 32, 32); 
 	}
 
 	@Override
-	public void setRotationAngles(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
-		//previously the render function, render code was moved to a method below
+	public void setupAnim(Entity p_102618_, float p_102619_, float p_102620_, float p_102621_, float p_102622_,
+			float p_102623_) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public void render(PoseStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
-		bone.render(matrixStack, buffer, packedLight, packedOverlay);
-		bone2.render(matrixStack, buffer, packedLight, packedOverlay);
-		bb_main.render(matrixStack, buffer, packedLight, packedOverlay);
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer consumer, int p_103113_, int p_103114_,
+			float p_103115_, float p_103116_, float p_103117_, float p_103118_) {
+		this.root().render(poseStack, consumer, p_103113_, p_103114_, p_103115_, p_103116_, p_103117_, p_103118_);
+		
 	}
 
-	public void setRotationAngle(ModelPart modelRenderer, float x, float y, float z) {
-		modelRenderer.rotateAngleX = x;
-		modelRenderer.rotateAngleY = y;
-		modelRenderer.rotateAngleZ = z;
+	public ModelPart root() {
+		return this.root;
 	}
 }

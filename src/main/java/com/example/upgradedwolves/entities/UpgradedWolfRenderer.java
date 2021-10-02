@@ -10,7 +10,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -73,11 +73,11 @@ public class UpgradedWolfRenderer extends WolfRenderer {
 
     @Override
     public void render(Wolf wolf, float entityYaw, float partialTicks, PoseStack matrixStackIn,
-            IRenderTypeBuffer bufferIn, int packedLightIn) {        
+            MultiBufferSource bufferIn, int packedLightIn) {        
         super.render(wolf, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
         if(!wolf.getMainHandItem().isEmpty()){
             ItemStack itemStack = wolf.getMainHandItem();
-            matrixStackIn.push();
+            matrixStackIn.pushPose();
             matrixStackIn.rotate(Vector3f.YP.rotationDegrees(Mth.lerp(partialTicks, -wolf.prevRenderYawOffset, -wolf.renderYawOffset)));
             matrixStackIn.translate(-1 * 0.0625, 0, 7 * 0.0625);
             matrixStackIn.rotate(Vector3f.YN.rotationDegrees(Mth.lerp(partialTicks, -wolf.prevRenderYawOffset, -wolf.renderYawOffset)));
@@ -98,15 +98,15 @@ public class UpgradedWolfRenderer extends WolfRenderer {
                 matrixStackIn.translate(6 * 0.0625, 6 * .0625, 0);
             }
             Minecraft.getInstance().getItemRenderer().renderItem(itemStack, ItemCameraTransforms.TransformType.NONE,packedLightIn,OverlayTexture.NO_OVERLAY,matrixStackIn,bufferIn);
-            matrixStackIn.pop();
+            matrixStackIn.popPose();
         }
         Entity tugRopeHolder = getCapability(wolf).getRopeHolder();
         if(tugRopeHolder != null)
             renderLeash(wolf, partialTicks, matrixStackIn, bufferIn, tugRopeHolder);
     }
 
-    private <E extends Entity> void renderLeash(Wolf entityLivingIn, float partialTicks, PoseStack matrixStackIn, IRenderTypeBuffer bufferIn, E leashHolder){
-        matrixStackIn.push();
+    private <E extends Entity> void renderLeash(Wolf entityLivingIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, E leashHolder){
+        matrixStackIn.pushPose();
         Vector3d vector3d = leashHolder.getLeashPosition(partialTicks);
         double d0 = (double)(Mth.lerp(partialTicks, entityLivingIn.renderYawOffset, entityLivingIn.prevRenderYawOffset) * ((float)Math.PI / 180F)) + (Math.PI / 2D);
         Vector3d vector3d1 = entityLivingIn.func_241205_ce_();
@@ -132,6 +132,6 @@ public class UpgradedWolfRenderer extends WolfRenderer {
         int l = entityLivingIn.world.getLightFor(LightType.SKY, blockpos1);
         renderSide(ivertexbuilder, matrix4f, f, f1, f2, i, j, k, l, 0.025F, 0.025F, f5, f6);
         renderSide(ivertexbuilder, matrix4f, f, f1, f2, i, j, k, l, 0.025F, 0.0F, f5, f6);
-        matrixStackIn.pop();
+        matrixStackIn.popPose();
     }
 }

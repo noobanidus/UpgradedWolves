@@ -12,10 +12,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import com.mojang.math.Vector3d;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.core.Direction;
@@ -48,33 +48,33 @@ public class FlyingDiskEntity extends WolfChaseableEntity{
     }
 
     @Override
-    public IPacket<?> createSpawnPacket() {        
+    public Packet<?> getAddEntityPacket() {        
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
-    protected void onImpact(RayTraceResult result) {
-        if(result.getType() == RayTraceResult.Type.BLOCK){
+    protected void onImpact(HitResult result) {
+        if(result.getType() == HitResult.Type.BLOCK){
             this.timeOut += flightTime * variant;
-            BlockRayTraceResult blockResult = (BlockRayTraceResult)result;
+            BlockHitResult blockResult = (BlockHitResult)result;
             if(this.getDeltaMovement().length() > 0.2)
-                this.world.playSound(this.getX(), this.getY(), this.getZ(), world.getBlockState(blockResult.getPos()).getBlock().getSoundType(null,null,null,null).getPlaceSound(), SoundCategory.BLOCKS, 0.3F, (1.0F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.2F) * 0.7F, false);
+                this.level.playSound(this.getX(), this.getY(), this.getZ(), world.getBlockState(blockResult.getPos()).getBlock().getSoundType(null,null,null,null).getPlaceSound(), SoundCategory.BLOCKS, 0.3F, (1.0F + (this.level.rand.nextFloat() - this.level.rand.nextFloat()) * 0.2F) * 0.7F, false);
             Vector3d vector3d1 = this.getDeltaMovement();
-            if(blockResult.getFace().getAxis() == Direction.Axis.Y && this.getDeltaMovement().length() < 0.1)
+            if(blockResult.getDirection().getAxis() == Direction.Axis.Y && this.getDeltaMovement().length() < 0.1)
                 super.OnHitBlock(blockResult);
             else
                 this.setDeltaMovement(
-                    blockResult.getFace().getAxis() == Direction.Axis.X ? -vector3d1.x * .2 : vector3d1.x * .3,
-                    blockResult.getFace().getAxis() == Direction.Axis.Y ? -vector3d1.y * .2 : vector3d1.y * .3,
-                    blockResult.getFace().getAxis() == Direction.Axis.Z ? -vector3d1.z * .2 : vector3d1.z * .3
+                    blockResult.getDirection().getAxis() == Direction.Axis.X ? -vector3d1.x * .2 : vector3d1.x * .3,
+                    blockResult.getDirection().getAxis() == Direction.Axis.Y ? -vector3d1.y * .2 : vector3d1.y * .3,
+                    blockResult.getDirection().getAxis() == Direction.Axis.Z ? -vector3d1.z * .2 : vector3d1.z * .3
                     );
-            RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_);
-            if(raytraceresult.getType() != RayTraceResult.Type.MISS){
+            HitResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_);
+            if(raytraceresult.getType() != HitResult.Type.MISS){
                 onImpact(raytraceresult);
             }
         }
-        if(result.getType() == RayTraceResult.Type.ENTITY){
-            EntityRayTraceResult entityResult = (EntityRayTraceResult)result;
+        if(result.getType() == HitResult.Type.ENTITY){
+            EntityHitResult entityResult = (EntityHitResult)result;
             if(speedFactor(1)){
                 if(entityResult.getEntity() instanceof LivingEntity){
                     LivingEntity entity = (LivingEntity)entityResult.getEntity();
