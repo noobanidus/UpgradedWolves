@@ -33,7 +33,7 @@ public class ClientHandler {
         // EntityRendererManager entityRendererManager = Minecraft.getInstance().getRenderManager();
         // entityRendererManager.register(ModEntities.mobPlushyEntityType, new MobPlushyRenderer(entityRendererManager));
 
-        MenuScreens.register(ModContainers.WOLF_CONTAINER.get(), WolfScreen::new);        
+        MenuScreens.register(ModContainers.WOLF_CONTAINER, WolfScreen::new);        
     }
 
     @SubscribeEvent

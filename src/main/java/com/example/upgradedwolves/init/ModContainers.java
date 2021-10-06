@@ -12,12 +12,12 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fmllegacy.RegistryObject;
 
 public class ModContainers {
-    public static RegistryObject<MenuType<WolfContainer>> WOLF_CONTAINER;
+    public static MenuType<WolfContainer> WOLF_CONTAINER;
 
     @SubscribeEvent
-    public static void registerContainers(final RegistryEvent.Register<ContainerType<?>> event){    
-        WOLF_CONTAINER = IForgeContainerType.create(WolfContainer::createContainerClientSide);
-        WOLF_CONTAINER.setRegistryName("wolf_container");
-        event.getRegistry().register(WOLF_CONTAINER);
+    public static void registerContainers(final RegistryEvent.Register<MenuType<?>> event){
+        MenuType<WolfContainer> wolfContainer = IForgeContainerType.create(WolfContainer::createContainerClientSide);    
+        wolfContainer.setRegistryName("wolf_container");
+        event.getRegistry().register(wolfContainer);
     }
 }

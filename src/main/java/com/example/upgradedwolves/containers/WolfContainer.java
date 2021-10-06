@@ -26,7 +26,7 @@ public class WolfContainer extends AbstractContainerMenu {
     public Inventory playerInventory;
 
     private WolfContainer(int id, Inventory playerInventory,WolfItemStackHandler wolfStackHandler,Wolf wolf,CompoundTag nbt) {
-        super(ModContainers.WOLF_CONTAINER.get(),id);
+        super(ModContainers.WOLF_CONTAINER,id);
         this.wolf = wolf;
         this.wolfItemHandler = wolfStackHandler;
         this.nbt = nbt;
