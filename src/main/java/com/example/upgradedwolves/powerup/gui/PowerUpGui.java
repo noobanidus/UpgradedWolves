@@ -19,8 +19,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.network.chat.Style;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.fml.client.gui.GuiUtils;
 
@@ -117,7 +117,7 @@ public class PowerUpGui extends AbstractGui {
       fill(matrixStack, 0, 0, 234, 113, Mth.floor(this.fade * 255.0F) << 24);
       boolean flag = false;
       ArrayList<Component> textBoxInfo = new ArrayList<Component>();
-      Style redStyle = Style.EMPTY.setColor(TextColor.fromTextFormatting(TextFormatting.RED)).setItalic(true);
+      Style redStyle = Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).setItalic(true);
       if(levelDistance(powerUp) <= 0){
          textBoxInfo.add(powerUp.getName());
          textBoxInfo.add(powerUp.getDescription(wolf));
@@ -126,7 +126,7 @@ public class PowerUpGui extends AbstractGui {
          textBoxInfo.add(new TextComponent("???").setStyle(Style.EMPTY.setItalic(true)));
          textBoxInfo.add(new TranslatableComponent("powerup.required.level",powerUp.levelType().toString(),powerUp.requiredLevel()).setStyle(redStyle));
       } else {
-         Style style = Style.EMPTY.setColor(TextColor.fromTextFormatting(TextFormatting.BLUE)).setItalic(true);
+         Style style = Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).setItalic(true);
          textBoxInfo.add(new TextComponent("???").setStyle(style));
          textBoxInfo.add(new TextComponent("???").setStyle(Style.EMPTY.setItalic(true)));
          textBoxInfo.add(new TranslatableComponent("powerup.required.level",powerUp.levelType().toString(),powerUp.requiredLevel()).setStyle(redStyle));

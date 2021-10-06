@@ -20,8 +20,8 @@ import net.minecraft.resources.SimpleResource;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.network.chat.Style;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.TranslatableComponent;
 
 public abstract class PowerUp {    
@@ -94,7 +94,7 @@ public abstract class PowerUp {
     }
 
     public Component getName(){
-        Style style = Style.EMPTY.setColor(TextColor.fromTextFormatting(TextFormatting.BLUE));
+        Style style = Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE));
         return new TranslatableComponent(name,effectiveLevel > 0 ? effectiveLevel : "").setStyle(style);
     }
 
