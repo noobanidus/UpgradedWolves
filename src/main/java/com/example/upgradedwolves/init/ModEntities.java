@@ -5,6 +5,7 @@ import com.example.upgradedwolves.entities.FlyingDiskEntity;
 import com.example.upgradedwolves.entities.TennisBallEntity;
 import com.example.upgradedwolves.entities.plushy.MobPlushyEntity;
 
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.event.RegistryEvent;
@@ -14,6 +15,10 @@ public class ModEntities {
     public static EntityType<TennisBallEntity> tennisBallEntityType;
     public static EntityType<FlyingDiskEntity> flyingDiskEntityType;
     public static EntityType<MobPlushyEntity> mobPlushyEntityType;
+
+    public static final ModelLayerLocation ZOMBIE_PLUSH = new ModelLayerLocation(UpgradedWolves.getId("zombie_plush"), "main");
+    public static final ModelLayerLocation SKELETON_PLUSH = new ModelLayerLocation(UpgradedWolves.getId("skeleton_plush"), "main");
+    public static final ModelLayerLocation CREEPER_PLUSH = new ModelLayerLocation(UpgradedWolves.getId("creeper_plush"), "main");
 
 
     @SubscribeEvent

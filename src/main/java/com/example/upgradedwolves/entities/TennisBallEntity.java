@@ -4,6 +4,7 @@ import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.common.WolfPlayerInteraction;
 import com.example.upgradedwolves.entities.goals.WolfFindAndPickUpItemGoal;
+import com.example.upgradedwolves.init.ModEntities;
 import com.example.upgradedwolves.itemHandler.WolfToysHandler;
 
 import net.minecraft.world.entity.EntityType;
@@ -27,6 +28,10 @@ import net.minecraftforge.fmllegacy.network.NetworkHooks;
 public class TennisBallEntity extends WolfChaseableEntity {
 
     public int timeOut = 0;
+
+    public TennisBallEntity(Level worldIn) {
+        super(ModEntities.tennisBallEntityType,worldIn);
+    }
 
     public TennisBallEntity(EntityType<? extends TennisBallEntity> p_i50159_1_, Level p_i50159_2_) {
         super(p_i50159_1_, p_i50159_2_);

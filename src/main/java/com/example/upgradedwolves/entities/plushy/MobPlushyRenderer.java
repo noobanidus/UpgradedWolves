@@ -16,10 +16,12 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.resources.ResourceLocation;
 
 public class MobPlushyRenderer extends EntityRenderer<MobPlushyEntity> {
-    protected EntityModel<Entity> model;  
+    protected EntityModel<Entity> model;
+    protected EntityRendererProvider.Context providerContext;
 
     public MobPlushyRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager);
+        providerContext = renderManager;
     }
 
     public static int getPackedOverlay(MobPlushyEntity livingEntityIn, float uIn) {
@@ -34,7 +36,7 @@ public class MobPlushyRenderer extends EntityRenderer<MobPlushyEntity> {
     public void render(MobPlushyEntity entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn,
             MultiBufferSource bufferIn, int packedLightIn) {        
         MobPlushy plush = (MobPlushy)entityIn.getItem().getItem();
-        model = MobPlushy.getModelByPlushType(plush);        
+        model = MobPlushy.getModelByPlushType(plush,providerContext);        
         matrixStackIn.pushPose();
         int i = OverlayTexture.NO_OVERLAY;
         VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(entityIn)));
