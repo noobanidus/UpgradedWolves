@@ -4,7 +4,6 @@ import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.common.WolfPlayerInteraction;
 import com.example.upgradedwolves.entities.goals.WolfFindAndPickUpItemGoal;
-import com.example.upgradedwolves.init.ModEntities;
 import com.example.upgradedwolves.itemHandler.WolfToysHandler;
 
 import net.minecraft.world.entity.EntityType;
@@ -12,16 +11,16 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
-import com.mojang.math.Vector3d;
+import net.minecraft.world.phys.Vec3;
+
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.core.Direction;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
@@ -33,17 +32,9 @@ public class TennisBallEntity extends WolfChaseableEntity {
         super(p_i50159_1_, p_i50159_2_);
     }
 
-    public TennisBallEntity(Level worldIn, LivingEntity throwerIn) {
-        super(ModEntities.tennisBallEntityType, throwerIn, worldIn);
-    }
-
-    public TennisBallEntity(Level worldIn, double x, double y, double z) {
-        super(ModEntities.tennisBallEntityType, x, y, z, worldIn);
-    }
-
     @Override
-    protected Item getDefaultItem() {
-        return WolfToysHandler.TENNISBALL;
+    public ItemStack getPickResult(){
+        return new ItemStack(WolfToysHandler.TENNISBALL);
     }
 
     @Override
@@ -52,12 +43,12 @@ public class TennisBallEntity extends WolfChaseableEntity {
     }
 
     @Override
-    protected void onImpact(HitResult result) {
+    protected void onHit(HitResult result) {
         if(result.getType() == HitResult.Type.BLOCK){
             BlockHitResult blockResult = (BlockHitResult)result;
-            Vector3d vector3d1 = this.getDeltaMovement();
+            Vec3 vector3d1 = this.getDeltaMovement();
             if(this.getDeltaMovement().length() > 0.2)
-                this.level.playSound(this.getX(), this.getY(), this.getZ(), world.getBlockState(blockResult.getPos()).getBlock().getSoundType(null, null, null, null).getPlaceSound(), SoundCategory.BLOCKS, 0.5F, (1.0F + (this.level.rand.nextFloat() - this.level.rand.nextFloat()) * 0.2F) * 0.7F, false);
+                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), level.getBlockState(blockResult.getBlockPos()).getBlock().getSoundType(null, null, null, null).getPlaceSound(), SoundSource.BLOCKS, 0.5F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F, false);
             if(blockResult.getDirection().getAxis() == Direction.Axis.Y && this.getDeltaMovement().length() < 0.1)
                 super.OnHitBlock(blockResult);
             else
@@ -66,9 +57,9 @@ public class TennisBallEntity extends WolfChaseableEntity {
                     blockResult.getDirection().getAxis() == Direction.Axis.Y ? -vector3d1.y * .7 : vector3d1.y * .9,
                     blockResult.getDirection().getAxis() == Direction.Axis.Z ? -vector3d1.z * .7 : vector3d1.z * .9
                     );
-            HitResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_);
+            HitResult raytraceresult = ProjectileUtil.getHitResult(this, this::canCollideWith);
             if(raytraceresult.getType() != HitResult.Type.MISS){
-                onImpact(raytraceresult);
+                onHit(raytraceresult);
             }
         }
         if(result.getType() == HitResult.Type.ENTITY){
@@ -76,9 +67,9 @@ public class TennisBallEntity extends WolfChaseableEntity {
             if(speedFactor(1)){
                 if(entityResult.getEntity() instanceof LivingEntity){
                     LivingEntity entity = (LivingEntity)entityResult.getEntity();
-                    entity.hurt(DamageSource.causePlayerDamage((Player)this.getOwner()), 1);
+                    entity.hurt(DamageSource.playerAttack((Player)this.getOwner()), 1);
                     double speed = this.getDeltaMovement().length() * .6;
-                    Vector3d bounceDirection = new Vector3d(entity.getPosition(1).x - this.getPosition(1).x,
+                    Vec3 bounceDirection = new Vec3(entity.getPosition(1).x - this.getPosition(1).x,
                                                                 entity.getPosition(1).y - this.getPosition(1).y,
                                                                 entity.getPosition(1).z - this.getPosition(1).z)
                                                                 .normalize();
@@ -98,7 +89,7 @@ public class TennisBallEntity extends WolfChaseableEntity {
 
     public void wolfCollect(Wolf wolf){        
         IWolfStats handler = WolfStatsHandler.getHandler(wolf);
-        ItemStack tennisBallItem = new ItemStack(getDefaultItem());
+        ItemStack tennisBallItem = getPickResult();
         int wolfSlot = handler.getInventory().getAvailableSlot(tennisBallItem);
 
         if(wolfSlot >= 0){
@@ -108,5 +99,10 @@ public class TennisBallEntity extends WolfChaseableEntity {
                 goal.setEndPoint(wolf.getPosition(1));
             this.kill();
         }
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        
     }
 }

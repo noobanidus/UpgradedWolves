@@ -37,7 +37,7 @@ public class MobPlushy extends Item {
             MobPlushyEntity mobPlushyEntity = new MobPlushyEntity(worldIn, playerIn);
             mobPlushyEntity.setItem(itemstack);
             mobPlushyEntity.setShooter(playerIn);
-            mobPlushyEntity.func_234612_a_(playerIn, playerIn.getXRot(), playerIn.getYRot(), 0.0F, 0.5F, 1.0F);
+            mobPlushyEntity.shootFromRotation(playerIn, playerIn.getXRot(), playerIn.getYRot(), 0.0F, 0.5F, 1.0F);
             worldIn.addFreshEntity(mobPlushyEntity);
         }
 

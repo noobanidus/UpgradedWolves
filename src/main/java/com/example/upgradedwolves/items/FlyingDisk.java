@@ -12,7 +12,7 @@ import net.minecraft.item.UseAction;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.Level;
 
@@ -47,13 +47,13 @@ public class FlyingDisk extends Item {
         Player playerIn = (Player)entityLiving;
         int time = getUseDuration(stack) - timeLeft;
         float bonus = Math.max(0,Math.min(8,time/3)) / 10.0F;
-        worldIn.playSound((Player)null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
+        worldIn.playSound((Player)null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.ENTITY_SNOWBALL_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
         if (!worldIn.isRemote) {
             FlyingDiskEntity flyingDiskEntity = new FlyingDiskEntity(worldIn, playerIn);
             flyingDiskEntity.setItem(stack);
             flyingDiskEntity.setShooter(playerIn);
             flyingDiskEntity.setNoGravity(true);
-            flyingDiskEntity.func_234612_a_(playerIn, playerIn.getXRot(), playerIn.getYRot(), 0.0F, 0.2F + bonus, 1.0F);
+            flyingDiskEntity.shootFromRotation(playerIn, playerIn.getXRot(), playerIn.getYRot(), 0.0F, 0.2F + bonus, 1.0F);
             worldIn.addFreshEntity(flyingDiskEntity);
         }
 

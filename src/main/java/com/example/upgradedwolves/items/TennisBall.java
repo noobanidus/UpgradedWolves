@@ -12,7 +12,7 @@ import net.minecraft.item.UseAction;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.Level;
 
@@ -47,12 +47,12 @@ public class TennisBall extends Item {
         Player playerIn = (Player)entityLiving;
         int time = getUseDuration(stack) - timeLeft;
         float bonus = Math.max(0,Math.min(15,time/3)) / 10.0F;
-        worldIn.playSound((Player)null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
+        worldIn.playSound((Player)null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.ENTITY_SNOWBALL_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
         if (!worldIn.isRemote) {
             TennisBallEntity tennisBallEntity = new TennisBallEntity(worldIn, playerIn);
             tennisBallEntity.setItem(stack);
             tennisBallEntity.setShooter(playerIn);
-            tennisBallEntity.func_234612_a_(playerIn, playerIn.getXRot(), playerIn.getYRot(), 0.0F, 0.5F + bonus, 1.0F);
+            tennisBallEntity.shootFromRotation(playerIn, playerIn.getXRot(), playerIn.getYRot(), 0.0F, 0.5F + bonus, 1.0F);
             worldIn.addFreshEntity(tennisBallEntity);
         }
 
