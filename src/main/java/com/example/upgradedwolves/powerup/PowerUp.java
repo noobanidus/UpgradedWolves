@@ -16,7 +16,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.animal.Wolf;
 
-import net.minecraft.resources.SimpleResource;
+import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.Component;
@@ -59,7 +59,7 @@ public abstract class PowerUp {
     private void initializePowerUp(int levelRequirement, String resourceLocationName,Class<? extends Goal> goal){
         ResourceLocation resourceLocation = UpgradedWolves.getId("powerups/" + resourceLocationName + ".json");
         try{   
-            SimpleResource iresource = (SimpleResource) Minecraft.getInstance().getResourceManager().getResource(resourceLocation);
+            Resource iresource = (Resource) Minecraft.getInstance().getResourceManager().getResource(resourceLocation);
             Gson itemData =  new Gson();
             POWER_UP_DATA = itemData.fromJson( new InputStreamReader(iresource.getInputStream()),PowerUpData.class);
             String powerUpName = resourceLocation.getPath().replace("powerups/", "").replace(".json", "");

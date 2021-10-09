@@ -6,14 +6,15 @@ import com.example.upgradedwolves.loot_table.modifier.ChestLootModifier;
 
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootTables;
 import net.minecraft.world.level.storage.loot.RandomValueRange;
-import net.minecraft.util.NonNullList;
+import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.data.GlobalLootModifierProvider;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootTableIdCondition;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraft.world.level.storage.loot.conditions.ILootCondition;
@@ -36,20 +37,20 @@ public class ModGlobalLootTableModifier extends GlobalLootModifierProvider{
         NonNullList<ChestLootModifier.ChestItem> normalChestDrops = NonNullList.create();
         
         ResourceLocation[] enchantedLootTables = new ResourceLocation[]{
-            LootTables.CHESTS_ABANDONED_MINESHAFT,
-            LootTables.CHESTS_DESERT_PYRAMID,
-            LootTables.CHESTS_JUNGLE_TEMPLE,
-            LootTables.BASTION_TREASURE,
-            LootTables.CHESTS_STRONGHOLD_CROSSING,
-            LootTables.CHESTS_SIMPLE_DUNGEON,
-            LootTables.CHESTS_STRONGHOLD_CORRIDOR
+            BuiltInLootTables.ABANDONED_MINESHAFT,
+            BuiltInLootTables.DESERT_PYRAMID,
+            BuiltInLootTables.JUNGLE_TEMPLE,
+            BuiltInLootTables.BASTION_TREASURE,
+            BuiltInLootTables.STRONGHOLD_CROSSING,
+            BuiltInLootTables.SIMPLE_DUNGEON,
+            BuiltInLootTables.STRONGHOLD_CORRIDOR
         };
 
         ResourceLocation[] normalLootTables = new ResourceLocation[]{
-            LootTables.CHESTS_SHIPWRECK_TREASURE,
-            LootTables.GAMEPLAY_FISHING_TREASURE,
-            LootTables.CHESTS_SPAWN_BONUS_CHEST,
-            LootTables.CHESTS_VILLAGE_VILLAGE_TAIGA_HOUSE
+            BuiltInLootTables.SHIPWRECK_TREASURE,
+            BuiltInLootTables.FISHING_TREASURE,
+            BuiltInLootTables.SPAWN_BONUS_CHEST,
+            BuiltInLootTables.VILLAGE_TAIGA_HOUSE
         };
         
         enchantedChestDrops.add(new ChestLootModifier.ChestItem(WolfToysHandler.GOLDENBONE, new RandomValueRange(1, 1), 0.3f));

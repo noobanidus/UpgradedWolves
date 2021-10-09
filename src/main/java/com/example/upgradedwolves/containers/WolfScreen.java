@@ -168,8 +168,8 @@ public class WolfScreen extends AbstractContainerScreen<WolfContainer> {
     }
 
     void drawPowerUpBackground(PoseStack matrixStack, float partialTicks, int x, int y){
-        //RenderSystem.pushMatrix();
-        //RenderSystem.translatef((float)(leftPos + 17), (float)(topPos + 68), 0.0F);
+        //matrixStack.pushPose();
+        //matrixStack.translate((float)(leftPos + 17), (float)(topPos + 68), 0.0F);
         powerUpGui.drawTabBackground(matrixStack);
         //RenderSystem.popMatrix();
     }

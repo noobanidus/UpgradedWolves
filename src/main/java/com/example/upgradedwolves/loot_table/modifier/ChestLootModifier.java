@@ -2,13 +2,16 @@ package com.example.upgradedwolves.loot_table.modifier;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.RandomValueRange;
 import net.minecraft.world.level.storage.loot.conditions.ILootCondition;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
@@ -25,7 +28,7 @@ public class ChestLootModifier extends LootModifier
      *
      * @param conditionsIn the ILootConditions that need to be matched before the loot is modified.
      */
-    public ChestLootModifier(ILootCondition[] conditionsIn, NonNullList<ChestItem> chestItems) {
+    public ChestLootModifier(LootItemCondition[] conditionsIn, NonNullList<ChestItem> chestItems) {
         super(conditionsIn);
         this.chestItems = chestItems;
     }
@@ -51,20 +54,20 @@ public class ChestLootModifier extends LootModifier
     public static class Serializer extends GlobalLootModifierSerializer<ChestLootModifier>
     {
         @Override
-        public ChestLootModifier read(ResourceLocation location, JsonObject json, ILootCondition[] ailootcondition) {
-            JsonArray stacksJson = JSONUtils.getJsonArray(json, "chestItems");
+        public ChestLootModifier read(ResourceLocation location, JsonObject json, LootItemCondition[] ailootcondition) {
+            JsonArray stacksJson = GsonHelper.getAsJsonArray(json, "chestItems");
             NonNullList<ChestItem> chestItems = NonNullList.create();
 
             for (int i = 0; i < stacksJson.size(); i++) {
                 JsonObject itemStack = stacksJson.get(i).getAsJsonObject();
-                RandomValueRange range = new RandomValueRange(JSONUtils.getInt(itemStack, "minItem"), JSONUtils.getInt(itemStack, "maxItem"));
+                IntRange range = IntRange.range(GsonHelper.getAsInt(itemStack, "minItem"), GsonHelper.getAsInt(itemStack, "maxItem"));
                 chestItems.add(new ChestItem(
                         ForgeRegistries.ITEMS.getValue(
                                 new ResourceLocation(
-                                        JSONUtils.getString(itemStack, "item"))
+                                        GsonHelper.getAsString(itemStack, "item"))
                         ),
                         range,
-                        JSONUtils.getFloat(itemStack, "chance")
+                        GsonHelper.getAsFloat(itemStack, "chance")
                 ));
             }
 
@@ -81,7 +84,7 @@ public class ChestLootModifier extends LootModifier
                 JsonObject obj = new JsonObject();
                 obj.addProperty("item", ForgeRegistries.ITEMS.getKey(stack.item).toString());
                 obj.addProperty("minItem", stack.range.getMin());
-                obj.addProperty("maxItem", stack.range.getMax());
+                obj.addProperty("maxItem", stack.range.upperBound(p_165041_));
                 obj.addProperty("chance", stack.chance);
                 chestItems.add(obj);
             }
@@ -94,11 +97,11 @@ public class ChestLootModifier extends LootModifier
 
 
     public static class ChestItem {
-        public RandomValueRange range;
+        public IntRange range;
         public Item item;
         public float chance;
 
-        public ChestItem(Item itemIn, RandomValueRange rangeIn, float chanceIn) {
+        public ChestItem(Item itemIn, IntRange rangeIn, float chanceIn) {
             this.item = itemIn;
             this.range = rangeIn;
             this.chance = chanceIn;

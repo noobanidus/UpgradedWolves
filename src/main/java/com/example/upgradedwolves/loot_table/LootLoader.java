@@ -16,7 +16,7 @@ import org.apache.logging.log4j.LogManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.SimpleResource;
+import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -25,7 +25,7 @@ public class LootLoader {
 
     public LootLoader(ResourceLocation resource){
         try{
-            SimpleResource iresource = (SimpleResource) Minecraft.getInstance().getResourceManager().getResource(resource);
+            Resource iresource = (Resource) Minecraft.getInstance().getResourceManager().getResource(resource);
             Gson lootData =  new Gson();
             Type listOfMyClassObject = new TypeToken<ArrayList<BasicLootModel>>() {}.getType();
             lootModelList = lootData.fromJson( new InputStreamReader(iresource.getInputStream()),listOfMyClassObject);            

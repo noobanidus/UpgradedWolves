@@ -9,8 +9,8 @@ import com.example.upgradedwolves.powerup.PowerUpList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.client.Minecraft;
@@ -22,9 +22,9 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraftforge.fml.client.gui.GuiUtils;
+import net.minecraftforge.fmlclient.gui.GuiUtils;
 
-public class PowerUpGui extends AbstractGui {
+public class PowerUpGui extends GuiComponent {
    Minecraft minecraft;
    private double scrollX;
    private double scrollY;
@@ -34,7 +34,7 @@ public class PowerUpGui extends AbstractGui {
    private int maxY = 93;
    private boolean centered;
    private float fade;
-   private FontRenderer font;
+   private Font font;
    private CompoundTag nbt;
    private static ResourceLocation background = new ResourceLocation("minecraft:textures/gui/advancements/backgrounds/stone.png");
    private static final ResourceLocation POWERUP = UpgradedWolves.getId("gui/wolf_powerup_gui.png");
@@ -48,7 +48,7 @@ public class PowerUpGui extends AbstractGui {
       this.wolf = wolf;
       this.nbt = nbt;
       powerUps = setPowerups();
-      font = minecraft.fontRenderer;
+      font = minecraft.font;
    }
 
    private PowerUp[] setPowerups(){
@@ -73,13 +73,13 @@ public class PowerUpGui extends AbstractGui {
          this.centered = true;
       }
 
-      RenderSystem.pushMatrix();
+      matrixStack.pushPose();
       RenderSystem.enableDepthTest();
-      RenderSystem.translatef(0.0F, 0.0F, 950.0F);
+      matrixStack.translate(0.0F, 0.0F, 950.0F);
       RenderSystem.colorMask(false, false, false, false);
       fill(matrixStack, 4680, 2260, -4680, -2260, -16777216);
       RenderSystem.colorMask(true, true, true, true);
-      RenderSystem.translatef(0.0F, 0.0F, -950.0F);
+      matrixStack.translate(0.0F, 0.0F, -950.0F);
       RenderSystem.depthFunc(518);
       fill(matrixStack, 141, 93, 0, 0, -16777216);
       RenderSystem.depthFunc(515);
@@ -102,38 +102,38 @@ public class PowerUpGui extends AbstractGui {
       displayPowerUps(matrixStack,i,j);
       
       RenderSystem.depthFunc(518);
-      RenderSystem.translatef(0.0F, 0.0F, -950.0F);
+      matrixStack.translate(0.0F, 0.0F, -950.0F);
       RenderSystem.colorMask(false, false, false, false);
       fill(matrixStack, 4680, 2260, -4680, -2260, -16777216);
       RenderSystem.colorMask(true, true, true, true);
-      RenderSystem.translatef(0.0F, 0.0F, 950.0F);
+      matrixStack.translate(0.0F, 0.0F, 950.0F);
       RenderSystem.depthFunc(515);
-      RenderSystem.popMatrix();
+      matrixStack.popPose();
    }
   
    public void drawTabTooltips(PoseStack matrixStack, int mouseX, int mouseY, int width, int height,PowerUp powerUp) {
-      RenderSystem.pushMatrix();
-      RenderSystem.translatef(0.0F, 0.0F, 200.0F);
+      matrixStack.pushPose();
+      matrixStack.translate(0.0F, 0.0F, 200.0F);
       fill(matrixStack, 0, 0, 234, 113, Mth.floor(this.fade * 255.0F) << 24);
       boolean flag = false;
       ArrayList<Component> textBoxInfo = new ArrayList<Component>();
-      Style redStyle = Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).setItalic(true);
+      Style redStyle = Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withItalic(true);
       if(levelDistance(powerUp) <= 0){
          textBoxInfo.add(powerUp.getName());
          textBoxInfo.add(powerUp.getDescription(wolf));
       } else if(levelDistance(powerUp) <= 3){
          textBoxInfo.add(powerUp.getName());
-         textBoxInfo.add(new TextComponent("???").setStyle(Style.EMPTY.setItalic(true)));
+         textBoxInfo.add(new TextComponent("???").setStyle(Style.EMPTY.withItalic(true)));
          textBoxInfo.add(new TranslatableComponent("powerup.required.level",powerUp.levelType().toString(),powerUp.requiredLevel()).setStyle(redStyle));
       } else {
-         Style style = Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).setItalic(true);
+         Style style = Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withItalic(true);
          textBoxInfo.add(new TextComponent("???").setStyle(style));
-         textBoxInfo.add(new TextComponent("???").setStyle(Style.EMPTY.setItalic(true)));
+         textBoxInfo.add(new TextComponent("???").setStyle(Style.EMPTY.withItalic(true)));
          textBoxInfo.add(new TranslatableComponent("powerup.required.level",powerUp.levelType().toString(),powerUp.requiredLevel()).setStyle(redStyle));
       }
       
       GuiUtils.drawHoveringText(matrixStack, textBoxInfo, mouseX, mouseY, width, height, width, font);
-      RenderSystem.popMatrix();
+      matrixStack.popPose();
       if (flag) {
          this.fade = Mth.clamp(this.fade + 0.02F, 0.0F, 0.3F);
       } else {
