@@ -23,7 +23,6 @@ import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -32,7 +31,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
-import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.LazyOptional;
@@ -42,6 +40,7 @@ import net.minecraftforge.fmllegacy.network.PacketDistributor;
 
 public class WolfStatsHandler {
     @CapabilityInject(IWolfStats.class)
+    
     public static final Capability<IWolfStats> CAPABILITY_WOLF_STATS = null;
 
     public static void register() {        
@@ -459,7 +458,7 @@ public class WolfStatsHandler {
     public static class Provider implements ICapabilitySerializable<CompoundTag>
     {
         final IWolfStats INSTANCE;
-        final Capability<IWolfStats> capability = CAPABILITY_WOLF_STATS;
+        Capability<IWolfStats> capability = CAPABILITY_WOLF_STATS;
 
         public Provider(){
             INSTANCE = new WolfStats();
@@ -480,7 +479,7 @@ public class WolfStatsHandler {
             nbt.putInt("WolfType",INSTANCE.getWolfType());
             nbt.putInt("WolfFur",INSTANCE.getWolfFur());
             nbt.put("Inventory",INSTANCE.getInventory().serializeNBT());
-            nbt.put("RoamPosition",NbtUtils.writeBlockPos(new BlockPos(INSTANCE.getRoamPoint())));
+            nbt.put("RoamPosition",NbtUtils.writeBlockPos(INSTANCE.getRoamPoint() != null ? new BlockPos(INSTANCE.getRoamPoint()) : BlockPos.ZERO));
             return nbt;
         }
 
@@ -506,7 +505,10 @@ public class WolfStatsHandler {
         @Override
         public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
         {
-            return CAPABILITY_WOLF_STATS.orEmpty(cap, LazyOptional.of(() -> INSTANCE));
+            if(cap == CAPABILITY_WOLF_STATS){
+                return (LazyOptional<T>) LazyOptional.of(() -> INSTANCE);
+            }
+            return LazyOptional.empty();
         }
     }
 }

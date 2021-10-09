@@ -7,13 +7,11 @@ import com.example.upgradedwolves.UpgradedWolves;
 
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.core.Direction;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
-import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -75,8 +73,11 @@ public class TrainingHandler {
         @Nonnull
         @Override
         public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
-        {
-            return CAPABILITY_TRAINING.orEmpty(cap, LazyOptional.of(() -> INSTANCE));
+        {            
+            if(cap == CAPABILITY_TRAINING){
+                return (LazyOptional<T>) LazyOptional.of(() -> INSTANCE);
+            }
+            return LazyOptional.empty();
         }
     }
     public static class Training implements ITraining{
