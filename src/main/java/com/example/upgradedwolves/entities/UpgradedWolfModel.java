@@ -20,7 +20,7 @@ public class UpgradedWolfModel extends WolfModel<Wolf> {
     }
 
     
-    public static LayerDefinition getBodyLayer(){
+    public static LayerDefinition createBodyLayer(){
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
         //float f = 13.5F;

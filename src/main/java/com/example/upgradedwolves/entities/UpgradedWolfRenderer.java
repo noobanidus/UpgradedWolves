@@ -6,10 +6,12 @@ import java.util.List;
 import com.example.upgradedwolves.UpgradedWolves;
 import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
+import com.example.upgradedwolves.init.ModModelLayers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -36,13 +38,11 @@ public class UpgradedWolfRenderer extends WolfRenderer {
         textureList.add(UpgradedWolves.getId("textures/entity/silver_wolf.png"));
         textureList.add(UpgradedWolves.getId("textures/entity/dark_wolf.png"));
         textureList.add(UpgradedWolves.getId("textures/entity/spotted_wolf.png"));
-    });
-    //TODO use model layers
-    // example: public static final ModelLayerLocation GOBLIN_TRADER = new ModelLayerLocation(new ResourceLocation(Reference.MOD_ID, "goblin_trader"), "main");
+    });    
 
     public UpgradedWolfRenderer(EntityRendererProvider.Context rendererManager) {
         super(rendererManager);
-        this.model = new UpgradedWolfModel(rendererManager.bakeLayer(ModelLayers.WOLF));
+        this.model = new UpgradedWolfModel(rendererManager.bakeLayer(ModModelLayers.UPGRADED_WOLF));
         
     }
 
