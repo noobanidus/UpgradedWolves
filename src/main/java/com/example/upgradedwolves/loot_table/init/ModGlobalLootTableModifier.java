@@ -7,8 +7,6 @@ import com.example.upgradedwolves.loot_table.modifier.ChestLootModifier;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
-import net.minecraft.world.level.storage.loot.LootTables;
-import net.minecraft.world.level.storage.loot.RandomValueRange;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.data.GlobalLootModifierProvider;
@@ -17,7 +15,7 @@ import net.minecraftforge.common.loot.LootTableIdCondition;
 import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraft.world.level.storage.loot.conditions.ILootCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 public class ModGlobalLootTableModifier extends GlobalLootModifierProvider{
     public static final DeferredRegister<GlobalLootModifierSerializer<?>> LOOT_MODIFIERS = DeferredRegister.create(ForgeRegistries.LOOT_MODIFIER_SERIALIZERS,UpgradedWolves.ModId);
@@ -53,16 +51,16 @@ public class ModGlobalLootTableModifier extends GlobalLootModifierProvider{
             BuiltInLootTables.VILLAGE_TAIGA_HOUSE
         };
         
-        enchantedChestDrops.add(new ChestLootModifier.ChestItem(WolfToysHandler.GOLDENBONE, new RandomValueRange(1, 1), 0.3f));
-        enchantedChestDrops.add(new ChestLootModifier.ChestItem(WolfToysHandler.ENCHANTEDGOLDENBONE, new RandomValueRange(1, 1), 0.06f));
-        enchantedChestDrops.add(new ChestLootModifier.ChestItem(Items.DANDELION, new RandomValueRange(2, 10), 0.5f));
+        enchantedChestDrops.add(new ChestLootModifier.ChestItem(WolfToysHandler.GOLDENBONE, 1, 1, 0.3f));
+        enchantedChestDrops.add(new ChestLootModifier.ChestItem(WolfToysHandler.ENCHANTEDGOLDENBONE, 1, 1, 0.06f));
+        enchantedChestDrops.add(new ChestLootModifier.ChestItem(Items.DANDELION, 2, 10, 0.5f));
 
-        normalChestDrops.add(new ChestLootModifier.ChestItem(WolfToysHandler.GOLDENBONE, new RandomValueRange(1, 1), 0.1f));
-        normalChestDrops.add(new ChestLootModifier.ChestItem(Items.DANDELION, new RandomValueRange(2, 10), 0.3f));
+        normalChestDrops.add(new ChestLootModifier.ChestItem(WolfToysHandler.GOLDENBONE, 1, 1, 0.1f));
+        normalChestDrops.add(new ChestLootModifier.ChestItem(Items.DANDELION, 2, 10, 0.3f));
 
         for (ResourceLocation resourceLocation : enchantedLootTables) {
             add(resourceLocation.getPath(), CHEST_LOOT.get(), new ChestLootModifier(
-                new ILootCondition[] {
+                new LootItemCondition[] {
                         LootTableIdCondition.builder(resourceLocation).build(),
                 },
                 enchantedChestDrops
@@ -71,7 +69,7 @@ public class ModGlobalLootTableModifier extends GlobalLootModifierProvider{
 
         for (ResourceLocation resourceLocation : normalLootTables) {
             add(resourceLocation.getPath(), CHEST_LOOT.get(), new ChestLootModifier(
-                new ILootCondition[] {
+                new LootItemCondition[] {
                         LootTableIdCondition.builder(resourceLocation).build(),
                 },
                 normalChestDrops

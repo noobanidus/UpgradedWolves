@@ -58,13 +58,14 @@ public class ChestLootModifier extends LootModifier
 
             for (int i = 0; i < stacksJson.size(); i++) {
                 JsonObject itemStack = stacksJson.get(i).getAsJsonObject();
-                IntRange range = IntRange.range(GsonHelper.getAsInt(itemStack, "minItem"), GsonHelper.getAsInt(itemStack, "maxItem"));
+                int min = GsonHelper.getAsInt(itemStack, "minItem");
+                int max =  GsonHelper.getAsInt(itemStack, "maxItem");
                 chestItems.add(new ChestItem(
                         ForgeRegistries.ITEMS.getValue(
                                 new ResourceLocation(
                                         GsonHelper.getAsString(itemStack, "item"))
                         ),
-                        range,
+                        min,max,
                         GsonHelper.getAsFloat(itemStack, "chance")
                 ));
             }
@@ -77,13 +78,11 @@ public class ChestLootModifier extends LootModifier
             JsonObject json = makeConditions(instance.conditions);
 
             JsonArray chestItems = new JsonArray();
-            IntRange.Serializer serializer = new IntRange.Serializer();
             for(ChestItem stack : instance.chestItems) {
                 JsonObject obj = new JsonObject();
                 obj.addProperty("item", ForgeRegistries.ITEMS.getKey(stack.item).toString()); 
-                serializer.serialize(stack.range, null, new Gson)
-                //obj.addProperty("minItem", stack.range.getMin());
-                //obj.addProperty("maxItem", stack.range.upperBound(p_165041_));
+                obj.addProperty("minItem", stack.min);
+                obj.addProperty("maxItem", stack.max);
                 obj.addProperty("chance", stack.chance);
                 chestItems.add(obj);
             }
@@ -99,10 +98,14 @@ public class ChestLootModifier extends LootModifier
         public IntRange range;
         public Item item;
         public float chance;
+        public int min;
+        public int max;
 
-        public ChestItem(Item itemIn, IntRange rangeIn, float chanceIn) {
+        public ChestItem(Item itemIn, int min, int max, float chanceIn) {
             this.item = itemIn;
-            this.range = rangeIn;
+            this.min = min;
+            this.max = max;
+            this.range = IntRange.range(min,max);
             this.chance = chanceIn;
         }
     }
