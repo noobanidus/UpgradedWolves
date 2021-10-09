@@ -26,13 +26,13 @@ public class SyncWolfHandMessage implements IMessage<SyncWolfHandMessage> {
     @Override
     public void encode(SyncWolfHandMessage message, FriendlyByteBuf buffer) {
         buffer.writeInt(message.wolfId);
-        buffer.writeItemStack(message.item);
+        buffer.writeItemStack(message.item,true);
     }
 
     @Override
     public SyncWolfHandMessage decode(FriendlyByteBuf buffer) {
         int id = buffer.readInt();
-        ItemStack item = buffer.readItemStack();
+        ItemStack item = buffer.readItem();
         return new SyncWolfHandMessage(id,item);
     }
 

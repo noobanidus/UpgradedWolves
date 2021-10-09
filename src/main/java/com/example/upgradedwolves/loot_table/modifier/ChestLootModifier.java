@@ -7,8 +7,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.RandomValueRange;
-import net.minecraft.world.level.storage.loot.conditions.ILootCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.core.NonNullList;
@@ -79,12 +77,13 @@ public class ChestLootModifier extends LootModifier
             JsonObject json = makeConditions(instance.conditions);
 
             JsonArray chestItems = new JsonArray();
-
+            IntRange.Serializer serializer = new IntRange.Serializer();
             for(ChestItem stack : instance.chestItems) {
                 JsonObject obj = new JsonObject();
-                obj.addProperty("item", ForgeRegistries.ITEMS.getKey(stack.item).toString());
-                obj.addProperty("minItem", stack.range.getMin());
-                obj.addProperty("maxItem", stack.range.upperBound(p_165041_));
+                obj.addProperty("item", ForgeRegistries.ITEMS.getKey(stack.item).toString()); 
+                serializer.serialize(stack.range, null, new Gson)
+                //obj.addProperty("minItem", stack.range.getMin());
+                //obj.addProperty("maxItem", stack.range.upperBound(p_165041_));
                 obj.addProperty("chance", stack.chance);
                 chestItems.add(obj);
             }

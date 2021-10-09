@@ -8,8 +8,9 @@ import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.particles.BasicParticleType;
+
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -49,9 +50,9 @@ public class SpawnLevelUpParticle implements IMessage<SpawnLevelUpParticle> {
             WolfStatsEnum stat = WolfStatsEnum.values()[message.statId];
             if(wolf.getOwner() == mc.player && message.statId != 3)
                 mc.player.sendMessage((Component)new TranslatableComponent("chat.upgradedwolves.level_up",wolf.getName(),stat.toString()),
-            Util.DUMMY_UUID);
+            Util.NIL_UUID);
             Random r = new Random();
-            BasicParticleType pt = ParticleTypes.FLASH;
+            SimpleParticleType pt = ParticleTypes.FLASH;
             switch(stat){
                 case Strength:
                 pt = ParticleTypes.FLAME;

@@ -7,7 +7,7 @@ import com.example.upgradedwolves.capabilities.TrainingHandler.ITraining;
 import com.example.upgradedwolves.common.TrainingEventHandler;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fmllegacy.network.NetworkEvent.Context;
@@ -39,7 +39,7 @@ public class TrainingItemMessage implements IMessage<TrainingItemMessage> {
     public void handle(TrainingItemMessage message, Supplier<Context> supplier) {
         supplier.get().enqueueWork(() -> {
             Minecraft mc = Minecraft.getInstance();
-            ClientPlayerEntity player = (ClientPlayerEntity)mc.level.getEntity(message.playerId);
+            LocalPlayer player = (LocalPlayer)mc.level.getEntity(message.playerId);
             ItemStack foodItem = TrainingEventHandler.getFoodStack(player);
             ITraining handler = TrainingHandler.getHandler(foodItem);
             handler.setAttribute(message.wolfValue);
