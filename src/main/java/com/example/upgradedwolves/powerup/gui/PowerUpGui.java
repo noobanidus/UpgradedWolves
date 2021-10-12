@@ -89,7 +89,7 @@ public class PowerUpGui extends GuiComponent {
       int k = i % 16;
       int l = j % 16;   
 
-      this.minecraft.getTextureManager().bindForSetup(background);
+      RenderSystem.setShaderTexture(0,background);
 
       for(int i1 = -1; i1 <= 15; ++i1) {
          for(int j1 = -1; j1 <= 8; ++j1) {
@@ -97,7 +97,7 @@ public class PowerUpGui extends GuiComponent {
          }
       }
 
-      this.minecraft.getTextureManager().bindForSetup(POWERUP);
+      RenderSystem.setShaderTexture(0,POWERUP);
       
       displayPowerUps(matrixStack,i,j);
       

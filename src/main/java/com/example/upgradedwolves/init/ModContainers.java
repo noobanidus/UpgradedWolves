@@ -19,5 +19,6 @@ public class ModContainers {
         MenuType<WolfContainer> wolfContainer = IForgeContainerType.create(WolfContainer::createContainerClientSide);    
         wolfContainer.setRegistryName("wolf_container");
         event.getRegistry().register(wolfContainer);
+        WOLF_CONTAINER = wolfContainer;
     }
 }

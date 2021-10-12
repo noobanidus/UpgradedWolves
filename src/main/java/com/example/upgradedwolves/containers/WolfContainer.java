@@ -31,6 +31,7 @@ public class WolfContainer extends AbstractContainerMenu {
         this.wolfItemHandler = wolfStackHandler;
         this.nbt = nbt;
         this.playerInventory = playerInventory;
+        
         setupContainer();
     }
 

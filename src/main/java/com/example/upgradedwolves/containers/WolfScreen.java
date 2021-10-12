@@ -101,11 +101,11 @@ public class WolfScreen extends AbstractContainerScreen<WolfContainer> {
         int edgeSpacingX = (this.width - this.imageWidth) / 2;
         int edgeSpacingY = (this.height - this.imageHeight) / 2;
         if(inventoryTab){
-            this.minecraft.getTextureManager().bindForSetup(INVENTORY);
+            RenderSystem.setShaderTexture(0,INVENTORY);
             this.blit(matrixStack, edgeSpacingX, edgeSpacingY, 0, 0, this.imageWidth, this.imageHeight);
             drawInventoryBackground(matrixStack, partialTicks, x, y, edgeSpacingX, edgeSpacingY);
         } else {
-            this.minecraft.getTextureManager().bindForSetup(POWERUP);
+            RenderSystem.setShaderTexture(0,POWERUP);
             this.blit(matrixStack, edgeSpacingX, edgeSpacingY, 0, 0, this.imageWidth, this.imageHeight);
             drawPowerUpBackground(matrixStack, partialTicks, x, y);
         }
@@ -119,7 +119,7 @@ public class WolfScreen extends AbstractContainerScreen<WolfContainer> {
 
     @Override
     public void init() {
-        super.init(minecraft, width, height);
+        super.init();
         powerUpGui = new PowerUpGui(minecraft,wolf,nbt);
     }
 
@@ -168,10 +168,10 @@ public class WolfScreen extends AbstractContainerScreen<WolfContainer> {
     }
 
     void drawPowerUpBackground(PoseStack matrixStack, float partialTicks, int x, int y){
-        //matrixStack.pushPose();
-        //matrixStack.translate((float)(leftPos + 17), (float)(topPos + 68), 0.0F);
+        matrixStack.pushPose();
+        matrixStack.translate((float)(leftPos + 17), (float)(topPos + 68), 0.0F);
         powerUpGui.drawTabBackground(matrixStack);
-        //RenderSystem.popMatrix();
+        matrixStack.popPose();
     }
 
     void buildXpBar(PoseStack matrixStack, int x,int y,int u,int v, int amount){
@@ -185,7 +185,7 @@ public class WolfScreen extends AbstractContainerScreen<WolfContainer> {
     }
 
     void drawTabs(PoseStack matrixStack){
-        this.minecraft.getTextureManager().bindForSetup(TABS);
+        RenderSystem.setShaderTexture(0,TABS);
         if(inventoryTab){
             this.blit(matrixStack, leftPos + 171, topPos + 7, 0, 27, 36, 26);
             this.blit(matrixStack, leftPos + 170, topPos + 34, 0, 0, 36, 26);
