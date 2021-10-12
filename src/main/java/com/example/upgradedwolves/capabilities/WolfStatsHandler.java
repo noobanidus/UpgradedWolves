@@ -508,7 +508,8 @@ public class WolfStatsHandler {
             INSTANCE.setWolfType(next.getInt("WolfType"));
             INSTANCE.setWolffur(next.getInt("WolfFur"));
             INSTANCE.getInventory().deserializeNBT(next.getCompound("Inventory"));
-            INSTANCE.setRoamPoint(next.getCompound("RoamPosition").getBoolean("isNotNull") ? null : new Vec3(next.getDouble("x"),next.getDouble("y"),next.getDouble("z")));
+            CompoundTag position = next.getCompound("RoamPosition");
+            INSTANCE.setRoamPoint(position.getBoolean("isNotNull") ? null : new Vec3(position.getDouble("x"),position.getDouble("y"),position.getDouble("z")));
             INSTANCE.InitLove();
             
         }
