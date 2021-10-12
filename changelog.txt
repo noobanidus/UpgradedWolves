@@ -1,3 +1,4 @@
+-Strength Wolf had Impress Villager Power Up
 v 0.4.1 Scavenger wolf PowerUp
 
 Added
@@ -101,5 +102,3 @@ Fixed
 
 =========
 v 1.1
-
--- Too lazy to document :/

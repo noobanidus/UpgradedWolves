@@ -42,20 +42,20 @@ public class WolfFindAndPickUpItemGoal extends Goal implements IUpdateableGoal{
         item = null;
         if(item != null || wolf.isInSittingPose() || wolf.getMainHandItem() != ItemStack.EMPTY)
             return false;
-        for(ItemEntity itementity : wolf.level.getEntitiesOfClass(ItemEntity.class, wolf.getBoundingBox().expandTowards(12.0D, 0.0D, 12.0D))) {
+        for(ItemEntity itementity : wolf.level.getEntitiesOfClass(ItemEntity.class, wolf.getBoundingBox().inflate(12.0D, 0.0D, 12.0D))) {
             if (wolfInventory.getAvailableSlot(itementity.getItem()) >= 0 && canEasilyReach(itementity)) {                
                 item = itementity;
                 return true;
             }
         }
-        for(WolfChaseableEntity wolfToy : wolf.level.getEntitiesOfClass(WolfChaseableEntity.class, wolf.getBoundingBox().expandTowards(36.0D, 5.0D, 36.0D))){
+        for(WolfChaseableEntity wolfToy : wolf.level.getEntitiesOfClass(WolfChaseableEntity.class, wolf.getBoundingBox().inflate(36.0D, 5.0D, 36.0D))){
             if (wolfInventory.getAvailableSlot(wolfToy.getPickResult()) >= 0 && canEasilyReach(wolfToy)){
                 item = wolfToy;
                 initialPoint = wolf.getPosition(1);
                 return true;
             }
         }
-        for(MobPlushyEntity mobPlushy : wolf.level.getEntitiesOfClass(MobPlushyEntity.class, wolf.getBoundingBox().expandTowards(12.0D, 0.0D, 12.0D))){
+        for(MobPlushyEntity mobPlushy : wolf.level.getEntitiesOfClass(MobPlushyEntity.class, wolf.getBoundingBox().inflate(12.0D, 0.0D, 12.0D))){
             if (wolfInventory.getAvailableSlot(mobPlushy.getItem()) >= 0 && canEasilyReach(mobPlushy)){
                 item = mobPlushy;
                 return true;

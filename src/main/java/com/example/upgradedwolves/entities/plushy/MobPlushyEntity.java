@@ -160,7 +160,7 @@ public class MobPlushyEntity extends ThrowableProjectile {
     }
 
     private boolean stillInGround(){
-        return this.inGround && this.level.noCollision((new AABB(this.getPosition(1), this.getPosition(1))).expandTowards(0.06D,0.06D,0.06D));
+        return this.inGround && this.level.noCollision((new AABB(this.getPosition(1), this.getPosition(1))).inflate(0.06D,0.06D,0.06D));
     }
 
     private void notInBlock() {
