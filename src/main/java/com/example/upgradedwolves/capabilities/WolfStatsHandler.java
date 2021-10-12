@@ -479,13 +479,24 @@ public class WolfStatsHandler {
             nbt.putInt("WolfType",INSTANCE.getWolfType());
             nbt.putInt("WolfFur",INSTANCE.getWolfFur());
             nbt.put("Inventory",INSTANCE.getInventory().serializeNBT());
-            nbt.put("RoamPosition",NbtUtils.writeBlockPos(INSTANCE.getRoamPoint() != null ? new BlockPos(INSTANCE.getRoamPoint()) : BlockPos.ZERO));
+            CompoundTag vec3 = new CompoundTag();
+            if(INSTANCE.getRoamPoint() == null){
+                vec3.putBoolean("isNotNull", false);
+            }
+            else{
+                vec3.putBoolean("isNotNull", true);
+                vec3.putDouble("x",INSTANCE.getRoamPoint().x);
+                vec3.putDouble("y",INSTANCE.getRoamPoint().y);
+                vec3.putDouble("z",INSTANCE.getRoamPoint().z);
+            }
+            nbt.put("RoamPosition",vec3);
             return nbt;
         }
 
         @Override
         public void deserializeNBT(CompoundTag compound)
         {
+            
             CompoundTag next = (CompoundTag)compound;            
             INSTANCE.setLevel(WolfStatsEnum.Speed, next.getInt("SpeedLevel"));
             INSTANCE.setLevel(WolfStatsEnum.Strength, next.getInt("StrengthLevel"));
@@ -497,8 +508,9 @@ public class WolfStatsHandler {
             INSTANCE.setWolfType(next.getInt("WolfType"));
             INSTANCE.setWolffur(next.getInt("WolfFur"));
             INSTANCE.getInventory().deserializeNBT(next.getCompound("Inventory"));
-            INSTANCE.setRoamPoint(Vec3.atCenterOf(NbtUtils.readBlockPos(next.getCompound("RoamPosition"))));
+            INSTANCE.setRoamPoint(next.getCompound("RoamPosition").getBoolean("isNotNull") ? null : new Vec3(next.getDouble("x"),next.getDouble("y"),next.getDouble("z")));
             INSTANCE.InitLove();
+            
         }
 
         @Nonnull
