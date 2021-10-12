@@ -1,6 +1,7 @@
 package com.example.upgradedwolves.entities.goals;
 
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
+import net.minecraft.world.entity.ai.util.LandRandomPos;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
@@ -19,7 +20,7 @@ public class WolfBiasRoamGoal extends RandomStrollGoal {
 
     protected Vec3 getPosition(){
         if (this.mob.isInWaterOrBubble()) {
-            Vec3 vector3d = DefaultRandomPos.getPos(this.mob, 15, 7);
+            Vec3 vector3d = LandRandomPos.getPos(this.mob, 15, 7);
             return vector3d == null ? super.getPosition() : vector3d;
         }
         return biasedPosition();
@@ -30,13 +31,13 @@ public class WolfBiasRoamGoal extends RandomStrollGoal {
         double distance = position.distanceTo(bias);
 
         if(distance < minDistance){
-            return DefaultRandomPos.getPos(this.mob, 10, 7);
+            return LandRandomPos.getPos(this.mob, 10, 7);
         } else if(distance > maxDistance){
             return bias;
         } else {            
-            Vec3 nextPosition = DefaultRandomPos.getPosTowards(this.mob,
+            Vec3 nextPosition = LandRandomPos.getPosTowards(this.mob,
              10, 7,
-              bias,1
+              bias
                 );
             return nextPosition;            
         }

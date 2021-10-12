@@ -127,6 +127,9 @@ public class WolfPlayerInteraction {
                     }
                     wolf.setOrderedToSit(true);
                 }
+                else{
+                    handler.setRoamPoint(null);
+                }
             }
         }
     }
