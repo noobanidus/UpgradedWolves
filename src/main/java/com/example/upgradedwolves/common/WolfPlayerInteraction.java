@@ -64,7 +64,7 @@ public class WolfPlayerInteraction {
             final Wolf wolf = (Wolf) event.getTarget();            
             final IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             if(handler.getTugOfWarStatus()){
-                wolf.setInSittingPose(false);
+                wolf.setOrderedToSit(false);
                 return;
             }
             if(wolf.getOwner() == event.getPlayer() && event.getPlayer().isCrouching()){
@@ -83,7 +83,7 @@ public class WolfPlayerInteraction {
                         (packetBuffer) ->{packetBuffer.writeInt(handler.getInventory().getSlots());packetBuffer.writeInt(wolf.getId());packetBuffer.writeNbt(nbt);}
                     );
                 }
-                wolf.setInSittingPose(!wolf.isInSittingPose());
+                wolf.setOrderedToSit(!wolf.isOrderedToSit());
             }
             else{
                 LogManager.getLogger().info(handler.getLevel(WolfStatsEnum.Love));
@@ -113,10 +113,10 @@ public class WolfPlayerInteraction {
                         goldenBone.rightClickWolf(wolf,handler);
                     if(!event.getPlayer().isCreative())
                         goldenBoneItem.shrink(1);
-                    wolf.setInSittingPose(!wolf.isInSittingPose());
+                    wolf.setOrderedToSit(!wolf.isOrderedToSit());
                 } else if (tugOfWarRopeItem != null){
                     handler.setRopeHolder(event.getPlayer());
-                    wolf.setInSittingPose(true);
+                    wolf.setOrderedToSit(true);
                     tugOfWarRopeItem.shrink(1);
                 }
                 if(handler.getWolfType() ==  3){
@@ -125,7 +125,7 @@ public class WolfPlayerInteraction {
                     } else {
                         handler.setRoamPoint(null);
                     }
-                    wolf.setInSittingPose(true);
+                    wolf.setOrderedToSit(true);
                 }
             }
         }
