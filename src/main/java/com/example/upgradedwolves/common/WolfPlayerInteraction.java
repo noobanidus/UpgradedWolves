@@ -186,7 +186,7 @@ public class WolfPlayerInteraction {
             removeWolfGoal(wolf, WaterAvoidingRandomStrollGoal.class);
 
             wolf.setCanPickUpLoot(false);
-            for(ItemEntity itementity : wolf.level.getEntitiesOfClass(ItemEntity.class, wolf.getBoundingBox().expandTowards(1.0D, 0.0D, 1.0D))) {
+            for(ItemEntity itementity : wolf.level.getEntitiesOfClass(ItemEntity.class, wolf.getBoundingBox().inflate(1.0D, 0.0D, 1.0D))) {
                 if (wolfInventory.getAvailableSlot(itementity.getItem()) >= 0) {
                     wolf.setCanPickUpLoot(true);
                 }
