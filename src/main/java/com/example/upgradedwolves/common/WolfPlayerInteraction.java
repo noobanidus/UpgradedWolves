@@ -254,7 +254,7 @@ public class WolfPlayerInteraction {
             EntityFinder<Wolf> entityFinder = new EntityFinder<Wolf>(player,Wolf.class);
             List<Wolf> wolves = entityFinder.findWithPredicate(10, 10,wolf -> wolf.getOwner() == player);
             //Why?
-            List<ItemStack> playerInventory = Stream.concat(Stream.concat(new Inventory(player).armor.stream(), new Inventory(player).items.stream()),new Inventory(player).offhand.stream()).collect(Collectors.toList());
+            List<ItemStack> playerInventory = Stream.concat(Stream.concat(player.getInventory().armor.stream(), player.getInventory().items.stream()),player.getInventory().offhand.stream()).collect(Collectors.toList());
             for (Wolf wolf : wolves) {
                 IWolfStats handler = WolfStatsHandler.getHandler(wolf);
                 if(handler.getRetrievalFlag()){
@@ -268,13 +268,13 @@ public class WolfPlayerInteraction {
                                 playerInventory.remove(nextItemToRetrieve);
                             }
                             if(nextItemToRetrieve != ItemStack.EMPTY){
-                                int slot = new Inventory(player).getSlotWithRemainingSpace(nextItemToRetrieve);
+                                int slot = player.getInventory().findSlotMatchingItem(nextItemToRetrieve);
                                 if(slot < 0){
                                     LogManager.getLogger().debug("slot is less than one...");
                                 }
                                 if(slot >= 0){
                                     itemHandler.insertIntoEmptySlot(nextItemToRetrieve.copy());                                
-                                    new Inventory(player).setItem(slot, ItemStack.EMPTY);
+                                    player.getInventory().setItem(slot, ItemStack.EMPTY);
                                 }
                             }
                         }

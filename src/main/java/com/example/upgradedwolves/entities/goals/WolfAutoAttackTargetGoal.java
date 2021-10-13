@@ -48,8 +48,8 @@ public class WolfAutoAttackTargetGoal extends NearestAttackableTargetGoal<Monste
     @Override
     public boolean canUse() {
         findTarget();
-        if(target != null)
-            LogManager.getLogger().info(target);
+        // if(target != null)
+        //     LogManager.getLogger().info(target);
         return super.canUse();
     }
 
