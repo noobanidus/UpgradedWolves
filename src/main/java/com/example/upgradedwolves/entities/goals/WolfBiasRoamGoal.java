@@ -29,6 +29,9 @@ public class WolfBiasRoamGoal extends WaterAvoidingRandomStrollGoal {
             Vec3 vector3d = LandRandomPos.getPos(this.mob, 15, 7);
             return vector3d == null ? super.getPosition() : vector3d;
         }
+        if(bias == null){
+            return super.getPosition();
+        }
         return biasedPosition();
     }
 
