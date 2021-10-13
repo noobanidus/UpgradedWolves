@@ -41,6 +41,7 @@ public class WolfTossArrowGoal extends CoolDownGoal {
                 List<Monster> enemies = entityFinder.findWithPredicate(5, 3,enemy -> (!(enemy instanceof NeutralMob) || ((NeutralMob)enemy).getTarget() != null) && wolf.getSensing().hasLineOfSight(enemy));
                 if(enemies.size() > 0){
                     target = enemies.get(0);
+                    arrowStackSlot = slot;
                     return true;
                 }
             }
@@ -55,15 +56,15 @@ public class WolfTossArrowGoal extends CoolDownGoal {
 
     @Override
     public boolean canContinueToUse() {
-        if(windUpTicks-- >= 0){
+        if(windUpTicks-- <= 0){
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             ItemStack arrowStack = handler.getInventory().getStackInSlot(arrowStackSlot);
             if(arrowStack.getItem() instanceof ArrowItem)
                 attackEntityWithRangedAttack(target, 2 + handler.getWolfStrength(), arrowStack);
             startCoolDown(AbilityEnhancer.minMaxIncrease(wolf, 200, 5, 150));
-            return true;
-        }
-        windUpTicks = 30;
+            windUpTicks = 30;
+            return false;
+        }        
         wolf.setYRot(wolf.getYRot() + 1);
         return false;
     }
@@ -71,7 +72,7 @@ public class WolfTossArrowGoal extends CoolDownGoal {
     private void attackEntityWithRangedAttack(LivingEntity target, float distanceFactor,ItemStack arrowStack) {
         AbstractArrow abstractarrowentity = ProjectileUtil.getMobArrow(wolf, arrowStack, distanceFactor);
         double d0 = target.getX() - wolf.getX();
-        double d1 = target.getEyeY() - abstractarrowentity.getY();
+        double d1 = target.getY() - abstractarrowentity.getY();
         double d2 = target.getZ() - wolf.getZ();
         double d3 = (double)Mth.sqrt((float)(d0 * d0 + d2 * d2));
         abstractarrowentity.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, (float)(14 - wolf.level.getDifficulty().getId() * 4));
