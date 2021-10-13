@@ -45,10 +45,10 @@ public class PowerUpList {
     };
     public static final PowerUp[] ShowWolf = {
         new ShareItemPowerUp(4),
-        new FishForItemPowerUp(7),
         new EnhanceSpeedPowerUp(5, 1, 0.05D),
         new EnhanceDetectionPowerUp(6, 1, 1D),
         new EnhanceAttackPowerUp(6, 1, 1),
+        new FishForItemPowerUp(7),
         new PickUpItemPowerUp(10),
         new ThrowPotionPowerUp(11),
         new EnhanceDetectionPowerUp(12, 2, 2D),
