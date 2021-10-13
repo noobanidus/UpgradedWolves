@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
+import com.example.upgradedwolves.common.WolfPlayerInteraction;
 import com.example.upgradedwolves.entities.utilities.EntityFinder;
 import com.example.upgradedwolves.itemHandler.WolfItemStackHandler;
 
@@ -48,5 +49,19 @@ public class ShareItemGoal extends Goal {
         ItemStack stack = handler.getInventory().extractItem(slot, 1, false);
         target.spawnAtLocation(stack);
         target = null;
+    }
+
+    //Needs to override continue using to make wolves ignore healing wolves.
+
+    @Override
+    public boolean canContinueToUse(){
+        return false;
+    }
+
+    private boolean wolfCriteria(Wolf wolf){
+        WolfItemStackHandler wolfInventory = WolfStatsHandler.getHandler(wolf).getInventory();
+        SelfPreservationGoal preservationGoal = (SelfPreservationGoal)WolfPlayerInteraction.getWolfGoal(wolf, SelfPreservationGoal.class);
+        return wolfInventory.getArbitraryItem(item -> item.isEdible() && item.getFoodProperties().isMeat()) < 0 
+        || preservationGoal == null || !preservationGoal.isEating;
     }
 }

@@ -14,9 +14,11 @@ public class SelfPreservationGoal extends Goal {
     final int eatingTime = 20 * 3;
     int currentTime = 0;
     int healAmount;
+    boolean isEating;
 
     public SelfPreservationGoal(Wolf wolf){
         this.wolf = wolf;
+        isEating = false;
     }
 
     @Override
@@ -29,6 +31,7 @@ public class SelfPreservationGoal extends Goal {
             healAmount = foodStack.getItem().getFoodProperties().getNutrition();
             currentTime = 0;
             foodStack.shrink(1);
+            isEating = true;
             return true;
         }
         healAmount = 0;
@@ -43,7 +46,12 @@ public class SelfPreservationGoal extends Goal {
         }   
         wolf.heal(healAmount);
         healAmount = 0;
+        isEating = false;
         return false;
+    }
+
+    public boolean isEating(){
+        return isEating;
     }
     
 }
