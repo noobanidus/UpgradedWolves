@@ -73,7 +73,7 @@ public class ThrowPotionGoal extends Goal {
 
     //Gets a potion with a certain effect
     private int burningQuestion(WolfItemStackHandler wolfItems,MobEffect effectType){
-        return wolfItems.getArbitraryItemStack(x -> x.getItem() instanceof ThrowablePotionItem && remainingWithEffect(PotionUtils.getCustomEffects(x),effectType));
+        return wolfItems.getArbitraryItemStack(x -> x.getItem() instanceof ThrowablePotionItem && remainingWithEffect(PotionUtils.getMobEffects(x),effectType));
     }
 
     private boolean remainingWithEffect(List<MobEffectInstance> effects, MobEffect effectType){
