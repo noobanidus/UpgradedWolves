@@ -124,7 +124,7 @@ public class WolfStatsHandler {
 
         private int getInventorySize(){
             if(getWolfType() == WolfType.Scavenger.getValue()){
-                return strengthLvl < 16 ? 3 + (strengthLvl * 3 / 5) : 9;
+                return strengthLvl < 9 ? 3 + (strengthLvl * 3 / 5) : 9;
             }
             else if(getWolfType() != WolfType.NotSet.getValue()){
                 return strengthLvl < 16 ? 1 + (strengthLvl * 4 / 15) : 5;
