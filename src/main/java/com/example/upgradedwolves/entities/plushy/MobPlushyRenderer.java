@@ -2,7 +2,6 @@ package com.example.upgradedwolves.entities.plushy;
 
 import com.example.upgradedwolves.items.MobPlushy;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexBuffer;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.minecraft.client.renderer.MultiBufferSource;

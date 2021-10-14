@@ -35,18 +35,18 @@ public class CreeperPlushyModel extends EntityModel<Entity> {
 		
 	}
 
-	public static LayerDefinition createBodyLayer(CubeDeformation deformation) {
+	public static LayerDefinition createBodyLayer() {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 		
-		partdefinition.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-2.0F, -4.0F, -2.5F, 4.0F, 4.0F, 4.0F,deformation),PartPose.rotation(1.5708F, 0.0F, 0.0F));
-		partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 8).addBox(-2.0F, 0.0F, -1.5F, 4.0F, 7.0F, 2.0F,deformation),PartPose.rotation(1.5708F, 0.0F, 0.0F));
+		partdefinition.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-2.0F, -4.0F, -2.5F, 4.0F, 4.0F, 4.0F),PartPose.rotation(1.5708F, 0.0F, 0.0F));
+		partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 8).addBox(-2.0F, 0.0F, -1.5F, 4.0F, 7.0F, 2.0F),PartPose.rotation(1.5708F, 0.0F, 0.0F));
 
-		partdefinition.addOrReplaceChild("leg1", CubeListBuilder.create().texOffs(0, 17).addBox(-0.0F, 7.0F, 0.5F, 2.0F, 3.0F, 2.0F,deformation),PartPose.rotation(1.5708F, 0.0F, 0.0F));
-		partdefinition.addOrReplaceChild("leg2", CubeListBuilder.create().texOffs(16, 0).addBox(-2.0F, 7.0F, 0.5F, 2.0F, 3.0F, 2.0F,deformation),PartPose.rotation(1.5708F, 0.0F, 0.0F));
+		partdefinition.addOrReplaceChild("leg1", CubeListBuilder.create().texOffs(0, 17).addBox(-0.0F, 7.0F, 0.5F, 2.0F, 3.0F, 2.0F),PartPose.rotation(1.5708F, 0.0F, 0.0F));
+		partdefinition.addOrReplaceChild("leg2", CubeListBuilder.create().texOffs(16, 0).addBox(-2.0F, 7.0F, 0.5F, 2.0F, 3.0F, 2.0F),PartPose.rotation(1.5708F, 0.0F, 0.0F));
 	
-		partdefinition.addOrReplaceChild("leg3", CubeListBuilder.create().texOffs(12, 8).addBox(-2.0F, 7.0F, -3.5F, 2.0F, 3.0F, 2.0F,deformation),PartPose.rotation(1.5708F, 0.0F, 0.0F));
-		partdefinition.addOrReplaceChild("leg4", CubeListBuilder.create().texOffs(12, 13).addBox(0.0F, 7.0F, -3.5F, 2.0F, 3.0F, 2.0F,deformation),PartPose.rotation(1.5708F, 0.0F, 0.0F));
+		partdefinition.addOrReplaceChild("leg3", CubeListBuilder.create().texOffs(12, 8).addBox(-2.0F, 7.0F, -3.5F, 2.0F, 3.0F, 2.0F),PartPose.rotation(1.5708F, 0.0F, 0.0F));
+		partdefinition.addOrReplaceChild("leg4", CubeListBuilder.create().texOffs(12, 13).addBox(0.0F, 7.0F, -3.5F, 2.0F, 3.0F, 2.0F),PartPose.rotation(1.5708F, 0.0F, 0.0F));
 
 		return LayerDefinition.create(meshdefinition, 32, 32); 
 	}

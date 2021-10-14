@@ -4,7 +4,10 @@ import com.example.upgradedwolves.UpgradedWolves;
 import com.example.upgradedwolves.containers.WolfScreen;
 import com.example.upgradedwolves.entities.UpgradedWolfModel;
 import com.example.upgradedwolves.entities.UpgradedWolfRenderer;
+import com.example.upgradedwolves.entities.plushy.CreeperPlushyModel;
 import com.example.upgradedwolves.entities.plushy.MobPlushyRenderer;
+import com.example.upgradedwolves.entities.plushy.SkeletonPlushyModel;
+import com.example.upgradedwolves.entities.plushy.ZombiePlushyModel;
 import com.example.upgradedwolves.init.ModContainers;
 import com.example.upgradedwolves.init.ModEntities;
 import com.example.upgradedwolves.init.ModModelLayers;
@@ -53,5 +56,8 @@ public class ClientHandler {
     @SubscribeEvent
     public static void LayerDefinition(EntityRenderersEvent.RegisterLayerDefinitions event){        
         event.registerLayerDefinition(ModModelLayers.UPGRADED_WOLF, UpgradedWolfModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.ZOMBIE_PLUSH, ZombiePlushyModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.CREEPER_PLUSH, CreeperPlushyModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.SKELETON_PLUSH, SkeletonPlushyModel::createBodyLayer);
     }
 }

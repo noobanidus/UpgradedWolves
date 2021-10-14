@@ -5,7 +5,7 @@ import com.example.upgradedwolves.entities.plushy.CreeperPlushyModel;
 import com.example.upgradedwolves.entities.plushy.MobPlushyEntity;
 import com.example.upgradedwolves.entities.plushy.SkeletonPlushyModel;
 import com.example.upgradedwolves.entities.plushy.ZombiePlushyModel;
-import com.example.upgradedwolves.init.ModEntities;
+import com.example.upgradedwolves.init.ModModelLayers;
 import com.example.upgradedwolves.utils.MobPlushyType;
 
 import net.minecraft.client.model.EntityModel;
@@ -51,11 +51,11 @@ public class MobPlushy extends Item {
     public static EntityModel<Entity> getModelByPlushType(MobPlushy plushItem, EntityRendererProvider.Context rendererManager){
         switch(plushItem.plushType){
             case ZOMBIE:
-            return new ZombiePlushyModel(rendererManager.bakeLayer(ModEntities.ZOMBIE_PLUSH));
+            return new ZombiePlushyModel(rendererManager.bakeLayer(ModModelLayers.ZOMBIE_PLUSH));
             case SKELETON:
-            return new SkeletonPlushyModel(rendererManager.bakeLayer(ModEntities.SKELETON_PLUSH));
+            return new SkeletonPlushyModel(rendererManager.bakeLayer(ModModelLayers.SKELETON_PLUSH));
             case CREEPER:
-            return new CreeperPlushyModel(rendererManager.bakeLayer(ModEntities.CREEPER_PLUSH));
+            return new CreeperPlushyModel(rendererManager.bakeLayer(ModModelLayers.CREEPER_PLUSH));
         }
         return null;
     }
