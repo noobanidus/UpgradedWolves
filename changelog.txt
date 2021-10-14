@@ -1,4 +1,15 @@
+Added
+(nothing for once)
+
+Removed
+-bias random walking goal from non show wolves
 -Strength Wolf had Impress Villager Power Up
+
+Fixed
+*issue with wolf throwing too many arrows
+
+================
+
 v 0.4.1 Scavenger wolf PowerUp
 
 Added
