@@ -36,7 +36,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraftforge.api.distmarker.Dist;
-
+//Try to extend Throwable instead
 public class MobPlushyEntity extends ThrowableProjectile {
     private static final EntityDataAccessor<ItemStack> ITEMSTACK_DATA = SynchedEntityData.defineId(ThrowableProjectile.class, EntityDataSerializers.ITEM_STACK);
     private boolean inGround;

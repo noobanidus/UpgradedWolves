@@ -2,13 +2,13 @@ package com.example.upgradedwolves.items;
 
 import com.example.upgradedwolves.UpgradedWolves;
 import com.example.upgradedwolves.entities.FlyingDiskEntity;
+import com.example.upgradedwolves.init.ModEntities;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TridentItem;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -50,7 +50,7 @@ public class FlyingDisk extends Item {
         float bonus = Math.max(0,Math.min(8,time/3)) / 10.0F;
         worldIn.playSound((Player)null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.SNOWBALL_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (worldIn.random.nextFloat() * 0.4F + 0.8F));
         if (!worldIn.isClientSide) {
-            FlyingDiskEntity flyingDiskEntity = new FlyingDiskEntity(null, worldIn);
+            FlyingDiskEntity flyingDiskEntity = new FlyingDiskEntity(ModEntities.flyingDiskEntityType,playerIn, worldIn);
             //flyingDiskEntity.setItem(stack);
             flyingDiskEntity.setOwner(playerIn);
             flyingDiskEntity.setNoGravity(true);

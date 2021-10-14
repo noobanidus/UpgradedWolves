@@ -12,6 +12,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.phys.BlockHitResult;
@@ -27,8 +28,6 @@ import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
 public class TennisBallEntity extends WolfChaseableEntity {
 
-    public int timeOut = 0;
-
     public TennisBallEntity(Level worldIn) {
         super(ModEntities.tennisBallEntityType,worldIn);
     }
@@ -37,9 +36,13 @@ public class TennisBallEntity extends WolfChaseableEntity {
         super(p_i50159_1_, p_i50159_2_);
     }
 
+    public TennisBallEntity(EntityType<? extends TennisBallEntity> p_i50159_1_,LivingEntity entity, Level p_i50159_2_){
+        super(p_i50159_1_,entity,p_i50159_2_);
+    }
+
     @Override
-    public ItemStack getPickResult(){
-        return new ItemStack(WolfToysHandler.TENNISBALL);
+    protected Item getDefaultItem() {
+        return WolfToysHandler.TENNISBALL;
     }
 
     @Override
@@ -94,7 +97,7 @@ public class TennisBallEntity extends WolfChaseableEntity {
 
     public void wolfCollect(Wolf wolf){        
         IWolfStats handler = WolfStatsHandler.getHandler(wolf);
-        ItemStack tennisBallItem = getPickResult();
+        ItemStack tennisBallItem = getItem();
         int wolfSlot = handler.getInventory().getAvailableSlot(tennisBallItem);
 
         if(wolfSlot >= 0){
@@ -104,10 +107,5 @@ public class TennisBallEntity extends WolfChaseableEntity {
                 goal.setEndPoint(wolf.getPosition(1));
             this.kill();
         }
-    }
-
-    @Override
-    protected void defineSynchedData() {
-        
     }
 }

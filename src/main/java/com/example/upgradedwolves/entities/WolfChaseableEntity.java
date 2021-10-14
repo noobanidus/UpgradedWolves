@@ -7,22 +7,27 @@ import com.example.upgradedwolves.common.TrainingEventHandler;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.Level;
 
-public abstract class WolfChaseableEntity extends Projectile {
+public abstract class WolfChaseableEntity extends ThrowableItemProjectile {
     
     public int timeOut = 0;
     protected float onHitScalar = 0.7f;
     private boolean inGround;
     @Nullable
     private BlockState inBlockState;
+
+    public WolfChaseableEntity(EntityType<? extends WolfChaseableEntity> p_i50159_1_,LivingEntity entity, Level p_i50159_2_){
+        super(p_i50159_1_, entity, p_i50159_2_);
+    }
 
     public WolfChaseableEntity(EntityType<? extends WolfChaseableEntity> p_i50159_1_, Level p_i50159_2_) {
         super(p_i50159_1_, p_i50159_2_);
@@ -63,14 +68,14 @@ public abstract class WolfChaseableEntity extends Projectile {
 
     public void onCollideWithWolf(Wolf wolf){
         if(!speedFactor(0.5))            
-            TrainingEventHandler.wolfCollectEntity(this, wolf, getPickResult());
+            TrainingEventHandler.wolfCollectEntity(this, wolf, getItem());
     }
 
     @Override
     public void playerTouch(Player entityIn) {        
         if (!this.level.isClientSide) {
             boolean flag = this.getOwner().getUUID() == entityIn.getUUID() && !speedFactor(1) && tickCount > 20;
-            if (flag && !entityIn.addItem(getPickResult())) {
+            if (flag && !entityIn.addItem(getItem())) {
                 flag = false;
             }
     

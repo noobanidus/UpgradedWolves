@@ -49,7 +49,7 @@ public class WolfFindAndPickUpItemGoal extends Goal implements IUpdateableGoal{
             }
         }
         for(WolfChaseableEntity wolfToy : wolf.level.getEntitiesOfClass(WolfChaseableEntity.class, wolf.getBoundingBox().inflate(36.0D, 5.0D, 36.0D))){
-            if (wolfInventory.getAvailableSlot(wolfToy.getPickResult()) >= 0 && canEasilyReach(wolfToy)){
+            if (wolfInventory.getAvailableSlot(wolfToy.getItem()) >= 0 && canEasilyReach(wolfToy)){
                 item = wolfToy;
                 initialPoint = wolf.getPosition(1);
                 return true;
@@ -82,7 +82,7 @@ public class WolfFindAndPickUpItemGoal extends Goal implements IUpdateableGoal{
                 initialPoint = null;
                 return false;
             }
-            else if (item == null || wolfInventory.getAvailableSlot(item.getPickResult()) < 0) {
+            else if (item == null || wolfInventory.getAvailableSlot(item.getItem()) < 0) {
                 return false;
             } else {
                 return shouldChase(3, item);

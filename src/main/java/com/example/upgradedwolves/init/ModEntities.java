@@ -24,7 +24,7 @@ public class ModEntities {
     @SubscribeEvent
     public static void onEntityTypeRegistration(RegistryEvent.Register<EntityType<?>> event){
         tennisBallEntityType = EntityType.Builder.<TennisBallEntity>of(TennisBallEntity::new, MobCategory.MISC)
-        .sized(.25f, .25f)
+        .sized(.25f, .25f).clientTrackingRange(4).updateInterval(10)
         .build(UpgradedWolves.getId("tennis_ball_entity_type").toString());
         tennisBallEntityType.setRegistryName(UpgradedWolves.getId("tennis_ball_entity_type"));
         event.getRegistry().register(tennisBallEntityType);

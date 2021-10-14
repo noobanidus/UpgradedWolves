@@ -9,7 +9,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Item;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -33,9 +33,14 @@ public class FlyingDiskEntity extends WolfChaseableEntity{
     }
 
     
+    public FlyingDiskEntity(EntityType<? extends FlyingDiskEntity> flyingDiskEntityType, Player playerIn, Level worldIn) {
+        super(flyingDiskEntityType,playerIn,worldIn);
+    }
+
+
     @Override
-    public ItemStack getPickResult(){
-        return new ItemStack(WolfToysHandler.FLYINGDISK);
+    protected Item getDefaultItem() {
+        return WolfToysHandler.FLYINGDISK;
     }
 
     @Override
@@ -79,7 +84,7 @@ public class FlyingDiskEntity extends WolfChaseableEntity{
                 }
             }            
             else if(entityResult.getEntity() instanceof Wolf){                
-                TrainingEventHandler.wolfCollectEntity(this, (Wolf)entityResult.getEntity(), getPickResult());
+                TrainingEventHandler.wolfCollectEntity(this, (Wolf)entityResult.getEntity(), getItem());
             }
         }
 
@@ -107,11 +112,5 @@ public class FlyingDiskEntity extends WolfChaseableEntity{
             float p_234612_5_, float p_234612_6_) {  
         super.shootFromRotation(p_234612_1_, p_234612_2_, p_234612_3_, p_234612_4_, p_234612_5_, p_234612_6_);
         variant = (p_234612_5_ - .2f) * 2.5f;
-    }
-
-    @Override
-    protected void defineSynchedData() {
-        // TODO Auto-generated method stub
-        
     }
 }

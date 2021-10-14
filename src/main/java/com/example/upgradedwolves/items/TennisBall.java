@@ -2,6 +2,7 @@ package com.example.upgradedwolves.items;
 
 import com.example.upgradedwolves.UpgradedWolves;
 import com.example.upgradedwolves.entities.TennisBallEntity;
+import com.example.upgradedwolves.init.ModEntities;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -49,7 +50,7 @@ public class TennisBall extends Item {
         float bonus = Math.max(0,Math.min(15,time/3)) / 10.0F;
         worldIn.playSound((Player)null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.SNOWBALL_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (worldIn.random.nextFloat() * 0.4F + 0.8F));
         if (!worldIn.isClientSide) {
-            TennisBallEntity tennisBallEntity = new TennisBallEntity(worldIn);
+            TennisBallEntity tennisBallEntity = new TennisBallEntity(ModEntities.tennisBallEntityType,playerIn,worldIn);
             //tennisBallEntity.setItem(stack);
             tennisBallEntity.setOwner(playerIn);
             tennisBallEntity.shootFromRotation(playerIn, playerIn.getXRot(), playerIn.getYRot(), 0.0F, 0.5F + bonus, 1.0F);
