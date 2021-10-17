@@ -31,6 +31,14 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 16
+      - uses: actions/cache@v2
+        with: 
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
       - name: make gradle wrapper executable
         run: chmod +x ./gradlew
       - name: buildwith Gradle
