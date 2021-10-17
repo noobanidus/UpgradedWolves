@@ -9,15 +9,14 @@ import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 
 import org.apache.logging.log4j.LogManager;
 
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.passive.WolfEntity;
-
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.Color;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.chat.Style;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
 
 public abstract class PowerUp {    
     //Must be a constant size
@@ -36,7 +35,7 @@ public abstract class PowerUp {
     protected String description;
     protected boolean active;
     protected String name;
-    protected ResourceLocation image;
+    protected net.minecraft.resources.ResourceLocation image;
     protected WolfStatsEnum statType;
     protected int givenLevel;
     protected int defaultPriority;        
