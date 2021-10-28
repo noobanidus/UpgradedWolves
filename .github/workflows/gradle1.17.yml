@@ -41,6 +41,14 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: make gradle wrapper executable
         run: chmod +x ./gradlew
+      - name: Get ChangeLog
+        id: changelog
+        run: |
+          MY_STRING=$(sed '/===/Q' changelog.txt)
+          MY_STRING="${MY_STRING//'%'/'%25'}"
+          MY_STRING="${MY_STRING//$'\n'/'%0A'}"
+          MY_STRING="${MY_STRING//$'\r'/'%0D'}"
+          echo "::set-output name=log::$MY_STRING"
       - name: buildwith Gradle
         run: ./gradlew build
       - uses: actions/github-script@v2
