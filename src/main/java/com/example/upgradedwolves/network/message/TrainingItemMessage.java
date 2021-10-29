@@ -10,6 +10,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fmllegacy.network.NetworkEvent.Context;
 
 public class TrainingItemMessage implements IMessage<TrainingItemMessage> {
@@ -38,14 +40,19 @@ public class TrainingItemMessage implements IMessage<TrainingItemMessage> {
     @Override
     public void handle(TrainingItemMessage message, Supplier<Context> supplier) {
         supplier.get().enqueueWork(() -> {
-            Minecraft mc = Minecraft.getInstance();
-            LocalPlayer player = (LocalPlayer)mc.level.getEntity(message.playerId);
-            ItemStack foodItem = TrainingEventHandler.getFoodStack(player);
-            ITraining handler = TrainingHandler.getHandler(foodItem);
-            handler.setAttribute(message.wolfValue);
+            setItemAttribute(message);
         });
         supplier.get().setPacketHandled(true);
 
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void setItemAttribute(TrainingItemMessage message){
+        Minecraft mc = Minecraft.getInstance();
+        LocalPlayer player = (LocalPlayer)mc.level.getEntity(message.playerId);
+        ItemStack foodItem = TrainingEventHandler.getFoodStack(player);
+        ITraining handler = TrainingHandler.getHandler(foodItem);
+        handler.setAttribute(message.wolfValue);
     }
 
 }

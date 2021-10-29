@@ -20,6 +20,8 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 
 public class MobPlushy extends Item {
     public MobPlushyType plushType;
@@ -48,6 +50,7 @@ public class MobPlushy extends Item {
         }
         return InteractionResultHolder.consume(itemstack);
     }
+    @OnlyIn(Dist.CLIENT)
     public static EntityModel<Entity> getModelByPlushType(MobPlushy plushItem, EntityRendererProvider.Context rendererManager){
         switch(plushItem.plushType){
             case ZOMBIE:
