@@ -2,10 +2,12 @@ package com.example.upgradedwolves.entities.goals;
 
 import com.example.upgradedwolves.entities.utilities.AbilityEnhancer;
 import com.example.upgradedwolves.loot_table.LootLoaders;
+import com.example.upgradedwolves.network.PacketHandler;
+import com.example.upgradedwolves.network.message.CreateParticleForMobMessage;
 
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -46,9 +48,7 @@ public class DigForItemGoal extends CoolDownGoal {
     public boolean canContinueToUse() {
         if(currentTime++ < timer){
             wolf.playSound(type.getBlock().getSoundType(null, null, null, null).getPlaceSound(), 0.5F, (1.0F + (wolf.getRandom().nextFloat() - wolf.getRandom().nextFloat()) * 0.2F) * 0.7F);            
-            Minecraft mc = Minecraft.getInstance();
-            if(mc.level != null)
-                mc.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, type),false, wolf.getX(), wolf.getY(), wolf.getZ(),wolf.getRandom().nextDouble()/5, wolf.getRandom().nextDouble()/5, wolf.getRandom().nextDouble()/5);
+            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new CreateParticleForMobMessage(wolf.getId(),new BlockParticleOption(ParticleTypes.BLOCK, type),1));            
             return true;
         }
         currentTime = 0;
