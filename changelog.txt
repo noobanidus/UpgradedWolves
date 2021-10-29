@@ -1,7 +1,7 @@
 v1.0.0
 
 Added
-(nothing for once)
++message that creates a generic particle.
 
 Removed
 -bias random walking goal from non show wolves
@@ -9,6 +9,7 @@ Removed
 
 Fixed
 *issue with wolf throwing too many arrows
+*issues with certain classes crashing servers
 
 ================
 
