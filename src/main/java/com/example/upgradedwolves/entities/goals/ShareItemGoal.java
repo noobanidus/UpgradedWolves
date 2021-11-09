@@ -58,6 +58,7 @@ public class ShareItemGoal extends Goal {
         return false;
     }
 
+    //TODO: find out if this needs to be deprecated
     private boolean wolfCriteria(Wolf wolf){
         WolfItemStackHandler wolfInventory = WolfStatsHandler.getHandler(wolf).getInventory();
         SelfPreservationGoal preservationGoal = (SelfPreservationGoal)WolfPlayerInteraction.getWolfGoal(wolf, SelfPreservationGoal.class);

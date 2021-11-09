@@ -8,7 +8,6 @@ import com.example.upgradedwolves.entities.utilities.EntityFinder;
 import com.example.upgradedwolves.network.PacketHandler;
 import com.example.upgradedwolves.network.message.CreateParticleForMobMessage;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.NeutralMob;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraftforge.fmllegacy.network.PacketDistributor;

@@ -5,8 +5,6 @@ import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.capabilities.WolfType;
 
-import org.apache.logging.log4j.LogManager;
-
 import net.minecraft.world.entity.NeutralMob;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;

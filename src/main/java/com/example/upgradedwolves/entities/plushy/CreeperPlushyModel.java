@@ -6,7 +6,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
@@ -19,19 +18,19 @@ import net.minecraft.world.entity.Entity;
 
 public class CreeperPlushyModel extends EntityModel<Entity> {
 	private final ModelPart root;
-	private final ModelPart head;
-	private final ModelPart rightHindLeg;
-	private final ModelPart leftHindLeg;
-	private final ModelPart rightFrontLeg;
-	private final ModelPart leftFrontLeg;
+	// private final ModelPart head;
+	// private final ModelPart rightHindLeg;
+	// private final ModelPart leftHindLeg;
+	// private final ModelPart rightFrontLeg;
+	// private final ModelPart leftFrontLeg;
 
 	public CreeperPlushyModel(ModelPart modelPart) {
 		this.root = modelPart;
-		this.head = modelPart.getChild("head");
-		this.leftHindLeg = modelPart.getChild("leg1");
-		this.rightHindLeg = modelPart.getChild("leg2");
-		this.leftFrontLeg = modelPart.getChild("leg3");
-		this.rightFrontLeg = modelPart.getChild("leg4");
+		// this.head = modelPart.getChild("head");
+		// this.leftHindLeg = modelPart.getChild("leg1");
+		// this.rightHindLeg = modelPart.getChild("leg2");
+		// this.leftFrontLeg = modelPart.getChild("leg3");
+		// this.rightFrontLeg = modelPart.getChild("leg4");
 		
 	}
 
@@ -54,7 +53,6 @@ public class CreeperPlushyModel extends EntityModel<Entity> {
 	@Override
 	public void setupAnim(Entity p_102618_, float p_102619_, float p_102620_, float p_102621_, float p_102622_,
 			float p_102623_) {
-		// TODO Auto-generated method stub
 		
 	}
 

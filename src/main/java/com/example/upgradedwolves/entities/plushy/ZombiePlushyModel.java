@@ -19,19 +19,19 @@ import net.minecraft.world.entity.Entity;
 
 public class ZombiePlushyModel extends EntityModel<Entity> {
 	private final ModelPart root;
-	private final ModelPart head;
-	private final ModelPart leftArm;
-	private final ModelPart rightArm;
-	private final ModelPart rightLeg;
-	private final ModelPart leftLeg;
+	// private final ModelPart head;
+	// private final ModelPart leftArm;
+	// private final ModelPart rightArm;
+	// private final ModelPart rightLeg;
+	// private final ModelPart leftLeg;
 
 	public ZombiePlushyModel(ModelPart modelPart) {
 		this.root = modelPart;
-		this.head = modelPart.getChild("head");
-		this.leftArm = modelPart.getChild("leg1");
-		this.rightArm = modelPart.getChild("leg2");
-		this.rightLeg = modelPart.getChild("leg3");
-		this.leftLeg = modelPart.getChild("leg4");
+		// this.head = modelPart.getChild("head");
+		// this.leftArm = modelPart.getChild("leg1");
+		// this.rightArm = modelPart.getChild("leg2");
+		// this.rightLeg = modelPart.getChild("leg3");
+		// this.leftLeg = modelPart.getChild("leg4");
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -53,7 +53,6 @@ public class ZombiePlushyModel extends EntityModel<Entity> {
 	@Override
 	public void setupAnim(Entity p_102618_, float p_102619_, float p_102620_, float p_102621_, float p_102622_,
 			float p_102623_) {
-		// TODO Auto-generated method stub
 		
 	}
 
