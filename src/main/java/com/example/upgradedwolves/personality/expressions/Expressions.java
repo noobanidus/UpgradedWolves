@@ -17,7 +17,6 @@ public abstract class Expressions extends Goal {
     public final Wolf wolf;
     
     protected int arbitraryState;
-    protected final Behavior mainBehavior;
     protected Behavior subBehavior;
     protected boolean waitingForInvite;
     protected int engagement;
@@ -25,14 +24,16 @@ public abstract class Expressions extends Goal {
     
     LivingEntity partner;
 
-    public Expressions(Wolf wolf,Behavior mainBehavior){
+    public Expressions(Wolf wolf,Behavior subBehavior){
         this.wolf = wolf;
-        this.mainBehavior = mainBehavior;
+        this.subBehavior = subBehavior;
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK,Goal.Flag.TARGET));
     }
 
     @Override
     public boolean canUse(){
+        arbitraryState = 0;
+        searchForPartner();
         return partner != null;
     }
 
@@ -59,6 +60,8 @@ public abstract class Expressions extends Goal {
     protected abstract void changeEngagement();
 
     protected abstract void setDefaultEngagement();
+
+    protected abstract void searchForPartner();
 
 
     protected void attacked(LivingEntity attackedBy){
@@ -99,13 +102,14 @@ public abstract class Expressions extends Goal {
         partner = setPartnerFromList(entities);
         return null;
     }
+    
+    protected <T> T setPartnerFromList(List<T> entities){
+        int rand = wolf.getRandom().nextInt(entities.size());
+        return entities.get(rand);
+    }
 
     private boolean shareOwner(Wolf otherWolf){
         return otherWolf.isTame() && otherWolf.getOwner() == wolf.getOwner();
     }
 
-    private <T> T setPartnerFromList(List<T> entities){
-        int rand = wolf.getRandom().nextInt(entities.size());
-        return entities.get(rand);
-    }
 }
