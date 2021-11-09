@@ -13,6 +13,8 @@ import com.example.upgradedwolves.itemHandler.WolfItemStackHandler;
 import com.example.upgradedwolves.itemHandler.WolfToysHandler;
 import com.example.upgradedwolves.network.PacketHandler;
 import com.example.upgradedwolves.network.message.SpawnLevelUpParticle;
+import com.example.upgradedwolves.personality.Behavior;
+import com.example.upgradedwolves.personality.WolfPersonality;
 import com.example.upgradedwolves.powerup.PowerUp;
 import com.example.upgradedwolves.powerup.PowerUpList;
 
@@ -79,6 +81,9 @@ public class WolfStatsHandler {
         List<Goal> unaddedGoals = new ArrayList<Goal>();
         boolean tugOfWarActive = false;
         boolean deathRetrieval,lootAdder;
+        WolfPersonality personality;
+        int wolfPersonalityId;
+        
 
         private boolean LevelUpFunction(int level, int xp) {
             return xp > Math.pow(level,1.1) * 4;
@@ -450,6 +455,21 @@ public class WolfStatsHandler {
         public void setWolffur(int color) {
             wolfFur = color;            
         }
+        @Override
+        public void setWolfPersonality(Behavior behavior) {
+            
+            wolfPersonalityId = behavior.ordinal();
+        }
+        @Override
+        public WolfPersonality getWolfPersonality() {
+            
+            return personality;
+        }
+        @Override
+        public int getWolfPersonalityId() {
+            
+            return wolfPersonalityId;
+        }
 
 
     }
@@ -476,6 +496,7 @@ public class WolfStatsHandler {
             nbt.putInt("IntelligenceXp", INSTANCE.getXp(WolfStatsEnum.Intelligence));
             nbt.putInt("WolfType",INSTANCE.getWolfType());
             nbt.putInt("WolfFur",INSTANCE.getWolfFur());
+            nbt.putInt("Personality",INSTANCE.getWolfPersonalityId());
             nbt.put("Inventory",INSTANCE.getInventory().serializeNBT());
             CompoundTag vec3 = new CompoundTag();
             if(INSTANCE.getRoamPoint() == null){
@@ -508,6 +529,7 @@ public class WolfStatsHandler {
             INSTANCE.getInventory().deserializeNBT(next.getCompound("Inventory"));
             CompoundTag position = next.getCompound("RoamPosition");
             INSTANCE.setRoamPoint(position.getBoolean("isNotNull") ? new Vec3(position.getDouble("x"),position.getDouble("y"),position.getDouble("z")) : null);
+            INSTANCE.setWolfPersonality(Behavior.values()[next.getInt("Personality")]);
             INSTANCE.InitLove();
             
         }
