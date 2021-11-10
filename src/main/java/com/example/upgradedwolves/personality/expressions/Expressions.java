@@ -104,8 +104,11 @@ public abstract class Expressions extends Goal {
     }
     
     protected <T> T setPartnerFromList(List<T> entities){
-        int rand = wolf.getRandom().nextInt(entities.size());
-        return entities.get(rand);
+        if(entities.size() > 0){
+            int rand = wolf.getRandom().nextInt(entities.size());
+            return entities.get(rand);
+        }
+        return null;
     }
 
     private boolean shareOwner(Wolf otherWolf){
