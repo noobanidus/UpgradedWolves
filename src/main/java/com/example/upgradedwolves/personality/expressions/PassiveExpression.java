@@ -1,17 +1,10 @@
 package com.example.upgradedwolves.personality.expressions;
 
-import java.util.List;
-
-import com.example.upgradedwolves.entities.utilities.EntityFinder;
 import com.example.upgradedwolves.personality.Behavior;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.entity.animal.Wolf;
-import net.minecraft.world.entity.monster.AbstractSkeleton;
-import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 
@@ -21,7 +14,8 @@ public class PassiveExpression extends Expressions {
     int barkSpam;
 
     public PassiveExpression(Wolf wolf, Behavior subBehavior) {
-        super(wolf, subBehavior);        
+        super(wolf, subBehavior);
+        maxEngagement = 600;   
     }
     
 
@@ -73,15 +67,9 @@ public class PassiveExpression extends Expressions {
     }
 
     @Override
-    protected void searchForPartner() {
+    protected LivingEntity searchForPartner() {
         //All monsters except skeletons
-        EntityFinder<LivingEntity> playerOrMonster = new EntityFinder<LivingEntity>(wolf,LivingEntity.class);
-        List<LivingEntity> entities = playerOrMonster.findWithPredicate(10, 5, x -> (x instanceof Monster && !(x instanceof AbstractSkeleton)) || (x instanceof Player && !isOwner((Player)x)));
-        setPartner(setPartnerFromList(entities));
-    }
-    
-    private boolean isOwner(Player player){
-        return wolf.isTame() && wolf.getOwner() == player;
+        return getNonFriendlyPartner();
     }
 
     private void runAway(){

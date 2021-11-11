@@ -1,6 +1,5 @@
 package com.example.upgradedwolves.personality;
 
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Wolf;
@@ -51,12 +50,12 @@ public class CommonActionsController {
 
     public Vec3 getLeft(){
         Vec3 angle = wolf.getLookAngle();
-        return new Vec3(-angle.z,0,angle.x).add(wolf.getPosition(1));
+        return new Vec3(-angle.z,0,angle.x).add(wolf.getPosition(0));
     }
 
     public Vec3 getRight(){
         Vec3 angle = wolf.getLookAngle();
-        return new Vec3(angle.z,0,angle.x).add(wolf.getPosition(1));
+        return new Vec3(angle.z,0,angle.x).add(wolf.getPosition(0));
     }
 
     public void jumpLateral(){

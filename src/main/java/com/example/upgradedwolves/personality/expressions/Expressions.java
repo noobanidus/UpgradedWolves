@@ -11,6 +11,9 @@ import org.apache.logging.log4j.LogManager;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.monster.AbstractSkeleton;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
 
 public abstract class Expressions extends Goal {
     //Add Wolf Behavior
@@ -21,6 +24,7 @@ public abstract class Expressions extends Goal {
     protected boolean waitingForInvite;
     protected int engagement;
     protected int maxEngagement;
+    protected int defaultState = 0;
     
     LivingEntity partner;
 
@@ -32,8 +36,8 @@ public abstract class Expressions extends Goal {
 
     @Override
     public boolean canUse(){
-        arbitraryState = 0;
-        searchForPartner();
+        arbitraryState = defaultState;
+        partner = searchForPartner();
         return partner != null;
     }
 
@@ -61,7 +65,7 @@ public abstract class Expressions extends Goal {
 
     protected abstract void setDefaultEngagement();
 
-    protected abstract void searchForPartner();
+    protected abstract LivingEntity searchForPartner();
 
 
     protected void attacked(LivingEntity attackedBy){
@@ -99,9 +103,15 @@ public abstract class Expressions extends Goal {
     protected LivingEntity getAnotherWolfOrOwner(){
         EntityFinder<LivingEntity> finder = new EntityFinder<LivingEntity>(wolf,LivingEntity.class);
         List<LivingEntity> entities = finder.findWithPredicate(10, 5, x -> (x instanceof Wolf && shareOwner((Wolf)x)) || x == wolf.getOwner());
-        partner = setPartnerFromList(entities);
-        return null;
+        return setPartnerFromList(entities);
     }
+
+    protected LivingEntity getNonFriendlyPartner(){
+        EntityFinder<LivingEntity> playerOrMonster = new EntityFinder<LivingEntity>(wolf,LivingEntity.class);
+        List<LivingEntity> entities = playerOrMonster.findWithPredicate(10, 5, x -> (x instanceof Monster && !(x instanceof AbstractSkeleton)) || (x instanceof Player && !isOwner((Player)x)) || (x instanceof Wolf && !sameSide((Wolf)x)));
+        return setPartnerFromList(entities);
+    }
+    
     
     protected <T> T setPartnerFromList(List<T> entities){
         if(entities.size() > 0){
@@ -111,8 +121,16 @@ public abstract class Expressions extends Goal {
         return null;
     }
 
+    private boolean isOwner(Player player){
+        return wolf.isTame() && wolf.getOwner() == player;
+    }
+
     private boolean shareOwner(Wolf otherWolf){
         return otherWolf.isTame() && otherWolf.getOwner() == wolf.getOwner();
+    }
+
+    private boolean sameSide(Wolf otherWolf){
+        return shareOwner(otherWolf) || (!wolf.isTame() && !otherWolf.isTame());
     }
 
 }
