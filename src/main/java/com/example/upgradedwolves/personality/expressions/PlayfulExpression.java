@@ -1,10 +1,13 @@
 package com.example.upgradedwolves.personality.expressions;
 
+import java.util.Optional;
+
 import com.example.upgradedwolves.personality.Behavior;
 import com.example.upgradedwolves.personality.CommonActionsController;
 import com.example.upgradedwolves.utils.RandomRangeTimer;
 
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.level.pathfinder.Path;
@@ -84,7 +87,20 @@ public class PlayfulExpression extends Expressions {
     protected LivingEntity searchForPartner() {     
         if(available){
             available = false;
-            return getAnotherWolfOrOwner();
+            LivingEntity potentialPlaymate = getAnotherWolfOrOwner();
+            if(potentialPlaymate instanceof Wolf){
+                Wolf wolfPlaymate = (Wolf)potentialPlaymate;
+                wolfPlaymate.goalSelector.getRunningGoals().filter((goal) -> {
+                    return goal.getGoal() instanceof Expressions;
+                }).toList().forEach(x -> x.stop());
+                Optional<WrappedGoal> recipGoal = wolf.goalSelector.getAvailableGoals().stream().filter((goal) -> {
+                    return goal.getGoal() instanceof ReciprocalExpression;
+                }).findFirst();
+                recipGoal.get().start();
+                ReciprocalExpression expression = (ReciprocalExpression)recipGoal.get().getGoal();
+                expression.setPartnerExternal(wolf);
+            }
+            return potentialPlaymate;
         }
         play.tick();
         return null;
