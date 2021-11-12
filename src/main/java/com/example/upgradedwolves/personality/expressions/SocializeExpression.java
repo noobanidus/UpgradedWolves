@@ -17,7 +17,7 @@ public class SocializeExpression extends Expressions {
     public SocializeExpression(Wolf wolf, Behavior subBehavior) {
         super(wolf, subBehavior);
         maxEngagement = 140;
-        observe = new RandomRangeTimer(280,280,wolf.getRandom());
+        observe = new RandomRangeTimer(140,140,wolf.getRandom());
         observe.setFunction(() -> {available = true;});
     }
 
@@ -67,8 +67,8 @@ public class SocializeExpression extends Expressions {
     }
     
     private void runTowards(){
-        if(position == null || position.distanceTo(partner.getPosition(1)) > 5 || !wolf.getNavigation().isInProgress()){
-            position = DefaultRandomPos.getPosAway(wolf,20,5,partner.getPosition(1));
+        if(position == null || wolf.getPosition(0).distanceTo(partner.getPosition(1)) > 5 || !wolf.getNavigation().isInProgress()){
+            position = DefaultRandomPos.getPosTowards(wolf,20,5,partner.getPosition(1),1);
             if(position != null){
                 Path path = wolf.getNavigation().createPath(position.x,position. y, position.z, 0);
                 wolf.getNavigation().moveTo(path, 1);

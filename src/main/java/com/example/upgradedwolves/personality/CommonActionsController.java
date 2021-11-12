@@ -25,7 +25,7 @@ public class CommonActionsController {
     }
 
     public void whine(){
-        wolf.playSound(SoundEvents.WOLF_WHINE, 1, 1);
+        wolf.playSound(SoundEvents.WOLF_WHINE, 1, .85f + (wolf.getRandom().nextFloat() * .3f));
     }
 
     public void jumpTowards(LivingEntity entity){

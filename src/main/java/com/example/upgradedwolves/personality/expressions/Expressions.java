@@ -122,11 +122,11 @@ public abstract class Expressions extends Goal {
     }
 
     private boolean shareOwner(Wolf otherWolf){
-        return otherWolf.isTame() && otherWolf.getOwner() == wolf.getOwner();
+        return otherWolf.isTame() && otherWolf.getOwner() == wolf.getOwner() && otherWolf != wolf;
     }
 
     private boolean sameSide(Wolf otherWolf){
-        return shareOwner(otherWolf) || (!wolf.isTame() && !otherWolf.isTame());
+        return (shareOwner(otherWolf) || (!wolf.isTame() && !otherWolf.isTame())) && otherWolf != wolf;
     }
 
 }
