@@ -38,6 +38,7 @@ public abstract class Expressions extends Goal {
     public boolean canUse(){
         arbitraryState = defaultState;
         partner = searchForPartner();
+        setDefaultEngagement();
         return partner != null;
     }
 
@@ -70,12 +71,7 @@ public abstract class Expressions extends Goal {
 
     protected void attacked(LivingEntity attackedBy){
 
-    }
-    
-    protected void setPartner(LivingEntity entity){
-        setDefaultEngagement();
-        partner = entity;
-    }
+    }        
 
     protected boolean bored(){
         return engagement <= 0 || partner == null;

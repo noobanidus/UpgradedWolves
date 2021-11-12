@@ -2,6 +2,7 @@ package com.example.upgradedwolves.personality.expressions;
 
 import com.example.upgradedwolves.personality.Behavior;
 import com.example.upgradedwolves.personality.CommonActionsController;
+import com.example.upgradedwolves.utils.RandomRangeTimer;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
@@ -15,12 +16,16 @@ public class PlayfulExpression extends Expressions {
     protected int x = 1;
     protected int z = 1;
     protected boolean flipX;
+    protected RandomRangeTimer play;
+    protected boolean available;
 
 
     public PlayfulExpression(Wolf wolf, Behavior subBehavior) {
         super(wolf, subBehavior);
         maxEngagement = 300;
         controller = new CommonActionsController(wolf);
+        play = new RandomRangeTimer(1200,4800,wolf.getRandom());
+        play.setFunction(() -> {available = true;});
     }
 
     @Override
@@ -31,7 +36,33 @@ public class PlayfulExpression extends Expressions {
 
     @Override
     public void tick(){
-
+        super.tick();
+        if(partner instanceof Wolf){
+            //get other wolf's behavior to determine play type.
+        }
+        switch(subBehavior){
+            case Affectionate:
+            case Social:
+            case Playful:
+                runAround();
+                break;
+            case Shy:
+            case Aggressive:
+                chase();
+                break;
+            case Dominant:
+            case Lazy:
+                annoy();
+                break;
+        }
+    }
+    @Override
+    public void reciprocateAction(Wolf otherWolf){
+        if(arbitraryState == 1){
+            otherWolf.getMoveControl().setWantedPosition(wolf.getX(), wolf.getY(), wolf.getZ(), 1);
+        } else {
+            otherWolf.getLookControl().setLookAt(wolf);
+        }
     }
 
     @Override
@@ -50,11 +81,17 @@ public class PlayfulExpression extends Expressions {
     }
 
     @Override
-    protected LivingEntity searchForPartner() {        
-        return getAnotherWolfOrOwner();
+    protected LivingEntity searchForPartner() {     
+        if(available){
+            available = false;
+            return getAnotherWolfOrOwner();
+        }
+        play.tick();
+        return null;
     }
     
     private void chase(){
+        changeState(1);
         if(wolf.getNavigation().isInProgress()){
             position = DefaultRandomPos.getPosAway(wolf,20,5,partner.getPosition(1));
             if(position != null){
@@ -65,10 +102,12 @@ public class PlayfulExpression extends Expressions {
     }
 
     private void annoy(){
+        changeState(2);
         controller.jumpTowards(partner);
     }
 
     private void runAround(){
+        changeState(3);
         if(!wolf.getNavigation().isInProgress()){
             if(flipX){
                 x = -x;
