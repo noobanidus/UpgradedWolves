@@ -1,4 +1,11 @@
 v1.1.0
++ Expressions
+	+ Aggressive Follow Expression
+	+ Socialize Expression
+	+ Playful expression.
+	+ intimidate expression
+	+ Passive expression
+	+ Personalities, expressions, and behavior
 
 ================
 
