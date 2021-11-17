@@ -59,6 +59,10 @@ public abstract class Expressions extends Goal {
     public void reciprocateAction(Wolf wolfEntity){
 
     }
+
+    public boolean isActive(){
+        return engagement > 0 && partner != null;
+    }
     
     protected abstract void changeState(int stateNumber);
     
@@ -98,7 +102,7 @@ public abstract class Expressions extends Goal {
 
     protected LivingEntity getAnotherWolfOrOwner(){
         EntityFinder<LivingEntity> finder = new EntityFinder<LivingEntity>(wolf,LivingEntity.class);
-        List<LivingEntity> entities = finder.findWithPredicate(10, 5, x -> (x instanceof Wolf && shareOwner((Wolf)x)) || x == wolf.getOwner());
+        List<LivingEntity> entities = finder.findWithPredicate(10, 5, x -> (x instanceof Wolf && sameSide((Wolf)x)) || x == wolf.getOwner());
         return setPartnerFromList(entities);
     }
 

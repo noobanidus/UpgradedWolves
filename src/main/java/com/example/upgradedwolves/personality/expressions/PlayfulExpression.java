@@ -1,5 +1,6 @@
 package com.example.upgradedwolves.personality.expressions;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.example.upgradedwolves.personality.Behavior;
@@ -21,13 +22,15 @@ public class PlayfulExpression extends Expressions {
     protected boolean flipX;
     protected RandomRangeTimer play;
     protected boolean available;
+    protected int partnerState;
 
 
     public PlayfulExpression(Wolf wolf, Behavior subBehavior) {
         super(wolf, subBehavior);
         maxEngagement = 300;
         controller = new CommonActionsController(wolf);
-        play = new RandomRangeTimer(1200,4800,wolf.getRandom());
+        //play = new RandomRangeTimer(1200,4800,wolf.getRandom());
+        play = new RandomRangeTimer(100,100,wolf.getRandom());
         play.setFunction(() -> {available = true;});
     }
 
@@ -58,6 +61,7 @@ public class PlayfulExpression extends Expressions {
                 annoy();
                 break;
         }
+        setPartnerPlayType();
     }
     @Override
     public void reciprocateAction(Wolf otherWolf){
@@ -70,7 +74,7 @@ public class PlayfulExpression extends Expressions {
 
     @Override
     protected void changeState(int stateNumber) {
-        
+        partnerState = stateNumber;
     }
 
     @Override
@@ -90,12 +94,17 @@ public class PlayfulExpression extends Expressions {
             LivingEntity potentialPlaymate = getAnotherWolfOrOwner();
             if(potentialPlaymate instanceof Wolf){
                 Wolf wolfPlaymate = (Wolf)potentialPlaymate;
+
+                List<WrappedGoal> excludeGoals = wolfPlaymate.goalSelector.getRunningGoals().filter((goal) -> {
+                    return goal.getGoal() instanceof Expressions && isPlaying((Expressions)goal.getGoal());
+                }).toList();
+                if(excludeGoals.size() > 0)
+                    return null;
+
                 wolfPlaymate.goalSelector.getRunningGoals().filter((goal) -> {
                     return goal.getGoal() instanceof Expressions;
                 }).toList().forEach(x -> x.stop());
-                Optional<WrappedGoal> recipGoal = wolf.goalSelector.getAvailableGoals().stream().filter((goal) -> {
-                    return goal.getGoal() instanceof ReciprocalExpression;
-                }).findFirst();
+                Optional<WrappedGoal> recipGoal = getWolfReciprocalExpression(wolfPlaymate);
                 recipGoal.get().start();
                 ReciprocalExpression expression = (ReciprocalExpression)recipGoal.get().getGoal();
                 expression.setPartnerExternal(wolf);
@@ -131,6 +140,29 @@ public class PlayfulExpression extends Expressions {
                 z = -z;
             }
             flipX = !flipX;
+            wolf.getNavigation().moveTo(
+                partner.getPosition(0).x + 2 * x,
+                partner.getPosition(0).y,
+                partner.getPosition(0).z + 2 * z, 1);
         }
+    }
+
+    private void setPartnerPlayType(){
+        if(partner != null && partner instanceof Wolf){
+            Wolf partnerWolf = (Wolf)partner;
+            ReciprocalExpression recipExpr = (ReciprocalExpression)getWolfReciprocalExpression(partnerWolf).get().getGoal();
+            recipExpr.arbitraryState = partnerState;
+
+        }
+    }
+
+    private Optional<WrappedGoal> getWolfReciprocalExpression(Wolf otherWolf){
+        return otherWolf.goalSelector.getAvailableGoals().stream().filter((goal) -> {
+            return goal.getGoal() instanceof ReciprocalExpression;
+        }).findFirst();
+    }
+
+    private boolean isPlaying(Expressions expression){
+        return (expression instanceof PlayfulExpression || expression instanceof ReciprocalExpression) && expression.isActive();
     }
 }
