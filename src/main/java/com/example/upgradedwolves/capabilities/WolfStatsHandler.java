@@ -14,6 +14,7 @@ import com.example.upgradedwolves.itemHandler.WolfToysHandler;
 import com.example.upgradedwolves.network.PacketHandler;
 import com.example.upgradedwolves.network.message.SpawnLevelUpParticle;
 import com.example.upgradedwolves.personality.Behavior;
+import com.example.upgradedwolves.personality.PersonalitySerializer;
 import com.example.upgradedwolves.personality.WolfPersonality;
 import com.example.upgradedwolves.powerup.PowerUp;
 import com.example.upgradedwolves.powerup.PowerUpList;
@@ -456,19 +457,14 @@ public class WolfStatsHandler {
             wolfFur = color;            
         }
         @Override
-        public void setWolfPersonality(Behavior behavior) {
+        public void setWolfPersonality(WolfPersonality personality) {
             
-            wolfPersonalityId = behavior.ordinal();
+            this.personality = personality;
         }
         @Override
         public WolfPersonality getWolfPersonality() {
             
             return personality;
-        }
-        @Override
-        public int getWolfPersonalityId() {
-            
-            return wolfPersonalityId;
         }
 
 
@@ -496,7 +492,7 @@ public class WolfStatsHandler {
             nbt.putInt("IntelligenceXp", INSTANCE.getXp(WolfStatsEnum.Intelligence));
             nbt.putInt("WolfType",INSTANCE.getWolfType());
             nbt.putInt("WolfFur",INSTANCE.getWolfFur());
-            nbt.putInt("Personality",INSTANCE.getWolfPersonalityId());
+            nbt.put("Personality",PersonalitySerializer.serializeNbt(INSTANCE.getWolfPersonality()));
             nbt.put("Inventory",INSTANCE.getInventory().serializeNBT());
             CompoundTag vec3 = new CompoundTag();
             if(INSTANCE.getRoamPoint() == null){
@@ -529,7 +525,7 @@ public class WolfStatsHandler {
             INSTANCE.getInventory().deserializeNBT(next.getCompound("Inventory"));
             CompoundTag position = next.getCompound("RoamPosition");
             INSTANCE.setRoamPoint(position.getBoolean("isNotNull") ? new Vec3(position.getDouble("x"),position.getDouble("y"),position.getDouble("z")) : null);
-            INSTANCE.setWolfPersonality(Behavior.values()[next.getInt("Personality")]);
+            INSTANCE.setWolfPersonality(PersonalitySerializer.deserializeNbt(next.getCompound("Personality")));
             INSTANCE.InitLove();
             
         }

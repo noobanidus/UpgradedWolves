@@ -13,7 +13,7 @@ public class PersonalitySerializer {
         return nbt;
     }
 
-    public static WolfPersonality getWolfPersonality(CompoundTag nbt){
+    public static WolfPersonality deserializeNbt(CompoundTag nbt){
         WolfPersonality personality = getWolfPersonalityType(nbt.getString("ClassName"));
         personality.subBehavior = Behavior.values()[nbt.getInt("SubBehavior")];
         return personality;

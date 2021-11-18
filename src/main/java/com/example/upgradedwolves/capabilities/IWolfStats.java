@@ -53,7 +53,6 @@ public interface IWolfStats {
     public void setRoamPoint(Vec3 location);
     public int getWolfFur();
     public void setWolffur(int color);
-    public void setWolfPersonality(Behavior behavior);
+    public void setWolfPersonality(WolfPersonality behavior);
     public WolfPersonality getWolfPersonality();
-    public int getWolfPersonalityId();
 }

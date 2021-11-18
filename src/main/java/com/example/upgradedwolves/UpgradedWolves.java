@@ -44,7 +44,7 @@ public class UpgradedWolves
 
     public static final String ModId = "upgradedwolves";
     // Directly reference a log4j logger.    
-    private static final Logger LOGGER = LogManager.getLogger();
+    public static final Logger LOGGER = LogManager.getLogger();
 
     public UpgradedWolves() {
         // Register the setup method for modloading
