@@ -21,7 +21,9 @@ public class CommonActionsController {
     }
 
     public void jump(){
-        wolf.getJumpControl().jump();
+        if(wolf.isOnGround()){
+            wolf.getJumpControl().jump();
+        }
     }
 
     public void whine(){
@@ -29,23 +31,27 @@ public class CommonActionsController {
     }
 
     public void jumpTowards(LivingEntity entity){
-        Vec3 vec3 = wolf.getDeltaMovement();
-        Vec3 vec31 = new Vec3(entity.getX() - this.wolf.getX(), 0.0D, entity.getZ() - this.wolf.getZ());
-        if (vec31.lengthSqr() > 1.0E-7D) {
-            vec31 = vec31.normalize().scale(0.4D).add(vec3.scale(0.2D));
-        }
+        if(wolf.isOnGround()){
+            Vec3 vec3 = wolf.getDeltaMovement();
+            Vec3 vec31 = new Vec3(entity.getX() - this.wolf.getX(), 0.0D, entity.getZ() - this.wolf.getZ());
+            if (vec31.lengthSqr() > 1.0E-7D) {
+                vec31 = vec31.normalize().scale(0.4D).add(vec3.scale(0.2D));
+            }
 
-        this.wolf.setDeltaMovement(vec31.x, 0.4D, vec31.z);
+            this.wolf.setDeltaMovement(vec31.x, 0.4D, vec31.z);
+        }
     }
 
     public void jumpTowards(Vec3 position){
-        Vec3 vec3 = wolf.getDeltaMovement();
-        Vec3 vec31 = new Vec3(position.x - this.wolf.getX(), 0.0D, position.z - this.wolf.getZ());
-        if (vec31.lengthSqr() > 1.0E-7D) {
-            vec31 = vec31.normalize().scale(0.4D).add(vec3.scale(0.2D));
-        }
+        if(wolf.isOnGround()){
+            Vec3 vec3 = wolf.getDeltaMovement();
+            Vec3 vec31 = new Vec3(position.x - this.wolf.getX(), 0.0D, position.z - this.wolf.getZ());
+            if (vec31.lengthSqr() > 1.0E-7D) {
+                vec31 = vec31.normalize().scale(0.4D).add(vec3.scale(0.2D));
+            }
 
-        this.wolf.setDeltaMovement(vec31.x, 0.4D, vec31.z);
+            this.wolf.setDeltaMovement(vec31.x, 0.4D, vec31.z);
+        }
     }
 
     public Vec3 getLeft(){
