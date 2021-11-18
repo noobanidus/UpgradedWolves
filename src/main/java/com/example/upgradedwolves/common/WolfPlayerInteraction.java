@@ -21,6 +21,7 @@ import com.example.upgradedwolves.items.TugOfWarRopeItem;
 import com.example.upgradedwolves.items.GoldenBone.GoldenBoneAbstract;
 import com.example.upgradedwolves.network.PacketHandler;
 import com.example.upgradedwolves.network.message.RenderMessage;
+import com.example.upgradedwolves.personality.Behavior;
 import com.example.upgradedwolves.items.MobPlushy;
 
 import org.apache.logging.log4j.LogManager;
@@ -242,6 +243,8 @@ public class WolfPlayerInteraction {
             if(handler.getWolfType() == 3)
                 wolf.goalSelector.addGoal(8, new WolfBiasRoamGoal(wolf, 1.0, 10, 5));
             wolf.goalSelector.addGoal(2, new TugOfWarGaol(wolf));
+
+            handler.getWolfPersonality().setWolfExpressions(wolf);
             
             handler.handleWolfGoals();          
         }

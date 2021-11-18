@@ -29,26 +29,11 @@ public class PassivePersonality extends WolfPersonality {
         if(stats == WolfStatsEnum.Intelligence)
             return 2;
         return 0;
-    }
-
-    @Override
-    public void setWolfExpressions(Wolf wolf) {
-        getExpressions().forEach(x -> assignExpressions(wolf,x));
-        
-    }
+    }        
 
     @Override
     public Stream<Class<? extends Expressions>> getExpressions() {
         //TODO: attempt to make this non hard coded
         return Stream.of(PassiveExpression.class);
     }
-
-    private void assignExpressions(Wolf wolf, Class<? extends Expressions> clazz){
-        try{
-            clazz.getConstructors()[0].newInstance(wolf,subBehavior);
-        } catch (Exception ignored){
-            UpgradedWolves.LOGGER.error("Failed to add Expression:" + clazz.getName());
-        }
-    }
-    
 }

@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import com.example.upgradedwolves.UpgradedWolves;
 import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.personality.expressions.Expressions;
 
@@ -28,12 +29,22 @@ public abstract class WolfPersonality {
         //bruh.... wtf?
         return (WolfPersonality)personalities.toArray()[rand.nextInt(personalities.toArray().length)];
     }
-
+    
+    public void setWolfExpressions(Wolf wolf) {
+        getExpressions().forEach(x -> assignExpressions(wolf,x));        
+    }
+    
     public abstract String getName();
 
     public abstract int levelUpStatBonus(WolfStatsEnum stats);
 
-    public abstract void setWolfExpressions(Wolf wolf);
-
     public abstract Stream<Class<? extends Expressions>> getExpressions();
+
+    protected void assignExpressions(Wolf wolf, Class<? extends Expressions> clazz){
+        try{
+            clazz.getConstructors()[0].newInstance(wolf,subBehavior);
+        } catch (Exception ignored){
+            UpgradedWolves.LOGGER.error("Failed to add Expression:" + clazz.getName());
+        }
+    }
 }
