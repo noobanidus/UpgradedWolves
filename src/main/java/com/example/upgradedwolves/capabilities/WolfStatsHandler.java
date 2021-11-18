@@ -2,6 +2,7 @@ package com.example.upgradedwolves.capabilities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -52,8 +53,13 @@ public class WolfStatsHandler {
     public static IWolfStats getHandler(Wolf entity) {
         IWolfStats stats = entity.getCapability(CAPABILITY_WOLF_STATS, Direction.DOWN).orElse(null);
         stats.setActiveWolf(entity);
-        if(stats.getWolfPersonality() == null)
-            stats.setWolfPersonality(WolfPersonality.getRandomWolfPersonality());
+        if(stats.getWolfPersonality() == null){
+            Random rand = new Random();
+            WolfPersonality personality = WolfPersonality.getRandomWolfPersonality();
+            personality.subBehavior = Behavior.values()[rand.nextInt(Behavior.values().length)];
+            stats.setWolfPersonality(personality);
+        }
+        
         return stats;
     }
 
