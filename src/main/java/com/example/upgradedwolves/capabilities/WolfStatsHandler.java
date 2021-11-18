@@ -52,6 +52,8 @@ public class WolfStatsHandler {
     public static IWolfStats getHandler(Wolf entity) {
         IWolfStats stats = entity.getCapability(CAPABILITY_WOLF_STATS, Direction.DOWN).orElse(null);
         stats.setActiveWolf(entity);
+        if(stats.getWolfPersonality() == null)
+            stats.setWolfPersonality(WolfPersonality.getRandomWolfPersonality());
         return stats;
     }
 
