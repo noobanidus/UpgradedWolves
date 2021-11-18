@@ -108,7 +108,7 @@ public abstract class Expressions extends Goal {
 
     protected LivingEntity getNonFriendlyPartner(){
         EntityFinder<LivingEntity> playerOrMonster = new EntityFinder<LivingEntity>(wolf,LivingEntity.class);
-        List<LivingEntity> entities = playerOrMonster.findWithPredicate(10, 5, x -> (x instanceof Monster && !(x instanceof AbstractSkeleton)) || (x instanceof Player && !isOwner((Player)x)) || (x instanceof Wolf && !sameSide((Wolf)x)));
+        List<LivingEntity> entities = playerOrMonster.findWithPredicate(10, 5, x -> (x instanceof Monster && !(x instanceof AbstractSkeleton)) || (x instanceof Player && !isOwner((Player)x)) || (x instanceof Wolf && !sameSide((Wolf)x) && x != wolf));
         return setPartnerFromList(entities);
     }
     

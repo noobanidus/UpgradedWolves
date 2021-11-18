@@ -6,12 +6,10 @@ import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.personality.expressions.Expressions;
 import com.example.upgradedwolves.personality.expressions.IntimidateExpression;
 
-import net.minecraft.world.entity.animal.Wolf;
-
 public class AggressivePersonality extends WolfPersonality {
 
-    protected AggressivePersonality(Behavior mainBehavior) {
-        super(mainBehavior);
+    public AggressivePersonality() {
+        super(Behavior.Aggressive);
     }
 
     @Override

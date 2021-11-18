@@ -1,4 +1,8 @@
 v1.1.0
++Personalities
+	+ AggressivePersonality
+	+ passive wolf personality.
+
 + Expressions
 	+ Aggressive Follow Expression
 	+ Socialize Expression

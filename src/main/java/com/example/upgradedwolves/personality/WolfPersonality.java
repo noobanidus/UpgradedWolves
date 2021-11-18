@@ -23,7 +23,7 @@ public abstract class WolfPersonality {
 
     public static WolfPersonality getRandomWolfPersonality(){
         //TODO: make this not hardcoded
-        Set<WolfPersonality> personalities = Set.of(new PassivePersonality());
+        Set<WolfPersonality> personalities = Set.of(new PassivePersonality(),new AggressivePersonality());
         Random rand = new Random();
 
         //bruh.... wtf?
@@ -33,7 +33,7 @@ public abstract class WolfPersonality {
     public void setWolfExpressions(Wolf wolf) {
         getExpressions().forEach(x -> assignExpressions(wolf,x));        
     }
-    
+
     public abstract String getName();
 
     public abstract int levelUpStatBonus(WolfStatsEnum stats);
@@ -42,7 +42,7 @@ public abstract class WolfPersonality {
 
     protected void assignExpressions(Wolf wolf, Class<? extends Expressions> clazz){
         try{
-            clazz.getConstructors()[0].newInstance(wolf,subBehavior);
+            wolf.goalSelector.addGoal(3,(Expressions)clazz.getConstructors()[0].newInstance(wolf,subBehavior));
         } catch (Exception ignored){
             UpgradedWolves.LOGGER.error("Failed to add Expression:" + clazz.getName());
         }

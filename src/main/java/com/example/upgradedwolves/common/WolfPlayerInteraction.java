@@ -88,6 +88,7 @@ public class WolfPlayerInteraction {
             else{
                 LogManager.getLogger().info(handler.getLevel(WolfStatsEnum.Love));
                 LogManager.getLogger().info(handler.getWolfType());
+                LogManager.getLogger().info(handler.getWolfPersonality().getClass().getName());
                 handler.InitLove();       
                 final ItemStack foodItem = TrainingEventHandler.getFoodStack(event.getPlayer());
                 final ItemStack goldenBoneItem = TrainingEventHandler.getPlayerHoldingItemStack(event.getPlayer(), GoldenBoneAbstract.class);

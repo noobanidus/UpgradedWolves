@@ -58,6 +58,7 @@ public class WolfStatsHandler {
             WolfPersonality personality = WolfPersonality.getRandomWolfPersonality();
             personality.subBehavior = Behavior.values()[rand.nextInt(Behavior.values().length)];
             stats.setWolfPersonality(personality);
+            stats.getWolfPersonality().setWolfExpressions(entity);
         }
         
         return stats;

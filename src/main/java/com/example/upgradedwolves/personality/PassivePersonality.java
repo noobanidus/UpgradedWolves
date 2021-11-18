@@ -1,15 +1,10 @@
 package com.example.upgradedwolves.personality;
 
-import java.util.List;
 import java.util.stream.Stream;
 
-import com.example.upgradedwolves.UpgradedWolves;
 import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.personality.expressions.Expressions;
 import com.example.upgradedwolves.personality.expressions.PassiveExpression;
-
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.animal.Wolf;
 
 public class PassivePersonality extends WolfPersonality {
 
