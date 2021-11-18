@@ -3,9 +3,12 @@ package com.example.upgradedwolves.personality;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.personality.expressions.Expressions;
+
+import net.minecraft.world.entity.animal.Wolf;
 
 public abstract class WolfPersonality {    
     public Behavior subBehavior;
@@ -30,5 +33,7 @@ public abstract class WolfPersonality {
 
     public abstract int levelUpStatBonus(WolfStatsEnum stats);
 
-    public abstract List<Expressions> getExpressions();
+    public abstract void setWolfExpressions(Wolf wolf);
+
+    public abstract Stream<Class<? extends Expressions>> getExpressions();
 }
