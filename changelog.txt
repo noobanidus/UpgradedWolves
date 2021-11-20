@@ -1,7 +1,13 @@
 v1.1.0
++Personalities, expressions, and behavior
+
 +Personalities
-	+ AggressivePersonality
-	+ passive wolf personality.
+	+ Aggressive Personality
+	+ Passive personality.
+	+ Social Personality
+	+ Dominant Personality
+	+ Affectionate Personality
+	+ Playful Personality
 
 + Expressions
 	+ Aggressive Follow Expression
@@ -9,7 +15,8 @@ v1.1.0
 	+ Playful expression.
 	+ intimidate expression
 	+ Passive expression
-	+ Personalities, expressions, and behavior
+
+Behaviors act like sub personalities, and influence the main personality of a wolf.
 
 ================
 
