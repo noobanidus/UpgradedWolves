@@ -1,5 +1,9 @@
 v1.1.0
+
+Added:
 +Personalities, expressions, and behavior
+Personalities are natural traits given to wolves and are applied randomly. 
+All Powerup behaviors will take precedent over personality behaviors.
 
 +Personalities
 	+ Aggressive Personality
@@ -17,6 +21,10 @@ v1.1.0
 	+ Passive expression
 
 Behaviors act like sub personalities, and influence the main personality of a wolf.
+
+
+Fixed:
+*some goals being interupted by others.
 
 ================
 
