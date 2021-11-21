@@ -1,9 +1,8 @@
 package com.example.upgradedwolves.personality;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.ServiceLoader;
-import java.util.Set;
 import java.util.stream.Stream;
 
 import com.example.upgradedwolves.UpgradedWolves;
@@ -16,7 +15,7 @@ import net.minecraft.world.entity.animal.Wolf;
 
 public abstract class WolfPersonality {    
     public Behavior subBehavior;
-    public static List<Class<? extends WolfPersonality>> addedWolfPersonalities;
+    public static List<Class<? extends WolfPersonality>> addedWolfPersonalities = new ArrayList<Class<? extends WolfPersonality>>();
 
     protected final Behavior mainBehavior;
 
@@ -34,6 +33,15 @@ public abstract class WolfPersonality {
             UpgradedWolves.LOGGER.error("failed to load wolf personality: " + selectedClass.getName());
         }
         return null;
+    }
+
+    public static void addGoals(){
+        addedWolfPersonalities.add(SocialPersonality.class);
+        addedWolfPersonalities.add(AffectionatePersonality.class);
+        addedWolfPersonalities.add(AggressivePersonality.class);
+        addedWolfPersonalities.add(DominantPersonality.class);
+        addedWolfPersonalities.add(PassivePersonality.class);
+        addedWolfPersonalities.add(PlayfulPersonality.class);
     }
     
     public void setWolfExpressions(Wolf wolf) {
