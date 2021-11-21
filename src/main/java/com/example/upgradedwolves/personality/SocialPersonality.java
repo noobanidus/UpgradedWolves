@@ -13,12 +13,6 @@ public class SocialPersonality extends WolfPersonality {
     }
 
     @Override
-    public String getName() {
-        
-        return null;
-    }
-
-    @Override
     public int levelUpStatBonus(WolfStatsEnum stats) {
         if(stats == WolfStatsEnum.Intelligence)
             return 2;
@@ -28,6 +22,11 @@ public class SocialPersonality extends WolfPersonality {
     @Override
     public Stream<Class<? extends Expressions>> getExpressions() {
         return Stream.of(SocializeExpression.class);
+    }
+
+    @Override
+    protected String getResourceName() {        
+        return "social";
     }
     
 }

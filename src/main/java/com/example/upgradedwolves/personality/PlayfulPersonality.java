@@ -13,11 +13,6 @@ public class PlayfulPersonality extends WolfPersonality {
     }
 
     @Override
-    public String getName() {        
-        return null;
-    }
-
-    @Override
     public int levelUpStatBonus(WolfStatsEnum stats) {    
         if(stats == WolfStatsEnum.Speed)
             return 2;
@@ -27,6 +22,11 @@ public class PlayfulPersonality extends WolfPersonality {
     @Override
     public Stream<Class<? extends Expressions>> getExpressions() {        
         return Stream.of(PlayfulExpression.class);
+    }
+
+    @Override
+    protected String getResourceName() {        
+        return "playful";
     }
     
 }

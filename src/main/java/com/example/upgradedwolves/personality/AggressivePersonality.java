@@ -13,12 +13,6 @@ public class AggressivePersonality extends WolfPersonality {
     }
 
     @Override
-    public String getName() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public int levelUpStatBonus(WolfStatsEnum stats) {
         if(stats == WolfStatsEnum.Strength)
             return 2;
@@ -28,6 +22,11 @@ public class AggressivePersonality extends WolfPersonality {
     @Override
     public Stream<Class<? extends Expressions>> getExpressions() {        
         return Stream.of(IntimidateExpression.class);
+    }
+
+    @Override
+    protected String getResourceName() {
+        return "aggressive";
     }
     
 }

@@ -14,12 +14,6 @@ public class PassivePersonality extends WolfPersonality {
     }
 
     @Override
-    public String getName() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public int levelUpStatBonus(WolfStatsEnum stats) {
         if(stats == WolfStatsEnum.Intelligence)
             return 2;
@@ -30,5 +24,10 @@ public class PassivePersonality extends WolfPersonality {
     public Stream<Class<? extends Expressions>> getExpressions() {
         //TODO: attempt to make this non hard coded
         return Stream.of(PassiveExpression.class);
+    }
+
+    @Override
+    protected String getResourceName() {
+        return "passive";
     }
 }
