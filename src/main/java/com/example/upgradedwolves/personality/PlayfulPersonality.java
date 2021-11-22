@@ -8,7 +8,7 @@ import com.example.upgradedwolves.personality.expressions.PlayfulExpression;
 
 public class PlayfulPersonality extends WolfPersonality {
 
-    protected PlayfulPersonality() {
+    public PlayfulPersonality() {
         super(Behavior.Playful);        
     }
 

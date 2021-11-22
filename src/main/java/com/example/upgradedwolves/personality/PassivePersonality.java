@@ -8,7 +8,7 @@ import com.example.upgradedwolves.personality.expressions.PassiveExpression;
 
 public class PassivePersonality extends WolfPersonality {
 
-    protected PassivePersonality() {
+    public PassivePersonality() {
         super(Behavior.Shy);
         //TODO Auto-generated constructor stub
     }

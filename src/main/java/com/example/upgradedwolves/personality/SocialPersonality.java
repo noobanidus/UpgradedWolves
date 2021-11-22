@@ -8,7 +8,7 @@ import com.example.upgradedwolves.personality.expressions.SocializeExpression;
 
 public class SocialPersonality extends WolfPersonality {
 
-    protected SocialPersonality() {
+    public SocialPersonality() {
         super(Behavior.Social);        
     }
 

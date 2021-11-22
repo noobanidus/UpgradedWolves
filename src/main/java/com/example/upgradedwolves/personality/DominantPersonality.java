@@ -8,7 +8,7 @@ import com.example.upgradedwolves.personality.expressions.IntimidateExpression;
 
 public class DominantPersonality extends WolfPersonality {
 
-    protected DominantPersonality() {
+    public DominantPersonality() {
         super(Behavior.Dominant);        
     }
 

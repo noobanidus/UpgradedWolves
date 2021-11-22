@@ -8,7 +8,7 @@ import com.example.upgradedwolves.personality.expressions.Expressions;
 
 public class AffectionatePersonality extends WolfPersonality {
 
-    protected AffectionatePersonality() {
+    public AffectionatePersonality() {
         super(Behavior.Affectionate);        
     }
 

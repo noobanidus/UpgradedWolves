@@ -19,7 +19,7 @@ public abstract class WolfPersonality {
 
     protected final Behavior mainBehavior;
 
-    protected WolfPersonality(Behavior mainBehavior){
+    public WolfPersonality(Behavior mainBehavior){
         this.mainBehavior = mainBehavior;
     }
 
