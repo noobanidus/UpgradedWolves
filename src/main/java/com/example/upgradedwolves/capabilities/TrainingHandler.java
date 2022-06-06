@@ -11,15 +11,15 @@ import net.minecraft.nbt.IntTag;
 import net.minecraft.core.Direction;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class TrainingHandler {
-    @CapabilityInject(ITraining.class)
-    public static final Capability<ITraining> CAPABILITY_TRAINING = null;
+    public static final Capability<ITraining> CAPABILITY_TRAINING = CapabilityManager.get(new CapabilityToken<>() {});
 
     public interface ITraining{
         public void setAttribute(int value);        

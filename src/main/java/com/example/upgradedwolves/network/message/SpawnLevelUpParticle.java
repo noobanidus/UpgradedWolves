@@ -14,7 +14,7 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraftforge.fmllegacy.network.NetworkEvent.Context;
+import net.minecraftforge.network.NetworkEvent.Context;
 
 public class SpawnLevelUpParticle implements IMessage<SpawnLevelUpParticle> {
     int wolfId;
@@ -31,9 +31,10 @@ public class SpawnLevelUpParticle implements IMessage<SpawnLevelUpParticle> {
     }
 
     @Override
-    public void encode(SpawnLevelUpParticle message, FriendlyByteBuf buffer) {
+    public SpawnLevelUpParticle encode(SpawnLevelUpParticle message, FriendlyByteBuf buffer) {
         buffer.writeInt(message.wolfId);
         buffer.writeInt(message.statId);
+        return message;
     }
 
     @Override
@@ -43,7 +44,7 @@ public class SpawnLevelUpParticle implements IMessage<SpawnLevelUpParticle> {
     }
 
     @Override
-    public void handle(SpawnLevelUpParticle message, Supplier<Context> supplier) {
+    public SpawnLevelUpParticle handle(SpawnLevelUpParticle message, Supplier<Context> supplier) {
         supplier.get().enqueueWork(() -> {
             Minecraft mc = Minecraft.getInstance();
             Wolf wolf = (Wolf)mc.level.getEntity(message.wolfId);
@@ -71,6 +72,7 @@ public class SpawnLevelUpParticle implements IMessage<SpawnLevelUpParticle> {
                 mc.level.addParticle(pt, false, wolf.getPosition(1).x() + r.nextDouble(), wolf.getPosition(1).y() + r.nextDouble(), wolf.getPosition(1).z() + r.nextDouble(), r.nextDouble()/5, r.nextDouble()/5, r.nextDouble()/5);
         });
         supplier.get().setPacketHandled(true);
+        return message;
     }
     
 }

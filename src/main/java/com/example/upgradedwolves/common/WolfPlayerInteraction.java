@@ -21,7 +21,6 @@ import com.example.upgradedwolves.items.TugOfWarRopeItem;
 import com.example.upgradedwolves.items.GoldenBone.GoldenBoneAbstract;
 import com.example.upgradedwolves.network.PacketHandler;
 import com.example.upgradedwolves.network.message.RenderMessage;
-import com.example.upgradedwolves.personality.Behavior;
 import com.example.upgradedwolves.items.MobPlushy;
 
 import org.apache.logging.log4j.LogManager;
@@ -53,8 +52,8 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
-import net.minecraftforge.fmllegacy.network.PacketDistributor;
+import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.network.PacketDistributor;
 
 public class WolfPlayerInteraction {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -106,7 +105,7 @@ public class WolfPlayerInteraction {
                         foodItem.shrink(1);
                         tHandler.resetAttribute();
                         if(Thread.currentThread().getName() == "Server thread")
-                            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getId(),WolfStatsHandler.getHandler(wolf).getWolfType(),handler.getWolfFur()));
+                            PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getId(),WolfStatsHandler.getHandler(wolf).getWolfType(),handler.getWolfFur()));
                     }
                 } else if (goldenBoneItem != null){
                     GoldenBoneAbstract goldenBone = (GoldenBoneAbstract)goldenBoneItem.getItem();
@@ -149,7 +148,7 @@ public class WolfPlayerInteraction {
     public void onStartTracking(PlayerEvent.StartTracking event){        
         event.getTarget().getCapability(WolfStatsHandler.CAPABILITY_WOLF_STATS).ifPresent(capability -> {
             Wolf wolf = (Wolf)event.getTarget();
-            PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getPlayer()), new RenderMessage(wolf.getId(),capability.getWolfType(),WolfStatsHandler.getHandler(wolf).getWolfFur()));
+            PacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getPlayer()), new RenderMessage(wolf.getId(),capability.getWolfType(),WolfStatsHandler.getHandler(wolf).getWolfFur()));
             wolf.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(capability.getWolfSpeed());
         });
     }
@@ -161,7 +160,7 @@ public class WolfPlayerInteraction {
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             //Scavenger Wolf Bonus
             handler.addXp(WolfStatsEnum.Speed,(handler.getWolfType() == 2 ? 1 : 0));
-            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getId(),handler.getWolfType(),handler.getWolfFur()) );
+            PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getId(),handler.getWolfType(),handler.getWolfFur()) );
         }
     }
     @SubscribeEvent
@@ -171,7 +170,7 @@ public class WolfPlayerInteraction {
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             handler.addXp(WolfStatsEnum.Strength,1);
             handler.addXp(WolfStatsEnum.Intelligence,(handler.getWolfType() == 3 ? 2 : 1));
-            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getId(),handler.getWolfType(),handler.getWolfFur()) );
+            PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getId(),handler.getWolfType(),handler.getWolfFur()) );
         }
     }
     @SubscribeEvent

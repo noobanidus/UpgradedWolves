@@ -16,7 +16,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.pathfinder.Path;
-import net.minecraftforge.fmllegacy.network.PacketDistributor;
+import net.minecraftforge.network.PacketDistributor;
 import net.minecraft.server.level.ServerPlayer;
 
 public class TugOfWarGaol extends Goal {
@@ -51,7 +51,7 @@ public class TugOfWarGaol extends Goal {
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             handler.clearRopeHolder();
             handler.addXp(WolfStatsEnum.Strength, 2);
-            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getId(),0,0,false) );
+            PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getId(),0,0,false) );
             return false;
         }
     }
@@ -68,7 +68,7 @@ public class TugOfWarGaol extends Goal {
             double d1 = (playerIn.getY() - wolf.getY()) / (double)distance;
             double d2 = (playerIn.getZ() - wolf.getZ()) / (double)distance;
             wolf.setDeltaMovement(wolf.getDeltaMovement().add(Math.copySign(d0 * d0 * 0.5D, d0), Math.copySign(d1 * d1 * 0.5D, d1), Math.copySign(d2 * d2 * 0.5D, d2)));
-            PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)playerIn), new MovePlayerMessage(playerIn.getUUID(),d0,d1,d2));
+            PacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)playerIn), new MovePlayerMessage(playerIn.getUUID(),d0,d1,d2));
         }
         
     }

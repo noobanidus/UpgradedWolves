@@ -22,7 +22,6 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraftforge.fmlclient.gui.GuiUtils;
 
 public class PowerUpGui extends GuiComponent {
    Minecraft minecraft;
@@ -131,8 +130,7 @@ public class PowerUpGui extends GuiComponent {
          textBoxInfo.add(new TextComponent("???").setStyle(Style.EMPTY.withItalic(true)));
          textBoxInfo.add(new TranslatableComponent("powerup.required.level",powerUp.levelType().toString(),powerUp.requiredLevel()).setStyle(redStyle));
       }
-      
-      GuiUtils.drawHoveringText(matrixStack, textBoxInfo, mouseX, mouseY, width, height, width, font);
+      this.minecraft.screen.renderComponentTooltip(matrixStack, textBoxInfo, mouseX, mouseY);
       matrixStack.popPose();
       if (flag) {
          this.fade = Mth.clamp(this.fade + 0.02F, 0.0F, 0.3F);

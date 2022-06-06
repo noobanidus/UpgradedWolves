@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.fmllegacy.network.NetworkEvent.Context;
+import net.minecraftforge.network.NetworkEvent.Context;
 
 public class MovePlayerMessage implements IMessage<MovePlayerMessage> {
     UUID playerId;
@@ -29,11 +29,12 @@ public class MovePlayerMessage implements IMessage<MovePlayerMessage> {
     }
 
     @Override
-    public void encode(MovePlayerMessage message, FriendlyByteBuf buffer) {
+    public MovePlayerMessage encode(MovePlayerMessage message, FriendlyByteBuf buffer) {
         buffer.writeUUID(message.playerId);
         buffer.writeDouble(message.d0);
         buffer.writeDouble(message.d1);
-        buffer.writeDouble(message.d2);        
+        buffer.writeDouble(message.d2);
+        return message;   
     }
 
     @Override
@@ -43,14 +44,14 @@ public class MovePlayerMessage implements IMessage<MovePlayerMessage> {
     }
 
     @Override
-    public void handle(MovePlayerMessage message, Supplier<Context> supplier) {
+    public MovePlayerMessage handle(MovePlayerMessage message, Supplier<Context> supplier) {
         supplier.get().enqueueWork(() -> {
             Minecraft mc = Minecraft.getInstance();
             Player playerIn = (Player)mc.level.getPlayerByUUID(message.playerId);
             playerIn.setDeltaMovement(playerIn.getDeltaMovement().add(Math.copySign(message.d0 * message.d0 * 0.5D, -message.d0), Math.copySign(message.d1 * message.d1 * 0.5D, -message.d1), Math.copySign(message.d2 * message.d2 * 0.5D, -message.d2)));
         });
         supplier.get().setPacketHandled(true);
-        
+        return message;
     }
     
 }

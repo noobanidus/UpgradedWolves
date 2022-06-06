@@ -9,24 +9,27 @@ import com.example.upgradedwolves.network.message.SpawnLevelUpParticle;
 import com.example.upgradedwolves.network.message.SyncWolfHandMessage;
 import com.example.upgradedwolves.network.message.TrainingItemMessage;
 
-import net.minecraftforge.fmllegacy.network.NetworkRegistry;
-import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.simple.SimpleChannel;
 
 public class PacketHandler
 {
     public static final String PROTOCOL_VERSION = "1";
 
-    public static SimpleChannel instance;
+    public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(UpgradedWolves.getId("main"),
+        () -> PROTOCOL_VERSION,
+        PROTOCOL_VERSION::equals,
+        PROTOCOL_VERSION::equals);
     private static int nextId = 0;
 
     public static void register()
     {
-        instance = NetworkRegistry.ChannelBuilder
-                .named(UpgradedWolves.getId("network"))
-                .networkProtocolVersion(() -> PROTOCOL_VERSION)
-                .clientAcceptedVersions(PROTOCOL_VERSION::equals)
-                .serverAcceptedVersions(PROTOCOL_VERSION::equals)
-                .simpleChannel();
+        // INSTANCE = NetworkRegistry.ChannelBuilder
+        //         .named(UpgradedWolves.getId("network"))
+        //         .networkProtocolVersion(() -> PROTOCOL_VERSION)
+        //         .clientAcceptedVersions(PROTOCOL_VERSION::equals)
+        //         .serverAcceptedVersions(PROTOCOL_VERSION::equals)
+        //         .simpleChannel();
 
         register(TrainingItemMessage.class,new TrainingItemMessage());
         register(RenderMessage.class, new RenderMessage());
@@ -39,6 +42,6 @@ public class PacketHandler
 
     private static <T> void register(Class<T> clazz, IMessage<T> message)
     {
-        instance.registerMessage(nextId++, clazz, message::encode, message::decode, message::handle);
+        INSTANCE.registerMessage(nextId++, clazz, message::encode, message::decode, message::handle);
     }
 }

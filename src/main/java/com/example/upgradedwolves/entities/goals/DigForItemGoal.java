@@ -6,7 +6,7 @@ import com.example.upgradedwolves.network.PacketHandler;
 import com.example.upgradedwolves.network.message.CreateParticleForMobMessage;
 
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fmllegacy.network.PacketDistributor;
+import net.minecraftforge.network.PacketDistributor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.item.ItemStack;
@@ -48,7 +48,7 @@ public class DigForItemGoal extends CoolDownGoal {
     public boolean canContinueToUse() {
         if(currentTime++ < timer){
             wolf.playSound(type.getBlock().getSoundType(null, null, null, null).getPlaceSound(), 0.5F, (1.0F + (wolf.getRandom().nextFloat() - wolf.getRandom().nextFloat()) * 0.2F) * 0.7F);            
-            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new CreateParticleForMobMessage(wolf.getId(),new BlockParticleOption(ParticleTypes.BLOCK, type),1));            
+            PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new CreateParticleForMobMessage(wolf.getId(),new BlockParticleOption(ParticleTypes.BLOCK, type),1));            
             return true;
         }
         currentTime = 0;
@@ -58,7 +58,7 @@ public class DigForItemGoal extends CoolDownGoal {
     }
     
     private boolean isGrassBlock(BlockState blockStateIn){
-        return blockStateIn.is(Blocks.GRASS_BLOCK) || net.minecraftforge.common.Tags.Blocks.DIRT.contains(blockStateIn.getBlock());
+        return blockStateIn.is(Blocks.GRASS_BLOCK) || blockStateIn.is(Blocks.GRAVEL);
     }
 
     private boolean isSandBlock(BlockState blockStateIn){

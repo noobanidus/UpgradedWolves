@@ -8,7 +8,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 
 public class CreateParticleForMobMessage implements IMessage<CreateParticleForMobMessage> {
     protected int entityId;
@@ -27,10 +27,11 @@ public class CreateParticleForMobMessage implements IMessage<CreateParticleForMo
     }
 
     @Override
-    public void encode(CreateParticleForMobMessage message, FriendlyByteBuf buffer) {     
+    public CreateParticleForMobMessage encode(CreateParticleForMobMessage message, FriendlyByteBuf buffer) {     
         EntityDataSerializers.PARTICLE.write(buffer, message.particleData);
         buffer.writeInt(message.entityId);
         buffer.writeInt(message.count);
+        return message;
     }
 
     @Override
@@ -43,7 +44,7 @@ public class CreateParticleForMobMessage implements IMessage<CreateParticleForMo
     }
 
     @Override
-    public void handle(CreateParticleForMobMessage message, Supplier<NetworkEvent.Context> supplier) {
+    public CreateParticleForMobMessage handle(CreateParticleForMobMessage message, Supplier<NetworkEvent.Context> supplier) {
         supplier.get().enqueueWork(() -> {
             Minecraft mc = Minecraft.getInstance();
             Entity entity = (Entity)mc.level.getEntity(message.entityId);
@@ -52,7 +53,7 @@ public class CreateParticleForMobMessage implements IMessage<CreateParticleForMo
             for(int i = 0; i < message.count; i++)
                 mc.level.addParticle(message.particleData, false, entity.getPosition(1).x + r.nextDouble(), entity.getPosition(1).y + r.nextDouble(), entity.getPosition(1).z + r.nextDouble(), r.nextDouble()/5, r.nextDouble()/5, r.nextDouble()/5);
         });
-
+        return message;
     }
 
 }

@@ -3,7 +3,6 @@ package com.example.upgradedwolves.capabilities;
 import java.util.List;
 
 import com.example.upgradedwolves.itemHandler.WolfItemStackHandler;
-import com.example.upgradedwolves.personality.Behavior;
 import com.example.upgradedwolves.personality.WolfPersonality;
 
 import net.minecraft.world.entity.Entity;

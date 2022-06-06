@@ -8,7 +8,7 @@ import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.fmllegacy.network.NetworkEvent.Context;
+import net.minecraftforge.network.NetworkEvent.Context;
 
 public class RenderMessage implements IMessage<RenderMessage> {
     int wolfId;
@@ -38,11 +38,12 @@ public class RenderMessage implements IMessage<RenderMessage> {
     }
 
     @Override
-    public void encode(RenderMessage message, FriendlyByteBuf buffer) {
+    public RenderMessage encode(RenderMessage message, FriendlyByteBuf buffer) {
         buffer.writeInt(message.wolfId);
         buffer.writeInt(message.wolfValue);
         buffer.writeInt(message.wolfFur);
         buffer.writeBoolean(message.renderType);
+        return message;
     }
 
     @Override
@@ -52,7 +53,7 @@ public class RenderMessage implements IMessage<RenderMessage> {
     }
 
     @Override
-    public void handle(RenderMessage message, Supplier<Context> supplier) {
+    public RenderMessage handle(RenderMessage message, Supplier<Context> supplier) {
         supplier.get().enqueueWork(() -> {
             Minecraft mc = Minecraft.getInstance();
             Wolf wolf = (Wolf)mc.level.getEntity(message.wolfId);
@@ -65,7 +66,7 @@ public class RenderMessage implements IMessage<RenderMessage> {
                 handler.clearRopeHolder();
         });
         supplier.get().setPacketHandled(true);
-
+        return message;
     }
     
 }

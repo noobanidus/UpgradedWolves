@@ -3,6 +3,7 @@ package com.example.upgradedwolves.entities.goals;
 import java.util.List;
 import java.util.Random;
 
+import com.example.upgradedwolves.UpgradedWolves;
 import com.example.upgradedwolves.entities.utilities.AbilityEnhancer;
 import com.example.upgradedwolves.entities.utilities.EntityFinder;
 import com.example.upgradedwolves.network.PacketHandler;
@@ -10,7 +11,7 @@ import com.example.upgradedwolves.network.message.CreateParticleForMobMessage;
 
 import net.minecraft.world.entity.NeutralMob;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraftforge.fmllegacy.network.PacketDistributor;
+import net.minecraftforge.network.PacketDistributor;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
@@ -47,7 +48,7 @@ public class BarkStunGoal extends CoolDownGoal {
         wof.playSound(SoundEvents.WOLF_AMBIENT, 20, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.02F + .7F);        
         for (Monster mobEntity : enemies) {
             mobEntity.setNoAi(true);
-            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> mobEntity), new CreateParticleForMobMessage(mobEntity.getId(),ParticleTypes.FLAME,10));
+            PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> mobEntity), new CreateParticleForMobMessage(mobEntity.getId(),ParticleTypes.FLAME,10));
         }
         startCoolDown();
     }

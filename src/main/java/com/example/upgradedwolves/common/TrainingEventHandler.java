@@ -25,7 +25,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fmllegacy.network.PacketDistributor;
+import net.minecraftforge.network.PacketDistributor;
 
 public class TrainingEventHandler {
     @SubscribeEvent
@@ -40,7 +40,7 @@ public class TrainingEventHandler {
         //     ITraining handler = TrainingHandler.getHandler(foodItem);
         //     handler.setAttribute(3);
         //     if(Thread.currentThread().getName() == "Server thread"){                
-        //         PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getPlayer()), new TrainingItemMessage(3, event.getPlayer()getId()));
+        //         PacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getPlayer()), new TrainingItemMessage(3, event.getPlayer()getId()));
         //     }
         // }
         else if(block instanceof OreBlock){
@@ -48,7 +48,7 @@ public class TrainingEventHandler {
             ITraining handler = TrainingHandler.getHandler(foodItem);
             handler.setAttribute(2);
             if(Thread.currentThread().getName() == "Server thread"){
-                PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getPlayer()), new TrainingItemMessage(2, event.getPlayer().getId()));
+                PacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getPlayer()), new TrainingItemMessage(2, event.getPlayer().getId()));
             }
         }
     }
@@ -66,7 +66,7 @@ public class TrainingEventHandler {
                 ITraining handler = TrainingHandler.getHandler(foodItem);
                 handler.setAttribute(1);                         
                 if(Thread.currentThread().getName() == "Server thread"){
-                    PacketHandler.instance.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)player), new TrainingItemMessage(1, player.getId()));
+                    PacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)player), new TrainingItemMessage(1, player.getId()));
                 }
             }
         }

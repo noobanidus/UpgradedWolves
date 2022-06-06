@@ -12,7 +12,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.InteractionHand;
-import net.minecraftforge.fmllegacy.network.PacketDistributor;
+import net.minecraftforge.network.PacketDistributor;
 
 @ClientGoal
 public class UseSwordGoal extends Goal implements Serializable {
@@ -33,7 +33,7 @@ public class UseSwordGoal extends Goal implements Serializable {
             if(swordSlot >= 0){
                 sword = wolfInventory.extractItem(wolfInventory.getSword(), 1, false);
                 wolf.setItemInHand(InteractionHand.MAIN_HAND, sword);
-                PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new SyncWolfHandMessage(wolf.getId(),sword));
+                PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new SyncWolfHandMessage(wolf.getId(),sword));
                 return true;
             }
         }
@@ -43,7 +43,7 @@ public class UseSwordGoal extends Goal implements Serializable {
     @Override
     public boolean canContinueToUse() {        
         if(wolf.getTarget() != null && super.canContinueToUse()){
-            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new SyncWolfHandMessage(wolf.getId(),ItemStack.EMPTY));
+            PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new SyncWolfHandMessage(wolf.getId(),ItemStack.EMPTY));
             return false;
         }
         return true;

@@ -32,18 +32,18 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fmllegacy.network.PacketDistributor;
+import net.minecraftforge.network.PacketDistributor;
 
 public class WolfStatsHandler {
-    @CapabilityInject(IWolfStats.class)
     
-    public static final Capability<IWolfStats> CAPABILITY_WOLF_STATS = null;
+    public static final Capability<IWolfStats> CAPABILITY_WOLF_STATS = CapabilityManager.get(new CapabilityToken<>() {});
 
     public static void register() {        
         MinecraftForge.EVENT_BUS.register(new WolfStatsHandler());
@@ -326,7 +326,7 @@ public class WolfStatsHandler {
         }
         @Override
         public void showParticle(int type){
-            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> currentWolf), new SpawnLevelUpParticle( currentWolf.getId(),type));
+            PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> currentWolf), new SpawnLevelUpParticle( currentWolf.getId(),type));
         }
         @Override
         public void setRopeHolder(Entity holder) {

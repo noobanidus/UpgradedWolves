@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fmllegacy.network.NetworkEvent.Context;
+import net.minecraftforge.network.NetworkEvent.Context;
 
 public class TrainingItemMessage implements IMessage<TrainingItemMessage> {
     int wolfValue;
@@ -26,10 +26,11 @@ public class TrainingItemMessage implements IMessage<TrainingItemMessage> {
         playerId = id;
     }
     @Override
-    public void encode(TrainingItemMessage message, FriendlyByteBuf buffer) {                
+    public TrainingItemMessage encode(TrainingItemMessage message, FriendlyByteBuf buffer) {                
         
         buffer.writeInt(message.wolfValue);        
         buffer.writeInt(message.playerId);
+        return message;
     }
 
     @Override
@@ -38,12 +39,12 @@ public class TrainingItemMessage implements IMessage<TrainingItemMessage> {
     }
 
     @Override
-    public void handle(TrainingItemMessage message, Supplier<Context> supplier) {
+    public TrainingItemMessage handle(TrainingItemMessage message, Supplier<Context> supplier) {
         supplier.get().enqueueWork(() -> {
             setItemAttribute(message);
         });
         supplier.get().setPacketHandled(true);
-
+        return message;
     }
 
     @OnlyIn(Dist.CLIENT)
