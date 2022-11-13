@@ -50,7 +50,7 @@ public class SpawnLevelUpParticle implements IMessage<SpawnLevelUpParticle> {
             Wolf wolf = (Wolf)mc.level.getEntity(message.wolfId);
             WolfStatsEnum stat = WolfStatsEnum.values()[message.statId];
             if(wolf.getOwner() == mc.player && message.statId != 3){
-                mc.player.chat(null,Component.translatable("chat.upgradedwolves.level_up",wolf.getName(),stat.toString()));
+                mc.player.chatSigned(null,Component.translatable("chat.upgradedwolves.level_up",wolf.getName(),stat.toString()));
             }
             Random r = new Random();
             SimpleParticleType pt = ParticleTypes.FLASH;
