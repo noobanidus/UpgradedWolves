@@ -41,13 +41,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDestroyBlockEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.living.LootingLevelEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
-import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingTickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -66,7 +66,7 @@ public class WolfPlayerInteraction {
                 wolf.setOrderedToSit(false);
                 return;
             }
-            if(wolf.getOwner() == event.getPlayer() && event.getPlayer().isCrouching()){
+            if(wolf.getOwner() == event.getEntity() && event.getEntity().isCrouching()){
                 if(Thread.currentThread().getName() == "Server thread"){
                     MenuProvider wolfInventory = new ContainerProviderWolfInventory(wolf,handler.getInventory());
                     CompoundTag nbt = new CompoundTag();
@@ -77,7 +77,7 @@ public class WolfPlayerInteraction {
                     nbt.putFloat("spdNum", handler.getStatRatio(WolfStatsEnum.Speed));
                     nbt.putFloat("intNum", handler.getStatRatio(WolfStatsEnum.Intelligence));
                     nbt.putInt("wolfType", handler.getWolfType());
-                    NetworkHooks.openGui((ServerPlayer)event.getPlayer(),
+                    NetworkHooks.openScreen((ServerPlayer)event.getEntity(),
                         wolfInventory,
                         (packetBuffer) ->{packetBuffer.writeInt(handler.getInventory().getSlots());packetBuffer.writeInt(wolf.getId());packetBuffer.writeNbt(nbt);}
                     );
@@ -89,9 +89,9 @@ public class WolfPlayerInteraction {
                 LogManager.getLogger().info(handler.getWolfType());
                 LogManager.getLogger().info(handler.getWolfPersonality().getClass().getName());
                 handler.InitLove();       
-                final ItemStack foodItem = TrainingEventHandler.getFoodStack(event.getPlayer());
-                final ItemStack goldenBoneItem = TrainingEventHandler.getPlayerHoldingItemStack(event.getPlayer(), GoldenBoneAbstract.class);
-                final ItemStack tugOfWarRopeItem = TrainingEventHandler.getPlayerHoldingItemStack(event.getPlayer(), TugOfWarRopeItem.class);                
+                final ItemStack foodItem = TrainingEventHandler.getFoodStack(event.getEntity());
+                final ItemStack goldenBoneItem = TrainingEventHandler.getPlayerHoldingItemStack(event.getEntity(), GoldenBoneAbstract.class);
+                final ItemStack tugOfWarRopeItem = TrainingEventHandler.getPlayerHoldingItemStack(event.getEntity(), TugOfWarRopeItem.class);                
                 if(foodItem != null){
                     final ITraining tHandler = TrainingHandler.getHandler(foodItem);
                     final int item = tHandler.getAttribute();                
@@ -111,11 +111,11 @@ public class WolfPlayerInteraction {
                     GoldenBoneAbstract goldenBone = (GoldenBoneAbstract)goldenBoneItem.getItem();
                     if(Thread.currentThread().getName() == "Server thread")
                         goldenBone.rightClickWolf(wolf,handler);
-                    if(!event.getPlayer().isCreative())
+                    if(!event.getEntity().isCreative())
                         goldenBoneItem.shrink(1);
                     wolf.setOrderedToSit(!wolf.isOrderedToSit());
                 } else if (tugOfWarRopeItem != null){
-                    handler.setRopeHolder(event.getPlayer());
+                    handler.setRopeHolder(event.getEntity());
                     wolf.setOrderedToSit(true);
                     tugOfWarRopeItem.shrink(1);
                 }
@@ -148,7 +148,7 @@ public class WolfPlayerInteraction {
     public void onStartTracking(PlayerEvent.StartTracking event){        
         event.getTarget().getCapability(WolfStatsHandler.CAPABILITY_WOLF_STATS).ifPresent(capability -> {
             Wolf wolf = (Wolf)event.getTarget();
-            PacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getPlayer()), new RenderMessage(wolf.getId(),capability.getWolfType(),WolfStatsHandler.getHandler(wolf).getWolfFur()));
+            PacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getEntity()), new RenderMessage(wolf.getId(),capability.getWolfType(),WolfStatsHandler.getHandler(wolf).getWolfFur()));
             wolf.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(capability.getWolfSpeed());
         });
     }
@@ -174,7 +174,7 @@ public class WolfPlayerInteraction {
         }
     }
     @SubscribeEvent
-    public void onWolfPickUp(LivingUpdateEvent event){        
+    public void onWolfPickUp(LivingTickEvent event){        
         if(event.getEntity() instanceof Wolf){
             Wolf wolf = (Wolf)event.getEntity();
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
@@ -233,7 +233,7 @@ public class WolfPlayerInteraction {
         }
     }
     @SubscribeEvent
-    public void AddWolfGoals(EntityJoinWorldEvent event){
+    public void AddWolfGoals(EntityJoinLevelEvent event){
         if(event.getEntity() instanceof Wolf){
             Wolf wolf = (Wolf)event.getEntity();
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);

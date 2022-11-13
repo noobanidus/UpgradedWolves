@@ -11,7 +11,6 @@ import com.example.upgradedwolves.personality.expressions.Expressions;
 import com.example.upgradedwolves.personality.expressions.ReciprocalExpression;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.animal.Wolf;
 
 public abstract class WolfPersonality {    
@@ -51,7 +50,7 @@ public abstract class WolfPersonality {
     }
 
     public Component getNameComponent(){
-        return new TranslatableComponent("personality.upgradedwolves." + getResourceName());
+        return Component.translatable("personality.upgradedwolves." + getResourceName());
     }
 
     public abstract int levelUpStatBonus(WolfStatsEnum stats);

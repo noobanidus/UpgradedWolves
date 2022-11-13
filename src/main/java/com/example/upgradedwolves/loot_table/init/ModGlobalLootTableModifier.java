@@ -1,8 +1,12 @@
 package com.example.upgradedwolves.loot_table.init;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.example.upgradedwolves.UpgradedWolves;
 import com.example.upgradedwolves.itemHandler.WolfToysHandler;
 import com.example.upgradedwolves.loot_table.modifier.ChestLootModifier;
+import com.mojang.serialization.Codec;
 
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.item.Items;
@@ -10,15 +14,15 @@ import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.data.GlobalLootModifierProvider;
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.loot.LootTableIdCondition;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 public class ModGlobalLootTableModifier extends GlobalLootModifierProvider{
-    public static final DeferredRegister<GlobalLootModifierSerializer<?>> LOOT_MODIFIERS = DeferredRegister.create(ForgeRegistries.Keys.LOOT_MODIFIER_SERIALIZERS,UpgradedWolves.ModId);
-    public static final net.minecraftforge.registries.RegistryObject<ChestLootModifier.Serializer> CHEST_LOOT = LOOT_MODIFIERS.register("chest_loot", ChestLootModifier.Serializer::new);
+    public static final DeferredRegister<Codec<? extends IGlobalLootModifier>> LOOT_MODIFIERS = DeferredRegister.create(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS,UpgradedWolves.ModId);
+    public static final net.minecraftforge.registries.RegistryObject<Codec<ChestLootModifier>> CHEST_LOOT = LOOT_MODIFIERS.register("chest_loot", ChestLootModifier.CODEC);
     
     public ModGlobalLootTableModifier(DataGenerator gen) {
         super(gen, UpgradedWolves.ModId);
@@ -30,8 +34,8 @@ public class ModGlobalLootTableModifier extends GlobalLootModifierProvider{
     }
 
     protected void addChestLootModifiers() {
-        NonNullList<ChestLootModifier.ChestItem> enchantedChestDrops = NonNullList.create();
-        NonNullList<ChestLootModifier.ChestItem> normalChestDrops = NonNullList.create();
+        List<ChestLootModifier.ChestItem> enchantedChestDrops = new ArrayList<ChestLootModifier.ChestItem>();
+        List<ChestLootModifier.ChestItem> normalChestDrops = new ArrayList<ChestLootModifier.ChestItem>();
         
         ResourceLocation[] enchantedLootTables = new ResourceLocation[]{
             BuiltInLootTables.ABANDONED_MINESHAFT,
@@ -50,15 +54,15 @@ public class ModGlobalLootTableModifier extends GlobalLootModifierProvider{
             BuiltInLootTables.VILLAGE_TAIGA_HOUSE
         };
         
-        enchantedChestDrops.add(new ChestLootModifier.ChestItem(WolfToysHandler.GOLDENBONE, 1, 1, 0.3f));
-        enchantedChestDrops.add(new ChestLootModifier.ChestItem(WolfToysHandler.ENCHANTEDGOLDENBONE, 1, 1, 0.06f));
-        enchantedChestDrops.add(new ChestLootModifier.ChestItem(Items.DANDELION, 2, 10, 0.5f));
+        enchantedChestDrops.add(new ChestLootModifier.ChestItem(WolfToysHandler.GOLDENBONE,0.3f,1));
+        enchantedChestDrops.add(new ChestLootModifier.ChestItem(WolfToysHandler.ENCHANTEDGOLDENBONE, 0.06f,1));
+        enchantedChestDrops.add(new ChestLootModifier.ChestItem(Items.DANDELION, 0.5f,10));
 
-        normalChestDrops.add(new ChestLootModifier.ChestItem(WolfToysHandler.GOLDENBONE, 1, 1, 0.1f));
-        normalChestDrops.add(new ChestLootModifier.ChestItem(Items.DANDELION, 2, 10, 0.3f));
+        normalChestDrops.add(new ChestLootModifier.ChestItem(WolfToysHandler.GOLDENBONE,0.1f,1));
+        normalChestDrops.add(new ChestLootModifier.ChestItem(Items.DANDELION, 0.3f,10));
 
         for (ResourceLocation resourceLocation : enchantedLootTables) {
-            add(resourceLocation.getPath(), CHEST_LOOT.get(), new ChestLootModifier(
+            add(resourceLocation.getPath(), new ChestLootModifier(
                 new LootItemCondition[] {
                         LootTableIdCondition.builder(resourceLocation).build(),
                 },
@@ -67,7 +71,7 @@ public class ModGlobalLootTableModifier extends GlobalLootModifierProvider{
         }
 
         for (ResourceLocation resourceLocation : normalLootTables) {
-            add(resourceLocation.getPath(), CHEST_LOOT.get(), new ChestLootModifier(
+            add(resourceLocation.getPath(), new ChestLootModifier(
                 new LootItemCondition[] {
                         LootTableIdCondition.builder(resourceLocation).build(),
                 },

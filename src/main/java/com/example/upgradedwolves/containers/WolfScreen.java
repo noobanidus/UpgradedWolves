@@ -12,7 +12,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.TextComponent;
 
 import java.awt.*;
 
@@ -57,8 +56,8 @@ public class WolfScreen extends AbstractContainerScreen<WolfContainer> {
     @Override
     protected void renderLabels(PoseStack matrixStack, int x, int y) {
         final float BAG_LABEL_YPOS = 5;
-        //TranslatableComponent bagLabel = new TranslatableComponent(StartupCommon.itemFlowerBag.getTranslationKey());
-        Component bagLabel = new TextComponent("Wolf Inventory");
+        //TranslatableComponent bagLabel = Component.translatable(StartupCommon.itemFlowerBag.getTranslationKey());
+        Component bagLabel = Component.literal("Wolf Inventory");
         if(wolf.hasCustomName())
             bagLabel = wolf.getCustomName();
         float BAG_LABEL_XPOS = (imageWidth * .7F) - this.font.width(bagLabel.getString()) / 2.0F;                  // centre the label
@@ -139,9 +138,9 @@ public class WolfScreen extends AbstractContainerScreen<WolfContainer> {
         this.font.draw(matrixStack, this.playerInventoryTitle,                              //this.font.drawString;
         PLAYER_LABEL_XPOS, PLAYER_LABEL_YPOS, Color.darkGray.getRGB());
 
-        this.font.draw(matrixStack, new TextComponent(strength), 76, 29, Color.darkGray.getRGB());
-        this.font.draw(matrixStack, new TextComponent(speed), 76, 39, Color.darkGray.getRGB());
-        this.font.draw(matrixStack, new TextComponent(intelligence), 76, 49, Color.darkGray.getRGB());
+        this.font.draw(matrixStack, Component.literal(strength), 76, 29, Color.darkGray.getRGB());
+        this.font.draw(matrixStack, Component.literal(speed), 76, 39, Color.darkGray.getRGB());
+        this.font.draw(matrixStack, Component.literal(intelligence), 76, 49, Color.darkGray.getRGB());
     }
 
     void drawPowerUpForeground(PoseStack matrixStack, int x, int y){

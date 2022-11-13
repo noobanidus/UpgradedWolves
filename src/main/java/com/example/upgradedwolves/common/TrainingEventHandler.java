@@ -11,7 +11,7 @@ import com.example.upgradedwolves.network.message.TrainingItemMessage;
 import org.apache.logging.log4j.LogManager;
 
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.OreBlock;
+import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.monster.Monster;
@@ -22,7 +22,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
-import net.minecraftforge.event.world.BlockEvent.BreakEvent;
+import net.minecraftforge.event.level.BlockEvent.BreakEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.network.PacketDistributor;
@@ -43,7 +43,7 @@ public class TrainingEventHandler {
         //         PacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getPlayer()), new TrainingItemMessage(3, event.getPlayer()getId()));
         //     }
         // }
-        else if(block instanceof OreBlock){
+        else if(block instanceof DropExperienceBlock){
             LogManager.getLogger().info("Deep Bug");
             ITraining handler = TrainingHandler.getHandler(foodItem);
             handler.setAttribute(2);
@@ -76,7 +76,7 @@ public class TrainingEventHandler {
         
         if(event.getTarget() instanceof Villager){
             LogManager.getLogger().info("Spoke");
-            Player player = (Player)event.getPlayer();
+            Player player = (Player)event.getEntity();
             ItemStack foodItem = getFoodStack(player);
             if(foodItem == null)
                 return;

@@ -25,10 +25,10 @@ public class LootLoader {
 
     public LootLoader(ResourceLocation resource){
         try{
-            Resource iresource = (Resource) Minecraft.getInstance().getResourceManager().getResource(resource);
+            Resource iresource = (Resource) Minecraft.getInstance().getResourceManager().getResource(resource).get();
             Gson lootData =  new Gson();
             Type listOfMyClassObject = new TypeToken<ArrayList<BasicLootModel>>() {}.getType();
-            lootModelList = lootData.fromJson( new InputStreamReader(iresource.getInputStream()),listOfMyClassObject);            
+            lootModelList = lootData.fromJson( new InputStreamReader(iresource.open()),listOfMyClassObject);            
         } catch (IOException e) {
             LogManager.getLogger().error("Failed to load loot table " + e.getMessage() );
         }

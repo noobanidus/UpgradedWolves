@@ -13,18 +13,19 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 
 public class ArrowInterceptGoal extends CoolDownGoal {
     protected EntityFinder<AbstractArrow> entityFinder;
     protected Wolf wolf;
     private AbstractArrow arrow;
-    private final Random rand;
+    private final RandomSource rand;
 
     public ArrowInterceptGoal(Wolf wolf){
         this.wolf = wolf;
         entityFinder = new EntityFinder<AbstractArrow>(wolf,AbstractArrow.class);
         setCoolDownInSeconds(600);
-        rand = new Random();
+        rand = RandomSource.create();
     }
 
     @Override

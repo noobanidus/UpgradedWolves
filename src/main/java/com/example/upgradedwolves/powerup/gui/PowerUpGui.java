@@ -18,10 +18,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
 
 public class PowerUpGui extends GuiComponent {
    Minecraft minecraft;
@@ -122,13 +120,13 @@ public class PowerUpGui extends GuiComponent {
          textBoxInfo.add(powerUp.getDescription(wolf));
       } else if(levelDistance(powerUp) <= 3){
          textBoxInfo.add(powerUp.getName());
-         textBoxInfo.add(new TextComponent("???").setStyle(Style.EMPTY.withItalic(true)));
-         textBoxInfo.add(new TranslatableComponent("powerup.required.level",powerUp.levelType().toString(),powerUp.requiredLevel()).setStyle(redStyle));
+         textBoxInfo.add(Component.literal("???").setStyle(Style.EMPTY.withItalic(true)));
+         textBoxInfo.add(Component.translatable("powerup.required.level",powerUp.levelType().toString(),powerUp.requiredLevel()).setStyle(redStyle));
       } else {
          Style style = Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE)).withItalic(true);
-         textBoxInfo.add(new TextComponent("???").setStyle(style));
-         textBoxInfo.add(new TextComponent("???").setStyle(Style.EMPTY.withItalic(true)));
-         textBoxInfo.add(new TranslatableComponent("powerup.required.level",powerUp.levelType().toString(),powerUp.requiredLevel()).setStyle(redStyle));
+         textBoxInfo.add(Component.literal("???").setStyle(style));
+         textBoxInfo.add(Component.literal("???").setStyle(Style.EMPTY.withItalic(true)));
+         textBoxInfo.add(Component.translatable("powerup.required.level",powerUp.levelType().toString(),powerUp.requiredLevel()).setStyle(redStyle));
       }
       this.minecraft.screen.renderComponentTooltip(matrixStack, textBoxInfo, mouseX, mouseY);
       matrixStack.popPose();

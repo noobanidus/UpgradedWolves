@@ -16,7 +16,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.Style;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
 
 public abstract class PowerUp {    
     //Must be a constant size
@@ -73,11 +72,11 @@ public abstract class PowerUp {
 
     public Component getName(){
         Style style = Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.BLUE));
-        return new TranslatableComponent(name,effectiveLevel > 0 ? effectiveLevel : "").setStyle(style);
+        return Component.translatable(name,effectiveLevel > 0 ? effectiveLevel : "").setStyle(style);
     }
 
     public Component getDescription(Wolf wolf){
-        return new TranslatableComponent(description,wolf.getName());
+        return Component.translatable(description,wolf.getName());
     }
 
     public Goal fetchRelevantGoal(Wolf wolf){

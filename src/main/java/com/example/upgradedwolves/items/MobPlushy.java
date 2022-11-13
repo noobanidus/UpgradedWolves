@@ -26,9 +26,8 @@ import net.minecraftforge.api.distmarker.Dist;
 public class MobPlushy extends Item {
     public MobPlushyType plushType;
 
-    public MobPlushy(String registryName, MobPlushyType type) {
+    public MobPlushy(MobPlushyType type) {
         super(new Item.Properties().stacksTo(1).tab(CreativeModeTab.TAB_MISC)/*.setISTER(TilePlushyEntity::new)*/);
-        this.setRegistryName(UpgradedWolves.getId(registryName));
         plushType = type;
     }
     

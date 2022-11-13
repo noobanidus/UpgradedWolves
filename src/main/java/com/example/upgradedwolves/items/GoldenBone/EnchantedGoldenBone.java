@@ -10,14 +10,12 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.Style;
 
 public class EnchantedGoldenBone extends GoldenBoneAbstract {
 
     public EnchantedGoldenBone() {
         super(new Item.Properties().tab(CreativeModeTab.TAB_MISC));
-        this.setRegistryName(UpgradedWolves.getId("enchanted_golden_bone"));
     }
 
     @Override
@@ -28,7 +26,7 @@ public class EnchantedGoldenBone extends GoldenBoneAbstract {
     @Override
     public Component getName(ItemStack stack) {
         Style style = net.minecraft.network.chat.Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.LIGHT_PURPLE)).withItalic(true);
-        Component component = new TextComponent(super.getName(stack).getString()).setStyle(style);
+        Component component = Component.literal(super.getName(stack).getString()).setStyle(style);
         return component;
     }
 

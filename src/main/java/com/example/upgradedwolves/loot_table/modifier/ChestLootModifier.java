@@ -1,8 +1,12 @@
 package com.example.upgradedwolves.loot_table.modifier;
 
+import com.google.common.base.Suppliers;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.IntRange;
@@ -11,22 +15,29 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.loot.LootModifier;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
+import java.util.function.Supplier;
 
 public class ChestLootModifier extends LootModifier
 {
-    private final NonNullList<ChestItem> chestItems;
+    private final List<ChestItem> chestItems;
+
+    public static final Supplier<Codec<ChestLootModifier>> CODEC = Suppliers.memoize(() -> RecordCodecBuilder.create(instance -> codecStart(instance).and(ChestItem.CODEC.listOf().fieldOf("additions").forGetter(modifier -> modifier.chestItems)).apply(instance, ChestLootModifier::new)));
+
     /**
      * Constructs a LootModifier.
      *
      * @param conditionsIn the ILootConditions that need to be matched before the loot is modified.
      */
-    public ChestLootModifier(LootItemCondition[] conditionsIn, NonNullList<ChestItem> chestItems) {
+    public ChestLootModifier(LootItemCondition[] conditionsIn, List<ChestItem> chestItems) {
         super(conditionsIn);
         this.chestItems = chestItems;
     }
@@ -34,7 +45,9 @@ public class ChestLootModifier extends LootModifier
 
     @Nonnull
     @Override
-    protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
+    protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot,
+            LootContext context) {
+        // TODO Auto-generated method stub
         for (ChestItem chestItem : chestItems) {
             generatedLoot.removeIf(itemStack -> itemStack.getItem() == chestItem.item);
             float rand = context.getRandom().nextFloat();
@@ -49,64 +62,31 @@ public class ChestLootModifier extends LootModifier
         return generatedLoot;
     }
 
-    public static class Serializer extends GlobalLootModifierSerializer<ChestLootModifier>
-    {
-        @Override
-        public ChestLootModifier read(ResourceLocation location, JsonObject json, LootItemCondition[] ailootcondition) {
-            JsonArray stacksJson = GsonHelper.getAsJsonArray(json, "chestItems");
-            NonNullList<ChestItem> chestItems = NonNullList.create();
-
-            for (int i = 0; i < stacksJson.size(); i++) {
-                JsonObject itemStack = stacksJson.get(i).getAsJsonObject();
-                int min = GsonHelper.getAsInt(itemStack, "minItem");
-                int max =  GsonHelper.getAsInt(itemStack, "maxItem");
-                chestItems.add(new ChestItem(
-                        ForgeRegistries.ITEMS.getValue(
-                                new ResourceLocation(
-                                        GsonHelper.getAsString(itemStack, "item"))
-                        ),
-                        min,max,
-                        GsonHelper.getAsFloat(itemStack, "chance")
-                ));
-            }
-
-            return new ChestLootModifier(ailootcondition, chestItems);
-        }
-
-        @Override
-        public JsonObject write(ChestLootModifier instance) {
-            JsonObject json = makeConditions(instance.conditions);
-
-            JsonArray chestItems = new JsonArray();
-            for(ChestItem stack : instance.chestItems) {
-                JsonObject obj = new JsonObject();
-                obj.addProperty("item", ForgeRegistries.ITEMS.getKey(stack.item).toString()); 
-                obj.addProperty("minItem", stack.min);
-                obj.addProperty("maxItem", stack.max);
-                obj.addProperty("chance", stack.chance);
-                chestItems.add(obj);
-            }
-
-            json.add("chestItems", chestItems);
-
-            return json;
-        }
-    }
-
-
     public static class ChestItem {
         public IntRange range;
         public Item item;
         public float chance;
-        public int min;
-        public int max;
+        public int quantity;
 
-        public ChestItem(Item itemIn, int min, int max, float chanceIn) {
+        public static final Codec<ChestItem> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            ForgeRegistries.ITEMS.getCodec().fieldOf("item").forGetter(chestItem -> chestItem.item),
+            Codec.FLOAT.fieldOf("chance").forGetter(chestItem -> chestItem.chance),
+            Codec.INT.fieldOf("quantity").forGetter(chestItem -> chestItem.quantity)
+            ).apply(instance, ChestItem::new));
+
+        public ChestItem(Item itemIn, float chanceIn, int quantity) {
             this.item = itemIn;
-            this.min = min;
-            this.max = max;
-            this.range = IntRange.range(min,max);
+            this.quantity = quantity;
             this.chance = chanceIn;
         }
     }
+
+
+    @Override
+    public Codec<? extends IGlobalLootModifier> codec() {
+        return CODEC.get();
+    }
+
+
+    
 }

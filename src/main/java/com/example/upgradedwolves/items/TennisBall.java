@@ -23,7 +23,6 @@ public class TennisBall extends Item {
 
     public TennisBall() {
         super(new Item.Properties().stacksTo(TENNIS_BALL_STACK_SIZE).tab(CreativeModeTab.TAB_MISC));
-        this.setRegistryName(UpgradedWolves.getId("tennis_ball"));
     }
 
     @Override

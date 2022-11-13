@@ -23,7 +23,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
+import net.minecraftforge.data.event.GatherDataEvent;
 
 @Mod.EventBusSubscriber(modid = UpgradedWolves.ModId,bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientHandler {
@@ -49,7 +49,7 @@ public class ClientHandler {
     public static void gatherData(final GatherDataEvent event){
         DataGenerator gen = event.getGenerator();
         if(event.includeServer()) {
-            gen.addProvider(new ModGlobalLootTableModifier(gen));
+            gen.addProvider(true,new ModGlobalLootTableModifier(gen));
         }
     }
 

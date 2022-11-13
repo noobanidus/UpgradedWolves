@@ -1,5 +1,7 @@
 package com.example.upgradedwolves.init;
 
+import org.apache.logging.log4j.LogManager;
+
 import com.example.upgradedwolves.UpgradedWolves;
 import com.example.upgradedwolves.entities.FlyingDiskEntity;
 import com.example.upgradedwolves.entities.TennisBallEntity;
@@ -7,8 +9,9 @@ import com.example.upgradedwolves.entities.plushy.MobPlushyEntity;
 
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegisterEvent;
 
 public class ModEntities {
     public static EntityType<TennisBallEntity> tennisBallEntityType;
@@ -17,24 +20,26 @@ public class ModEntities {
 
 
     @SubscribeEvent
-    public static void onEntityTypeRegistration(RegistryEvent.Register<EntityType<?>> event){
-        tennisBallEntityType = EntityType.Builder.<TennisBallEntity>of(TennisBallEntity::new, MobCategory.MISC)
-        .sized(.25f, .25f).clientTrackingRange(4).updateInterval(10)
-        .build(UpgradedWolves.getId("tennis_ball_entity_type").toString());
-        tennisBallEntityType.setRegistryName(UpgradedWolves.getId("tennis_ball_entity_type"));
-        event.getRegistry().register(tennisBallEntityType);
+    public static void onEntityTypeRegistration(RegisterEvent event){
+        LogManager.getLogger().info(event.getRegistryKey());
 
-        flyingDiskEntityType = EntityType.Builder.<FlyingDiskEntity>of(FlyingDiskEntity::new, MobCategory.MISC)
-        .sized(.25f, .25f)
-        .build(UpgradedWolves.getId("flying_disk_entity_type").toString());
-        flyingDiskEntityType.setRegistryName(UpgradedWolves.getId("flying_disk_entity_type"));
-        event.getRegistry().register(flyingDiskEntityType);
-                
-        mobPlushyEntityType = EntityType.Builder
-            .<MobPlushyEntity>of(MobPlushyEntity::new,MobCategory.MISC)
-            .sized(0.5F, 0.5F)
-            .build(UpgradedWolves.getId("mob_plushy_entity_type").toString());
-        mobPlushyEntityType.setRegistryName(UpgradedWolves.getId("mob_plushy_entity_type"));
-        event.getRegistry().register(mobPlushyEntityType);
+        if(ForgeRegistries.ENTITY_TYPES == event.getRegistryKey()){
+            tennisBallEntityType = EntityType.Builder.<TennisBallEntity>of(TennisBallEntity::new, MobCategory.MISC)
+            .sized(.25f, .25f).clientTrackingRange(4).updateInterval(10)
+            .build(UpgradedWolves.getId("tennis_ball_entity_type").toString());
+            flyingDiskEntityType = EntityType.Builder.<FlyingDiskEntity>of(FlyingDiskEntity::new, MobCategory.MISC)
+            .sized(.25f, .25f)
+            .build(UpgradedWolves.getId("flying_disk_entity_type").toString());                
+            mobPlushyEntityType = EntityType.Builder
+                .<MobPlushyEntity>of(MobPlushyEntity::new,MobCategory.MISC)
+                .sized(0.5F, 0.5F)
+                .build(UpgradedWolves.getId("mob_plushy_entity_type").toString());
+            event.register(ForgeRegistries.Keys.ENTITY_TYPES, helper -> {
+                helper.register(UpgradedWolves.getId("tennis_ball_entity_type"),tennisBallEntityType);
+                helper.register(UpgradedWolves.getId("flying_disk_entity_type"),flyingDiskEntityType);
+                helper.register(UpgradedWolves.getId("mob_plushy_entity_type"),mobPlushyEntityType);
+                }
+            );
+        }
     }
 }

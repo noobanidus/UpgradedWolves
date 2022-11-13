@@ -1,5 +1,6 @@
 package com.example.upgradedwolves.itemHandler;
 
+import com.example.upgradedwolves.UpgradedWolves;
 import com.example.upgradedwolves.items.FlyingDisk;
 import com.example.upgradedwolves.items.MobPlushy;
 import com.example.upgradedwolves.items.TennisBall;
@@ -9,8 +10,9 @@ import com.example.upgradedwolves.items.GoldenBone.GoldenBone;
 import com.example.upgradedwolves.utils.MobPlushyType;
 
 import net.minecraft.world.item.Item;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegisterEvent;
 
 
 public class WolfToysHandler {
@@ -25,24 +27,32 @@ public class WolfToysHandler {
     public static MobPlushy creeperPlushy = null;
 
     @SubscribeEvent
-    public static void registerItems(final RegistryEvent.Register<Item> event){
-        TENNISBALL = new TennisBall();
-        event.getRegistry().register(TENNISBALL);
-        GOLDENBONE = new GoldenBone();
-        event.getRegistry().register(GOLDENBONE);
-        ENCHANTEDGOLDENBONE = new EnchantedGoldenBone();
-        event.getRegistry().register(ENCHANTEDGOLDENBONE);
-        FLYINGDISK = new FlyingDisk();
-        event.getRegistry().register(FLYINGDISK);
-        TUFOFWARROPE = new TugOfWarRopeItem();
-        event.getRegistry().register(TUFOFWARROPE);
+    public static void registerItems(final RegisterEvent event){
+        if(ForgeRegistries.ITEMS == event.getRegistryKey()){
+            TENNISBALL = new TennisBall();
+            GOLDENBONE = new GoldenBone();
+            ENCHANTEDGOLDENBONE = new EnchantedGoldenBone();
+            FLYINGDISK = new FlyingDisk();
+            TUFOFWARROPE = new TugOfWarRopeItem();
+            event.register(ForgeRegistries.Keys.ITEMS,helper ->{
+                helper.register(UpgradedWolves.getId("tennis_ball"),TENNISBALL);
+                helper.register(UpgradedWolves.getId("golden_bone"),GOLDENBONE);
+                helper.register(UpgradedWolves.getId("enchanted_golden_bone"),ENCHANTEDGOLDENBONE);
+                helper.register(UpgradedWolves.getId("flying_disk"),FLYINGDISK);
+                helper.register(UpgradedWolves.getId("tug_of_war_rope"),TUFOFWARROPE);
+                }
+            );
 
-        zombiePlushy = new MobPlushy("zombie_plush",MobPlushyType.ZOMBIE);
-        event.getRegistry().register(zombiePlushy);
-        skeletonPlushy = new MobPlushy("skeleton_plush",MobPlushyType.SKELETON);
-        event.getRegistry().register(skeletonPlushy);
-        creeperPlushy = new MobPlushy("creeper_plush",MobPlushyType.CREEPER);
-        event.getRegistry().register(creeperPlushy);
+            zombiePlushy = new MobPlushy(MobPlushyType.ZOMBIE);
+            skeletonPlushy = new MobPlushy(MobPlushyType.SKELETON);
+            creeperPlushy = new MobPlushy(MobPlushyType.CREEPER);
+            event.register(ForgeRegistries.Keys.ITEMS, helper ->{
+                helper.register(UpgradedWolves.getId("zombie_plush"),zombiePlushy);
+                helper.register(UpgradedWolves.getId("skeleton_plush"),skeletonPlushy);
+                helper.register(UpgradedWolves.getId("creeper_plush"),creeperPlushy);
+                }
+            );
+        }
     }
 
 }

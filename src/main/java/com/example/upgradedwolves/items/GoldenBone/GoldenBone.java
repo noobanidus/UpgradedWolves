@@ -9,7 +9,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.ChatFormatting;
 
@@ -17,13 +16,12 @@ public class GoldenBone extends GoldenBoneAbstract {
 
     public GoldenBone() {
         super(new Item.Properties().tab(CreativeModeTab.TAB_MISC));
-        this.setRegistryName(UpgradedWolves.getId("golden_bone"));
     }
 
     @Override
     public Component getName(ItemStack stack) {
         Style style = Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.AQUA));
-        Component component = new TextComponent(super.getName(stack).getString()).setStyle(style);
+        Component component = Component.literal(super.getName(stack).getString()).setStyle(style);
         return component;
     }
 

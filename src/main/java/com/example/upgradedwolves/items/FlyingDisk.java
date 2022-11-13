@@ -23,7 +23,6 @@ public class FlyingDisk extends Item {
 
     public FlyingDisk() {
         super(new Item.Properties().stacksTo(TENNIS_BALL_STACK_SIZE).tab(CreativeModeTab.TAB_MISC));
-        this.setRegistryName(UpgradedWolves.getId("flying_disk"));
     }
 
     @Override
