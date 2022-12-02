@@ -18,7 +18,7 @@ public class ContainerProviderWolfInventory implements MenuProvider {
 
     @Override
     public Component getDisplayName(){
-        return Component.literal("Inventory");
+        return Component.translatable("chestScreen.header.player");
     }
 
     @Override

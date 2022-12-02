@@ -57,7 +57,7 @@ public class WolfScreen extends AbstractContainerScreen<WolfContainer> {
     protected void renderLabels(PoseStack matrixStack, int x, int y) {
         final float BAG_LABEL_YPOS = 5;
         //TranslatableComponent bagLabel = Component.translatable(StartupCommon.itemFlowerBag.getTranslationKey());
-        Component bagLabel = Component.literal("Wolf Inventory");
+        Component bagLabel = Component.translatable("chestScreen.header.wolf");
         if(wolf.hasCustomName())
             bagLabel = wolf.getCustomName();
         float BAG_LABEL_XPOS = (imageWidth * .7F) - this.font.width(bagLabel.getString()) / 2.0F;                  // centre the label

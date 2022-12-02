@@ -61,6 +61,8 @@
     "personality.upgradedwolves.affectionate":"Affectionate",
     "personality.upgradedwolves.aggressive":"Aggressive",
 
+    "chestScreen.header.wolf": "Wolf Inventory",
+
 
     "chat.upgradedwolves.level_up":"%s has leveled up %s"
 }
