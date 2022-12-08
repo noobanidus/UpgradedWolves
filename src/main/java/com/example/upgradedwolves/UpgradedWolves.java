@@ -10,7 +10,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig.Type;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
@@ -32,6 +34,7 @@ import com.example.upgradedwolves.client.ClientHandler;
 import com.example.upgradedwolves.common.DamageHandler;
 import com.example.upgradedwolves.common.TrainingEventHandler;
 import com.example.upgradedwolves.common.WolfPlayerInteraction;
+import com.example.upgradedwolves.config.Config;
 import com.example.upgradedwolves.init.ModChestLoot;
 import com.example.upgradedwolves.init.ModContainers;
 import com.example.upgradedwolves.init.ModEntities;
@@ -66,6 +69,7 @@ public class UpgradedWolves
         FMLJavaModLoadingContext.get().getModEventBus().register(ModContainers.class);
         FMLJavaModLoadingContext.get().getModEventBus().register(WolfToysHandler.class);
         FMLJavaModLoadingContext.get().getModEventBus().register(ModEntities.class);
+        ModLoadingContext.get().registerConfig(Type.COMMON, Config.commonSpec);
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
     }

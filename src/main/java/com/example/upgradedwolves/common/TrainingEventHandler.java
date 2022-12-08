@@ -4,6 +4,7 @@ import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.TrainingHandler;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.capabilities.TrainingHandler.ITraining;
+import com.example.upgradedwolves.config.Config;
 import com.example.upgradedwolves.entities.goals.WolfFindAndPickUpItemGoal;
 import com.example.upgradedwolves.network.PacketHandler;
 import com.example.upgradedwolves.network.message.TrainingItemMessage;
@@ -45,10 +46,12 @@ public class TrainingEventHandler {
         // }
         else if(block instanceof DropExperienceBlock){
             LogManager.getLogger().info("Deep Bug");
-            ITraining handler = TrainingHandler.getHandler(foodItem);
-            handler.setAttribute(2);
-            if(Thread.currentThread().getName() == "Server thread"){
-                PacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getPlayer()), new TrainingItemMessage(2, event.getPlayer().getId()));
+            if(Config.COMMON.wolfType.scavengerWolfEnabled.get()){
+                ITraining handler = TrainingHandler.getHandler(foodItem);
+                handler.setAttribute(2);
+                if(Thread.currentThread().getName() == "Server thread"){
+                    PacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getPlayer()), new TrainingItemMessage(2, event.getPlayer().getId()));
+                }
             }
         }
     }
@@ -63,14 +66,17 @@ public class TrainingEventHandler {
                 return;
             if(event.getEntity() instanceof Monster){
                 LogManager.getLogger().info("Killed");
-                ITraining handler = TrainingHandler.getHandler(foodItem);
-                handler.setAttribute(1);                         
-                if(Thread.currentThread().getName() == "Server thread"){
-                    PacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)player), new TrainingItemMessage(1, player.getId()));
+                if(Config.COMMON.wolfType.fighterWolfEnabled.get()){
+                    ITraining handler = TrainingHandler.getHandler(foodItem);
+                    handler.setAttribute(1);                         
+                    if(Thread.currentThread().getName() == "Server thread"){
+                        PacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)player), new TrainingItemMessage(1, player.getId()));
+                    }
                 }
             }
         }
     }
+    
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void VillagerInteract(EntityInteract event){
         
@@ -80,8 +86,10 @@ public class TrainingEventHandler {
             ItemStack foodItem = getFoodStack(player);
             if(foodItem == null)
                 return;
-            ITraining handler = TrainingHandler.getHandler(foodItem);
-            handler.setAttribute(3);
+            if(Config.COMMON.wolfType.showWolfEnabled.get()){
+                ITraining handler = TrainingHandler.getHandler(foodItem);
+                handler.setAttribute(3);
+            }
         }
     }
     
