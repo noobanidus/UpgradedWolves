@@ -4,6 +4,7 @@ import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.capabilities.WolfType;
+import com.example.upgradedwolves.config.Config;
 import com.example.upgradedwolves.itemHandler.WolfItemStackHandler;
 
 import org.apache.logging.log4j.LogManager;
@@ -25,21 +26,22 @@ public class DamageHandler {
         if(event.getSource().getDirectEntity() != null && event.getSource().getDirectEntity() instanceof Wolf){
             Wolf wolf = (Wolf)event.getSource().getDirectEntity();
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
-            event.setAmount(handler.getWolfStrength());                                          
-            handler.addXp(WolfStatsEnum.Strength, handler.getWolfType() == WolfType.Fighter.getValue() ?
-            3 :
-            2);
+            event.setAmount(handler.getWolfStrength());
+            int wolfAttackXp = Config.COMMON.wolfLevelling.wolfAttackXp.get();
+            int fighterWolfAttackXp = Config.COMMON.wolfLevelling.fighterWolfAttackBonusXp.get();
+            handler.addXp(WolfStatsEnum.Strength,wolfAttackXp + (handler.getWolfType() == WolfType.Fighter.getValue() 
+            ? fighterWolfAttackXp : 0));
             if(event.getEntity() instanceof Monster)
-                handler.addXp(WolfStatsEnum.Strength, 2);           
+                handler.addXp(WolfStatsEnum.Strength, Config.COMMON.wolfLevelling.wolfAttackXp.get());           
         }
     }
     @SubscribeEvent
     public void onWolfKill(LivingDeathEvent event){
         if(event.getSource().getDirectEntity() != null && event.getSource().getDirectEntity() instanceof Wolf){
             Wolf wolf = (Wolf)event.getSource().getDirectEntity();
-            IWolfStats handler = WolfStatsHandler.getHandler(wolf);                                        
-            handler.addXp(WolfStatsEnum.Intelligence, 1);
-            handler.addXp(WolfStatsEnum.Speed,2);
+            IWolfStats handler = WolfStatsHandler.getHandler(wolf);
+            handler.addXp(WolfStatsEnum.Intelligence, Config.COMMON.wolfLevelling.wolfKillIntXp.get());
+            handler.addXp(WolfStatsEnum.Speed,Config.COMMON.wolfLevelling.wolfKillSpeedXp.get());
             wolf.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(handler.getWolfSpeed());
             LogManager.getLogger().info("Wolf intelligence Increased:" + handler.getXp(WolfStatsEnum.Intelligence) + " xp, lvl: " + handler.getLevel(WolfStatsEnum.Intelligence));
             if(wolf.getMainHandItem() != null){

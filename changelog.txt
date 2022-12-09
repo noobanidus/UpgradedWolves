@@ -1,6 +1,8 @@
 v1.2.0
 + Some translatable components
-+ Configuration options
++ Configuration options (see config file for more details)
+	+ Wolf types
+	+ Wolf Levelling
 
 ===============
 

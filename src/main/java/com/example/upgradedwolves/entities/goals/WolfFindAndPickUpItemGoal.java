@@ -5,6 +5,7 @@ import java.util.EnumSet;
 import com.example.upgradedwolves.capabilities.IWolfStats;
 import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
+import com.example.upgradedwolves.config.Config;
 import com.example.upgradedwolves.entities.WolfChaseableEntity;
 import com.example.upgradedwolves.entities.plushy.MobPlushyEntity;
 import com.example.upgradedwolves.itemHandler.WolfItemStackHandler;
@@ -80,7 +81,7 @@ public class WolfFindAndPickUpItemGoal extends Goal implements IUpdateableGoal{
             if (endPoint != null){
                 double distance = initialPoint.distanceTo(endPoint);
                 IWolfStats stats = WolfStatsHandler.getHandler(wolf);
-                stats.addXp(WolfStatsEnum.Speed, (int)(distance/2));
+                stats.addXp(WolfStatsEnum.Speed, (int)(distance * (Config.COMMON.wolfLevelling.fetchSpeedModifier.get())/2));
                 endPoint = null;
                 initialPoint = null;
                 return false;

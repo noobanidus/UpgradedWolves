@@ -11,6 +11,7 @@ import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.capabilities.WolfStatsHandler;
 import com.example.upgradedwolves.capabilities.WolfType;
 import com.example.upgradedwolves.capabilities.TrainingHandler.ITraining;
+import com.example.upgradedwolves.config.Config;
 import com.example.upgradedwolves.containers.ContainerProviderWolfInventory;
 import com.example.upgradedwolves.entities.goals.FollowOwnerVariableGoal;
 import com.example.upgradedwolves.entities.goals.TugOfWarGaol;
@@ -41,6 +42,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
+import net.minecraftforge.common.ForgeConfig.Common;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDestroyBlockEvent;
@@ -159,7 +161,7 @@ public class WolfPlayerInteraction {
             Wolf wolf = (Wolf)event.getEntity();
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             //Scavenger Wolf Bonus
-            handler.addXp(WolfStatsEnum.Speed,(handler.getWolfType() == 2 ? 1 : 0));
+            handler.addXp(WolfStatsEnum.Speed,(handler.getWolfType() == 2 ? Config.COMMON.wolfLevelling.scavengerWolfSpeedXp.get() : 0));
             PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getId(),handler.getWolfType(),handler.getWolfFur()) );
         }
     }
