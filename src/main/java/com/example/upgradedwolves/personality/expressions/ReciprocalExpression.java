@@ -66,5 +66,10 @@ public class ReciprocalExpression extends Expressions {
     private void chase() {
         wolf.getNavigation().moveTo(partner, 1);
     }
+
+    @Override
+    protected void subBehaviorTick() {
+        
+    }
     
 }

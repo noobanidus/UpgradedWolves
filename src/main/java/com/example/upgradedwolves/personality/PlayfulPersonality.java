@@ -2,10 +2,12 @@ package com.example.upgradedwolves.personality;
 
 import java.util.stream.Stream;
 
+import com.example.upgradedwolves.annotations.PersonalityBehavior;
 import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.personality.expressions.Expressions;
 import com.example.upgradedwolves.personality.expressions.PlayfulExpression;
 
+@PersonalityBehavior(Behavior.Playful)
 public class PlayfulPersonality extends WolfPersonality {
 
     public PlayfulPersonality() {

@@ -3,6 +3,7 @@ package com.example.upgradedwolves.personality.expressions;
 import java.util.EnumSet;
 import java.util.List;
 
+import com.example.upgradedwolves.config.Config;
 import com.example.upgradedwolves.entities.utilities.EntityFinder;
 import com.example.upgradedwolves.personality.Behavior;
 
@@ -25,12 +26,14 @@ public abstract class Expressions extends Goal {
     protected int engagement;
     protected int maxEngagement;
     protected int defaultState = 0;
+    private boolean subBehaviorAllowed;
     
     LivingEntity partner;
 
     public Expressions(Wolf wolf,Behavior subBehavior){
         this.wolf = wolf;
         this.subBehavior = subBehavior;
+        subBehaviorAllowed = Config.COMMON.wolfPersonality.getAllowedTypes().contains(subBehavior);
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK,Goal.Flag.TARGET));
     }
 
@@ -45,6 +48,9 @@ public abstract class Expressions extends Goal {
     @Override
     public void tick(){
         changeEngagement();
+        if(Config.COMMON.wolfPersonality.subBehaviorEnabled.get() && subBehaviorAllowed){
+            subBehaviorTick();
+        }
     }
 
     @Override
@@ -71,6 +77,8 @@ public abstract class Expressions extends Goal {
     protected abstract void setDefaultEngagement();
 
     protected abstract LivingEntity searchForPartner();
+
+    protected abstract void subBehaviorTick();
 
 
     protected void attacked(LivingEntity attackedBy){

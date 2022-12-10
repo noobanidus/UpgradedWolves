@@ -3,6 +3,7 @@ v1.2.0
 + Configuration options (see config file for more details)
 	+ Wolf types
 	+ Wolf Levelling
+	+ Wolf Personalities
 
 ===============
 

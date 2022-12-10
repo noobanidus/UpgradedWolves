@@ -29,6 +29,11 @@ public class PassiveExpression extends Expressions {
     public void tick(){
         super.tick();
         wolf.getLookControl().setLookAt(partner);
+        subBehaviorTick();
+    }
+
+    @Override
+    protected void subBehaviorTick() {
         switch(subBehavior){
             case Affectionate:
             case Social:
@@ -43,6 +48,8 @@ public class PassiveExpression extends Expressions {
             case Dominant:
             case Lazy:
                 //Do nothing..
+                break;
+            case EMPTY:
                 break;
         }
     }

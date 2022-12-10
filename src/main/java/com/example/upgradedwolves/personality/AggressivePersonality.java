@@ -2,10 +2,12 @@ package com.example.upgradedwolves.personality;
 
 import java.util.stream.Stream;
 
+import com.example.upgradedwolves.annotations.PersonalityBehavior;
 import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.personality.expressions.Expressions;
 import com.example.upgradedwolves.personality.expressions.IntimidateExpression;
 
+@PersonalityBehavior(Behavior.Aggressive)
 public class AggressivePersonality extends WolfPersonality {
 
     public AggressivePersonality() {

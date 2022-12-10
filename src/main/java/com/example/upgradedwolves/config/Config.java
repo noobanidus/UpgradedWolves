@@ -1,7 +1,13 @@
 package com.example.upgradedwolves.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang3.tuple.Pair;
 
+import com.example.upgradedwolves.personality.Behavior;
+
+import net.minecraft.world.level.GameRules.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;
@@ -22,11 +28,13 @@ public final class Config {
 
         public final WolfType wolfType;
         public final WolfLevelling wolfLevelling;
+        public final WolfPersonality wolfPersonality;
 
         Common(ForgeConfigSpec.Builder builder){
             builder.comment("Common configuration settings").push("common");
             this.wolfType = new WolfType(builder, true, true, true);
             this.wolfLevelling = new WolfLevelling(builder, 2, 1, 1, 2, 1, 2, 1.0, 2);
+            this.wolfPersonality = new WolfPersonality(builder, true, true, true, true, true, true, true, true, true);
             builder.pop();
         }
 
@@ -77,8 +85,50 @@ public final class Config {
 
         }
 
-        // public static class PowerUp{
-        //     public final ForgeConfigSpec. test;
-        // }
+        public static class WolfPersonality{
+            final String NAME = "Wolf Personality Settings";
+            final String KEY = "personalitySettings";
+            public final ForgeConfigSpec.BooleanValue personalityTypesEnabled;
+            public final ForgeConfigSpec.BooleanValue subBehaviorEnabled;
+            public final ForgeConfigSpec.BooleanValue aggressivePersonalityEnabled;
+            public final ForgeConfigSpec.BooleanValue socialPersonalityEnabled;
+            public final ForgeConfigSpec.BooleanValue affectionatePersonalityEnabled;
+            public final ForgeConfigSpec.BooleanValue playfulPersonalityEnabled;
+            public final ForgeConfigSpec.BooleanValue dominantPersonalityEnabled;
+            public final ForgeConfigSpec.BooleanValue lazyPersonalityEnabled;
+            public final ForgeConfigSpec.BooleanValue shyPersonalityEnabled;
+
+            public WolfPersonality(ForgeConfigSpec.Builder builder, boolean personalityTypesEnabled, boolean subBehaviorEnabled,
+                    boolean aggressivePersonalityEnabled, boolean socialPersonalityEnabled,
+                    boolean affectionatePersonalityEnabled, boolean playfulPersonalityEnabled,
+                    boolean dominantPersonalityEnabled, boolean lazyPersonalityEnabled,
+                    boolean shyPersonalityEnabled) {
+                this.personalityTypesEnabled = builder.comment("Enables personality types").define("personalityTypesEnabled",personalityTypesEnabled);
+                this.subBehaviorEnabled = builder.comment("Enables personality sub behaviors").define("subBehaviorEnabled",subBehaviorEnabled);
+                this.aggressivePersonalityEnabled = builder.comment("Enables the aggressive personality type").define("aggressivePersonalityEnabled",aggressivePersonalityEnabled);
+                this.socialPersonalityEnabled = builder.comment("Enables the social personality type").define("socialPersonalityEnabled",socialPersonalityEnabled);
+                this.affectionatePersonalityEnabled = builder.comment("Enables the affectionate personality type").define("affectionatePersonalityEnabled",affectionatePersonalityEnabled);
+                this.playfulPersonalityEnabled = builder.comment("Enables the playful personality type").define("playfulPersonalityEnabled",playfulPersonalityEnabled);
+                this.dominantPersonalityEnabled = builder.comment("Enables the dominant personality type").define("dominantPersonalityEnabled",dominantPersonalityEnabled);
+                this.lazyPersonalityEnabled = builder.comment("Enables the lazy personality type").define("lazyPersonalityEnabled",lazyPersonalityEnabled);
+                this.shyPersonalityEnabled = builder.comment("Enables the shy personality type").define("shyPersonalityEnabled",shyPersonalityEnabled);
+            }
+
+            public List<Behavior> getAllowedTypes() {
+                List<Behavior> behaviorTypes = new ArrayList<Behavior>();
+                if(aggressivePersonalityEnabled.get()) behaviorTypes.add(Behavior.Aggressive);
+                if(socialPersonalityEnabled.get()) behaviorTypes.add(Behavior.Social);
+                if(affectionatePersonalityEnabled.get()) behaviorTypes.add(Behavior.Affectionate);
+                if(playfulPersonalityEnabled.get()) behaviorTypes.add(Behavior.Playful);
+                if(dominantPersonalityEnabled.get()) behaviorTypes.add(Behavior.Dominant);
+                if(lazyPersonalityEnabled.get()) behaviorTypes.add(Behavior.Lazy);
+                if(shyPersonalityEnabled.get()) behaviorTypes.add(Behavior.Shy);
+                behaviorTypes.add(Behavior.EMPTY);
+                
+                return behaviorTypes;
+            }
+
+        }
+
     }
 }

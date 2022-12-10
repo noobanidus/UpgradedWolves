@@ -6,7 +6,9 @@ import java.util.Random;
 import java.util.stream.Stream;
 
 import com.example.upgradedwolves.UpgradedWolves;
+import com.example.upgradedwolves.annotations.PersonalityBehavior;
 import com.example.upgradedwolves.capabilities.WolfStatsEnum;
+import com.example.upgradedwolves.config.Config;
 import com.example.upgradedwolves.personality.expressions.Expressions;
 import com.example.upgradedwolves.personality.expressions.ReciprocalExpression;
 
@@ -42,6 +44,9 @@ public abstract class WolfPersonality {
         addedWolfPersonalities.add(DominantPersonality.class);
         addedWolfPersonalities.add(PassivePersonality.class);
         addedWolfPersonalities.add(PlayfulPersonality.class);
+        addedWolfPersonalities.removeIf(x -> !Config.COMMON.wolfPersonality.getAllowedTypes().contains(
+            x.getAnnotation(PersonalityBehavior.class).value()));
+        
     }
     
     public void setWolfExpressions(Wolf wolf) {

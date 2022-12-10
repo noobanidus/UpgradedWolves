@@ -8,6 +8,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.example.upgradedwolves.UpgradedWolves;
+import com.example.upgradedwolves.config.Config;
 import com.example.upgradedwolves.entities.goals.IUpdateableGoal;
 import com.example.upgradedwolves.entities.goals.WolfPlayWithPlushGoal;
 import com.example.upgradedwolves.itemHandler.WolfItemStackHandler;
@@ -55,10 +56,17 @@ public class WolfStatsHandler {
         stats.setActiveWolf(entity);
         if(stats.getWolfPersonality() == null){
             Random rand = new Random();
-            WolfPersonality personality = WolfPersonality.getRandomWolfPersonality();
-            personality.subBehavior = Behavior.values()[rand.nextInt(Behavior.values().length)];
-            stats.setWolfPersonality(personality);
-            stats.getWolfPersonality().setWolfExpressions(entity);
+            if(Config.COMMON.wolfPersonality.personalityTypesEnabled.get()){
+                WolfPersonality personality = WolfPersonality.getRandomWolfPersonality();
+                if(Config.COMMON.wolfPersonality.subBehaviorEnabled.get()){
+                    personality.subBehavior = Behavior.values()[rand.nextInt(Behavior.values().length)];
+                }
+                else {
+                    personality.subBehavior = Behavior.EMPTY;
+                }
+                stats.getWolfPersonality().setWolfExpressions(entity);
+                stats.setWolfPersonality(personality);
+            }
         }
         
         return stats;

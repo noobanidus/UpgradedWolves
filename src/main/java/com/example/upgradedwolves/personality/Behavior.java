@@ -7,5 +7,6 @@ public enum Behavior {
     Playful,
     Dominant,
     Lazy,
-    Shy
+    Shy,
+    EMPTY,
 }

@@ -36,6 +36,11 @@ public class IntimidateExpression extends Expressions {
         super.tick();
         wolf.getLookControl().setLookAt(partner);
         wolf.setYRot(wolf.getYHeadRot());
+        subBehaviorTick();
+    }
+
+    @Override
+    protected void subBehaviorTick() {
         switch(subBehavior){
             case Playful:
                 if(partner.distanceTo(wolf) > 5){
@@ -74,6 +79,8 @@ public class IntimidateExpression extends Expressions {
                 }
             case Lazy:
                 growl.tick();
+                break;
+            case EMPTY:
                 break;
         }
     }

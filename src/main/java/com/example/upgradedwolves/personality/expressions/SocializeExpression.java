@@ -25,6 +25,11 @@ public class SocializeExpression extends Expressions {
     public void tick(){
         super.tick();
         wolf.getLookControl().setLookAt(partner);
+        subBehaviorTick();
+    }
+
+    @Override
+    protected void subBehaviorTick() {
         switch(subBehavior){
             case Affectionate:
             case Social:
@@ -35,6 +40,8 @@ public class SocializeExpression extends Expressions {
                 break;
             case Shy:
             case Lazy:                
+                break;
+            case EMPTY:
                 break;
         }
     }

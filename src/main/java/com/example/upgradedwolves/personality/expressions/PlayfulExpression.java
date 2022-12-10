@@ -46,6 +46,12 @@ public class PlayfulExpression extends Expressions {
         if(partner instanceof Wolf){
             //get other wolf's behavior to determine play type.
         }
+        subBehaviorTick();
+        setPartnerPlayType();
+    }
+
+    @Override
+    protected void subBehaviorTick() {
         switch(subBehavior){
             case Affectionate:
             case Social:
@@ -60,8 +66,9 @@ public class PlayfulExpression extends Expressions {
             case Lazy:
                 annoy();
                 break;
+            case EMPTY:
+                break;
         }
-        setPartnerPlayType();
     }
     @Override
     public void reciprocateAction(Wolf otherWolf){

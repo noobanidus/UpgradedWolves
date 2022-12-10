@@ -27,6 +27,11 @@ public class AggressiveFollowExpression extends Expressions {
     @Override
     public void tick(){
         super.tick();
+        subBehaviorTick();
+    }
+
+    @Override
+    protected void subBehaviorTick() {
         switch(subBehavior){
             case Affectionate:
                 attach(1.25f,1.4f);
@@ -42,6 +47,8 @@ public class AggressiveFollowExpression extends Expressions {
             case Shy:
             case Lazy:
                 attach(2.5f,.75f);
+                break;
+            case EMPTY:
                 break;
         }
     }

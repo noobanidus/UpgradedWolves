@@ -2,14 +2,16 @@ package com.example.upgradedwolves.personality;
 
 import java.util.stream.Stream;
 
+import com.example.upgradedwolves.annotations.PersonalityBehavior;
 import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 import com.example.upgradedwolves.personality.expressions.Expressions;
 import com.example.upgradedwolves.personality.expressions.SocializeExpression;
 
+@PersonalityBehavior(Behavior.Social)
 public class SocialPersonality extends WolfPersonality {
 
     public SocialPersonality() {
-        super(Behavior.Social);        
+        super(Behavior.Social);
     }
 
     @Override
