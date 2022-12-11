@@ -6,6 +6,7 @@ v1.2.0
 	+ Wolf Personalities
 
 + Command for modifying wolf levels.
++ Command for modifying wolf types.
 
 ===============
 
