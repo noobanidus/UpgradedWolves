@@ -6,12 +6,10 @@ import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.example.upgradedwolves.personality.Behavior;
+import com.example.upgradedwolves.powerup.PowerUpList;
 
-import net.minecraft.world.level.GameRules.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
-import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;
-import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 
 public final class Config {
     public static final ForgeConfigSpec commonSpec;
@@ -29,12 +27,14 @@ public final class Config {
         public final WolfType wolfType;
         public final WolfLevelling wolfLevelling;
         public final WolfPersonality wolfPersonality;
+        public final PowerUpConfig powerUps;
 
         Common(ForgeConfigSpec.Builder builder){
             builder.comment("Common configuration settings").push("common");
             this.wolfType = new WolfType(builder, true, true, true);
             this.wolfLevelling = new WolfLevelling(builder, 2, 1, 1, 2, 1, 2, 1.0, 2);
             this.wolfPersonality = new WolfPersonality(builder, true, true, true, true, true, true, true, true, true);
+            this.powerUps = new PowerUpConfig(builder, .05, 2D, 1D, PowerUpList.StrengthWolfDefault, PowerUpList.ScavengerWolfDefault, PowerUpList.ShowWolfDefault, PowerUpList.notSetDefault);
             builder.pop();
         }
 
@@ -128,6 +128,31 @@ public final class Config {
                 return behaviorTypes;
             }
 
+        }
+
+        public static class PowerUpConfig{
+            final String NAME = "Power UPs";
+            final String KEY = "powerUp";
+            public final ConfigValue<Double> speedBonusDefault; //.05
+            public final ConfigValue<Double> detectBonusDefault;//2
+            public final ConfigValue<Double> attackBonusDefault; //1
+            public final ForgeConfigSpec.ConfigValue<List<String>> strengthWolfPowerUps;
+            public final ForgeConfigSpec.ConfigValue<List<String>> scavengerWolfPowerUps;
+            public final ForgeConfigSpec.ConfigValue<List<String>> showWolfPowerUps;
+            public final ForgeConfigSpec.ConfigValue<List<String>> unsetWolfPowerUps;
+
+            public PowerUpConfig(ForgeConfigSpec.Builder builder,Double speedBonusDefault, Double detectBonusDefault,
+                    Double attackBonusDefault, List<String> strengthWolfPowerUps,
+                    List<String> scavengerWolfPowerUps, List<String> showWolfPowerUps,
+                    List<String> unsetWolfPowerUps) {
+                this.speedBonusDefault = builder.comment("Default bonus for enhance speed powerup").define("speedBonusDefault",speedBonusDefault);
+                this.detectBonusDefault = builder.comment("Default bonus for enhance detect powerup").define("detectBonusDefault",detectBonusDefault);
+                this.attackBonusDefault = builder.comment("Default bonus for enhance attack powerup").define("attackBonusDefault",attackBonusDefault);
+                this.strengthWolfPowerUps = builder.comment("The power up list for the strength wolf").define("strengthWolfPowerUps",strengthWolfPowerUps);
+                this.scavengerWolfPowerUps = builder.comment("The power up list for the scavenger wolf").define("scavengerWolfPowerUps",scavengerWolfPowerUps);
+                this.showWolfPowerUps = builder.comment("The power up list for the show wolf").define("showWolfPowerUps",showWolfPowerUps);
+                this.unsetWolfPowerUps = builder.comment("The power up list for the default wolf").define("unsetWolfPowerUps",unsetWolfPowerUps);
+            }
         }
 
     }

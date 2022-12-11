@@ -42,6 +42,7 @@ import com.example.upgradedwolves.init.ModEntities;
 import com.example.upgradedwolves.itemHandler.WolfToysHandler;
 import com.example.upgradedwolves.network.PacketHandler;
 import com.example.upgradedwolves.personality.WolfPersonality;
+import com.example.upgradedwolves.powerup.PowerUpList;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(UpgradedWolves.ModId)
@@ -74,6 +75,7 @@ public class UpgradedWolves
         ModLoadingContext.get().registerConfig(Type.COMMON, Config.commonSpec);
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
+        PowerUpList.RegisterPowerUps();
     }
 
     private void setup(final FMLCommonSetupEvent event)

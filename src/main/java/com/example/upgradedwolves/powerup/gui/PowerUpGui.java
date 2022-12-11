@@ -1,11 +1,14 @@
 package com.example.upgradedwolves.powerup.gui;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.example.upgradedwolves.UpgradedWolves;
 import com.example.upgradedwolves.capabilities.WolfStatsEnum;
+import com.example.upgradedwolves.capabilities.WolfType;
 import com.example.upgradedwolves.powerup.PowerUp;
 import com.example.upgradedwolves.powerup.PowerUpList;
+import com.example.upgradedwolves.powerup.PowerUpListBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -35,7 +38,7 @@ public class PowerUpGui extends GuiComponent {
    private CompoundTag nbt;
    private static ResourceLocation background = new ResourceLocation("minecraft:textures/gui/advancements/backgrounds/stone.png");
    private static final ResourceLocation POWERUP = UpgradedWolves.getId("gui/wolf_powerup_gui.png");
-   public PowerUp[] powerUps;
+   public List<PowerUp> powerUps;
    public Wolf wolf;
 
 
@@ -48,18 +51,12 @@ public class PowerUpGui extends GuiComponent {
       font = minecraft.font;
    }
 
-   private PowerUp[] setPowerups(){
-      switch(nbt.getInt("wolfType")){
-         case 0:
-            return PowerUpList.notSet;
-         case 1: // Fighter type
-            return PowerUpList.StrengthWolf;
-         case 2: // Scavenger type
-            return PowerUpList.ScavengerWolf;
-         case 3:
-            return PowerUpList.ShowWolf;
-         default:
-            return null;
+   private List<PowerUp> setPowerups(){
+      try {
+         return PowerUpListBuilder.buildOrRetrieve(WolfType.values()[nbt.getInt("wolfType")]);
+      } catch (Exception e){
+         UpgradedWolves.LOGGER.error(e.getMessage() + e.getStackTrace());
+         return null;
       }
    }
 
@@ -149,21 +146,21 @@ public class PowerUpGui extends GuiComponent {
 
    public void drawTooltips(PoseStack matrixStack, int mouseX, int mouseY, int width, int height,int xOffset, int yOffset) {
       if(xOffset < mouseX && mouseX < xOffset + 141 && yOffset < mouseY && mouseY < yOffset + 93){
-         for(int i = 0; i < powerUps.length; i++){
+         for(int i = 0; i < powerUps.size(); i++){
             int x = 30 * (i % 4) + 13 + Mth.floor(this.scrollX) + xOffset;
             int y = 7 * i + Mth.floor(this.scrollY) + yOffset;
-            if(levelDistance(powerUps[i]) < 7 &&x< mouseX && mouseX < x + 26 &&
+            if(levelDistance(powerUps.get(i)) < 7 &&x< mouseX && mouseX < x + 26 &&
                y < mouseY && mouseY < y + 26)
-               drawTabTooltips(matrixStack, mouseX, mouseY, width, height,powerUps[i]);
+               drawTabTooltips(matrixStack, mouseX, mouseY, width, height,powerUps.get(i));
          }
       }
    }
 
    private void displayPowerUps(PoseStack matrixStack,int xOffset,int yOffset){
-      for(int i = 0; i < powerUps.length; i++){
+      for(int i = 0; i < powerUps.size(); i++){
          int x = 30 * (i % 4) + 13;
          int y = 7 * i + 3;
-         PowerUp powerUp = powerUps[i];
+         PowerUp powerUp = powerUps.get(i);
          int id = powerUp.iconType(getNbtData(powerUp.levelType()));
          if(levelDistance(powerUp) < 7){
             displayIcon(matrixStack, id, x + xOffset, y + yOffset);

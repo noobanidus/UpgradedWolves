@@ -4,6 +4,7 @@ v1.2.0
 	+ Wolf types
 	+ Wolf Levelling
 	+ Wolf Personalities
+	+ Wolf PowerUps
 
 + Command for modifying wolf levels.
 + Command for modifying wolf types.

@@ -1,75 +1,103 @@
 package com.example.upgradedwolves.powerup;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
 public class PowerUpList {
-    public static final PowerUp[] StrengthWolfDefault = {
-        new EnhanceDetectionPowerUp(4, 1, 2D), 
-        new AutoAttackPowerUp(5),
-        new EnhanceAttackPowerUp(5, 1, 1),
-        new FleeHealthPowerUp(6),
-        new EnhanceSpeedPowerUp(7, 1, 0.05D),
-        new FleeCreeperPowerUp(8),
-        new UseSwordPowerUp(9),
-        new PickUpItemPowerUp(10),
-        new EnhanceAttackPowerUp(10, 2, 1),
-        new BarkStunPowerUp(13),
-        new EnhanceDetectionPowerUp(14, 1, 2D),
-        new DisarmEnemyPowerUp(14),
-        new EnhanceAttackPowerUp(15, 3, 1),
-        new SelfPreservationPowerUp(15),
-        new ArrowInterceptPowerUp(18),
-        new EnhanceSpeedPowerUp(18, 2, 0.05D),
-        new FishForItemPowerUp(18),
-        new EnhanceAttackPowerUp(20,4,1),
-        new WolfTossArrowPowerUp(21)
-    };
-    public static PowerUp[] StrengthWolf;
-    public static final PowerUp[] ScavengerWolfDefault = {
-        new FleeHealthPowerUp(2),
-        new PickUpItemPowerUp(2),
-        new EnhanceDetectionPowerUp(4, 1, 2D),
-        new EnhanceSpeedPowerUp(5,1,0.05D),
-        new EnhanceAttackPowerUp(6, 1, 1),
-        new FleeCreeperPowerUp(7),
-        new DetectEnemyPowerUp(8),
-        new EnhanceSpeedPowerUp(10,2,0.05D),
-        new SelfPreservationPowerUp(11),
-        new RetrieveOnDeathPowerUp(12),
-        new EnhanceDetectionPowerUp(14, 2, 1D),
-        new EnhanceSpeedPowerUp(15,3,0.05D), 
-        new DigForItemPowerUp(17),
-        new FishForItemPowerUp(18),
-        new EnhanceAttackPowerUp(18, 2, 1),
-        new EnhanceSpeedPowerUp(20,4,0.05D),
-        new LootBonusPowerUp(22),
-        new EnhanceSpeedPowerUp(25,5,0.05D)
-    };
-    public static PowerUp[] ScavengerWolf;
-    public static final PowerUp[] ShowWolfDefault = {
-        new ShareItemPowerUp(4),
-        new EnhanceSpeedPowerUp(5, 1, 0.05D),
-        new EnhanceDetectionPowerUp(6, 1, 1D),
-        new EnhanceAttackPowerUp(6, 1, 1),
-        new FishForItemPowerUp(7),
-        new PickUpItemPowerUp(10),
-        new ThrowPotionPowerUp(11),
-        new EnhanceDetectionPowerUp(12, 2, 2D),
-        new SelfPreservationPowerUp(15),
-        new EnhanceSpeedPowerUp(16, 2, 0.05D),
-        new EnhanceDetectionPowerUp(16, 3, 3D),
-        new EnhanceAttackPowerUp(18, 2, 1),
-        new ImpressVillagerPowerUp(19),
-        new EnhanceDetectionPowerUp(21, 4, 3D),
-        new EnhanceDetectionPowerUp(25, 5, 3D),
-    };
-    public static PowerUp[] ShowWolf;
 
-    public static final PowerUp[] notSetDefault = {
-        new FleeHealthPowerUp(5),
-        new FleeCreeperPowerUp(10),
-    };
+    public static final List<String> StrengthWolfDefault = Arrays.asList(
+        "4:enhance_detect", 
+        "5:auto_attack",
+        "5:enhance_detect",
+        "6:flee_health",
+        "7:enhance_speed",
+        "8:flee_creeper",
+        "9:use_sword",
+        "10:pick_up_item",
+        "10:enhance_attack",
+        "13:bark_stun",
+        "14:enhance_detect",
+        "14:disarm_enemy",
+        "15:enhance_attack",
+        "15:self_preservation",
+        "18:arrow_intercept",
+        "18:enhance_speed",
+        "18:fish_catcher",
+        "20:enhance_attack",
+        "21:toss_arrow");
+    public static final List<String> ScavengerWolfDefault = Arrays.asList(
+        "2:flee_health",
+        "2:pick_up_item",
+        "4:enhance_detect",
+        "5:enhance_speed",
+        "6:enhance_attack",
+        "7:flee_creeper",
+        "8:detect_enemy",
+        "10:enhance_speed",
+        "11:self_preservation",
+        "12:death_retrieval",
+        "14:enhance_detect",
+        "15:enhance_speed",
+        "17:dig_for_item",
+        "18:fish_catcher",
+        "18:enhance_attack",
+        "20:enhance_speed",
+        "22:loot_bonus",
+        "25:enhance_speed"
+    );
+    public static final List<String> ShowWolfDefault = Arrays.asList(
+        "4:share_item",
+        "5:enhance_speed",
+        "6:enhance_detect",
+        "6:enhance_attack",
+        "7:fish_catcher",
+        "10:pick_up_item",
+        "11:use_potion",
+        "12:enhance_detect",
+        "15:self_preservation",
+        "16:enhance_speed",
+        "16:enhance_detect",
+        "18:enhance_attack",
+        "19:impress",
+        "21:enhance_detect",
+        "25:enhance_detect"
+    );
+    public static final List<String> notSetDefault = Arrays.asList(
+        "5:flee_health",
+        "10:flee_creeper"
+    );
 
-    public static BiMap<Integer,Class> PowerUpIdMap = HashBiMap.create();
+    public static BiMap<String,Class> PowerUpIdMap = HashBiMap.create();
+
+    public static void RegisterPowerUps(){
+        register("arrow_intercept",ArrowInterceptPowerUp.class);
+        register("auto_attack",AutoAttackPowerUp.class);
+        register("bark_stun",BarkStunPowerUp.class);
+        register("detect_enemy",DetectEnemyPowerUp.class);
+        register("dig_for_item", DigForItemPowerUp.class);
+        register("disarm_enemy",DisarmEnemyPowerUp.class);
+        register("enhance_attack",EnhanceAttackPowerUp.class);
+        register("enhance_detect",EnhanceDetectionPowerUp.class);
+        register("enhance_speed",EnhanceSpeedPowerUp.class);
+        register("fish_catcher",FishForItemPowerUp.class);
+        register("flee_creeper", FleeCreeperPowerUp.class);
+        register("flee_health", FleeHealthPowerUp.class);
+        register("impress",ImpressVillagerPowerUp.class);
+        register("loot_bonus",LootBonusPowerUp.class);
+        register("pick_up_item",PickUpItemPowerUp.class);
+        register("death_retrieval",RetrieveOnDeathPowerUp.class);
+        register("self_preservation",SelfPreservationPowerUp.class);
+        register("share_item",ShareItemPowerUp.class);
+        register("use_potion",ThrowPotionPowerUp.class);
+        register("use_sword",UseSwordPowerUp.class);
+        register("toss_arrow",WolfTossArrowPowerUp.class);
+    }
+
+    private static void register(String resourceName, Class clazz){
+        PowerUpIdMap.put(resourceName,clazz);
+    }
 }

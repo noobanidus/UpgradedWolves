@@ -20,6 +20,7 @@ import com.example.upgradedwolves.personality.PersonalitySerializer;
 import com.example.upgradedwolves.personality.WolfPersonality;
 import com.example.upgradedwolves.powerup.PowerUp;
 import com.example.upgradedwolves.powerup.PowerUpList;
+import com.example.upgradedwolves.powerup.PowerUpListBuilder;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -123,7 +124,7 @@ public class WolfStatsHandler {
         }
 
         private void resetGoals(){
-            PowerUp[] wolfTypePowerUps = getRelevantPowerUps();
+            List<PowerUp> wolfTypePowerUps = getRelevantPowerUps();
             for(int i = 0; i < allGoals.size();i++){
                 if(allGoals.get(i) instanceof IUpdateableGoal)
                     ((IUpdateableGoal)allGoals.get(i)).Update(this, currentWolf);
@@ -168,7 +169,7 @@ public class WolfStatsHandler {
         public void addGoals(){
             if(allGoals.size() > 0)
                 clearGoals();
-            PowerUp[] wolfTypePowerUps = getRelevantPowerUps();
+            List<PowerUp> wolfTypePowerUps = getRelevantPowerUps();
 
             for (PowerUp powerUp : wolfTypePowerUps) {
                 conditionallyAddPowerUp(powerUp);
@@ -374,17 +375,13 @@ public class WolfStatsHandler {
             return false;
         }
 
-        private PowerUp[] getRelevantPowerUps(){            
-            if(getWolfType() == WolfType.Fighter.getValue()){
-                return PowerUpList.StrengthWolf;
+        private List<PowerUp> getRelevantPowerUps(){
+            try {
+                return PowerUpListBuilder.buildOrRetrieve(WolfType.values()[getWolfType()]);
+            } catch (Exception e){
+                UpgradedWolves.LOGGER.error(e.getMessage() + e.getStackTrace());
+                return null;
             }
-            if(getWolfType() == WolfType.Scavenger.getValue()){
-                return PowerUpList.ScavengerWolf;
-            }
-            if(getWolfType() == WolfType.Show.getValue()){
-                return PowerUpList.ShowWolf;
-            }
-            return PowerUpList.notSet;                    
         }
 
         private void conditionallyAddPowerUp(PowerUp powerUp){
