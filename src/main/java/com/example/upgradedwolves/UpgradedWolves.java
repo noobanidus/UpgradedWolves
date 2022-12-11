@@ -36,6 +36,7 @@ import com.example.upgradedwolves.common.TrainingEventHandler;
 import com.example.upgradedwolves.common.WolfPlayerInteraction;
 import com.example.upgradedwolves.config.Config;
 import com.example.upgradedwolves.init.ModChestLoot;
+import com.example.upgradedwolves.init.ModCommands;
 import com.example.upgradedwolves.init.ModContainers;
 import com.example.upgradedwolves.init.ModEntities;
 import com.example.upgradedwolves.itemHandler.WolfToysHandler;
@@ -65,6 +66,7 @@ public class UpgradedWolves
         MinecraftForge.EVENT_BUS.register(new WolfPlayerInteraction());
         MinecraftForge.EVENT_BUS.register(new TrainingEventHandler());
         MinecraftForge.EVENT_BUS.register(new ModChestLoot());
+        MinecraftForge.EVENT_BUS.register(new ModCommands());
         //Future reference for static registering...
         FMLJavaModLoadingContext.get().getModEventBus().register(ModContainers.class);
         FMLJavaModLoadingContext.get().getModEventBus().register(WolfToysHandler.class);

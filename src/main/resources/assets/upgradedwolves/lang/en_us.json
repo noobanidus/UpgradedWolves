@@ -63,6 +63,7 @@
 
     "chestScreen.header.wolf": "Wolf Inventory",
 
+    "chat.upgradedwolves.level_up":"%s has leveled up %s",
 
-    "chat.upgradedwolves.level_up":"%s has leveled up %s"
+    "command.set_wolf_level_success":"Set %1$s %2$s to %3$s"
 }

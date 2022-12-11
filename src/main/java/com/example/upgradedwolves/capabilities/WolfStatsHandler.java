@@ -64,8 +64,8 @@ public class WolfStatsHandler {
                 else {
                     personality.subBehavior = Behavior.EMPTY;
                 }
-                stats.getWolfPersonality().setWolfExpressions(entity);
                 stats.setWolfPersonality(personality);
+                stats.getWolfPersonality().setWolfExpressions(entity);
             }
         }
         
