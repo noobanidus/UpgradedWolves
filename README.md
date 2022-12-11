@@ -65,6 +65,22 @@ The show wolf is the smartest wolf and is able to take advantage of elements of 
 ### Golden Bones
 -A golden colored bone that levels up your wolf more quickly
 
+## Console Commands
+By looking directly at a wolf or using the entity selector, you can change certain wolf attributes using the following console commands
+
+
+### Set wolf Type
+`/setWolfType <entitySelector> <WolfType>`
+- Sets the wolf type to either
+  * NotSet
+  * Fighter
+  * Scavenger
+  * Show
+
+### Set Wolf Level
+`/setWolfLevel <entitySelector> <statName> <value>`
+- Sets the given wolf stat to any value greater than or equal to 0
+
 ## Recipes
 
 ![Creeper Plush Recipe](https://github.com/Injourn/UpgradedWolves/blob/master/readmeImages/CreeperPlushRecipe.png?raw=true)
