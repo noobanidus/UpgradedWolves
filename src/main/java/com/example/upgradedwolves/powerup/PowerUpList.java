@@ -1,8 +1,10 @@
 package com.example.upgradedwolves.powerup;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 
 public class PowerUpList {
-    public static final PowerUp[] StrengthWolf = {
+    public static final PowerUp[] StrengthWolfDefault = {
         new EnhanceDetectionPowerUp(4, 1, 2D), 
         new AutoAttackPowerUp(5),
         new EnhanceAttackPowerUp(5, 1, 1),
@@ -23,7 +25,8 @@ public class PowerUpList {
         new EnhanceAttackPowerUp(20,4,1),
         new WolfTossArrowPowerUp(21)
     };
-    public static final PowerUp[] ScavengerWolf = {
+    public static PowerUp[] StrengthWolf;
+    public static final PowerUp[] ScavengerWolfDefault = {
         new FleeHealthPowerUp(2),
         new PickUpItemPowerUp(2),
         new EnhanceDetectionPowerUp(4, 1, 2D),
@@ -43,7 +46,8 @@ public class PowerUpList {
         new LootBonusPowerUp(22),
         new EnhanceSpeedPowerUp(25,5,0.05D)
     };
-    public static final PowerUp[] ShowWolf = {
+    public static PowerUp[] ScavengerWolf;
+    public static final PowerUp[] ShowWolfDefault = {
         new ShareItemPowerUp(4),
         new EnhanceSpeedPowerUp(5, 1, 0.05D),
         new EnhanceDetectionPowerUp(6, 1, 1D),
@@ -60,9 +64,12 @@ public class PowerUpList {
         new EnhanceDetectionPowerUp(21, 4, 3D),
         new EnhanceDetectionPowerUp(25, 5, 3D),
     };
-    public static final PowerUp[] notSet = {
+    public static PowerUp[] ShowWolf;
+
+    public static final PowerUp[] notSetDefault = {
         new FleeHealthPowerUp(5),
         new FleeCreeperPowerUp(10),
     };
 
+    public static BiMap<Integer,Class> PowerUpIdMap = HashBiMap.create();
 }
