@@ -73,6 +73,7 @@ public final class Config {
             public WolfLevelling(ForgeConfigSpec.Builder builder, int wolfAttackXp, int fighterWolfAttackBonusXp, int getWolfKillIntXp,
                     int getWollKillSpeedXp, int scavengerWolfSpeedXp, int tugOfWarStrengthBonus,
                     double fetchSpeedModifier, int plushyIntelligenceBonus) {
+                builder.comment(NAME).push(KEY);
                 this.wolfAttackXp = builder.comment("How much STR XP a wolf gets for attacking.").define("wolfAttackXp",wolfAttackXp);
                 this.fighterWolfAttackBonusXp = builder.comment("How much STR bonus XP a fighter wolf gets for attacking.").define("fighterWolfAttackBonusXp",fighterWolfAttackBonusXp);
                 this.wolfKillIntXp = builder.comment("How much INT XP a wolf gets for a kill").define("getWolfKillIntXp",getWolfKillIntXp);
@@ -81,6 +82,7 @@ public final class Config {
                 this.tugOfWarStrengthBonus = builder.comment("How much STR XP a wolf gets for playing tug of war").define("tugOfWarStrengthBonus",tugOfWarStrengthBonus);
                 this.fetchSpeedModifier = builder.comment("How much SPD XP a wolf gets for playing fetch").define("fetchSpeedModifier",fetchSpeedModifier);
                 this.plushyIntelligenceBonus = builder.comment("How much INT xp a wolf gets for playing with a plush toy.").define("plushyIntelligenceBonus",plushyIntelligenceBonus);
+                builder.pop();
             }
 
         }
@@ -103,6 +105,7 @@ public final class Config {
                     boolean affectionatePersonalityEnabled, boolean playfulPersonalityEnabled,
                     boolean dominantPersonalityEnabled, boolean lazyPersonalityEnabled,
                     boolean shyPersonalityEnabled) {
+                builder.comment(NAME).push(KEY);
                 this.personalityTypesEnabled = builder.comment("Enables personality types").define("personalityTypesEnabled",personalityTypesEnabled);
                 this.subBehaviorEnabled = builder.comment("Enables personality sub behaviors").define("subBehaviorEnabled",subBehaviorEnabled);
                 this.aggressivePersonalityEnabled = builder.comment("Enables the aggressive personality type").define("aggressivePersonalityEnabled",aggressivePersonalityEnabled);
@@ -112,6 +115,7 @@ public final class Config {
                 this.dominantPersonalityEnabled = builder.comment("Enables the dominant personality type").define("dominantPersonalityEnabled",dominantPersonalityEnabled);
                 this.lazyPersonalityEnabled = builder.comment("Enables the lazy personality type").define("lazyPersonalityEnabled",lazyPersonalityEnabled);
                 this.shyPersonalityEnabled = builder.comment("Enables the shy personality type").define("shyPersonalityEnabled",shyPersonalityEnabled);
+                builder.pop();
             }
 
             public List<Behavior> getAllowedTypes() {
@@ -136,22 +140,24 @@ public final class Config {
             public final ConfigValue<Double> speedBonusDefault; //.05
             public final ConfigValue<Double> detectBonusDefault;//2
             public final ConfigValue<Double> attackBonusDefault; //1
-            public final ForgeConfigSpec.ConfigValue<List<String>> strengthWolfPowerUps;
-            public final ForgeConfigSpec.ConfigValue<List<String>> scavengerWolfPowerUps;
-            public final ForgeConfigSpec.ConfigValue<List<String>> showWolfPowerUps;
-            public final ForgeConfigSpec.ConfigValue<List<String>> unsetWolfPowerUps;
+            public final ForgeConfigSpec.ConfigValue<List<? extends String>> strengthWolfPowerUps;
+            public final ForgeConfigSpec.ConfigValue<List<? extends String>> scavengerWolfPowerUps;
+            public final ForgeConfigSpec.ConfigValue<List<? extends String>> showWolfPowerUps;
+            public final ForgeConfigSpec.ConfigValue<List<? extends String>> unsetWolfPowerUps;
 
             public PowerUpConfig(ForgeConfigSpec.Builder builder,Double speedBonusDefault, Double detectBonusDefault,
                     Double attackBonusDefault, List<String> strengthWolfPowerUps,
                     List<String> scavengerWolfPowerUps, List<String> showWolfPowerUps,
                     List<String> unsetWolfPowerUps) {
+                builder.comment(NAME).push(KEY);
                 this.speedBonusDefault = builder.comment("Default bonus for enhance speed powerup").define("speedBonusDefault",speedBonusDefault);
                 this.detectBonusDefault = builder.comment("Default bonus for enhance detect powerup").define("detectBonusDefault",detectBonusDefault);
                 this.attackBonusDefault = builder.comment("Default bonus for enhance attack powerup").define("attackBonusDefault",attackBonusDefault);
-                this.strengthWolfPowerUps = builder.comment("The power up list for the strength wolf").define("strengthWolfPowerUps",strengthWolfPowerUps);
-                this.scavengerWolfPowerUps = builder.comment("The power up list for the scavenger wolf").define("scavengerWolfPowerUps",scavengerWolfPowerUps);
-                this.showWolfPowerUps = builder.comment("The power up list for the show wolf").define("showWolfPowerUps",showWolfPowerUps);
-                this.unsetWolfPowerUps = builder.comment("The power up list for the default wolf").define("unsetWolfPowerUps",unsetWolfPowerUps);
+                this.strengthWolfPowerUps = builder.comment("The power up list for the strength wolf").defineList("strengthWolfPowerUps",strengthWolfPowerUps, obj -> obj instanceof String);
+                this.scavengerWolfPowerUps = builder.comment("The power up list for the scavenger wolf").defineList("scavengerWolfPowerUps",scavengerWolfPowerUps, obj -> obj instanceof String);
+                this.showWolfPowerUps = builder.comment("The power up list for the show wolf").defineList("showWolfPowerUps",showWolfPowerUps, obj -> obj instanceof String);
+                this.unsetWolfPowerUps = builder.comment("The power up list for the default wolf").defineList("unsetWolfPowerUps",unsetWolfPowerUps, obj -> obj instanceof String);
+                builder.pop();
             }
         }
 

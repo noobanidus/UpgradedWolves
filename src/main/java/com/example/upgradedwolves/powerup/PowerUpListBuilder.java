@@ -50,13 +50,13 @@ public class PowerUpListBuilder {
     private static List<String> getDefinitionByWolfType(WolfType type) {
         switch(type){
             case Fighter:
-                return Config.COMMON.powerUps.strengthWolfPowerUps.get();
+                return (List<String>)Config.COMMON.powerUps.strengthWolfPowerUps.get();
             case NotSet:
-                return Config.COMMON.powerUps.unsetWolfPowerUps.get();
+                return (List<String>)Config.COMMON.powerUps.unsetWolfPowerUps.get();
             case Scavenger:
-                return Config.COMMON.powerUps.scavengerWolfPowerUps.get();
+                return (List<String>)Config.COMMON.powerUps.scavengerWolfPowerUps.get();
             case Show:
-                return Config.COMMON.powerUps.showWolfPowerUps.get();
+                return (List<String>)Config.COMMON.powerUps.showWolfPowerUps.get();
             default:
                 return null;
         }
@@ -75,12 +75,12 @@ public class PowerUpListBuilder {
                 throw new IllegalArgumentException("resource not found for " + item + ".");
             }
 
-            if(powerUpClass.isAssignableFrom(BonusStatPowerUp.class)){
-                int count = (int)powerUpList.stream().filter(x -> x.getClass().equals(powerUpClass.getClass())).count();
-                powerUpList.add((PowerUp)powerUpClass.getConstructors()[0].newInstance(split[1],count+1,getConfigBonus(powerUpClass)));
+            if(BonusStatPowerUp.class.isAssignableFrom(powerUpClass)){
+                int count = (int)powerUpList.stream().filter(x -> x.getClass().equals(powerUpClass)).count();
+                powerUpList.add((PowerUp)powerUpClass.getConstructors()[0].newInstance(level,count+1,getConfigBonus(powerUpClass)));
             }
-            else if(powerUpClass.isAssignableFrom(PowerUp.class)){
-                powerUpList.add((PowerUp)powerUpClass.getConstructors()[0].newInstance(split[1]));
+            else if(PowerUp.class.isAssignableFrom(powerUpClass)){
+                powerUpList.add((PowerUp)powerUpClass.getConstructors()[0].newInstance(level));
             }
             else throw new IllegalArgumentException("resource not found for " + item + ".");
         }
