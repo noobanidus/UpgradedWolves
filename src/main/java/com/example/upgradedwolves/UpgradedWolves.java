@@ -66,12 +66,12 @@ public class UpgradedWolves
         MinecraftForge.EVENT_BUS.register(new DamageHandler());
         MinecraftForge.EVENT_BUS.register(new WolfPlayerInteraction());
         MinecraftForge.EVENT_BUS.register(new TrainingEventHandler());
-        MinecraftForge.EVENT_BUS.register(new ModChestLoot());
         MinecraftForge.EVENT_BUS.register(new ModCommands());
         //Future reference for static registering...
         FMLJavaModLoadingContext.get().getModEventBus().register(ModContainers.class);
         FMLJavaModLoadingContext.get().getModEventBus().register(WolfToysHandler.class);
         FMLJavaModLoadingContext.get().getModEventBus().register(ModEntities.class);
+        FMLJavaModLoadingContext.get().getModEventBus().register(ModChestLoot.class);
         ModLoadingContext.get().registerConfig(Type.COMMON, Config.commonSpec);
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);

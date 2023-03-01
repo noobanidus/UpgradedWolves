@@ -13,7 +13,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MessageSigner;
 import net.minecraftforge.network.NetworkEvent.Context;
 
 public class SpawnLevelUpParticle implements IMessage<SpawnLevelUpParticle> {
@@ -50,7 +49,7 @@ public class SpawnLevelUpParticle implements IMessage<SpawnLevelUpParticle> {
             Wolf wolf = (Wolf)mc.level.getEntity(message.wolfId);
             WolfStatsEnum stat = WolfStatsEnum.values()[message.statId];
             if(wolf.getOwner() == mc.player && message.statId != 3){
-                mc.player.chatSigned(null,Component.translatable("chat.upgradedwolves.level_up",wolf.getName(),stat.toString()));
+                mc.player.sendSystemMessage(Component.translatable("chat.upgradedwolves.level_up",wolf.getName(),stat.toString()));
             }
             Random r = new Random();
             SimpleParticleType pt = ParticleTypes.FLASH;

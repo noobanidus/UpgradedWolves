@@ -1,5 +1,8 @@
 package com.example.upgradedwolves.client;
 
+import java.util.Collections;
+import java.util.List;
+
 import com.example.upgradedwolves.UpgradedWolves;
 import com.example.upgradedwolves.containers.WolfScreen;
 import com.example.upgradedwolves.entities.UpgradedWolfModel;
@@ -11,7 +14,7 @@ import com.example.upgradedwolves.entities.plushy.ZombiePlushyModel;
 import com.example.upgradedwolves.init.ModContainers;
 import com.example.upgradedwolves.init.ModEntities;
 import com.example.upgradedwolves.init.ModModelLayers;
-import com.example.upgradedwolves.loot_table.init.ModGlobalLootTableModifier;
+import com.example.upgradedwolves.loot_table.init.ModChestLootTable;
 
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -20,7 +23,10 @@ import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.data.event.GatherDataEvent;
@@ -43,14 +49,6 @@ public class ClientHandler {
         // entityRendererManager.register(ModEntities.mobPlushyEntityType, new MobPlushyRenderer(entityRendererManager));
 
         MenuScreens.register(ModContainers.WOLF_CONTAINER, WolfScreen::new);        
-    }
-
-    @SubscribeEvent
-    public static void gatherData(final GatherDataEvent event){
-        DataGenerator gen = event.getGenerator();
-        if(event.includeServer()) {
-            gen.addProvider(true,new ModGlobalLootTableModifier(gen));
-        }
     }
 
     @SubscribeEvent

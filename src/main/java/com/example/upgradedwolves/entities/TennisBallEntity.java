@@ -15,6 +15,7 @@ import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -42,11 +43,11 @@ public class TennisBallEntity extends WolfChaseableEntity {
 
     @Override
     protected Item getDefaultItem() {
-        return WolfToysHandler.TENNISBALL;
+        return WolfToysHandler.TENNIS_BALL;
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {        
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {        
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 

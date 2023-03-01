@@ -19,6 +19,7 @@ import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -107,9 +108,9 @@ public class MobPlushyEntity extends ThrowableProjectile {
 
     protected List<MobPlushy> plushTypes(){
         ArrayList<MobPlushy> plushes = new ArrayList<MobPlushy>();        
-        plushes.add(WolfToysHandler.creeperPlushy);
-        plushes.add(WolfToysHandler.skeletonPlushy);
-        plushes.add(WolfToysHandler.zombiePlushy);
+        plushes.add(WolfToysHandler.CREEPER_PLUSHY);
+        plushes.add(WolfToysHandler.SKELETON_PLUSHY);
+        plushes.add(WolfToysHandler.ZOMBIE_PLUSHY);
         return plushes;
     }
 
@@ -123,7 +124,7 @@ public class MobPlushyEntity extends ThrowableProjectile {
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 

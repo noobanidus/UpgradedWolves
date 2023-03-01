@@ -15,7 +15,7 @@ import net.minecraft.ChatFormatting;
 public class GoldenBone extends GoldenBoneAbstract {
 
     public GoldenBone() {
-        super(new Item.Properties().tab(CreativeModeTab.TAB_MISC));
+        super(new Item.Properties());
     }
 
     @Override

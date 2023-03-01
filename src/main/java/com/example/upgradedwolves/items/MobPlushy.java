@@ -27,7 +27,7 @@ public class MobPlushy extends Item {
     public MobPlushyType plushType;
 
     public MobPlushy(MobPlushyType type) {
-        super(new Item.Properties().stacksTo(1).tab(CreativeModeTab.TAB_MISC)/*.setISTER(TilePlushyEntity::new)*/);
+        super(new Item.Properties().stacksTo(1)/*.setISTER(TilePlushyEntity::new)*/);
         plushType = type;
     }
     

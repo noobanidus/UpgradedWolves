@@ -22,7 +22,7 @@ public class FlyingDisk extends Item {
     static private final int TENNIS_BALL_STACK_SIZE = 8;
 
     public FlyingDisk() {
-        super(new Item.Properties().stacksTo(TENNIS_BALL_STACK_SIZE).tab(CreativeModeTab.TAB_MISC));
+        super(new Item.Properties().stacksTo(TENNIS_BALL_STACK_SIZE));
     }
 
     @Override

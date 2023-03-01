@@ -341,7 +341,7 @@ public class WolfStatsHandler {
         public void setRopeHolder(Entity holder) {
             ropeHolder = holder;
             tugOfWarActive = true;
-            currentWolf.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(WolfToysHandler.TUFOFWARROPE));
+            currentWolf.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(WolfToysHandler.TUF_OF_WAR_ROPE));
         }
         @Override
         public Entity getRopeHolder() {            

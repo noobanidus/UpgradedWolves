@@ -47,7 +47,7 @@ public class TugOfWarGaol extends Goal {
         if(timeActive++ < 20*15 && distance < 64){
             return true;
         } else {
-            wolf.spawnAtLocation(new ItemStack(WolfToysHandler.TUFOFWARROPE));
+            wolf.spawnAtLocation(new ItemStack(WolfToysHandler.TUF_OF_WAR_ROPE));
             playerIn = null;
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             handler.clearRopeHolder();

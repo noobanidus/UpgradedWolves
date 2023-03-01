@@ -11,6 +11,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.Item;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -40,11 +41,11 @@ public class FlyingDiskEntity extends WolfChaseableEntity{
 
     @Override
     protected Item getDefaultItem() {
-        return WolfToysHandler.FLYINGDISK;
+        return WolfToysHandler.FLYING_DISK;
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {        
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {        
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 

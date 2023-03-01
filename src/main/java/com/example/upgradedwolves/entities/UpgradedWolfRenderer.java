@@ -26,8 +26,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.Util;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.util.Mth;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import org.joml.Matrix4f;
+
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 
@@ -78,23 +79,23 @@ public class UpgradedWolfRenderer extends WolfRenderer {
         if(!wolf.getMainHandItem().isEmpty()){
             ItemStack itemStack = wolf.getMainHandItem();
             matrixStackIn.pushPose();
-            matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(Mth.lerp(partialTicks, -wolf.yBodyRotO, -wolf.yBodyRot)));
+            matrixStackIn.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, -wolf.yBodyRotO, -wolf.yBodyRot)));
             matrixStackIn.translate(-1 * 0.0625, 0, 7 * 0.0625);
-            matrixStackIn.mulPose(Vector3f.YN.rotationDegrees(Mth.lerp(partialTicks, -wolf.yBodyRotO, -wolf.yBodyRot)));
-            matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(Mth.lerp(partialTicks, -wolf.yHeadRotO, -wolf.yHeadRot)));
+            matrixStackIn.mulPose(Axis.YN.rotationDegrees(Mth.lerp(partialTicks, -wolf.yBodyRotO, -wolf.yBodyRot)));
+            matrixStackIn.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, -wolf.yHeadRotO, -wolf.yHeadRot)));
             matrixStackIn.translate(1 * 0.0625, 8.5 * 0.0625, 5.5 * 0.0625);
-            matrixStackIn.mulPose(Vector3f.XN.rotationDegrees(Mth.lerp(partialTicks, -wolf.xRotO, -wolf.getXRot())));
+            matrixStackIn.mulPose(Axis.XN.rotationDegrees(Mth.lerp(partialTicks, -wolf.xRotO, -wolf.getXRot())));
             matrixStackIn.translate(-1 * 0.0625, 0, 0);
 
             matrixStackIn.translate(0, 1.0 * 0.0625, 0);
-            matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(75F));
+            matrixStackIn.mulPose(Axis.XP.rotationDegrees(75F));
             matrixStackIn.scale(0.5F, 0.5F, 0.5F);
 
-            matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(90F));
-            matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(90F));        
+            matrixStackIn.mulPose(Axis.YP.rotationDegrees(90F));
+            matrixStackIn.mulPose(Axis.XP.rotationDegrees(90F));        
             if(wolf.getMainHandItem().getItem() instanceof SwordItem){
-                matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(90F));
-                matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(45F));
+                matrixStackIn.mulPose(Axis.YP.rotationDegrees(90F));
+                matrixStackIn.mulPose(Axis.ZP.rotationDegrees(45F));
                 matrixStackIn.translate(6 * 0.0625, 6 * .0625, 0);
             }
 

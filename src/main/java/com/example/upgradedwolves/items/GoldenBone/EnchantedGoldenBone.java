@@ -15,7 +15,7 @@ import net.minecraft.network.chat.Style;
 public class EnchantedGoldenBone extends GoldenBoneAbstract {
 
     public EnchantedGoldenBone() {
-        super(new Item.Properties().tab(CreativeModeTab.TAB_MISC));
+        super(new Item.Properties());
     }
 
     @Override
