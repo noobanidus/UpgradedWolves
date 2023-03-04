@@ -50,7 +50,7 @@ public class WolfToysHandler {
     @SubscribeEvent
     public static void buildContents(CreativeModeTabEvent.BuildContents event) {
     // Add to ingredients tab
-        if (event.getTab() == CreativeModeTabs.INGREDIENTS) {
+        if (event.getTab() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             //event.accept(ITEM);
             event.accept(TENNIS_BALL);
             event.accept(FLYING_DISK);
