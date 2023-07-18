@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: CI 1.20
 
 # Controls when the workflow will run
 on:
@@ -67,7 +67,7 @@ jobs:
           file_path: ./build/libs/${{ steps.fname.outputs.result }}.jar
           changelog: ${{ steps.changelog.outputs.log }}
           display_name: ${{ steps.fname.outputs.result }}
-          game_versions: 73407:1.19.3,73407:1.19,2:Java 17,68441:Forge
+          game_versions: 75125:1.20,75125:1.20.1,2:Java 17,68441:Forge
           release_type: alpha
       - name: upload artifacts
         uses: actions/upload-artifact@v2
