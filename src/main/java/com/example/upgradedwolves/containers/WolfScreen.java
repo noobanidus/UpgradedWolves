@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.player.Inventory;
@@ -47,26 +48,26 @@ public class WolfScreen extends AbstractContainerScreen<WolfContainer> {
         this.imageHeight = 175;
     }    
     @Override
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(GuiGraphics matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrixStack, mouseX, mouseY);
     }
 
     @Override
-    protected void renderLabels(PoseStack matrixStack, int x, int y) {
-        final float BAG_LABEL_YPOS = 5;
-        //TranslatableComponent bagLabel = Component.translatable(StartupCommon.itemFlowerBag.getTranslationKey());
+    protected void renderLabels(GuiGraphics graphics, int x, int y) {
+        final int BAG_LABEL_YPOS = 5;
+
         Component bagLabel = Component.translatable("chestScreen.header.wolf");
         if(wolf.hasCustomName())
             bagLabel = wolf.getCustomName();
-        float BAG_LABEL_XPOS = (imageWidth * .7F) - this.font.width(bagLabel.getString()) / 2.0F;                  // centre the label
-        this.font.draw(matrixStack, bagLabel, BAG_LABEL_XPOS, BAG_LABEL_YPOS, Color.darkGray.getRGB());            //this.font.drawString;
+        int BAG_LABEL_XPOS = (int)((imageWidth * .7F) - this.font.width(bagLabel.getString()) / 2.0F);                  // centre the label
+        graphics.drawString(font, bagLabel, BAG_LABEL_XPOS, BAG_LABEL_YPOS, Color.white.getRGB());            //this.font.drawString;
 
         if(inventoryTab){
-            drawInventoryForeground(matrixStack, x, y);
+            drawInventoryForeground(graphics, x, y);
         } else {
-            drawPowerUpForeground(matrixStack, x, y);
+            drawPowerUpForeground(graphics, x, y);
         }
 
     }
@@ -95,25 +96,20 @@ public class WolfScreen extends AbstractContainerScreen<WolfContainer> {
     }
 
     @Override
-    protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
+    protected void renderBg(GuiGraphics graphics, float partialTicks, int x, int y) {
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         int edgeSpacingX = (this.width - this.imageWidth) / 2;
         int edgeSpacingY = (this.height - this.imageHeight) / 2;
         if(inventoryTab){
-            RenderSystem.setShaderTexture(0,INVENTORY);
-            this.blit(matrixStack, edgeSpacingX, edgeSpacingY, 0, 0, this.imageWidth, this.imageHeight);
-            drawInventoryBackground(matrixStack, partialTicks, x, y, edgeSpacingX, edgeSpacingY);
+            graphics.blit(INVENTORY, edgeSpacingX, edgeSpacingY, 0, 0, this.imageWidth, this.imageHeight);
+            drawInventoryBackground(graphics, partialTicks, x, y, edgeSpacingX, edgeSpacingY);
         } else {
-            RenderSystem.setShaderTexture(0,POWERUP);
-            this.blit(matrixStack, edgeSpacingX, edgeSpacingY, 0, 0, this.imageWidth, this.imageHeight);
-            drawPowerUpBackground(matrixStack, partialTicks, x, y);
+            drawPowerUpBackground(graphics, partialTicks, x, y);
+            graphics.blit(POWERUP, edgeSpacingX, edgeSpacingY, 0, 0, this.imageWidth, this.imageHeight);
         }
         
-
-        
-        drawTabs(matrixStack);
-        
-        InventoryScreen.renderEntityInInventory(edgeSpacingX + 38, edgeSpacingY + 50, 40, (edgeSpacingX + 38) - x,(edgeSpacingY + 30) - y, wolf);
+        drawTabs(graphics);
+        InventoryScreen.renderEntityInInventoryFollowsMouse(graphics,edgeSpacingX + 38, edgeSpacingY + 50, 40, (edgeSpacingX + 38) - x,(edgeSpacingY + 30) - y, wolf);
     }
 
     @Override
@@ -123,74 +119,74 @@ public class WolfScreen extends AbstractContainerScreen<WolfContainer> {
     }
 
     @Override
-    protected void renderTooltip(PoseStack matrixStack, int x, int y) {        
-        super.renderTooltip(matrixStack, x, y);
+    protected void renderTooltip(GuiGraphics graphics, int x, int y) {        
+        super.renderTooltip(graphics, x, y);
         if(!inventoryTab){
-            powerUpGui.drawTooltips(matrixStack, x, y, width, height,leftPos + 17,topPos + 68);
+            powerUpGui.drawTooltips(graphics, x, y, width, height,leftPos + 17,topPos + 68);
         }
     }
 
-    void drawInventoryForeground(PoseStack matrixStack, int x, int y){
-        final float PLAYER_LABEL_XPOS = 8;
-        final float PLAYER_LABEL_DISTANCE_FROM_BOTTOM = (96 - 2);
+    void drawInventoryForeground(GuiGraphics graphics, int x, int y){
+        final int PLAYER_LABEL_XPOS = 8;
+        final int PLAYER_LABEL_DISTANCE_FROM_BOTTOM = (96 - 2);
 
-        float PLAYER_LABEL_YPOS = imageHeight - PLAYER_LABEL_DISTANCE_FROM_BOTTOM;
-        this.font.draw(matrixStack, this.playerInventoryTitle,                              //this.font.drawString;
-        PLAYER_LABEL_XPOS, PLAYER_LABEL_YPOS, Color.darkGray.getRGB());
+        int PLAYER_LABEL_YPOS = imageHeight - PLAYER_LABEL_DISTANCE_FROM_BOTTOM;
+        graphics.drawString(font, this.playerInventoryTitle,                              //this.font.drawString;
+        PLAYER_LABEL_XPOS, PLAYER_LABEL_YPOS, Color.white.getRGB());
 
-        this.font.draw(matrixStack, Component.literal(strength), 76, 29, Color.darkGray.getRGB());
-        this.font.draw(matrixStack, Component.literal(speed), 76, 39, Color.darkGray.getRGB());
-        this.font.draw(matrixStack, Component.literal(intelligence), 76, 49, Color.darkGray.getRGB());
+        graphics.drawString(font, Component.literal(strength), 76, 29, Color.white.getRGB());
+        graphics.drawString(font, Component.literal(speed), 76, 39, Color.white.getRGB());
+        graphics.drawString(font, Component.literal(intelligence), 76, 49, Color.white.getRGB());
     }
 
-    void drawPowerUpForeground(PoseStack matrixStack, int x, int y){
+    void drawPowerUpForeground(GuiGraphics matrixStack, int x, int y){
 
     }
     
-    void drawInventoryBackground(PoseStack matrixStack, float partialTicks, int x, int y,int edgeSpacingX, int edgeSpacingY){
+    void drawInventoryBackground(GuiGraphics graphics, float partialTicks, int x, int y,int edgeSpacingX, int edgeSpacingY){
         
         //Draw hearts
         int totalHearts = (int)wolf.getHealth();
         int index = 0;
         while(totalHearts > 1){            
-            this.blit(matrixStack, leftPos + 76 + (index * 9), topPos + 14, 29, 182, 9, 9);
+            graphics.blit(INVENTORY, leftPos + 76 + (index * 9), topPos + 14, 29, 182, 9, 9);
             index++;
             totalHearts -= 2;
         }
         if(totalHearts == 1)
-            this.blit(matrixStack, leftPos + 76 + (index * 9), topPos + 14, 19, 182, 9, 9);
+            graphics.blit(INVENTORY, leftPos + 76 + (index * 9), topPos + 14, 19, 182, 9, 9);
 
-        buildXpBar(matrixStack, leftPos + 113, topPos + 31, 39, 185, (int)(strNum * 52));
-        buildXpBar(matrixStack, leftPos + 113, topPos + 41, 39, 179, (int)(spdNum * 52));
-        buildXpBar(matrixStack, leftPos + 113, topPos + 51, 94, 179, (int)(intNum * 52));
-        extraSlots(matrixStack, slots - 1);
+        buildXpBar(graphics, leftPos + 113, topPos + 31, 39, 185, (int)(strNum * 52));
+        buildXpBar(graphics, leftPos + 113, topPos + 41, 39, 179, (int)(spdNum * 52));
+        buildXpBar(graphics, leftPos + 113, topPos + 51, 94, 179, (int)(intNum * 52));
+        extraSlots(graphics, slots - 1);
     }
 
-    void drawPowerUpBackground(PoseStack matrixStack, float partialTicks, int x, int y){
-        matrixStack.pushPose();
-        matrixStack.translate((float)(leftPos + 17), (float)(topPos + 68), 0.0F);
-        powerUpGui.drawTabBackground(matrixStack);
-        matrixStack.popPose();
+    void drawPowerUpBackground(GuiGraphics graphics, float partialTicks, int x, int y){
+        graphics.pose().pushPose();
+        graphics.pose().translate((float)(leftPos + 17), (float)(topPos + 68), 0.0F);
+        powerUpGui.drawTabBackground(graphics);
+        graphics.pose().popPose();
     }
 
-    void buildXpBar(PoseStack matrixStack, int x,int y,int u,int v, int amount){
-        this.blit(matrixStack, x, y, u, v, amount, 5);
+    void buildXpBar(GuiGraphics graphics, int x,int y,int u,int v, int amount){
+        graphics.blit(INVENTORY, x, y, u, v, amount, 5);
     }
     
-    void extraSlots(PoseStack matrixStack,int amount){
+    void extraSlots(GuiGraphics graphics,int amount){
         for(int i = 0; i < amount; i++){
-            this.blit(matrixStack, leftPos + 24 + (i * 18), topPos + 62, 0, 177, 18, 18);
+            graphics.blit(INVENTORY, leftPos + 24 + (i * 18), topPos + 62, 0, 177, 18, 18);
         }
     }
 
-    void drawTabs(PoseStack matrixStack){
+    void drawTabs(GuiGraphics graphics){
         RenderSystem.setShaderTexture(0,TABS);
         if(inventoryTab){
-            this.blit(matrixStack, leftPos + 171, topPos + 7, 0, 27, 36, 26);
-            this.blit(matrixStack, leftPos + 170, topPos + 34, 0, 0, 36, 26);
+            graphics.blit(TABS, leftPos + 171, topPos + 7, 0, 27, 36, 26);
+            graphics.blit(TABS, leftPos + 170, topPos + 34, 0, 0, 36, 26);
         } else {
-            this.blit(matrixStack, leftPos + 170, topPos + 7, 0, 0, 36, 26);
-            this.blit(matrixStack, leftPos + 171, topPos + 33, 0, 27, 36, 26);
+            graphics.blit(TABS, leftPos + 170, topPos + 7, 0, 0, 36, 26);
+            graphics.blit(TABS, leftPos + 171, topPos + 33, 0, 27, 36, 26);
         }
     }
     

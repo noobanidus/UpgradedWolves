@@ -88,14 +88,14 @@ public class ThrowPotionGoal extends Goal {
         double d2 = target.getZ() + vector3d.z - wolf.getZ();
         float f = Mth.sqrt((float)(d0 * d0 + d2 * d2));
 
-        ThrownPotion potionentity = new ThrownPotion(wolf.level, wolf);
+        ThrownPotion potionentity = new ThrownPotion(wolf.level(), wolf);
         potionentity.setItem(potionStack);
         potionentity.setXRot(potionentity.getXRot() - 20.0F);
         potionentity.shoot(d0, d1 + (double)(f * 0.2F), d2, 0.75F, 8.0F);
         if (!wolf.isSilent()) {
-            wolf.level.playSound((Player)null, wolf.getX(), wolf.getY(), wolf.getZ(), SoundEvents.SPLASH_POTION_THROW, wolf.getSoundSource(), 1.0F, 0.8F + wolf.getRandom().nextFloat() * 0.4F);
+            wolf.level().playSound((Player)null, wolf.getX(), wolf.getY(), wolf.getZ(), SoundEvents.SPLASH_POTION_THROW, wolf.getSoundSource(), 1.0F, 0.8F + wolf.getRandom().nextFloat() * 0.4F);
         }
-        wolf.level.addFreshEntity(potionentity);             
+        wolf.level().addFreshEntity(potionentity);             
     }
     
 }

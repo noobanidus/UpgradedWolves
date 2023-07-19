@@ -86,7 +86,7 @@ public class MobPlushyEntity extends ThrowableProjectile {
 
     @Override
     public void playerTouch(Player entityIn) {        
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             boolean flag = this.getOwner().getUUID() == entityIn.getUUID() && tickCount > 20;
             if (flag) {                
                 if(!entityIn.isCreative() && !entityIn.addItem(getItem()))
@@ -134,9 +134,9 @@ public class MobPlushyEntity extends ThrowableProjectile {
             this.kill();
         super.tick();
         Vec3 blockpos = this.getPosition(1);
-        BlockState blockstate = this.level.getBlockState(new BlockPos(blockpos));
+        BlockState blockstate = this.level().getBlockState(BlockPos.containing(blockpos));
         if (!blockstate.isAir()) {
-            VoxelShape voxelshape = blockstate.getCollisionShape(this.level, new BlockPos(blockpos));
+            VoxelShape voxelshape = blockstate.getCollisionShape(this.level(), BlockPos.containing(blockpos));
             if (!voxelshape.isEmpty()) {
                 Vec3 vector3d1 = this.getPosition(1);
 
@@ -149,7 +149,7 @@ public class MobPlushyEntity extends ThrowableProjectile {
             }
         }
 
-        for(Wolf wolf : this.level.getEntitiesOfClass(Wolf.class, this.getBoundingBox())) {
+        for(Wolf wolf : this.level().getEntitiesOfClass(Wolf.class, this.getBoundingBox())) {
             onCollideWithWolf(wolf);    
         }
         
@@ -161,7 +161,7 @@ public class MobPlushyEntity extends ThrowableProjectile {
     }
 
     private boolean stillInGround(){
-        return this.inGround && this.level.noCollision((new AABB(this.getPosition(1), this.getPosition(1))).inflate(0.06D,0.06D,0.06D));
+        return this.inGround && this.level().noCollision((new AABB(this.getPosition(1), this.getPosition(1))).inflate(0.06D,0.06D,0.06D));
     }
 
     private void notInBlock() {
@@ -171,7 +171,7 @@ public class MobPlushyEntity extends ThrowableProjectile {
     }
 
     protected void OnHitBlock(BlockHitResult p_230299_1_) {
-        this.inBlockState = this.level.getBlockState(p_230299_1_.getBlockPos());
+        this.inBlockState = this.level().getBlockState(p_230299_1_.getBlockPos());
         super.onHitBlock(p_230299_1_);
         Vec3 vector3d = p_230299_1_.getLocation().subtract(this.getX(), this.getY(), this.getZ());
         this.setDeltaMovement(vector3d);

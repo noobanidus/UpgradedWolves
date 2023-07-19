@@ -9,6 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -26,10 +27,10 @@ public class FishForItemGoal extends CoolDownGoal {
     @Override
     public boolean canUse() {
         if(active() && wolf.isInWater()){
-            ServerLevel world = (ServerLevel)wolf.level;
-            LootContext.Builder lootcontext$builder = (new LootContext.Builder(world).withRandom(wolf.getRandom()).withParameter(LootContextParams.ORIGIN, wolf.getPosition(1)).withParameter(LootContextParams.TOOL, new ItemStack(Items.FISHING_ROD)));
-            LootTable loottable = wolf.level.getServer().getLootTables().get(BuiltInLootTables.FISHING);
-            itemStackList = loottable.getRandomItems(lootcontext$builder.create(LootContextParamSets.FISHING));
+            ServerLevel world = (ServerLevel)wolf.level();
+            LootParams.Builder lootParams$builder = (new LootParams.Builder(world).withLuck(wolf.getRandom().nextFloat()).withParameter(LootContextParams.ORIGIN, wolf.getPosition(1)).withParameter(LootContextParams.TOOL, new ItemStack(Items.FISHING_ROD)));
+            LootTable loottable = wolf.level().getServer().getLootData().getLootTable(BuiltInLootTables.FISHING);
+            itemStackList = loottable.getRandomItems(lootParams$builder.create(LootContextParamSets.FISHING));
             return true;
         }
         return false;

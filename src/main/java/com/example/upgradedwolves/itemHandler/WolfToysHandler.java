@@ -11,7 +11,7 @@ import com.example.upgradedwolves.utils.MobPlushyType;
 
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.event.CreativeModeTabEvent;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
@@ -48,9 +48,9 @@ public class WolfToysHandler {
     // Registered on the MOD event bus
     // Assume we have RegistryObject<Item> and RegistryObject<Block> called ITEM and BLOCK
     @SubscribeEvent
-    public static void buildContents(CreativeModeTabEvent.BuildContents event) {
+    public static void buildContents(BuildCreativeModeTabContentsEvent event) {
     // Add to ingredients tab
-        if (event.getTab() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+        if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             //event.accept(ITEM);
             event.accept(TENNIS_BALL);
             event.accept(FLYING_DISK);

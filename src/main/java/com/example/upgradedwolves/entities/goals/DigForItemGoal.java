@@ -30,7 +30,7 @@ public class DigForItemGoal extends CoolDownGoal {
     @Override
     public boolean canUse() {
         //Gets block "type" at the position below the wolf
-        BlockState blockStandingOn = wolf.level.getBlockState(new BlockPos(wolf.getPosition(1).add(0, -1, 0)));   
+        BlockState blockStandingOn = wolf.level().getBlockState(BlockPos.containing(wolf.getPosition(1).add(0, -1, 0)));   
         if(active() && !wolf.isInSittingPose() && (isGrassBlock(blockStandingOn) || isSandBlock(blockStandingOn))){
             type = blockStandingOn;
             wolf.getNavigation().stop();

@@ -57,7 +57,7 @@ public class TennisBallEntity extends WolfChaseableEntity {
             BlockHitResult blockResult = (BlockHitResult)result;
             Vec3 vector3d1 = this.getDeltaMovement();
             if(this.getDeltaMovement().length() > 0.2)
-                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), level.getBlockState(blockResult.getBlockPos()).getBlock().getSoundType(null, null, null, null).getPlaceSound(), SoundSource.BLOCKS, 0.5F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F, false);
+                this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), level().getBlockState(blockResult.getBlockPos()).getBlock().getSoundType(null, null, null, null).getPlaceSound(), SoundSource.BLOCKS, 0.5F, (1.0F + (this.level().random.nextFloat() - this.level().random.nextFloat()) * 0.2F) * 0.7F, false);
             if(blockResult.getDirection().getAxis() == Direction.Axis.Y && this.getDeltaMovement().length() < 0.1)
                 super.OnHitBlock(blockResult);
             else
@@ -66,7 +66,7 @@ public class TennisBallEntity extends WolfChaseableEntity {
                     blockResult.getDirection().getAxis() == Direction.Axis.Y ? -vector3d1.y * .7 : vector3d1.y * .9,
                     blockResult.getDirection().getAxis() == Direction.Axis.Z ? -vector3d1.z * .7 : vector3d1.z * .9
                     );
-            HitResult raytraceresult = ProjectileUtil.getHitResult(this, this::canCollideWith);
+            HitResult raytraceresult = ProjectileUtil.getHitResultOnMoveVector(this, this::canCollideWith);
             if(raytraceresult.getType() != HitResult.Type.MISS){
                 onHit(raytraceresult);
             }
@@ -76,7 +76,9 @@ public class TennisBallEntity extends WolfChaseableEntity {
             if(speedFactor(1)){
                 if(entityResult.getEntity() instanceof LivingEntity){
                     LivingEntity entity = (LivingEntity)entityResult.getEntity();
-                    entity.hurt(DamageSource.playerAttack((Player)this.getOwner()), 1);
+                    if(this.getOwner() != null) {
+                        entity.hurt(/*DamageSource.playerAttack*/((Player)this.getOwner()).damageSources().thrown(this, this.getOwner()), 1);
+                    }
                     double speed = this.getDeltaMovement().length() * .6;
                     Vec3 bounceDirection = new Vec3(entity.getPosition(1).x - this.getPosition(1).x,
                                                                 entity.getPosition(1).y - this.getPosition(1).y,

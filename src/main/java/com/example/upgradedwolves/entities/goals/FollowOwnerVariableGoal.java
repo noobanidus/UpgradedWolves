@@ -83,7 +83,7 @@ public class FollowOwnerVariableGoal extends FollowOwnerGoal{
         LivingEntity owner = tameable.getOwner();
         if (Math.abs((double)x - owner.getX()) < 2.0D && Math.abs((double)z - owner.getZ()) < 2.0D) {
            return false;
-        } else if (!this.isTeleportFriendlyBlock(new BlockPos(x, y, z))) {
+        } else if (!this.isTeleportFriendlyBlock(BlockPos.containing(x, y, z))) {
            return false;
         } else {
            this.tameable.lerpTo((double)x + 0.5D, (double)y, (double)z + 0.5D, this.tameable.getYRot(), this.tameable.getXRot(),1,false);
@@ -92,12 +92,12 @@ public class FollowOwnerVariableGoal extends FollowOwnerGoal{
         }
     }
     private boolean isTeleportFriendlyBlock(BlockPos pos) {
-        Level world = tameable.level;
+        Level world = tameable.level();
         BlockPathTypes blockpathtypes = WalkNodeEvaluator.getBlockPathTypeStatic(world, pos.mutable());
         if (blockpathtypes != BlockPathTypes.WALKABLE) {
            return false;
         } else {
-           BlockState blockstate = world.getBlockState(new BlockPos(pos));
+           BlockState blockstate = world.getBlockState(pos);
            if (blockstate.getBlock() instanceof LeavesBlock) {
               return false;
            } else {

@@ -21,7 +21,7 @@ public class CommonActionsController {
     }
 
     public void jump(){
-        if(wolf.isOnGround()){
+        if(wolf.onGround()){
             wolf.getJumpControl().jump();
         }
     }
@@ -31,7 +31,7 @@ public class CommonActionsController {
     }
 
     public void jumpTowards(LivingEntity entity){
-        if(wolf.isOnGround()){
+        if(wolf.onGround()){
             Vec3 vec3 = wolf.getDeltaMovement();
             Vec3 vec31 = new Vec3(entity.getX() - this.wolf.getX(), 0.0D, entity.getZ() - this.wolf.getZ());
             if (vec31.lengthSqr() > 1.0E-7D) {
@@ -43,7 +43,7 @@ public class CommonActionsController {
     }
 
     public void jumpTowards(Vec3 position){
-        if(wolf.isOnGround()){
+        if(wolf.onGround()){
             Vec3 vec3 = wolf.getDeltaMovement();
             Vec3 vec31 = new Vec3(position.x - this.wolf.getX(), 0.0D, position.z - this.wolf.getZ());
             if (vec31.lengthSqr() > 1.0E-7D) {

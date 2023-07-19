@@ -48,7 +48,7 @@ public class WolfTypeCommand {
                 IWolfStats handler = WolfStatsHandler.getHandler(wolf);
                 WolfType type = WolfType.values()[wolfType];
                 handler.setWolfType(wolfType);
-                handler.setWolffur(wolf.level.random.nextInt(3));
+                handler.setWolffur(wolf.level().random.nextInt(3));
                 handler.addGoals();
                 handler.handleWolfGoals();
                 if(Thread.currentThread().getName() == "Server thread")

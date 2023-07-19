@@ -63,10 +63,10 @@ public class IntimidateExpression extends Expressions {
                 }
                 break;
             case Aggressive:
-                if(partner.distanceTo(wolf) < 2 && wolf.isOnGround()){
+                if(partner.distanceTo(wolf) < 2 && wolf.onGround()){
                     if(canAttack){
                         controller.jumpTowards(partner);
-                        partner.hurt(DamageSource.mobAttack(wolf),2);
+                        partner.hurt(wolf.damageSources().mobAttack(wolf),2);
                         canAttack = false;
                     }
                 }

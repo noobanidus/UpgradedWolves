@@ -46,7 +46,7 @@ import net.minecraftforge.common.ForgeConfig.Common;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDestroyBlockEvent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.event.entity.living.LootingLevelEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingTickEvent;
@@ -101,7 +101,7 @@ public class WolfPlayerInteraction {
                         return;
                     else{
                         handler.setWolfType(item);
-                        handler.setWolffur(wolf.level.random.nextInt(3));
+                        handler.setWolffur(wolf.level().random.nextInt(3));
                         handler.addGoals();
                         handler.handleWolfGoals();
                         foodItem.shrink(1);
@@ -137,7 +137,7 @@ public class WolfPlayerInteraction {
     }
 
     @SubscribeEvent(priority=EventPriority.HIGHEST)
-    public void onEntitySpawn(LivingSpawnEvent event) {
+    public void onEntitySpawn(MobSpawnEvent event) {
         if(event.getEntity() instanceof Wolf){                
             Wolf wolf = (Wolf)event.getEntity();
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
@@ -192,7 +192,7 @@ public class WolfPlayerInteraction {
                 removeWolfGoal(wolf, WaterAvoidingRandomStrollGoal.class);
 
             wolf.setCanPickUpLoot(false);
-            for(ItemEntity itementity : wolf.level.getEntitiesOfClass(ItemEntity.class, wolf.getBoundingBox().inflate(1.0D, 0.0D, 1.0D))) {
+            for(ItemEntity itementity : wolf.level().getEntitiesOfClass(ItemEntity.class, wolf.getBoundingBox().inflate(1.0D, 0.0D, 1.0D))) {
                 if (wolfInventory.getAvailableSlot(itementity.getItem()) >= 0) {
                     wolf.setCanPickUpLoot(true);
                 }

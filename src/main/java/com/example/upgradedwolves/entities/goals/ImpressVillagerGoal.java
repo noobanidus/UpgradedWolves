@@ -18,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -94,8 +95,8 @@ public class ImpressVillagerGoal extends CoolDownGoal {
                 Villager villager = (Villager)villagerEntity;
                 VillagerProfession villagerprofession = villager.getVillagerData().getProfession();
                 if (GIFTS.containsKey(villagerprofession)) {
-                    LootTable loottable = villager.level.getServer().getLootTables().get(GIFTS.get(villagerprofession));
-                    LootContext.Builder lootcontext$builder = (new LootContext.Builder((ServerLevel)villager.level)).withParameter(LootContextParams.ORIGIN, villager.getPosition(1)).withParameter(LootContextParams.THIS_ENTITY, villager).withRandom(villager.getRandom());
+                    LootTable loottable = villager.level().getServer().getLootData().getLootTable(GIFTS.get(villagerprofession));
+                    LootParams.Builder lootcontext$builder = (new LootParams.Builder((ServerLevel)villager.level())).withParameter(LootContextParams.ORIGIN, villager.getPosition(1)).withParameter(LootContextParams.THIS_ENTITY, villager).withLuck(villager.getRandom().nextFloat());
                     return loottable.getRandomItems(lootcontext$builder.create(LootContextParamSets.GIFT));
                 } else {
                     return ImmutableList.of(new ItemStack(Items.WHEAT_SEEDS));

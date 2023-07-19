@@ -19,6 +19,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.WolfRenderer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.level.LightLayer;
@@ -99,7 +100,7 @@ public class UpgradedWolfRenderer extends WolfRenderer {
                 matrixStackIn.translate(6 * 0.0625, 6 * .0625, 0);
             }
 
-            Minecraft.getInstance().getItemRenderer().renderStatic(itemStack, ItemTransforms.TransformType.NONE,packedLightIn,OverlayTexture.NO_OVERLAY,matrixStackIn,bufferIn,wolf.getId());
+            Minecraft.getInstance().getItemRenderer().renderStatic(itemStack, ItemDisplayContext.NONE,packedLightIn,OverlayTexture.NO_OVERLAY,matrixStackIn,bufferIn,wolf.level(), wolf.getId());
             matrixStackIn.popPose();
         }
         Entity tugRopeHolder = getCapability(wolf).getRopeHolder();
@@ -124,13 +125,13 @@ public class UpgradedWolfRenderer extends WolfRenderer {
         //float f3 = 0.025F;
         VertexConsumer vertexconsumer = p_115465_.getBuffer(RenderType.leash());
         Matrix4f matrix4f = p_115464_.last().pose();
-        float f4 = Mth.fastInvSqrt(f * f + f2 * f2) * 0.025F / 2.0F;
+        float f4 = Mth.invSqrt(f * f + f2 * f2) * 0.025F / 2.0F;
         float f5 = f2 * f4;
         float f6 = f * f4;
-        BlockPos blockpos = new BlockPos(p_115462_.getEyePosition(p_115463_));
-        BlockPos blockpos1 = new BlockPos(p_115466_.getEyePosition(p_115463_));
-        int k = p_115462_.level.getBrightness(LightLayer.SKY, blockpos);
-        int l = p_115462_.level.getBrightness(LightLayer.SKY, blockpos1);
+        BlockPos blockpos = BlockPos.containing(p_115462_.getEyePosition(p_115463_));
+        BlockPos blockpos1 = BlockPos.containing(p_115466_.getEyePosition(p_115463_));
+        int k = p_115462_.level().getBrightness(LightLayer.SKY, blockpos);
+        int l = p_115462_.level().getBrightness(LightLayer.SKY, blockpos1);
 
         for(int i1 = 0; i1 <= 24; ++i1) {
             addVertexPair(vertexconsumer, matrix4f, f, f1, f2, 0, 0, k, l, 0.025F, 0.025F, f5, f6, i1, false);

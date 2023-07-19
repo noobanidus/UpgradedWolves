@@ -75,8 +75,8 @@ public class WolfTossArrowGoal extends CoolDownGoal {
         double d1 = target.getY() - abstractarrowentity.getY();
         double d2 = target.getZ() - wolf.getZ();
         double d3 = (double)Mth.sqrt((float)(d0 * d0 + d2 * d2));
-        abstractarrowentity.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, (float)(14 - wolf.level.getDifficulty().getId() * 4));
+        abstractarrowentity.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, (float)(14 - wolf.level().getDifficulty().getId() * 4));
         wolf.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (wolf.getRandom().nextFloat() * 0.4F + 0.8F));
-        wolf.level.addFreshEntity(abstractarrowentity);
+        wolf.level().addFreshEntity(abstractarrowentity);
      }
 }

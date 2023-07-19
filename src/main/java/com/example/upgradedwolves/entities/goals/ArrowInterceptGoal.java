@@ -45,7 +45,9 @@ public class ArrowInterceptGoal extends CoolDownGoal {
     public void start() {
         startCoolDown();
         if(randomChancePercentage(50)){
-            wolf.hurt(DamageSource.arrow(arrow, arrow.getOwner()) , (float)arrow.getBaseDamage());
+            if(arrow.getOwner() != null) {
+                wolf.hurt(arrow.getOwner().damageSources().arrow(arrow, arrow.getOwner()), (float)arrow.getBaseDamage());
+            }
         }
         if(randomChancePercentage(25)){
             wolf.spawnAtLocation(new ItemStack(Items.ARROW));

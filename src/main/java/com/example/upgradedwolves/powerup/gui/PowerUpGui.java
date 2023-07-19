@@ -13,7 +13,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.client.Minecraft;
@@ -24,7 +25,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.ChatFormatting;
 
-public class PowerUpGui extends GuiComponent {
+public class PowerUpGui {
    Minecraft minecraft;
    private double scrollX;
    private double scrollY;
@@ -49,6 +50,7 @@ public class PowerUpGui extends GuiComponent {
       this.nbt = nbt;
       powerUps = setPowerups();
       font = minecraft.font;
+      
    }
 
    private List<PowerUp> setPowerups(){
@@ -60,55 +62,42 @@ public class PowerUpGui extends GuiComponent {
       }
    }
 
-   public void drawTabBackground(PoseStack matrixStack) {
+   public void drawTabBackground(GuiGraphics guiGraphics) {
       if (!this.centered) {
          this.scrollX = (double)0;
          this.scrollY = (double)0;
          this.centered = true;
       }
 
-      matrixStack.pushPose();
-      RenderSystem.enableDepthTest();
-      matrixStack.translate(0.0F, 0.0F, 950.0F);
-      RenderSystem.colorMask(false, false, false, false);
-      fill(matrixStack, 4680, 2260, -4680, -2260, -16777216);
-      RenderSystem.colorMask(true, true, true, true);
-      matrixStack.translate(0.0F, 0.0F, -950.0F);
-      RenderSystem.depthFunc(518);
-      fill(matrixStack, 141, 93, 0, 0, -16777216);
-      RenderSystem.depthFunc(515);
 
+      guiGraphics.enableScissor(0, 0, 0 + 300, 0 + 200);
+      guiGraphics.pose().pushPose();
+      guiGraphics.pose().translate((float)0, (float)0, 0.0F);
       int i = Mth.floor(this.scrollX);
       int j = Mth.floor(this.scrollY);
       int k = i % 16;
       int l = j % 16;   
 
-      RenderSystem.setShaderTexture(0,background);
+      // RenderSystem.setShaderTexture(0,background);
 
       for(int i1 = -1; i1 <= 15; ++i1) {
          for(int j1 = -1; j1 <= 8; ++j1) {
-            blit(matrixStack, k + 16 * i1, l + 16 * j1, 0.0F, 0.0F, 16, 16, 16, 16);
+            guiGraphics.blit(background, k + 16 * i1, l + 16 * j1, 0.0F, 0.0F, 16, 16, 16, 16);
          }
       }
 
-      RenderSystem.setShaderTexture(0,POWERUP);
+      // RenderSystem.setShaderTexture(0,POWERUP);
       
-      displayPowerUps(matrixStack,i,j);
+      displayPowerUps(guiGraphics,i,j);
       
-      RenderSystem.depthFunc(518);
-      matrixStack.translate(0.0F, 0.0F, -950.0F);
-      RenderSystem.colorMask(false, false, false, false);
-      fill(matrixStack, 4680, 2260, -4680, -2260, -16777216);
-      RenderSystem.colorMask(true, true, true, true);
-      matrixStack.translate(0.0F, 0.0F, 950.0F);
-      RenderSystem.depthFunc(515);
-      matrixStack.popPose();
+      guiGraphics.pose().popPose();
+      guiGraphics.disableScissor();
    }
   
-   public void drawTabTooltips(PoseStack matrixStack, int mouseX, int mouseY, int width, int height,PowerUp powerUp) {
-      matrixStack.pushPose();
-      matrixStack.translate(0.0F, 0.0F, 200.0F);
-      fill(matrixStack, 0, 0, 234, 113, Mth.floor(this.fade * 255.0F) << 24);
+   public void drawTabTooltips(GuiGraphics graphics, int mouseX, int mouseY, int width, int height,PowerUp powerUp) {
+      graphics.pose().pushPose();
+      graphics.pose().translate(0.0F, 0.0F, 200.0F);
+      graphics.fill(0, 0, 234, 113, Mth.floor(this.fade * 255.0F) << 24);
       boolean flag = false;
       ArrayList<Component> textBoxInfo = new ArrayList<Component>();
       Style redStyle = Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)).withItalic(true);
@@ -125,8 +114,9 @@ public class PowerUpGui extends GuiComponent {
          textBoxInfo.add(Component.literal("???").setStyle(Style.EMPTY.withItalic(true)));
          textBoxInfo.add(Component.translatable("powerup.required.level",powerUp.levelType().toString(),powerUp.requiredLevel()).setStyle(redStyle));
       }
-      this.minecraft.screen.renderComponentTooltip(matrixStack, textBoxInfo, mouseX, mouseY);
-      matrixStack.popPose();
+      graphics.renderComponentTooltip(font, textBoxInfo, mouseX, mouseY);
+      // this.minecraft.screen.renderWithTooltip(graphics, mouseY, mouseX, mouseY);//(graphics, textBoxInfo,);
+      graphics.pose().popPose();
       if (flag) {
          this.fade = Mth.clamp(this.fade + 0.02F, 0.0F, 0.3F);
       } else {
@@ -144,56 +134,56 @@ public class PowerUpGui extends GuiComponent {
       }
    }
 
-   public void drawTooltips(PoseStack matrixStack, int mouseX, int mouseY, int width, int height,int xOffset, int yOffset) {
+   public void drawTooltips(GuiGraphics graphics, int mouseX, int mouseY, int width, int height,int xOffset, int yOffset) {
       if(xOffset < mouseX && mouseX < xOffset + 141 && yOffset < mouseY && mouseY < yOffset + 93){
          for(int i = 0; i < powerUps.size(); i++){
             int x = 30 * (i % 4) + 13 + Mth.floor(this.scrollX) + xOffset;
             int y = 7 * i + Mth.floor(this.scrollY) + yOffset;
             if(levelDistance(powerUps.get(i)) < 7 &&x< mouseX && mouseX < x + 26 &&
                y < mouseY && mouseY < y + 26)
-               drawTabTooltips(matrixStack, mouseX, mouseY, width, height,powerUps.get(i));
+               drawTabTooltips(graphics, mouseX, mouseY, width, height,powerUps.get(i));
          }
       }
    }
 
-   private void displayPowerUps(PoseStack matrixStack,int xOffset,int yOffset){
+   private void displayPowerUps(GuiGraphics graphics,int xOffset,int yOffset){
       for(int i = 0; i < powerUps.size(); i++){
          int x = 30 * (i % 4) + 13;
          int y = 7 * i + 3;
          PowerUp powerUp = powerUps.get(i);
          int id = powerUp.iconType(getNbtData(powerUp.levelType()));
          if(levelDistance(powerUp) < 7){
-            displayIcon(matrixStack, id, x + xOffset, y + yOffset);
+            displayIcon(graphics, id, x + xOffset, y + yOffset);
             if(y > this.maxY - 30){
                this.maxY += 7;
             }
          }
          if(levelDistance(powerUp) < 3)
-            blit(matrixStack, x + xOffset + 4, y + yOffset + 5, powerUp.uLocation, powerUp.vLocation, 16, 16);
+            graphics.blit(POWERUP, x + xOffset + 4, y + yOffset + 5, powerUp.uLocation, powerUp.vLocation, 16, 16);
          
       }
    }
 
-   private void displayIcon(PoseStack matrixStack,int id,int x,int y){
+   private void displayIcon(GuiGraphics graphics,int id,int x,int y){
       //Too lazy to learn the delegate equivalent of JAVA this'll do
       switch(id){
          case 0:
-            blit(matrixStack, x, y, 0, 178, 25, 25);
+            graphics.blit(POWERUP, x, y, 0, 178, 25, 25);
          break;
          case 1:
-            blit(matrixStack, x - 1, y, 25, 178, 26, 26);
+            graphics.blit(POWERUP, x - 1, y, 25, 178, 26, 26);
          break;
          case 2:
-            blit(matrixStack, x, y, 52, 178, 26, 26);
+            graphics.blit(POWERUP, x, y, 52, 178, 26, 26);
          break;
          case 3:
-            blit(matrixStack, x, y, 0, 204, 25, 25);
+            graphics.blit(POWERUP, x, y, 0, 204, 25, 25);
          break;
          case 4:
-            blit(matrixStack, x - 1, y, 25, 204, 26, 26);
+            graphics.blit(POWERUP, x - 1, y, 25, 204, 26, 26);
          break;
          case 5:
-            blit(matrixStack, x, y, 52, 204, 26, 26);
+            graphics.blit(POWERUP, x, y, 52, 204, 26, 26);
          break;
       }
    }
