@@ -9,6 +9,7 @@ import com.example.upgradedwolves.network.message.SpawnLevelUpParticle;
 import com.example.upgradedwolves.network.message.SyncWolfHandMessage;
 import com.example.upgradedwolves.network.message.TrainingItemMessage;
 
+import net.minecraftforge.network.NetworkInstance;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 
@@ -16,7 +17,7 @@ public class PacketHandler
 {
     public static final String PROTOCOL_VERSION = "1";
 
-    public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(UpgradedWolves.getId("main"),
+    public static final NetworkInstance INSTANCE = NetworkRegistry.findTarget(UpgradedWolves.getId("main"),
         () -> PROTOCOL_VERSION,
         PROTOCOL_VERSION::equals,
         PROTOCOL_VERSION::equals);

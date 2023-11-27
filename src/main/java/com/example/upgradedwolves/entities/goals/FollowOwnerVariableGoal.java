@@ -86,7 +86,7 @@ public class FollowOwnerVariableGoal extends FollowOwnerGoal{
         } else if (!this.isTeleportFriendlyBlock(BlockPos.containing(x, y, z))) {
            return false;
         } else {
-           this.tameable.lerpTo((double)x + 0.5D, (double)y, (double)z + 0.5D, this.tameable.getYRot(), this.tameable.getXRot(),1,false);
+           this.tameable.lerpTo((double)x + 0.5D, (double)y, (double)z + 0.5D, this.tameable.getYRot(), this.tameable.getXRot(),1);
            this.navigator.stop();
            return true;
         }

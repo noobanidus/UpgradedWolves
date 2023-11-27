@@ -8,7 +8,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.NetworkContext;
 
 public class CreateParticleForMobMessage implements IMessage<CreateParticleForMobMessage> {
     protected int entityId;
@@ -44,7 +44,7 @@ public class CreateParticleForMobMessage implements IMessage<CreateParticleForMo
     }
 
     @Override
-    public CreateParticleForMobMessage handle(CreateParticleForMobMessage message, Supplier<NetworkEvent.Context> supplier) {
+    public CreateParticleForMobMessage handle(CreateParticleForMobMessage message, Supplier<NetworkContext> supplier) {
         supplier.get().enqueueWork(() -> {
             Minecraft mc = Minecraft.getInstance();
             Entity entity = (Entity)mc.level.getEntity(message.entityId);
