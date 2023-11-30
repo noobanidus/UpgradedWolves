@@ -60,6 +60,7 @@ jobs:
             return fs.readdirSync("./build/libs/").filter(e => !e.endsWith("dev.jar") && !e.endsWith("sources.jar") && e.endsWith(".jar"))[0].replace(".jar", "");
       - name: Upload to curseforge
         uses: itsmeow/curseforge-upload@v2
+        if: github.event_name != 'pull_request'
         with:
           token: ${{ secrets.CFUPLOADKEY }}
           project_id: 509557
