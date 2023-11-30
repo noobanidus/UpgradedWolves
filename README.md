@@ -65,6 +65,9 @@ The show wolf is the smartest wolf and is able to take advantage of elements of 
 ### Golden Bones
 -A golden colored bone that levels up your wolf more quickly
 
+### Wolf Inventory
+-To open up the wolf inventory press and hold the [Sneak] key and right click.
+
 ## Console Commands
 By looking directly at a wolf or using the entity selector, you can change certain wolf attributes using the following console commands
 
