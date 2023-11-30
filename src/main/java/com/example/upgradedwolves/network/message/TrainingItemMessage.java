@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkEvent.Context;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 
 public class TrainingItemMessage implements IMessage<TrainingItemMessage> {
     int wolfValue;
@@ -39,11 +39,11 @@ public class TrainingItemMessage implements IMessage<TrainingItemMessage> {
     }
 
     @Override
-    public TrainingItemMessage handle(TrainingItemMessage message, Supplier<Context> supplier) {
-        supplier.get().enqueueWork(() -> {
+    public TrainingItemMessage handle(TrainingItemMessage message, CustomPayloadEvent.Context context) {
+        context.enqueueWork(() -> {
             setItemAttribute(message);
         });
-        supplier.get().setPacketHandled(true);
+        context.setPacketHandled(true);
         return message;
     }
 

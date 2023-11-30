@@ -335,7 +335,7 @@ public class WolfStatsHandler {
         }
         @Override
         public void showParticle(int type){
-            PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> currentWolf), new SpawnLevelUpParticle( currentWolf.getId(),type));
+            PacketHandler.INSTANCE.send(new SpawnLevelUpParticle( currentWolf.getId(),type),PacketDistributor.TRACKING_ENTITY.with(currentWolf));
         }
         @Override
         public void setRopeHolder(Entity holder) {

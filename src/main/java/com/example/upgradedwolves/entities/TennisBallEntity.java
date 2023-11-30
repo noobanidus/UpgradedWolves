@@ -25,7 +25,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.common.ForgeHooks;
 
 public class TennisBallEntity extends WolfChaseableEntity {
 
@@ -48,7 +48,7 @@ public class TennisBallEntity extends WolfChaseableEntity {
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {        
-        return NetworkHooks.getEntitySpawningPacket(this);
+        return ForgeHooks.getEntitySpawnPacket(this);
     }
 
     @Override

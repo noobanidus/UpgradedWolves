@@ -1,12 +1,11 @@
 package com.example.upgradedwolves.network.message;
 
 import java.util.UUID;
-import java.util.function.Supplier;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent.Context;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 
 public class MovePlayerMessage implements IMessage<MovePlayerMessage> {
     UUID playerId;
@@ -44,13 +43,13 @@ public class MovePlayerMessage implements IMessage<MovePlayerMessage> {
     }
 
     @Override
-    public MovePlayerMessage handle(MovePlayerMessage message, Supplier<Context> supplier) {
-        supplier.get().enqueueWork(() -> {
+    public MovePlayerMessage handle(MovePlayerMessage message, CustomPayloadEvent.Context context) {
+        context.enqueueWork(() -> {
             Minecraft mc = Minecraft.getInstance();
             Player playerIn = (Player)mc.level.getPlayerByUUID(message.playerId);
             playerIn.setDeltaMovement(playerIn.getDeltaMovement().add(Math.copySign(message.d0 * message.d0 * 0.5D, -message.d0), Math.copySign(message.d1 * message.d1 * 0.5D, -message.d1), Math.copySign(message.d2 * message.d2 * 0.5D, -message.d2)));
         });
-        supplier.get().setPacketHandled(true);
+        context.setPacketHandled(true);
         return message;
     }
     

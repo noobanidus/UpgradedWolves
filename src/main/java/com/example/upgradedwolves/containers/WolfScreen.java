@@ -113,7 +113,7 @@ public class WolfScreen extends AbstractContainerScreen<WolfContainer> {
         }
         
         drawTabs(graphics);
-        InventoryScreen.renderEntityInInventoryFollowsMouse(graphics,edgeSpacingX + 38, edgeSpacingY + 50, 40, (edgeSpacingX + 38) - x,(edgeSpacingY + 30) - y,0.25F,this.xMouse,this.yMouse, wolf);
+        InventoryScreen.renderEntityInInventoryFollowsMouse(graphics,edgeSpacingX+8, edgeSpacingY, edgeSpacingX + 71,edgeSpacingY + 56,40,0.25F,this.xMouse,this.yMouse, wolf);
     }
 
     @Override

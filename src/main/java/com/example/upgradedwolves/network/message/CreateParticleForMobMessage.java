@@ -1,14 +1,13 @@
 package com.example.upgradedwolves.network.message;
 
 import java.util.Random;
-import java.util.function.Supplier;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraftforge.network.NetworkContext;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 
 public class CreateParticleForMobMessage implements IMessage<CreateParticleForMobMessage> {
     protected int entityId;
@@ -44,8 +43,8 @@ public class CreateParticleForMobMessage implements IMessage<CreateParticleForMo
     }
 
     @Override
-    public CreateParticleForMobMessage handle(CreateParticleForMobMessage message, Supplier<NetworkContext> supplier) {
-        supplier.get().enqueueWork(() -> {
+    public CreateParticleForMobMessage handle(CreateParticleForMobMessage message, CustomPayloadEvent.Context context) {
+        context.enqueueWork(() -> {
             Minecraft mc = Minecraft.getInstance();
             Entity entity = (Entity)mc.level.getEntity(message.entityId);
             Random r = new Random();

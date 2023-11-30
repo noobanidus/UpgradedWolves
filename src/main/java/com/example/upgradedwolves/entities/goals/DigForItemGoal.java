@@ -48,7 +48,7 @@ public class DigForItemGoal extends CoolDownGoal {
     public boolean canContinueToUse() {
         if(currentTime++ < timer){
             wolf.playSound(type.getBlock().getSoundType(null, null, null, null).getPlaceSound(), 0.5F, (1.0F + (wolf.getRandom().nextFloat() - wolf.getRandom().nextFloat()) * 0.2F) * 0.7F);            
-            PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new CreateParticleForMobMessage(wolf.getId(),new BlockParticleOption(ParticleTypes.BLOCK, type),1));            
+            PacketHandler.INSTANCE.send(new CreateParticleForMobMessage(wolf.getId(),new BlockParticleOption(ParticleTypes.BLOCK, type),1),PacketDistributor.TRACKING_ENTITY.with(wolf));            
             return true;
         }
         currentTime = 0;

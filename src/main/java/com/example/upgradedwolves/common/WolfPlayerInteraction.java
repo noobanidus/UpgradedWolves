@@ -42,7 +42,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.ForgeConfig.Common;
+import net.minecraftforge.common.extensions.IForgeServerPlayer;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDestroyBlockEvent;
@@ -54,7 +56,6 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PacketDistributor;
 
 public class WolfPlayerInteraction {
@@ -72,6 +73,7 @@ public class WolfPlayerInteraction {
                 if(Thread.currentThread().getName() == "Server thread"){
                     MenuProvider wolfInventory = new ContainerProviderWolfInventory(wolf,handler.getInventory());
                     CompoundTag nbt = new CompoundTag();
+                    final IForgeServerPlayer player = (IForgeServerPlayer)event.getEntity();
                     nbt.putInt("strLevel", handler.getLevel(WolfStatsEnum.Strength));                    
                     nbt.putInt("spdLevel", handler.getLevel(WolfStatsEnum.Speed));
                     nbt.putInt("intLevel", handler.getLevel(WolfStatsEnum.Intelligence));
@@ -79,10 +81,13 @@ public class WolfPlayerInteraction {
                     nbt.putFloat("spdNum", handler.getStatRatio(WolfStatsEnum.Speed));
                     nbt.putFloat("intNum", handler.getStatRatio(WolfStatsEnum.Intelligence));
                     nbt.putInt("wolfType", handler.getWolfType());
-                    NetworkHooks.openScreen((ServerPlayer)event.getEntity(),
+                    player.openMenu(
                         wolfInventory,
-                        (packetBuffer) ->{packetBuffer.writeInt(handler.getInventory().getSlots());packetBuffer.writeInt(wolf.getId());packetBuffer.writeNbt(nbt);}
-                    );
+                        (packetBuffer) ->{
+                            packetBuffer.writeInt(handler.getInventory().getSlots());
+                            packetBuffer.writeInt(wolf.getId());
+                            packetBuffer.writeNbt(nbt);
+                        });
                 }
                 wolf.setOrderedToSit(!wolf.isOrderedToSit());
             }
@@ -107,7 +112,7 @@ public class WolfPlayerInteraction {
                         foodItem.shrink(1);
                         tHandler.resetAttribute();
                         if(Thread.currentThread().getName() == "Server thread")
-                            PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getId(),WolfStatsHandler.getHandler(wolf).getWolfType(),handler.getWolfFur()));
+                            PacketHandler.INSTANCE.send(new RenderMessage( wolf.getId(),WolfStatsHandler.getHandler(wolf).getWolfType(),handler.getWolfFur()),PacketDistributor.TRACKING_ENTITY.with(wolf));
                     }
                 } else if (goldenBoneItem != null){
                     GoldenBoneAbstract goldenBone = (GoldenBoneAbstract)goldenBoneItem.getItem();
@@ -150,7 +155,7 @@ public class WolfPlayerInteraction {
     public void onStartTracking(PlayerEvent.StartTracking event){        
         event.getTarget().getCapability(WolfStatsHandler.CAPABILITY_WOLF_STATS).ifPresent(capability -> {
             Wolf wolf = (Wolf)event.getTarget();
-            PacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getEntity()), new RenderMessage(wolf.getId(),capability.getWolfType(),WolfStatsHandler.getHandler(wolf).getWolfFur()));
+            PacketHandler.INSTANCE.send(new RenderMessage(wolf.getId(),capability.getWolfType(),WolfStatsHandler.getHandler(wolf).getWolfFur()),PacketDistributor.PLAYER.with((ServerPlayer)event.getEntity()));
             wolf.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(capability.getWolfSpeed());
         });
     }
@@ -162,7 +167,7 @@ public class WolfPlayerInteraction {
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             //Scavenger Wolf Bonus
             handler.addXp(WolfStatsEnum.Speed,(handler.getWolfType() == 2 ? Config.COMMON.wolfLevelling.scavengerWolfSpeedXp.get() : 0));
-            PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getId(),handler.getWolfType(),handler.getWolfFur()) );
+            PacketHandler.INSTANCE.send(new RenderMessage( wolf.getId(),handler.getWolfType(),handler.getWolfFur()), PacketDistributor.TRACKING_ENTITY.with(wolf));
         }
     }
     @SubscribeEvent
@@ -172,7 +177,7 @@ public class WolfPlayerInteraction {
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             handler.addXp(WolfStatsEnum.Strength,1);
             handler.addXp(WolfStatsEnum.Intelligence,(handler.getWolfType() == 3 ? 2 : 1));
-            PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getId(),handler.getWolfType(),handler.getWolfFur()) );
+            PacketHandler.INSTANCE.send(new RenderMessage( wolf.getId(),handler.getWolfType(),handler.getWolfFur()), PacketDistributor.TRACKING_ENTITY.with(wolf));
         }
     }
     @SubscribeEvent

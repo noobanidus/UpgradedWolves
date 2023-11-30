@@ -1,7 +1,6 @@
 package com.example.upgradedwolves.network.message;
 
 import java.util.Random;
-import java.util.function.Supplier;
 
 import com.example.upgradedwolves.capabilities.WolfStatsEnum;
 
@@ -11,9 +10,8 @@ import net.minecraft.network.FriendlyByteBuf;
 
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.network.NetworkEvent.Context;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 
 public class SpawnLevelUpParticle implements IMessage<SpawnLevelUpParticle> {
     int wolfId;
@@ -43,8 +41,8 @@ public class SpawnLevelUpParticle implements IMessage<SpawnLevelUpParticle> {
     }
 
     @Override
-    public SpawnLevelUpParticle handle(SpawnLevelUpParticle message, Supplier<Context> supplier) {
-        supplier.get().enqueueWork(() -> {
+    public SpawnLevelUpParticle handle(SpawnLevelUpParticle message, CustomPayloadEvent.Context context) {
+        context.enqueueWork(() -> {
             Minecraft mc = Minecraft.getInstance();
             Wolf wolf = (Wolf)mc.level.getEntity(message.wolfId);
             WolfStatsEnum stat = WolfStatsEnum.values()[message.statId];
@@ -70,7 +68,7 @@ public class SpawnLevelUpParticle implements IMessage<SpawnLevelUpParticle> {
             for(int i = 0; i < 15; i++)
                 mc.level.addParticle(pt, false, wolf.getPosition(1).x() + r.nextDouble(), wolf.getPosition(1).y() + r.nextDouble(), wolf.getPosition(1).z() + r.nextDouble(), r.nextDouble()/5, r.nextDouble()/5, r.nextDouble()/5);
         });
-        supplier.get().setPacketHandled(true);
+        context.setPacketHandled(true);
         return message;
     }
     
