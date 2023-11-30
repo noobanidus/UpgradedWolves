@@ -50,7 +50,7 @@ public class TrainingEventHandler {
                 ITraining handler = TrainingHandler.getHandler(foodItem);
                 handler.setAttribute(2);
                 if(Thread.currentThread().getName() == "Server thread"){
-                    PacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getPlayer()), new TrainingItemMessage(2, event.getPlayer().getId()));
+                    PacketHandler.INSTANCE.send(new TrainingItemMessage(2, event.getPlayer().getId()),PacketDistributor.PLAYER.with((ServerPlayer)event.getPlayer()));
                 }
             }
         }
@@ -70,7 +70,7 @@ public class TrainingEventHandler {
                     ITraining handler = TrainingHandler.getHandler(foodItem);
                     handler.setAttribute(1);                         
                     if(Thread.currentThread().getName() == "Server thread"){
-                        PacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)player), new TrainingItemMessage(1, player.getId()));
+                        PacketHandler.INSTANCE.send(new TrainingItemMessage(1, player.getId()),PacketDistributor.PLAYER.with((ServerPlayer)player));
                     }
                 }
             }

@@ -11,6 +11,7 @@ import org.apache.logging.log4j.LogManager;
 
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.animal.Wolf;
@@ -50,7 +51,7 @@ public class DetectEnemiesGoal extends Goal implements IUpdateableGoal {
         List<Monster> foundEntities = entityFinder.findWithPredicate(range, 0, x -> wolf.getSensing().hasLineOfSight(x));
         foundEntities.addAll(entityFinder.findWithinRange(range/5, 0));
         for(Monster monsterEntity : foundEntities) {
-            monsterEntity.addEffect(new MobEffectInstance(MobEffect.byId(24),120 + (10 * AbilityEnhancer.detectionSkill(wolf))));
+            monsterEntity.addEffect(new MobEffectInstance(MobEffects.GLOWING,120 + (10 * AbilityEnhancer.detectionSkill(wolf))));
             this.wolf.getLookControl().setLookAt(monsterEntity.getPosition(1));
             detectedEntity = monsterEntity;
             currentTicks = 0;

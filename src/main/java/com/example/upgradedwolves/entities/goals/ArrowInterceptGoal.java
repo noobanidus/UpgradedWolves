@@ -57,7 +57,7 @@ public class ArrowInterceptGoal extends CoolDownGoal {
     }
 
     private void teleportToLocation(double x, double y, double z) {       
-        this.wolf.lerpTo((double)x + 0.5D, (double)y, (double)z + 0.5D, this.wolf.getYRot(), this.wolf.getXRot(),1,false);
+        this.wolf.lerpTo((double)x + 0.5D, (double)y, (double)z + 0.5D, this.wolf.getYRot(), this.wolf.getXRot(),1);
         wolf.getNavigation().stop();                
     }
     

@@ -20,7 +20,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.common.ForgeHooks;
 
 public class FlyingDiskEntity extends WolfChaseableEntity{
 
@@ -46,7 +46,7 @@ public class FlyingDiskEntity extends WolfChaseableEntity{
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {        
-        return NetworkHooks.getEntitySpawningPacket(this);
+        return ForgeHooks.getEntitySpawnPacket(this);
     }
 
     @Override

@@ -48,7 +48,7 @@ public class BarkStunGoal extends CoolDownGoal {
         wof.playSound(SoundEvents.WOLF_AMBIENT, 20, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.02F + .7F);        
         for (Monster mobEntity : enemies) {
             mobEntity.setNoAi(true);
-            PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> mobEntity), new CreateParticleForMobMessage(mobEntity.getId(),ParticleTypes.FLAME,10));
+            PacketHandler.INSTANCE.send(new CreateParticleForMobMessage(mobEntity.getId(),ParticleTypes.FLAME,10),PacketDistributor.TRACKING_ENTITY.with(mobEntity));
         }
         startCoolDown();
     }

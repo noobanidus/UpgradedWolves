@@ -52,7 +52,7 @@ public class TugOfWarGaol extends Goal {
             IWolfStats handler = WolfStatsHandler.getHandler(wolf);
             handler.clearRopeHolder();
             handler.addXp(WolfStatsEnum.Strength, Config.COMMON.wolfLevelling.tugOfWarStrengthBonus.get());
-            PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getId(),0,0,false) );
+            PacketHandler.INSTANCE.send(new RenderMessage( wolf.getId(),0,0,false),PacketDistributor.TRACKING_ENTITY.with(wolf));
             return false;
         }
     }
@@ -69,7 +69,7 @@ public class TugOfWarGaol extends Goal {
             double d1 = (playerIn.getY() - wolf.getY()) / (double)distance;
             double d2 = (playerIn.getZ() - wolf.getZ()) / (double)distance;
             wolf.setDeltaMovement(wolf.getDeltaMovement().add(Math.copySign(d0 * d0 * 0.5D, d0), Math.copySign(d1 * d1 * 0.5D, d1), Math.copySign(d2 * d2 * 0.5D, d2)));
-            PacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)playerIn), new MovePlayerMessage(playerIn.getUUID(),d0,d1,d2));
+            PacketHandler.INSTANCE.send(new MovePlayerMessage(playerIn.getUUID(),d0,d1,d2),PacketDistributor.PLAYER.with((ServerPlayer)playerIn));
         }
         
     }

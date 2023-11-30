@@ -1,9 +1,7 @@
 package com.example.upgradedwolves.network.message;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 
 /**
  * Author: MrCrayfish
@@ -14,5 +12,5 @@ public interface IMessage<T>
 
     T decode(FriendlyByteBuf buffer);
 
-    T handle(T message, Supplier<NetworkEvent.Context> supplier);
+    T handle(T message, CustomPayloadEvent.Context context);
 }

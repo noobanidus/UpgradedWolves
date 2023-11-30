@@ -33,7 +33,7 @@ public class UseSwordGoal extends Goal implements Serializable {
             if(swordSlot >= 0){
                 sword = wolfInventory.extractItem(wolfInventory.getSword(), 1, false);
                 wolf.setItemInHand(InteractionHand.MAIN_HAND, sword);
-                PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new SyncWolfHandMessage(wolf.getId(),sword));
+                PacketHandler.INSTANCE.send(new SyncWolfHandMessage(wolf.getId(),sword),PacketDistributor.TRACKING_ENTITY.with(wolf));
                 return true;
             }
         }
@@ -43,7 +43,7 @@ public class UseSwordGoal extends Goal implements Serializable {
     @Override
     public boolean canContinueToUse() {        
         if(wolf.getTarget() != null && super.canContinueToUse()){
-            PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new SyncWolfHandMessage(wolf.getId(),ItemStack.EMPTY));
+            PacketHandler.INSTANCE.send(new SyncWolfHandMessage(wolf.getId(),ItemStack.EMPTY),PacketDistributor.TRACKING_ENTITY.with(wolf));
             return false;
         }
         return true;

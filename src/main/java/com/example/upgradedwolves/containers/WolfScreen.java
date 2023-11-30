@@ -20,6 +20,8 @@ public class WolfScreen extends AbstractContainerScreen<WolfContainer> {
     private static final ResourceLocation INVENTORY = UpgradedWolves.getId("gui/wolf_chest_gui.png");
     private static final ResourceLocation TABS = UpgradedWolves.getId("gui/wolf_tabs_gui.png");
     private static final ResourceLocation POWERUP = UpgradedWolves.getId("gui/wolf_powerup_gui.png");
+    private float xMouse;
+    private float yMouse;
     Wolf wolf;
     PowerUpGui powerUpGui;
     String strength,speed,intelligence;
@@ -49,7 +51,9 @@ public class WolfScreen extends AbstractContainerScreen<WolfContainer> {
     }    
     @Override
     public void render(GuiGraphics matrixStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrixStack);
+        this.xMouse = mouseX;
+        this.yMouse = mouseY;
+        this.renderBackground(matrixStack,mouseX,mouseY,partialTicks);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrixStack, mouseX, mouseY);
     }
@@ -109,7 +113,7 @@ public class WolfScreen extends AbstractContainerScreen<WolfContainer> {
         }
         
         drawTabs(graphics);
-        InventoryScreen.renderEntityInInventoryFollowsMouse(graphics,edgeSpacingX + 38, edgeSpacingY + 50, 40, (edgeSpacingX + 38) - x,(edgeSpacingY + 30) - y, wolf);
+        InventoryScreen.renderEntityInInventoryFollowsMouse(graphics,edgeSpacingX+8, edgeSpacingY, edgeSpacingX + 71,edgeSpacingY + 56,40,0.25F,this.xMouse,this.yMouse, wolf);
     }
 
     @Override

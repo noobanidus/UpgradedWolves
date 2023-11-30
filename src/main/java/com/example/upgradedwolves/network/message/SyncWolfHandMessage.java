@@ -5,9 +5,9 @@ import java.util.function.Supplier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.InteractionHand;
-import net.minecraftforge.network.NetworkEvent.Context;
 
 public class SyncWolfHandMessage implements IMessage<SyncWolfHandMessage> {    
     int wolfId;
@@ -38,8 +38,8 @@ public class SyncWolfHandMessage implements IMessage<SyncWolfHandMessage> {
     }
 
     @Override
-    public SyncWolfHandMessage handle(SyncWolfHandMessage message, Supplier<Context> supplier) {
-        supplier.get().enqueueWork(() -> {
+    public SyncWolfHandMessage handle(SyncWolfHandMessage message, CustomPayloadEvent.Context context) {
+        context.enqueueWork(() -> {
             Minecraft mc = Minecraft.getInstance();
             Wolf wolf = (Wolf)mc.level.getEntity(message.wolfId);            
             wolf.setItemInHand(InteractionHand.MAIN_HAND, message.item);

@@ -52,7 +52,7 @@ public class WolfTypeCommand {
                 handler.addGoals();
                 handler.handleWolfGoals();
                 if(Thread.currentThread().getName() == "Server thread")
-                            PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> wolf), new RenderMessage( wolf.getId(),WolfStatsHandler.getHandler(wolf).getWolfType(),handler.getWolfFur()));
+                            PacketHandler.INSTANCE.send(new RenderMessage(wolf.getId(),WolfStatsHandler.getHandler(wolf).getWolfType(),handler.getWolfFur()),PacketDistributor.TRACKING_ENTITY.with(wolf));
                 if(source.getEntity() != null){
                     source.getEntity().sendSystemMessage(Component.translatable("command.set_wolf_type_success",wolf.getName(),type.toString()));
                 }
