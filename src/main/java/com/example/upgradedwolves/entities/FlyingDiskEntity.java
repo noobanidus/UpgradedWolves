@@ -10,6 +10,7 @@ import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.Item;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.phys.BlockHitResult;
@@ -21,8 +22,9 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 
-public class FlyingDiskEntity extends WolfChaseableEntity{
+public class FlyingDiskEntity extends WolfChaseableEntity implements IEntityAdditionalSpawnData{
 
     public int timeOut = 0;
     protected int flightTime = 100;
@@ -115,5 +117,17 @@ public class FlyingDiskEntity extends WolfChaseableEntity{
             float p_234612_5_, float p_234612_6_) {  
         super.shootFromRotation(p_234612_1_, p_234612_2_, p_234612_3_, p_234612_4_, p_234612_5_, p_234612_6_);
         variant = (p_234612_5_ - .2f) * 2.5f;
+    }
+
+
+    @Override
+    public void writeSpawnData(FriendlyByteBuf buffer) {
+        
+    }
+
+
+    @Override
+    public void readSpawnData(FriendlyByteBuf additionalData) {
+        
     }
 }
